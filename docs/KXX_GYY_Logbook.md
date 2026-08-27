@@ -4,20 +4,20 @@
 
 | Informasi | Keterangan |
 |---|---|
-| Kelas | *[Kelas]* |
-| Nomor Kelompok | *[Nomor Kelompok]* |
-| Nama Kelompok | *[Nama Kelompok]* |
+| Kelas | K-01 |
+| Nomor Kelompok | G-03 |
+| Nama Kelompok | MAYOOOOOR |
 | Nama Perangkat Lunak | *[Nama P/L]* |
 
 **Anggota Kelompok:**
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| 13525031 | Revandra Zacky Maharta |
+| 13525079 | Danesh Rasyad Damotino |
+| 13525088 | Theresia Estelina Ratu Udju |
+| 13525127 | Edward Terrance Lie |
+| 13525130 | Necia Aurely Greva Dedevi |
 
 ---
 
@@ -33,7 +33,7 @@
 
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
-| *04-05-2026* | *[Nama Mahasiswa]* | *[Jelaskan Pekerjaan secara Singkat]* | *[Durasi Pengerjaan]* | *[On Progress/Done]* | [Kendala yang dialami, jika tidak ada cukup tandai "-"] | 
+| *27-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan Pemilihan Nama Kelompok, SDGs dan Ide Kasar Produk yang ingin dibuat | <1 Jam | Done | - | 
 | *05-05-2026* | *John Doe* | *Mendesain diagram kelas* | *3* | *Done* | *-* | 
 | | | | | | | |
 
