@@ -34,7 +34,7 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | *27-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan Pemilihan Nama Kelompok, SDGs dan Ide Kasar Produk yang ingin dibuat | <1 Jam | Done | - | 
-| *05-05-2026* | *John Doe* | *Mendesain diagram kelas* | *3* | *Done* | *-* | 
+| *28-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan brainstorming ide, menentukan nama produk, dan membagi tugas  | <1 Jam | Done | - | 
 | | | | | | | |
 
 **Catatan/Evaluasi Milestone 1:**
