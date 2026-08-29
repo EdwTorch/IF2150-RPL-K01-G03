@@ -32,10 +32,22 @@ Dipersiapkan oleh:
 # BAB 1: Analisis Permasalahan
 
 ## 1.1 Latar Belakang Masalah
-Tuliskan deskripsi permasalahan yang kalian pilih secara naratif dan spesifik. Tambahkan keterkaitan permasalahan tersebut dengan Tujuan Pembangunan Berkelanjutan (SDGs) yang telah disepakati. Dukung argumen kalian dengan data yang kredibel, serta jelaskan urgensi mengapa masalah ini perlu dan layak untuk segera diselesaikan.
+<p> Perkembangan teknologi dan aktivitas masyarakat saat ini mendorong munculnya berbagai kebutuhan akan layanan jasa, baik untuk keperluan pribadi maupun pekerjaan. Kondisi tersebut dapat menjadi peluang bagi masyarakat untuk memperoleh penghasilan dengan memanfaatkan keterampilan yang dimiliki melalui penyediaan jasa kepada pihak yang membutuhkan, tanpa harus terikat pada hubungan kerja formal. Hal ini semakin relevan karena berdasarkan data dari Badan Pusat Statistik pada Februari 2026, masih terdapat 7,24 juta pengangguran di Indonesia dengan Tingkat Pengangguran Terbuka (TPT) sebesar 4,68%. Dengan tersedianya akses terhadap peluang kerja berbasis jasa, masyarakat yang belum memperoleh pekerjaan dapat memanfaatkan keterampilan yang dimilikinya untuk mendapatkan penghasilan yang layak. </p>
+<p> Meskipun kebutuhan akan layanan jasa terus meningkat, masyarakat masih menemukan kendala dalam menemukan penyedia jasa yang sesuai dengan kebutuhan, biaya, lokasi, dan waktu yang dimiliki. Informasi mengenai jasa yang tersedia juga tersebar di berbagai platform, sehingga menghambat proses pencarian dan mengakibatkan penawaran jasa jadi tidak terstruktur. Oleh karena itu, platform digital dapat dimanfaatkan untuk mempertemukan pencari dan penyedia jasa dengan lebih efisien. </p>
+<p>CariJasa dikembangkan sebagai platform digital yang dapat membantu masyarakat dalam mencari dan menawarkan jasa dengan lebih terstruktur. Platform ini menyediakan informasi mengenai jasa, keterampilan, harga, lokasi, serta penilaian dari konsumen. Dengan adanya platform yang terintegrasi, penyedia jasa dapat menawarkan jasa yang dimilikinya sedangkan pencari jasa dapat menemukan layanan jasa apa yang dibutuhkan dengan lebih cepat. Pengembangan platform ini sejalan dengan Sustainable Development Goal (SDG) ke-8, yaitu *Decent Work and Economic Growth*. CariJasa diharapkan dapat mempermudah akses terhadap peluang pekerjaan berbasis keterampilan sekaligus mendukung terciptanya pekerjaan yang produktif dan pertumbuhan ekonomi inklusif.</p>
+
 
 ## 1.2 Analisis Kondisi Saat Ini
-Lakukan analisis terhadap proses yang berjalan saat ini di dunia nyata, baik itu sistem lama ataupun solusi yang sudah ada. Soroti kesenjangan atau celah dari kondisi tersebut yang nantinya akan diselesaikan oleh perangkat lunak kalian.
+### 1. Kondisi Pencari Jasa
+Masyarakat yang membutuhkan jasa saat ini dapat mencari penyedia melalui berbagai media, seperti medsos, komunitas, rekomendasi orang lain, atau platform tertentu. Namun, informasi mengenai penyedia jasa tidak berada pada satu tempat yang sama. Pengguna harus mencari dan membandingkan informasi seperti harga, keterampilan, serta pengalaman penyedia secara manual.
+
+### 2. Kondisi Penyedia Jasa
+Para penyedia jasa dapat memanfaatkan media sosial atau platform tertentu untuk mempromosikan layanannya secara mandiri, tetapi jangkauan calon konsumen dapat bergantung pada visibilitas atau algoritma di platform tersebut. Para penyedia jasa juga merasa kesulitan untuk  menjangkau calon konsumen yang benar-benar membutuhkan jasanya.
+
+### 3. Kondisi Platform yang Sudah Ada
+Berdasarkan perbandingan dengan platform sejenis, Fiverr dan Upwork telah menyediakan fitur utama dalam marketplace jasa, seperti pencarian jasa, penawaran jasa, profil penyedia, portofolio, booking, rating dan review, filter berdasarkan kebutuhan dan harga, chat, request jasa, hingga pembayaran melalui platform. Kedua platform juga memungkinkan pengguna untuk mempertimbangkan berbagai penyedia jasa sebelum melakukan pemesanan. Namun, Fiverr dan Upwork memiliki cakupan pasar yang luas dan bersifat global. Sementara itu, CariJasa memiliki fokus pada pasar lokal Indonesia dan memiliki fitur *compare*, sehingga pengguna dapat membandingkan dua atau lebih jasa secara detil dan mudah.
+
+
 
 ---
 
