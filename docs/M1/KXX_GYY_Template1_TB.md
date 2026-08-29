@@ -60,13 +60,16 @@ Definisikan secara tegas asumsi (baik teknis maupun dari sisi pengguna) yang men
 
 
 ## 3.2 Kebutuhan Pengguna Awal
-Definisikan apa yang ingin dicapai oleh pengguna saat menggunakan sistem ini dalam format *User Story* (Sebagai [Aktor], saya ingin [Aktivitas/Kebutuhan], sehingga [Tujuan/Nilai]). Pastikan kalian berfokus pada "apa yang ingin dilakukan pengguna".
-
 | ID | Aktor | Kebutuhan / Aktivitas | Tujuan / Nilai |
 | :--- | :--- | :--- | :--- |
-| US-01 | *Kasir* |  *Memindai barcode barang* | *Proses pembayaran berjalan cepat dan akurat* |
-| US-02 | *[Nama Aktor]* | *[Kebutuhan pengguna]* | *[Tujuan yang dicapai pengguna]* |
-| ... | ... | ... | ... |
+| US-01 | Penyedia Jasa | Menampilkan portofolio dan menentukan harga layanan. | Mempromosikan keahlian dan memperoleh penghasilan. |
+| US-02 | Penyedia Jasa | Berinteraksi dengan pencari jasa dan mengirimkan hasil jasa. | Menyelesaikan pesanan dan membangun reputasi. |
+| US-03 | Pengguna Jasa | Mencari dan menyaring jasa berdasarkan keahlian serta *budget*. | Menemukan layanan yang sesuai dengan kriteria kebutuhan. |
+| US-04 | Pengguna Jasa | Melakukan pemesanan dan pembayaran digital langsung di platform. | Bertransaksi tanpa harus berpindah ke aplikasi lain. |
+| US-05 | Pengguna Jasa | Berkomunikasi mengenai *detail* jasa dan mengajukan revisi pekerjaan. | Memastikan hasil akhir sesuai dengan pesanan. |
+| US-06 | Pengguna Jasa | Membaca dan memberikan ulasan serta penilaian. | Menilai kualitas penyedia jasa dan membantu pengguna lain. |
+| US-07 | *Developer* | Mengurus enkripsi data serta sistem penahanan dan pencairan dana. | Menjamin keamanan transaksi dan kerahasiaan data pengguna. |
+| US-08 | *Developer* | Menyediakan *form* pengaduan dan pusat umpan balik. | Menangani kendala operasional dan memediasi permasalahan transaksi. |
 
 ## 3.3 Model Proses Bisnis
 Buatlah *Activity Diagram* atau *Swimlane Diagram* yang menunjukkan alur kerja proses bisnis dari sistem solusi. Diagram ini harus memvisualisasikan bagaimana alur operasional di dunia nyata berjalan lebih efisien dengan adanya interaksi antara aktor (yang didefinisikan pada poin 3.1) dan sistem perangkat lunak. Perhatikan notasi yang digunakan dalam pembuatannya.
