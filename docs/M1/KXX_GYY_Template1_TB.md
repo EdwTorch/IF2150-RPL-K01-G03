@@ -55,9 +55,10 @@ Definisikan secara tegas asumsi (baik teknis maupun dari sisi pengguna) yang men
 Buatlah daftar seluruh aktor (pengguna) yang akan berinteraksi langsung dengan sistem solusi yang kalian kembangkan. Berikan penjelasan singkat mengenai peran dan karakteristik dari masing-masing aktor tersebut.
 
 | Aktor | Deskripsi |
-| :--- | :--- |
-| *Kasir* | *Pengguna ini bertindak sebagai pihak yang bertanggung jawab untuk memproses transaksi harian dan melayani pembayaran pelanggan. Karakteristik dari pengguna ini adalah mengutamakan kecepatan dan keakuratan saat bertransaksi.* |
-| ... | ... |
+| :--: | :-- |
+| Penyedia Jasa | Memanfaatkan keterampilan yang dimilikinya untuk menawarkan layanan digital tanpa adanya hubungan kerja formal. Penyedia jasa menampilkan portofolio, menentukan harga, serta mendiskusikan dan menyelesaikan pesanan secara mandi. |
+| Pengguna Jasa | Membutuhkan layanan digital untuk kebutuhan pribadi maupun pekerjaan. Pengguna jasa menggunakan platform untuk mencari penyedia jasa (berdasarkan kriteria spesifiknya), melakukan pemesanan serta pembayaran digital, mengajukan revisi, dan memberikan ulasan. |
+| *Developer* | Pengelola situs web, bertanggung jawab menjaga keamanan data dan transaksi, menyediakan layanan aduan, serta bertindak sebagai penengah dalam proses penahanan hingga pencairan dana. |
 
 
 ## 3.2 Kebutuhan Pengguna Awal
