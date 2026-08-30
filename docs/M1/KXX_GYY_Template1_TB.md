@@ -19,11 +19,11 @@ Dipersiapkan oleh:
 
 | NIM | Nama |
 |---|---|
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| 13525031 | Revandra Zacky Maharta |
+| 13525079 | Danesh Rasyad Damotino |
+| 13525088 | Theresia Estelina Ratu Udju |
+| 13525127 | Edward Terrance Lie |
+| 13525130 | Necia Aurely Greva Dedevi |
 ---
 
 <br>
@@ -54,49 +54,50 @@ Berdasarkan perbandingan dengan platform sejenis, Fiverr dan Upwork telah menyed
 # BAB 2: Analisis Solusi
 
 ## 2.1 Deskripsi Perangkat Lunak
-Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, CariJasa. CariJasa merupakan sebuah situs web responsif (*responsive website*), sehingga dapat menyesuaikan tampilan pada perangkat pengguna. Alasan utama pemilihan situs web responsif adalah untuk mempermudah pengguna mengakses situs web menggunakan berbagai perangkat tanpa perlu mengunduh aplikasi terlebih dahulu. Situs web ini dirancang untuk menghubungkan pencari jasa dan penyedia jasa khususnya di bidang layanan digital (*digital service*). Dari sudut pandang pencari jasa, situs web ini menyediakan akses untuk mencari kebutuhan jasa di bidang digital dengan mudah, seperti jasa pemrograman, penyuntingan video, desain grafis, dan sebagainya. Sementara itu, bagi penyedia jasa, situs web ini dapat digunakan sebagai wadah untuk menampilkan portofolio karya, membangun reputasi, mendapatkan pengakuan (*recognition*), serta memperoleh penghasilan. Pada situs web ini, pencari jasa dan penyedia jasa dapat melakukan seluruh proses transaksi pada satu platform yang sama. Pengguna dapat melakukan pemesanan, mendiskusikan rincian jasa, hingga menyelesaikan pembayaran tanpa perlu beralih ke platform lain. Pencari jasa juga dapat menemukan penyedia jasa yang sesuai melalui fitur penyaringan (*filtering*) berdasarkan anggaran (*budget*) yang dimiliki dan keahlian yang dibutuhkan. Selain itu, mereka juga dapat memberikan ulasan maupun membaca ulasan dari pengguna lain. Nilai unik yang membedakan CariJasa dengan solusi yang sudah ada adalah fokus dan model interaksi platformnya. Berbeda dengan platform yang mencampurkan jasa fisik dan digital, CariJasa secara spesifik berfokus pada layanan digital. Oleh karena itu, alur, tampilan, dan interaksi pada situs web ini dirancang khusus untuk memenuhi kebutuhan industri kreatif dan teknologi.
+Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, yaitu CariJasa. CariJasa merupakan sebuah situs *web* responsif  sehingga dapat menyesuaikan tampilan pada perangkat pengguna. Alasan utama pemilihan situs web responsif adalah untuk mempermudah pengguna mengakses situs web menggunakan berbagai perangkat tanpa perlu mengunduh aplikasi terlebih dahulu. Situs web ini dirancang untuk menghubungkan pencari jasa dan penyedia jasa khususnya di bidang layanan digital. Dari sudut pandang pencari jasa, situs web ini dapat menyediakan akses untuk mencari kebutuhan jasa di bidang digital dengan mudah, seperti jasa pemrograman, penyuntingan video, desain grafis, dan sebagainya yang termasuk dalam *digital services*. Sementara itu, bagi penyedia jasa, situs web ini dapat digunakan sebagai wadah untuk menampilkan portofolio karya, membangun reputasi, mendapatkan pengakuan, serta memperoleh penghasilan. Pada situs web ini, pencari jasa dan penyedia jasa dapat melakukan seluruh proses transaksi pada satu platform yang sama. Pengguna dapat melakukan pemesanan, mendiskusikan rincian jasa, hingga menyelesaikan pembayaran tanpa perlu beralih ke platform lain. Pencari jasa juga dapat menemukan penyedia jasa yang sesuai melalui fitur penyaringan berdasarkan anggaran yang dimiliki dan keahlian yang dibutuhkan. Selain itu, pengguna juga dapat memberikan ulasan maupun membaca ulasan dari pengguna lain. Nilai unik yang membedakan CariJasa dengan solusi yang sudah ada adalah fokus dan model interaksi platformnya. Berbeda dengan platform yang mencampurkan jasa fisik dan digital, CariJasa secara spesifik berfokus pada layanan digital. Oleh karena itu, alur, tampilan, dan interaksi pada situs web ini dirancang khusus untuk memenuhi kebutuhan industri kreatif dan teknologi digital.
 
 ## 2.2 Asumsi dan Batasan
 ### 2.2.1 Asumsi dari sisi pengguna : 
 #### Tingkat Kemampuan Pengguna
-- Pengguna diasumsikan sudah terbiasa mengoperasikan situs web standar seperti, OTP, login menggunakan google, formulir digital, pembayaran secara digital, dan proses mengunggah dokumen.
+- Pengguna diasumsikan sudah terbiasa mengoperasikan situs web standar seperti, OTP, *login* menggunakan google, formulir digital, pembayaran secara digital, dan proses mengunggah dokumen.
 - Pengguna diasumsikan memiliki dan familiar media pembayaran digital, seperti QRIS, dompet digital, maupun M-Banking.
 #### Perangkat dan/atau Infrastruktur Pengguna 
-- Pengguna diasumsikan memiliki perangkat yang mendukung peramban web modern.
+- Pengguna diasumsikan memiliki perangkat yang mendukung peramban *web* modern.
 - Pengguna diasumsikan memiliki internet dengan kecepatan dan latensi yang stabil untuk proses streaming/upload media yang diperlukan.
 #### Perilaku Pengguna 
 - Pengguna diasumsikan memberikan data berupa identitas, maupun deskripsi jasa yang valid, bukan data palsu yang menyebabkan misinformasi.
 - Pengguna diasumsikan memahami workflow yang harus diikuti dalam memesan jasa dan kooperatif dalam pembelian jasa. 
 - Pengguna diasumsikan menjaga kredensial dan login aplikasi dengan baik dan benar.
-- Penjual memiliki kemampuan dan portofolio yang mencukupi sebelum menawarkan jasa kepada pengguna
-- Penjual memahami workflow laman, termasuk transaksi, proses permintaan jasa, revisi, dan konfirmasi hasil pekerjaan
+- Penjual memiliki kemampuan dan portofolio yang mencukupi sebelum menawarkan jasa kepada pengguna.
+- Penjual memahami workflow laman, termasuk transaksi, proses permintaan jasa, revisi, dan konfirmasi hasil pekerjaan.
 - Diasumsikan penjual dan pembeli aktif dalam berkomunikasi melalui platform yang disediakan dalam proses pengerjaan dan revisi dalam penggunaan jasa.
-- Diasumsikan portofolio yang dibuat penjual tetap berdasarkan pada keaslian dan legalitas baik secara hukum, maupun etika
+- Diasumsikan portofolio yang dibuat penjual tetap berdasarkan pada keaslian dan legalitas baik secara hukum, maupun etika.
 - Pengguna diasumsikan memercayai dan menyetujui pihak CariJasa sebagai pihak penengah dalam proses transaksi dari penahanan dana dari pembayaran di sisi pengguna hingga pencairan dana saat pesanan terkonfirmasi selesai.
 - Penjual diasumsikan memiliki komitmen untuk mengerjakan dan menyelesaikan pesanan dan layanan sesuai deadline dan perjanjian yang sudah disetujui
 - Penjual diasumsikan dapat menentukan harga layanan yang sesuai dengan kemampuan secara mandiri dan masuk akal.
 - Pembeli diasumsikan aktif dalam meninjau dan meminta revisi sesuai waktu yang telah diberikan oleh sistem. 
 
 ### 2.2.2 Asumsi dari sisi pengerjaan teknis perangkat lunak
-- Media penyimpanan baik lokal ataupun cloud diasumsikan memiliki kapasitas yang mencukupi dan mendukung request pengguna, serta menjamin akses baca dan tulis untuk berkas portofolio, brief pengguna, dan dokumen transaksi
+- Media penyimpanan baik lokal ataupun *cloud* diasumsikan memiliki kapasitas yang mencukupi dan mendukung request pengguna, serta menjamin akses baca dan tulis untuk berkas portofolio, *brief* pengguna, dan dokumen transaksi.
 - Diasumsikan ketersediaan dan respons aplikasi terkait pembayaran dan pencairan dana berjalan dengan baik, sesuai dengan status yang telah diberikan.
-- Sistem diasumsikan dapat beroperasi dengan load yang wajar terutama saat dilakukan pengujian dan dapat ditangani dengan satu server tunggal tanpa perlu konfigurasi yang lebih rumit
+- Sistem diasumsikan dapat beroperasi dengan load yang wajar terutama saat dilakukan pengujian dan dapat ditangani dengan satu *server* tunggal tanpa perlu konfigurasi yang lebih rumit.
 - Sistem autentikasi diasumsikan selalu berjalan dengan baik dalam melakukan validasi token pengguna sehingga menghindari pencurian token (akun pengguna).
-- Diasumsikan informasi kredensial yang digunakan telah dienkripsi saat informasi ditransmisikan dari situs web menuju server.
+- Diasumsikan informasi kredensial yang digunakan telah dienkripsi saat informasi ditransmisikan dari situs web menuju *server*.
 
-### 2.2.3 Batasan regulasi/hukum :
-- Sistem yang digunakan harus menjamin keamanan data, kredensial pengguna, informasi transaksi, brief dan konten yang dihasilkan, serta komunikasi antar pengguna. Hal ini ditujukan untuk menjamin data pengguna agar tidak terekspos ke publik tanpa perizinan yang sah
+### 2.2.3 Batasan dan Ruang Lingkup
+#### Batasan regulasi/hukum :
+- Sistem yang digunakan harus menjamin keamanan data, kredensial pengguna, informasi transaksi, *brief* dan konten yang dihasilkan, serta komunikasi antar pengguna. Hal ini ditujukan untuk menjamin data pengguna agar tidak terekspos ke publik tanpa perizinan yang sah.
 - Sistem harus memfasilitasi pengguna terutama pembeli dalam mengajukan revisi dengan jumlah batas yang wajar sehingga pengguna mendapatkan kualitas terbaik dari uang yang dikeluarkan.
-- Sistem hanya berfungsi sebagai perantara yang menghubungkan penjual jasa dan pembeli. Segala bentuk orisinalitas portofolio, karya, dan hasil yang diberikan ditanggungkan kepada masing-masing penjual
-### 2.2.4 Keterbatasan sumber daya 
-- Waktu development yang terbatas karena dilakukan dalam proses perkuliahan sebagai tugas besar.
-- Ketiadaan biaya atau anggaran yang diberikan dalam melakukan development
-- Penggunaan server atau infrastruktur deployment gratis
-- Keterbatasan jumlah anggota dan kapasitas teknis tim yang melakukan development
-- Keterbatasan pengetahuan terkait rekayasa perangkat lunak bagi beberapa anggota
+- Sistem hanya berfungsi sebagai perantara yang menghubungkan penjual jasa dan pembeli. Segala bentuk orisinalitas portofolio, karya, dan hasil yang diberikan ditanggungkan kepada masing-masing penjual.
+#### Keterbatasan sumber daya 
+- Waktu *development* yang terbatas karena dilakukan dalam proses perkuliahan sebagai tugas besar.
+- Ketiadaan biaya atau anggaran yang diberikan dalam melakukan *development*.
+- Penggunaan server atau infrastruktur *deployment* gratis.
+- Keterbatasan jumlah anggota dan kapasitas teknis tim yang melakukan *development*.
+- Keterbatasan pengetahuan terkait rekayasa perangkat lunak bagi beberapa anggota.
 
-### 2.2.5 Ruang lingkup solusi :  
-- Sistem hanya terbatas pada integrasi dengan payment gate atau uang secara virtual tanpa adanya sirkulasi uang ril di dalam aplikasi
+#### Ruang lingkup solusi :  
+- Sistem hanya terbatas pada integrasi dengan *payment gate* atau uang secara *virtual* tanpa adanya sirkulasi uang ril di dalam aplikasi.
 - Sistem tidak menyediakan layanan customer service secara real time selama 24 jam, layanan customer service hanya dibatasi pada pengajuan tiket atau formulir.
 - Sistem hanya menyediakan komunikasi langsung secara teks, tidak mendukung modul komunikasi dalam bentuk video, maupun audio.
 - Sistem hanya menyediakan beberapa jasa pada kategori utama dalam penawaran jasa.
@@ -128,10 +129,10 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 
 ## 3.3 Model Proses Bisnis
 <p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram.png" width="80%">
+<img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 1. Activity Diagram Sederhana dari CariJasa</i>
+<i>Gambar 3.1 Activity Diagram Sederhana dari CariJasa</i>
 </p>
 
 <br>
