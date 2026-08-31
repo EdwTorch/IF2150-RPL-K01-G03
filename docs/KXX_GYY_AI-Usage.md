@@ -35,7 +35,9 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 1
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| *[Nama AI]* | *[Sertakan Tujuan Penggunaan]* | *[Tuliskan Prompt Utama]* | *[Tuliskan Keputusan Hasil Validasi]* |
+| Gemini | Mendapatkan Penjelasan Lebih Lengkap dan Terkait Asumsi dan Batasan | Saya diminta untuk melakukan brainstorming terkait ide, deskripsi perangkat lunak, dan asumsi serta batasan yang diminta dalam pembuatan perangkat lunak, kira kira apa saja yang perlu saya bahas di sana? lalu maksudnya asumsi dari sisi pengguna ini apa? kemampuan mereka kah, atau keperluan mereka terhadap perangkat lunak, atau apa?| AI menjelaskan hal yang diperlukan dalam menjelaskan lingkup Asumsi dan Batasan RPL beserta hint dari setiap poin yang dibutuhkan. Saya (Edward) menggunakannya untuk membuatnya poin poinnya secara mandiri sesuai pengetahuan saya |
+| Gemini | Mendapatkan Kritisi dan Hal yang perlu dilengkapi dalam membuat cakupan asumsi dalam perangkat lunak | Saya ingin membuat parodi fiverr, tolong kritisi yang masih salah, dan berikan hint saja untuk yang kurang terkait asumsi pengguna, Poin 1 .... Poin 2..| AI mengkritisi poin yang saya berikan terkait asumsi perangkat lunak dari  sisi pengguna maupun teknis, saya (Edward) melakukan perbaikan terhadap struktur bahasa dan menambahkan komponen asumsi yang kurang lengkap |
+| Gemini | Mendapatkan Penjelasan lebih lanjut terkait Batasan yang harus dipenuhi dalam dokumen Milestone 1 RPL | kalau yang batasan bagaimana maksudnya, jangan beri contoh dulu | AI memberikan penjelasan dan hint terkait hal yang perlu dibahas, saya (Edward) menggunakannya untuk membuat poin poin yang berhubungan dengan batasan dalam pengembangan Perangkat Lunak |
 | *Gemini* | *Mengecek relasi antar class* | *"Apakah relasi antara class User dan Order dalam UML ini seharusnya composition atau aggregation?"* | *AI menyarankan composition, tapi setelah dicek kembali ke requirement, kami menggunakan aggregation karena Order masih bisa eksis di history.* |
 | | | | | |
 
