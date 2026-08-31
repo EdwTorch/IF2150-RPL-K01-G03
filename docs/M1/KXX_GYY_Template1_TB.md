@@ -79,9 +79,6 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 
 ### 2.2.2 Asumsi dari sisi pengerjaan teknis perangkat lunak
 - Media penyimpanan baik lokal ataupun *cloud* diasumsikan memiliki kapasitas yang mencukupi dan mendukung request pengguna, serta menjamin akses baca dan tulis untuk berkas portofolio, *brief* pengguna, dan dokumen transaksi.
-- Diasumsikan ketersediaan dan respons aplikasi terkait pembayaran dan pencairan dana berjalan dengan baik, sesuai dengan status yang telah diberikan.
-- Sistem diasumsikan dapat beroperasi dengan load yang wajar terutama saat dilakukan pengujian dan dapat ditangani dengan satu *server* tunggal tanpa perlu konfigurasi yang lebih rumit.
-- Sistem autentikasi diasumsikan selalu berjalan dengan baik dalam melakukan validasi token pengguna sehingga menghindari pencurian token (akun pengguna).
 - Diasumsikan informasi kredensial yang digunakan telah dienkripsi saat informasi ditransmisikan dari situs web menuju *server*.
 
 ### 2.2.3 Batasan dan Ruang Lingkup
@@ -97,7 +94,7 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 - Keterbatasan pengetahuan terkait rekayasa perangkat lunak bagi beberapa anggota.
 
 #### Ruang lingkup solusi :  
-- Sistem hanya terbatas pada integrasi dengan *payment gate* atau uang secara *virtual* tanpa adanya sirkulasi uang ril di dalam aplikasi.
+- Sistem hanya terbatas pada sirkulasi pembayaran menggunakan uang  *virtual* tanpa adanya sirkulasi uang ril di dalam aplikasi.
 - Sistem tidak menyediakan layanan customer service secara real time selama 24 jam, layanan customer service hanya dibatasi pada pengajuan tiket atau formulir.
 - Sistem hanya menyediakan komunikasi langsung secara teks, tidak mendukung modul komunikasi dalam bentuk video, maupun audio.
 - Sistem hanya menyediakan beberapa jasa pada kategori utama dalam penawaran jasa.
@@ -136,3 +133,5 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 </p>
 
 <br>
+
+## Daftar Pustaka
