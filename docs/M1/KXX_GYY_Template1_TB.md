@@ -109,7 +109,7 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | :--: | :-- |
 | Penyedia Jasa | Memanfaatkan keterampilan yang dimilikinya untuk menawarkan layanan digital tanpa adanya hubungan kerja formal. Penyedia jasa menampilkan portofolio, menentukan harga, serta mendiskusikan dan menyelesaikan pesanan secara mandi. |
 | Pengguna Jasa | Membutuhkan layanan digital untuk kebutuhan pribadi maupun pekerjaan. Pengguna jasa menggunakan platform untuk mencari penyedia jasa (berdasarkan kriteria spesifiknya), melakukan pemesanan serta pembayaran digital, mengajukan revisi, dan memberikan ulasan. |
-| *Developer* | Pengelola situs web, bertanggung jawab menjaga keamanan data dan transaksi, menyediakan layanan aduan, serta bertindak sebagai penengah dalam proses penahanan hingga pencairan dana. |
+| Admin | Pengelola operasional situs yang bertugas memantau aktivitas pengguna dan interaksinya, memberi respons pada pengaduan dari pengguna, menindaklanjuti pengaduan dengan memblokir atau menghapus akun, serta bertindak sebagai mediator jika terjadi konflik antara pengguna jasa dengan penyedia jasa. |
 
 
 ## 3.2 Kebutuhan Pengguna Awal
@@ -121,8 +121,9 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | US-04 | Pengguna Jasa | Melakukan pemesanan dan pembayaran digital langsung di platform. | Bertransaksi tanpa harus berpindah ke aplikasi lain. |
 | US-05 | Pengguna Jasa | Berkomunikasi mengenai *detail* jasa dan mengajukan revisi pekerjaan. | Memastikan hasil akhir sesuai dengan pesanan. |
 | US-06 | Pengguna Jasa | Membaca dan memberikan ulasan serta penilaian. | Menilai kualitas penyedia jasa dan membantu pengguna lain. |
-| US-07 | *Developer* | Mengurus enkripsi data serta sistem penahanan dan pencairan dana. | Menjamin keamanan transaksi dan kerahasiaan data pengguna. |
-| US-08 | *Developer* | Menyediakan *form* pengaduan dan pusat umpan balik. | Menangani kendala operasional dan memediasi permasalahan transaksi. |
+| US-07 | Admin | Memantau aktivitas dan merespons pengaduan dari pengguna. | Menjaga keamanan dan kenyamanan penggunaan platform. |
+| US-08 | Admin | Memblokir atau menghapus akun berdasarkan pengaduan. | Menindaklanjuti pelanggaran untuk menjaga keberlanjutan platform. |
+| US-09 | Admin | Menjadi mediator konflik antara pengguna jasa dan penyedia jasa. | Menyelesaikan permasalahan transaksi secara adil. |
 
 ## 3.3 Model Proses Bisnis
 <p align="center">
