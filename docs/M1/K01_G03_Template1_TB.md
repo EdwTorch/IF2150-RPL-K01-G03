@@ -125,7 +125,12 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | US-08 | Admin | Memblokir atau menghapus akun berdasarkan pengaduan. | Menindaklanjuti pelanggaran untuk menjaga keberlanjutan platform. |
 | US-09 | Admin | Menjadi mediator konflik antara pengguna jasa dan penyedia jasa. | Menyelesaikan permasalahan transaksi secara adil. |
 
-## 3.3 Model Proses Bisnis
+## 3.3 Deskripsi Aktivitas
+### 3.3.1 Penyedia Jasa
+### 3.3.2 Pengguna Jasa
+### 3.3.3 Admin
+
+## 3.4 Model Proses Bisnis
 <p align="center">
 <img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram.png" width="70%">
 </p>
