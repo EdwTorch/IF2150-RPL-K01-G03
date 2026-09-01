@@ -124,6 +124,8 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | US-07 | Admin | Memantau aktivitas dan merespons pengaduan dari pengguna. | Menjaga keamanan dan kenyamanan penggunaan platform. |
 | US-08 | Admin | Memblokir atau menghapus akun berdasarkan pengaduan. | Menindaklanjuti pelanggaran untuk menjaga keberlanjutan platform. |
 | US-09 | Admin | Menjadi mediator konflik antara pengguna jasa dan penyedia jasa. | Menyelesaikan permasalahan transaksi secara adil. |
+| US-10 | Admin | Memvalidasi pembayaran, menahan dana transaksi di rekening platform, dan mengurus pencairan dana. | Menjamin keamanan serta kelancaran arus finansial antara pembeli dan penjual. |
+| US-11 | Semua Aktor | Melakukan pendaftaran (registrasi), pengisian data diri, dan proses autentikasi akun (login). | Mendapatkan akses terhadap akun masing-masing ke dalam sistem dan melindungi data pribadi. |
 
 ## 3.3 Deskripsi Aktivitas
 ### 3.3.1 Penyedia Jasa
@@ -147,7 +149,7 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | B01 | Registrasi Akun | Pendaftaran akun pada platform. | US-11 |
 | B02 | Melengkapi Profil | Mengisi dan melengkapi data-data yang diperlukan untuk menggunakan platform. | US-11 |
 | B03 | Login Akun | Pengguna jasa masuk ke akun yang telah dibuat. | US-11 |
-| B04 | Pencarian Layanan | Pengguna mencari jasa yang dibutuhkan berdasarkan kata kunci atau kategori jasa. | US-0 |
+| B04 | Pencarian Layanan | Pengguna mencari jasa yang dibutuhkan berdasarkan kata kunci atau kategori jasa. | US-03 |
 | B05 | Memfilter Jasa | Pengguna menyaring hasil pencarian berdasarkan kriteria tertentu, seperti kategori jasa, harga, waktu, lokasi, dan rating. | US-03 |
 | B06 | Melihat Detail Jasa | Pengguna melihat informasi lebih detail mengenai suatu jasa. | US-03 |
 | B07 | Membandingkan Jasa | Pengguna jasa dapat membandingkan berbagai penyedia jasa yang mungkin relevan dengan kriteria yang dimilikinya. | US-03 |
