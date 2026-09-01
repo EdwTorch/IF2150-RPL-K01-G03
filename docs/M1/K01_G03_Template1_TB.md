@@ -125,7 +125,51 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | US-08 | Admin | Memblokir atau menghapus akun berdasarkan pengaduan. | Menindaklanjuti pelanggaran untuk menjaga keberlanjutan platform. |
 | US-09 | Admin | Menjadi mediator konflik antara pengguna jasa dan penyedia jasa. | Menyelesaikan permasalahan transaksi secara adil. |
 
-## 3.3 Model Proses Bisnis
+## 3.3 Deskripsi Aktivitas
+### 3.3.1 Penyedia Jasa
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--: | :--- | :--- | :--: |
+| A01 | Registrasi Akun | Melakukan pendaftaran akun pada platform. | US-11 |
+| A02 | Melengkapi Profil | Melengkapi informasi diri dan portofolionya. | US-01 |
+| A03 | Login Akun | Penyedia jasa masuk ke akun yang telah dibuat. | US-11 |
+| A04 | Mengunggah Hasil Pekerjaan | Memberikan dokumen pengerjaan kepada pengguna jasa. | US-02 |
+| A05 | Mempromosikan Jasa | Penyedia jasa membuat *post* terkait jasa yang ia jual. | US-01 |
+| A06 | Negosiasi dan Komunikasi | Penyedia jasa dapat menjawab dan berdiskusi dengan calon pembeli atau pembeli terkait ketersediaan jasa dan waktu. | US-02 |
+| A07 | Mengonfirmasi Pesanan | Penyedia jasa dan pengguna mengonfirmasi hasil negosiasi sebelum pekerjaan dimulai.	| US-02 |
+| A08 | Mengirim Hasil dan/atau Draft Produk | Penyedia jasa memberikan hasil dan/atau draft produk kepada pengguna jasa. | US-02 |
+| A09 | Mengerjakan Revisi | Penyedia jasa melakukan revisi berdasarkan keinginan pengguna. | US-02 |
+| A10 | Menerima Pembayaran sesuai Jasa yang Berlaku | Penyedia jasa mendapatkan pembayaran sesuai dengan harga yang sudah ditentukan. | US-01 |
+| A11 | Melaporkan Pengguna Jasa yang Bermasalah | Penyedia jasa dapat melaporkan pengguna yang bermasalah atau tidak bertanggung jawab atas pesanannya. | US-07 |
+
+### 3.3.2 Pengguna Jasa
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--: | :--- | :--- | :--: |
+| B01 | Registrasi Akun | Pendaftaran akun pada platform. | US-11 |
+| B02 | Melengkapi Profil | Mengisi dan melengkapi data-data yang diperlukan untuk menggunakan platform. | US-11 |
+| B03 | Login Akun | Pengguna jasa masuk ke akun yang telah dibuat. | US-11 |
+| B04 | Pencarian Layanan | Pengguna mencari jasa yang dibutuhkan berdasarkan kata kunci atau kategori jasa. | US-0 |
+| B05 | Memfilter Jasa | Pengguna menyaring hasil pencarian berdasarkan kriteria tertentu, seperti kategori jasa, harga, waktu, lokasi, dan rating. | US-03 |
+| B06 | Melihat Detail Jasa | Pengguna melihat informasi lebih detail mengenai suatu jasa. | US-03 |
+| B07 | Membandingkan Jasa | Pengguna jasa dapat membandingkan berbagai penyedia jasa yang mungkin relevan dengan kriteria yang dimilikinya. | US-03 |
+| B08 | Menyimpan Jasa | Pengguna dapat menyimpan jasa yang dianggap menarik untuk dilihat kembali. | US-03 |
+| B09 | Negosiasi | Calon pengguna jasa dapat berdiskusi dengan penyedia jasa terkait hal-hal teknis. | US-05 |
+| B10 | Pemesanan | Pengguna jasa memesan jasa melalui platform sesuai dengan kesepakatan. | US-04 |
+| B11 | Pembayaran | Pengguna jasa dapat melakukan pembayaran secara langsung pada platform. | US-04 |
+| B12 | Mengajukan Revisi | Pengguna jasa dapat mengajukan revisi terkait hasil pekerjaan kepada penyedia jasa. | US-05 |
+| B13 | Mengajukan Tiket Laporan | Pengguna jasa dapat mengajukan laporan terkait penyedia jasa kepada admin. | US-07 |
+| B14 | Memberikan Ulasan | Pengguna jasa dapat memberikan ulasan terkait pengalamannya memesan pada suatu penyedia jasa tertentu. | US-06 |
+
+### 3.3.3 Admin
+| ID | Aktivitas | Penjelasan | ID User Story |
+| :--: | :--- | :--- | :--: |
+| C01 | Login Akun | Admin memulai segala proses dengan melakukan login terhadap dashboard admin CariJasa. | US-11 |
+| C02 | Penanganan Tiket/Form Laporan Pengguna | Admin dapat menanggapi atau memberikan bantuan terkait permasalahan user melalui pertanyaan yang diajukan user melalui tiket/form. | US-07 |
+| C03 | Pemantauan dan Pelaporan Terkait Perilaku Pengguna | Admin meninjau perilaku pengguna yang dilaporkan dengan bukti yang diberikan oleh pengguna, lalu memberikan tindak lanjut berdasarkan bukti yang diberikan sesuai SOP yang berlaku. | US-08 |
+| C04 | Mediasi Pengguna dan Penanganan Konflik | Berkomunikasi dengan pihak yang berkonflik dan memberikan sanksi kepada pihak yang ditemukan bersalah. | US-09 |
+| C05 | Validasi dan Tahan Dana | Admin memvalidasi pembayaran dari pengguna dan menahannya dengan aman di rekening platform. | US-10 |
+| C06 | Pencairan Dana | Admin mengurus pelepasan dana agar masuk ke saldo penyedia jasa setelah pesanan selesai. | US-10 |
+
+## 3.4 Model Proses Bisnis
 <p align="center">
 <img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram.png" width="70%">
 </p>
