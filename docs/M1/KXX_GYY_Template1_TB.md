@@ -121,8 +121,9 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | US-04 | Pengguna Jasa | Melakukan pemesanan dan pembayaran digital langsung di platform. | Bertransaksi tanpa harus berpindah ke aplikasi lain. |
 | US-05 | Pengguna Jasa | Berkomunikasi mengenai *detail* jasa dan mengajukan revisi pekerjaan. | Memastikan hasil akhir sesuai dengan pesanan. |
 | US-06 | Pengguna Jasa | Membaca dan memberikan ulasan serta penilaian. | Menilai kualitas penyedia jasa dan membantu pengguna lain. |
-| US-07 | *Developer* | Mengurus enkripsi data serta sistem penahanan dan pencairan dana. | Menjamin keamanan transaksi dan kerahasiaan data pengguna. |
-| US-08 | *Developer* | Menyediakan *form* pengaduan dan pusat umpan balik. | Menangani kendala operasional dan memediasi permasalahan transaksi. |
+| US-07 | Admin | Memantau aktivitas dan merespons pengaduan dari pengguna. | Menjaga keamanan dan kenyamanan penggunaan platform. |
+| US-08 | Admin | Memblokir atau menghapus akun berdasarkan pengaduan. | Menindaklanjuti pelanggaran untuk menjaga keberlanjutan platform. |
+| US-09 | Admin | Menjadi mediator konflik antara pengguna jasa dan penyedia jasa. | Menyelesaikan permasalahan transaksi secara adil. |
 
 ## 3.3 Model Proses Bisnis
 <p align="center">
