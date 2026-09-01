@@ -107,9 +107,9 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 ## 3.1 Identifikasi Aktor
 | Aktor | Deskripsi |
 | :--: | :-- |
-| Penyedia Jasa | Memanfaatkan keterampilan yang dimilikinya untuk menawarkan layanan digital tanpa adanya hubungan kerja formal. Penyedia jasa menampilkan portofolio, menentukan harga, serta mendiskusikan dan menyelesaikan pesanan secara mandi. |
-| Pengguna Jasa | Membutuhkan layanan digital untuk kebutuhan pribadi maupun pekerjaan. Pengguna jasa menggunakan platform untuk mencari penyedia jasa (berdasarkan kriteria spesifiknya), melakukan pemesanan serta pembayaran digital, mengajukan revisi, dan memberikan ulasan. |
-| Admin | Pengelola operasional situs yang bertugas memantau aktivitas pengguna dan interaksinya, memberi respons pada pengaduan dari pengguna, menindaklanjuti pengaduan dengan memblokir atau menghapus akun, serta bertindak sebagai mediator jika terjadi konflik antara pengguna jasa dengan penyedia jasa. |
+| Penyedia Jasa | Memanfaatkan keterampilan yang dimilikinya untuk menawarkan layanan digital tanpa adanya hubungan kerja formal. Penyedia jasa menampilkan portofolio, mempromosikan jasa, menentukan harga, serta bernegosiasi dan menyelesaikan pesanan (termasuk mengirim draf dan revisi) secara mandiri. Aktor ini juga dapat melaporkan pengguna jasa yang bermasalah. |
+| Pengguna Jasa | Membutuhkan layanan digital untuk kebutuhan pribadi maupun pekerjaan. Pengguna jasa menggunakan platform untuk mencari penyedia jasa berdasarkan kriteria spesifiknya (melalui filter, perbandingan, dan fitur simpan jasa), bernegosiasi, melakukan pemesanan serta pembayaran digital, mengajukan revisi, memberikan ulasan, dan mengajukan tiket pengaduan kepada admin. |
+| Admin | Pengelola operasional situs yang bertugas memantau aktivitas pengguna dan interaksinya. Admin memberikan respons pada tiket pengaduan, menindaklanjuti pelanggaran sesuai SOP (seperti memblokir atau menghapus akun), bertindak sebagai mediator jika terjadi konflik transaksi, serta mengelola alur keuangan. |
 
 
 ## 3.2 Kebutuhan Pengguna Awal
