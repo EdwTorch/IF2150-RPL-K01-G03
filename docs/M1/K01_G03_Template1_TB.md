@@ -135,3 +135,4 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 <br>
 
 ## Daftar Pustaka
+<p>Badan Pusat Statistik. (2026). Keadaan angkatan kerja di Indonesia Februari 2026 (Vol. 48, No. 1). Badan Pusat Statistik.</p>
