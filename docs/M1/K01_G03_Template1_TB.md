@@ -199,9 +199,7 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 <i>Gambar 3.3 Activity Diagram Pemesanan dan Transaksi dari CariJasa</i>
 </p>
 
-### 3.4.4 Penanganan Laporan
-*soon*
-<br>
+
 
 ## Daftar Pustaka
 <p>Badan Pusat Statistik. (2026). Keadaan angkatan kerja di Indonesia Februari 2026 (Vol. 48, No. 1). Badan Pusat Statistik.</p>
