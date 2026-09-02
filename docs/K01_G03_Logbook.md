@@ -36,6 +36,7 @@
 | *27-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan Pemilihan Nama Kelompok, SDGs dan Ide Kasar Produk yang ingin dibuat | <1 Jam | Done | - | 
 | *28-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan brainstorming ide, menentukan nama produk, dan membagi tugas  | <1 Jam | Done | - | 
 | *31-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan asistensi Milestone 1  | 1 Jam | Done | - | 
+| *01-09-2026* | Revandra, Danesh, Theresia, Edward, Necia | Berdiskusi terkait tugas tambahan 3.3 serta revisi Milestone 1  | 1 Jam | Done | - | 
 | | | | | | | |
 
 **Catatan/Evaluasi Milestone 1:**
