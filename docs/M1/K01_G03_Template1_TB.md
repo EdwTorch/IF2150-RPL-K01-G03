@@ -172,13 +172,35 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 | C06 | Pencairan Dana | Admin mengurus pelepasan dana agar masuk ke saldo penyedia jasa setelah pesanan selesai. | US-10 |
 
 ## 3.4 Model Proses Bisnis
+### 3.4.1 Autentikasi
 <p align="center">
-<img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram.png" width="70%">
+<img alt="Activity Diagram Autentikasi dari CariJasa" src="./assets/diagram/activity-diagram-autentikasi.png" width="90%">
+
 </p>
 <p align="center">
-<i>Gambar 3.1 Activity Diagram Sederhana dari CariJasa</i>
+<i>Gambar 3.1 Activity Diagram Autentikasi dari CariJasa</i>
 </p>
 
+### 3.4.2 Pencarian Layanan
+<p align="center">
+<img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram-pencarian-layanan.png" width="90%">
+
+</p>
+<p align="center">
+<i>Gambar 3.2 Activity Diagram Pencarian Layanan dari CariJasa</i>
+</p>
+
+### 3.4.3 Pemesanan dan Transaksi
+<p align="center">
+<img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram-pemesanan-dan-transaksi.png" width="90%">
+
+</p>
+<p align="center">
+<i>Gambar 3.3 Activity Diagram Pemesanan dan Transaksi dari CariJasa</i>
+</p>
+
+### 3.4.4 Penanganan Laporan
+*soon*
 <br>
 
 ## Daftar Pustaka
