@@ -54,8 +54,8 @@ Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan A
 
 | Tanda Tangan | Nama Anggota |
 | :---: | :--- |
-| <img src="./assets/ttd-anggota1.png" width="100"> | 13525031 - Revandra Zacky Maharta |
-| <img src="./assets/ttd-anggota2.png" width="100"> | 13525079 - Danesh Rasyad Damotino |
-| <img src="./assets/ttd-anggota3.png" width="100"> | 13525088 - Theresia Estelina Ratu Udju |
-| <img src="./assets/ttd-anggota4.png" width="100"> | 13525127 - Edward Terrance Lie |
-| <img src="./assets/ttd-anggota5.png" width="100"> | 13525130 - Necia Aurely Greva Dedevi |
+| <img src="M1/assets/ttd-anggota1.png" width="100"> | 13525031 - Revandra Zacky Maharta |
+| <img src="M1/assets/ttd-anggota2.png" width="100"> | 13525079 - Danesh Rasyad Damotino |
+| <img src="M1/assets/ttd-anggota3.png" width="100"> | 13525088 - Theresia Estelina Ratu Udju |
+| <img src="M1/assets/ttd-anggota4.png" width="100"> | 13525127 - Edward Terrance Lie |
+| <img src="M1/assets/ttd-anggota5.png" width="100"> | 13525130 - Necia Aurely Greva Dedevi |
