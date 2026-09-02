@@ -191,7 +191,16 @@ Solusi perangkat lunak yang kami usulkan adalah sebuah platform pencarian jasa, 
 </p>
 
 ### 3.4.3 Pemesanan dan Transaksi
+<p align="center">
+<img alt="Contoh Activity Diagram" src="./assets/diagram/activity-diagram-pemesanan-dan-transaksi.png" width="90%">
 
+</p>
+<p align="center">
+<i>Gambar 3.3 Activity Diagram Pemesanan dan Transaksi dari CariJasa</i>
+</p>
+
+### 3.4.4 Penanganan Laporan
+*soon*
 <br>
 
 ## Daftar Pustaka
