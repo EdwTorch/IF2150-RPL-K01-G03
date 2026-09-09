@@ -59,6 +59,8 @@
 | *08-09-2026 & 09-09-2026* | Theresia, Necia | Mengerjakan revisi pemetaan kebutuhan  | <3 Jam | Done | - |
 | *08-09-2026 & 09-09-2026* | Theresia, Necia | Mengerjakan revisi pemetaan kebutuhan  | <3 Jam | Done | - |
 | *08-09-2026 & 09-09-2026* | Edward | Memperbaiki Deskripsi Sistem dan Numberin R action di Kebutuhan Fungsional | 2 Jam | Done | - |
+| *08-09-2026 & 09-09-2026* | Danesh | Memperbaiki penjelasan pada KF dan deskripsi kebutuhan pada KNF agar sesuai format | 3 Jam | Done | - |
+| *09-09-2026* | Danesh | Menyesuaikan ID Kebutuhan pada KF | 3 Jam | Done | - |
 **Catatan/Evaluasi Milestone 2:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
