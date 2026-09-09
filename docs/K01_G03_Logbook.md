@@ -39,8 +39,10 @@
 | *29-08-2026* | Theresia | Mengerjakan bagian deskripsi perangkat lunak  | <2 Jam | Done | - |
 | *29-08-2026* | Edward | Mengerjakan Asumsi dalam Pembuatan Rancangan Perangkat Lunak | 2 Jam | Done | - |
 | *29-08-2026* | Necia | Mengerjakan analisis permasalahan | <3 Jam | Done | - |
+| *30-08-2026* | Danesh | Membuat Activity Diagram awal (sederhana) untuk bagian 3.4 | 1 jam | Done | Membiasakan diri dengan draw.io |
 | *31-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan asistensi Milestone 1  | 1 Jam | Done | - | 
-| *01-09-2026* | Revandra, Danesh, Theresia, Edward, Necia | Berdiskusi terkait tugas tambahan 3.3 serta revisi Milestone 1  | 1 Jam | Done | - | 
+| *01-09-2026* | Revandra, Danesh, Theresia, Edward, Necia | Berdiskusi terkait tugas tambahan 3.3 serta revisi Milestone 1  | 1 Jam | Done | - |
+| *02-09-2026* | Danesh | Melakukan revisi pada bagian 3.4 dan mengerjakan 3.3 | >3 jam | Done | - |
 
 **Catatan/Evaluasi Milestone 1:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
