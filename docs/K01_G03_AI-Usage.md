@@ -23,6 +23,7 @@
 
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
+* [Milestone 2](#milestone-2)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 ---
@@ -46,7 +47,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | Gemini | Mendapatkan Penjelasan dan Detail Umum  Terkait Kebutuhan Fungsional  | kebutuhan fungsional itu seperti apa? | AI memberikan penjelasan terkait apa itu kebutuhan fungsional beserta contoh-contohnya, serta ciri-cirinya. Saya (Edward) melakukan pemahaman dan mencoba membuat draft terkait informasi yang dikemukakan terkait kebutuhan fungsional |
 | Gemini | Mendapatkan masukan terhadap draf kebutuhan fungsional | saya telah membuat draf dengan bentuk ... tolong berikan kritik dan point out hal yang membuatnya masih kurang baik, berikan hint saja bukan kalimat | AI memberikan poin kritik dan arahan (hint) terkait kebutuhan fungsional. Saya (Edward) meninjau kembali masukan dan memperbaikinya sesuai pemahaman saya dan materi yang telah diberikan |
-| |  |  |  |
+| Chat GPT |  Membantu mengidentifikasi beberapa jenis kebutuhan berdasarkan deskripsi kebutuhan | Tentukan jenis kebutuhan dari deskripsi tersebut  | Tidak ada yang perlu untuk dimodifikasi |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
