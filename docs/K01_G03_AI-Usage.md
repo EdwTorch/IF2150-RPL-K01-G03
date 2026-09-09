@@ -46,7 +46,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | Gemini | Mendapatkan Penjelasan dan Detail Umum  Terkait Kebutuhan Fungsional  | kebutuhan fungsional itu seperti apa? | AI memberikan penjelasan terkait apa itu kebutuhan fungsional beserta contoh-contohnya, serta ciri-cirinya. Saya (Edward) melakukan pemahaman dan mencoba membuat draft terkait informasi yang dikemukakan terkait kebutuhan fungsional |
 | Gemini | Mendapatkan masukan terhadap draf kebutuhan fungsional | saya telah membuat draf dengan bentuk ... tolong berikan kritik dan point out hal yang membuatnya masih kurang baik, berikan hint saja bukan kalimat | AI memberikan poin kritik dan arahan (hint) terkait kebutuhan fungsional. Saya (Edward) meninjau kembali masukan dan memperbaikinya sesuai pemahaman saya dan materi yang telah diberikan |
-| |  |  |  |
+| Gemini | Memperoleh arahan dan penjelasan mengenai Kebutuhan Non-Fungsional | tolong jelaskan kepada saya bagaimana kebutuhan non-fungsional itu dan berikan contoh-contohnya | AI memberikan penjelasan mengenai kebutuhan non-fungsional, lalu saya (Revandra) mempelajari lebih lanjut dan memahami implementasinya pada aplikasi CariJasa. |
 
 ---
 ### Pernyataan Integritas dan Persetujuan
