@@ -39,8 +39,13 @@
 | *29-08-2026* | Theresia | Mengerjakan bagian deskripsi perangkat lunak  | <2 Jam | Done | - |
 | *29-08-2026* | Edward | Mengerjakan Asumsi dalam Pembuatan Rancangan Perangkat Lunak | 2 Jam | Done | - |
 | *29-08-2026* | Necia | Mengerjakan analisis permasalahan | <3 Jam | Done | - |
+| *29-08-2026* | Revandra | Mengerjakan bagian daftar seluruh aktor | 1,5 jam | Done | - |
+| *29-08-2026* | Revandra | Mengerjakan bagian kebutuhan awal seluruh aktor | 1 jam | Done | - |
+| *30-08-2026* | Danesh | Membuat Activity Diagram awal (sederhana) untuk bagian 3.4 | 1 jam | Done | Membiasakan diri dengan draw.io |
 | *31-08-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan asistensi Milestone 1  | 1 Jam | Done | - | 
-| *01-09-2026* | Revandra, Danesh, Theresia, Edward, Necia | Berdiskusi terkait tugas tambahan 3.3 serta revisi Milestone 1  | 1 Jam | Done | - | 
+| *01-09-2026* | Revandra, Danesh, Theresia, Edward, Necia | Berdiskusi terkait tugas tambahan 3.3 serta revisi Milestone 1  | 1 Jam | Done | - |
+| *01-09-2026* | Revandra | Mengerjakan revisi untuk daftar aktor dan perannya | 1,5 jam | Done | - |
+| *02-09-2026* | Danesh | Melakukan revisi pada bagian 3.4 dan mengerjakan 3.3 | >3 jam | Done | - |
 
 **Catatan/Evaluasi Milestone 1:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
@@ -59,6 +64,8 @@
 | *08-09-2026 & 09-09-2026* | Theresia, Necia | Mengerjakan revisi pemetaan kebutuhan  | <3 Jam | Done | - |
 | *08-09-2026 & 09-09-2026* | Theresia, Necia | Mengerjakan revisi pemetaan kebutuhan  | <3 Jam | Done | - |
 | *08-09-2026 & 09-09-2026* | Edward | Memperbaiki Deskripsi Sistem dan Numberin R action di Kebutuhan Fungsional | 2 Jam | Done | - |
+| *08-09-2026 & 09-09-2026* | Danesh | Memperbaiki penjelasan pada KF dan deskripsi kebutuhan pada KNF agar sesuai format | 3 Jam | Done | - |
+| *09-09-2026* | Danesh | Menyesuaikan ID Kebutuhan pada KF | < 1 Jam | Done | - |
 **Catatan/Evaluasi Milestone 2:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
