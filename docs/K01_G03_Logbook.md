@@ -50,6 +50,8 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | *03-09-2026* | Revandra, Danesh, Theresia, Edward, Necia | Membagi tugas milestone 2 | <1 Jam | Done | - |
 | *04-09-2026* | Theresia, Necia | Mengerjakan bagian pemetaan kebutuhan  | 2 Jam | Done | - |
+| *05-09-2026* | Revandra | Mengerjakan bagian kebutuhan non-fungsional | < 1 jam | Done | - |
+| *08-09-2026* | Revandra | Mengerjakan revisi pada deskripsi pengguna perangkat lunak | < 1 jam | Done | - |
 | *08-09-2026 & 09-09-2026* | Theresia, Necia | Mengerjakan revisi pemetaan kebutuhan  | <3 Jam | Done | - |
 | *07-09-2026* | Revandra, Danesh, Theresia, Edward, Necia | Melakukan asistensi milestone 2 | 1 Jam | Done | - |
 
