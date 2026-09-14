@@ -70,6 +70,13 @@
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ---
+### Milestone 3
+**Periode:** [9 September 2026] - [16 September 2026]
 
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- | 
+| *10-09-2026* | Revandra, Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian UseCase | <1 Jam | Done | - |
+| *11-09-2026* | Edward | Menyelesaikan UC10-UC12 (Sekarang UC11-UC13) | 3 Jam | Done | - |
+| *13-09-2026* | Revandra, Danesh, Theresia, Edward, Necia  | Asistensi M3 | 1 Jam | Done | - |
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
