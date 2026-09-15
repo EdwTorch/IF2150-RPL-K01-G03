@@ -24,6 +24,7 @@
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
+* [Milestone 3](#milestone-3)
 * Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
 
 
@@ -66,6 +67,7 @@
 | *08-09-2026 & 09-09-2026* | Edward | Memperbaiki Deskripsi Sistem dan Numberin R action di Kebutuhan Fungsional | 2 Jam | Done | - |
 | *08-09-2026 & 09-09-2026* | Danesh | Memperbaiki penjelasan pada KF dan deskripsi kebutuhan pada KNF agar sesuai format | 3 Jam | Done | - |
 | *09-09-2026* | Danesh | Menyesuaikan ID Kebutuhan pada KF | < 1 Jam | Done | - |
+
 **Catatan/Evaluasi Milestone 2:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
@@ -77,6 +79,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | 
 | *10-09-2026* | Revandra, Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian UseCase | <1 Jam | Done | - |
 | *11-09-2026* | Edward | Menyelesaikan UC10-UC12 (Sekarang UC11-UC13) | 3 Jam | Done | - |
+| *12-09-2026* | Theresia | Menyelesaikan UC7-UC9 (Sekarang UC8-UC10) | 3 Jam | Done | - |
 | *13-09-2026* | Revandra, Danesh, Theresia, Edward, Necia  | Asistensi M3 | 1 Jam | Done | - |
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
