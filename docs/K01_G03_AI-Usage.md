@@ -55,7 +55,8 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 ### Milestone 3
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
-| Gemini | Memastikan Penggunaan Usecase dan penulisan skenario usecase | Bagaimana UseCase diterapkan dalam bentuk skenario yang da, berikan contoh skenario yang dapat dijadikan contoh untuk tugas saya | AI Memberikan pemahaman terkait usecase dan bentuk umum dari skenario usecase saya (Edward) melakukan pembentukan skenario dari usecase yang telah dibuat dengan referensi yang telah disarankan AI dan materi yang ada | 
+| Gemini | Memastikan Penggunaan Usecase dan penulisan skenario usecase | Bagaimana UseCase diterapkan dalam bentuk skenario yang da, berikan contoh skenario yang dapat dijadikan contoh untuk tugas saya | AI Memberikan pemahaman terkait usecase dan bentuk umum dari skenario usecase saya (Edward) melakukan pembentukan skenario dari usecase yang telah dibuat dengan referensi yang telah disarankan AI dan materi yang ada |
+| Gemini | Menerima masukan dan kritik terhadap draf use case yang telah dibuat | berikut merupakan draf dari use case yang telah saya buat, tolong beri masukan dan beri tahu apakah terdapat bagian-bagian yang masih kurang tepat, tidak perlu memberi jawaban secara langsung, beri jawaban berupa hint | AI memberikan beberapa poin kritik dan arahan (hint) terhadap hal-hal yang masih bisa diperbaiki. Saya (Revandra) mengkaji ulang hal-hal yang ditunjukkan dan memperbaikinya dengan materi yang sudah diajari sebagai referensi juga. |
 ### Pernyataan Integritas dan Persetujuan
 
 Kami yang bertanda tangan di bawah ini menyatakan bahwa seluruh log penggunaan AI di atas adalah benar. Kami telah memvalidasi seluruh hasil AI dan bertanggung jawab penuh atas orisinalitas, keamanan, dan kebenaran hasil akhir dari tugas ini.
