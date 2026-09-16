@@ -77,6 +77,7 @@
 | *10-09-2026* | Revandra, Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian UseCase | <1 Jam | Done | - |
 | *11-09-2026* | Edward | Menyelesaikan UC10-UC12 (Sekarang UC11-UC13) | 3 Jam | Done | - |
 | *12-09-2026* | Theresia | Menyelesaikan UC7-UC9 (Sekarang UC8-UC10) | 3 Jam | Done | - |
+| *12-09-2026* | Necia | Menyelesaikan UC01 - UC03 dan Diagram Use Case | <4 Jam | Done | - |
 | *12-09-2026* & *13-09-2026* | Revandra | Menyelesaikan UC13—UC15 (sekarang UC14—UC16) | 3 Jam | Done | - |
 | *13-09-2026* | Revandra, Danesh, Theresia, Edward, Necia  | Asistensi M3 | 1 Jam | Done | - |
 | *13-09-2026* | Danesh | Mengerjakan skenario normal UC04, UC05, dan UC07 serta mengisi form asistensi | 1 Jam | Done | - |
