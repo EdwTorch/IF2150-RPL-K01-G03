@@ -25,9 +25,6 @@
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
-* Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
-
-
 ---
 
 ### Milestone 1
@@ -84,5 +81,8 @@
 | *13-09-2026* | Revandra, Danesh, Theresia, Edward, Necia  | Asistensi M3 | 1 Jam | Done | - |
 | *13-09-2026* | Danesh | Mengerjakan skenario normal UC04, UC05, dan UC07 serta mengisi form asistensi | 1 Jam | Done | - |
 | *15-09-2026* | Danesh | Menyelesaikan UC04-UC07 | 1 jam | Done | - |
+
+**Catatan/Evaluasi Milestone 3:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
