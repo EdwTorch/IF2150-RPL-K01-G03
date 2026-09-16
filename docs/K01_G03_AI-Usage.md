@@ -24,7 +24,8 @@
 ### Daftar Isi
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
-* Notes: Copy bagian Daftar Isi seperti Milestone 1 untuk Milestone berikutnya, contoh ``* [Milestone 2](#milestone-2)``. Ketika Daftar isi diklik maka akan langsung diarahkan ke bagian bawah sesuai dengan Milestone tujuan.
+* [Milestone 3](#milestone-3)
+
 
 ---
 
@@ -58,6 +59,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Memastikan Penggunaan Usecase dan penulisan skenario usecase | Bagaimana UseCase diterapkan dalam bentuk skenario yang da, berikan contoh skenario yang dapat dijadikan contoh untuk tugas saya | AI Memberikan pemahaman terkait usecase dan bentuk umum dari skenario usecase saya (Edward) melakukan pembentukan skenario dari usecase yang telah dibuat dengan referensi yang telah disarankan AI dan materi yang ada |
 | Gemini | Menerima masukan dan kritik terhadap draf use case yang telah dibuat | berikut merupakan draf dari use case yang telah saya buat, tolong beri masukan dan beri tahu apakah terdapat bagian-bagian yang masih kurang tepat, tidak perlu memberi jawaban secara langsung, beri jawaban berupa hint | AI memberikan beberapa poin kritik dan arahan (hint) terhadap hal-hal yang masih bisa diperbaiki. Saya (Revandra) mengkaji ulang hal-hal yang ditunjukkan dan memperbaikinya dengan materi yang sudah diajari sebagai referensi juga. |
 | Claude | Memastikan relasi include/extend dari beberapa use case | Apakah relasi include/extend dari dua use case tersebut sudah benar? | Menganalisis apakah relasi tersebut memang sesuai atau tidak. Jika tidak maka hapus relasi yang tidak diperlukan. |
+| Gemini | Menganalisis skenario Use Case  | Berikut adalah skenario Use Case yang telah saya buat, analisislah serta beri masukan terkait skenario alternatif dan eksepsi yang mungkin terjadi | AI memberikan kritik dan saran terhadap skenario yang telah ada, beberapa ditolak karena tidak sesuai dengan hasil asistensi. Selain itu, AI memberikan ide skenario alternatif/eksepsi yang mungkin terjadi, tetapi hanya digunakan yang esensial (penting) saja |
 
 ### Pernyataan Integritas dan Persetujuan
 
