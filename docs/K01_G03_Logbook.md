@@ -82,5 +82,7 @@
 | *12-09-2026* | Theresia | Menyelesaikan UC7-UC9 (Sekarang UC8-UC10) | 3 Jam | Done | - |
 | *12-09-2026* & *13-09-2026* | Revandra | Menyelesaikan UC13—UC15 (sekarang UC14—UC16) | 3 Jam | Done | - |
 | *13-09-2026* | Revandra, Danesh, Theresia, Edward, Necia  | Asistensi M3 | 1 Jam | Done | - |
+| *13-09-2026* | Danesh | Mengerjakan skenario normal UC04, UC05, dan UC07 serta mengisi form asistensi | 1 Jam | Done | - |
+| *15-09-2026* | Danesh | Menyelesaikan UC04-UC07 | 1 jam | Done | - |
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
