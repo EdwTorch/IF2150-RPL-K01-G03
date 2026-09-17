@@ -83,6 +83,14 @@
 | *13-09-2026* | Danesh | Mengerjakan skenario normal UC04, UC05, dan UC07 serta mengisi form asistensi | 1 Jam | Done | - |
 | *15-09-2026* | Danesh | Menyelesaikan UC04-UC07 | 1 jam | Done | - |
 
+
+### Milestone 4
+**Periode:** [17 September 2026] - [23 September 2026]
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *10-09-2026* | Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian Class | 1,5 Jam | Done | Tidak memahami Maksud Tipe Class yang ingin dikerjakan (Apakah Entity Based atau BCE Based) |
+
+
 **Catatan/Evaluasi Milestone 3:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
