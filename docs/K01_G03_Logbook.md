@@ -88,7 +88,8 @@
 **Periode:** [17 September 2026] - [23 September 2026]
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| *10-09-2026* | Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian Class | 1,5 Jam | Done | Tidak memahami Maksud Tipe Class yang ingin dikerjakan (Apakah Entity Based atau BCE Based) |
+| *17-09-2026* | Danesh, Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian Class | 1,5 Jam | Done | Tidak memahami Maksud Tipe Class yang ingin dikerjakan (Apakah Entity Based atau BCE Based) |
+| *18-09-2026* | Necia,Edward | Memperbaiki Pembagian Class | 1,5 Jam | Done | Masih Ragu |
 
 
 **Catatan/Evaluasi Milestone 3:**
