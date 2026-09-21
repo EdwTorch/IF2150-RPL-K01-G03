@@ -63,6 +63,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Menganalisis skenario Use Case  | Berikut adalah skenario Use Case yang telah saya buat, analisislah serta beri masukan terkait skenario alternatif dan eksepsi yang mungkin terjadi | Memfilter kritik dan saran berdasarkan hasil asistensi serta memfilter ide skenario alternatif/eksepsi sesuai dengan kebutuhan (yang esensial saja) |
 ---
 
+### Milestone 4
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Mendapatkan Penjelasan Terkait Relasi Antarkelas  | Jelaskan asosiasi, agregasi, komposisi, generalisasi, atau dependensi dalam relasi kelas | AI memberikan penjelasan secara detail terkait tiap relasi kelas. Saya (There) memeriksa kembali penjelasan dari AI tersebut melalui membandingkannya dengan ppt dosen dan ppt asistensi akbar |
+
+
 ### Pernyataan Integritas dan Persetujuan
 
 
