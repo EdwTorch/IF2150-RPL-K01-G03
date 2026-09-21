@@ -25,6 +25,7 @@
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
+* [Milestone 4](#milestone-4)
 ---
 
 ### Milestone 1
@@ -90,9 +91,9 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *17-09-2026* | Danesh, Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian Class | 1,5 Jam | Done | Tidak memahami Maksud Tipe Class yang ingin dikerjakan (Apakah Entity Based atau BCE Based) |
 | *18-09-2026* | Necia,Edward | Memperbaiki Pembagian Class | 1,5 Jam | Done | Masih Ragu |
+| *20-09-2026 & 21-09-2026* | There | Mengerjakan kelas untuk UC08, UC09, dan UC10 | 3 Jam | Done | Sempat ada revisi |
 
-
-**Catatan/Evaluasi Milestone 3:**
+**Catatan/Evaluasi Milestone 4:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
