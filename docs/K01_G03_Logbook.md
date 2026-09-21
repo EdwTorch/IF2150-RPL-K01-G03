@@ -92,6 +92,8 @@
 | *17-09-2026* | Danesh, Theresia, Edward, Necia | Membagi tugas milestone 3 dan menyelesaikan Pembagian Class | 1,5 Jam | Done | Tidak memahami Maksud Tipe Class yang ingin dikerjakan (Apakah Entity Based atau BCE Based) |
 | *18-09-2026* | Necia,Edward | Memperbaiki Pembagian Class | 1,5 Jam | Done | Masih Ragu |
 | *20-09-2026 & 21-09-2026* | There | Mengerjakan kelas untuk UC08, UC09, dan UC10 | 3 Jam | Done | Sempat ada revisi |
+| *20-09-2026* | Necia | Mengerjakan kelas untuk UC01, UC02, dan UC03| <3 Jam | Done | Sempat ada revisi |
+| *21-09-2026* | Necia | Mengerjakan revisi diagram kelas untuk UC01, UC02, dan UC03| <2 Jam | Done | |
 
 **Catatan/Evaluasi Milestone 4:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
