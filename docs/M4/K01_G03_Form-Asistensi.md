@@ -5,7 +5,7 @@
 | Informasi | Keterangan |
 | --- | --- |
 | **Hari** | Minggu |
-| **Tanggal** | 13/09/2026 |
+| **Tanggal** | 20/09/2026 |
 | **Kelas** | K-01 |
 | **Nomor Kelompok** | G-03  |
 | **Nama Kelompok** | MAYOOOOOR  |
@@ -26,10 +26,14 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+| 1. Untuk relasi kelas, panah artinya kelas 1 menimpan kelas 2, tanpa panah artinya kelas saling menyimpan satu sama lain.  |
+| 2. Entity: database, Boundary: client site, Controller: API |
+| 3. Dari boundary ke entity ada perantaranya, yaitu controller. |
+| 4. Asosiasi: menyimpan dan mengingat. |
+| 5. Dependency: hanya memakai atau hanya mereturn. |
+| 6. Komposisi: a komposisi b, berarti kalau a dihapus b jadi tidak bermakna. |
+| 7. Agregasi: a agregasi b, berarti kalau a dihapus b tetap bermakna. |
+| 8. God class: satu kelas yang bisa semuanya (lebih baik dihindari karena maintenance). |
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
@@ -38,7 +42,7 @@
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/AsistensiMS4.jpg" width="100%">
 </p>
 
 <p align="center">
