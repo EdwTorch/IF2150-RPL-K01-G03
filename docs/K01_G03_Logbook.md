@@ -99,8 +99,11 @@
 | *20-09-2026* | Necia | Mengerjakan kelas untuk UC01, UC02, dan UC03| <3 Jam | Done | Sempat ada revisi |
 | *21-09-2026* | Necia | Mengerjakan revisi diagram kelas untuk UC01, UC02, dan UC03| <2 Jam | Done | |
 | *21-09-2026* | Revandra | Mengerjakan revisi diagram kelas UC14, UC15, UC16 | 4 jam | Done | Sempat ada revisi |
+| *21-09-2026* | Danesh | Mengerjakan identifikasi kelas UC04-UC07 serta menambahkan class yang diperlukan | 2 jam | Done | Kesibukan |
 | *22-09-2026* | Edward | Menyamakan Atribut dan Method serta traceability  | 3 Jam | Done | |
+| *22-09-2026* | Danesh | Mengerjakan atribut dan metode serta diagram kelas UC04-UC07  | 3 Jam | Done | Pemahaman terkait diagram |
 | *23-09-2026* | Edward, Necia, There, Danesh, Revandra | Membuat Diagram Keseluruhn dan Revisi Diagram | 3 Jam | Done | |
+| *23-09-2026* | Danesh | Mengerjakan revisi diagram kelas UC04-UC07  | 1 Jam | Done | |
 
 **Catatan/Evaluasi Milestone 4:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
