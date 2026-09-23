@@ -22,10 +22,13 @@
 ---
 
 ### Daftar Isi
-* [Milestone 1](#milestone-1)
-* [Milestone 2](#milestone-2)
-* [Milestone 3](#milestone-3)
-* [Milestone 4](#milestone-4)
+- [Logbook Pekerjaan](#logbook-pekerjaan)
+  - [Tugas Besar IF2150 - Rekayasa Perangkat Lunak](#tugas-besar-if2150---rekayasa-perangkat-lunak)
+    - [Daftar Isi](#daftar-isi)
+    - [Milestone 1](#milestone-1)
+    - [Milestone 2](#milestone-2)
+    - [Milestone 3](#milestone-3)
+    - [Milestone 4](#milestone-4)
 ---
 
 ### Milestone 1
@@ -94,6 +97,7 @@
 | *20-09-2026 & 21-09-2026* | There | Mengerjakan kelas untuk UC08, UC09, dan UC10 | 3 Jam | Done | Sempat ada revisi |
 | *20-09-2026* | Necia | Mengerjakan kelas untuk UC01, UC02, dan UC03| <3 Jam | Done | Sempat ada revisi |
 | *21-09-2026* | Necia | Mengerjakan revisi diagram kelas untuk UC01, UC02, dan UC03| <2 Jam | Done | |
+| *21-09-2026* | Revandra | Mengerjakan revisi diagram kelas UC14, UC15, UC16 | 4 jam | Done | Sempat ada revisi |
 
 **Catatan/Evaluasi Milestone 4:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
