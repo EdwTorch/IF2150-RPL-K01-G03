@@ -67,6 +67,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | Gemini | Mendapatkan Penjelasan Terkait Relasi Antarkelas  | Jelaskan asosiasi, agregasi, komposisi, generalisasi, atau dependensi dalam relasi kelas | AI memberikan penjelasan secara detail terkait tiap relasi kelas. Saya (There) memeriksa kembali penjelasan dari AI tersebut melalui membandingkannya dengan ppt dosen dan ppt asistensi akbar |
+| Gemini | Mendapatkan Penjelasan Terkait Relasi AntarKelas dan Contoh Atribut dan Method sebuah kelas | Berikan Contoh UC dengan Class yang tersedia di dalamnya, beserta relasinya  | AI menjelaskan penjelasan detail terkait relasi, diagram UML UC Dummy sebagai contoh. Saya (Edward) memahami dan menerapkan ilmu yang didapatkan kedalam pembuatan diagram dan class yang ada dari UC yang disediakan  |
 
 
 ### Pernyataan Integritas dan Persetujuan
