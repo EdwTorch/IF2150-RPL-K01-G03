@@ -237,22 +237,29 @@ Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Cas
 | *...* | *...* | *...* |
 
 ## 4.2 Identifikasi Use Case
-Salin ulang daftar Use Case versi terbaru dari BAB 3.2 dokumen *Class Diagram*, pastikan seluruh ID KF yang dirujuk sudah sesuai dengan tabel pada 3.1.
-
-| ID UC | Nama Use Case | Deskripsi Singkat | Aktor | ID KF |
+| ID UC | Nama Use Case | Deskripsi Singkat | Aktor Terlibat | ID KF Terkait |
 | :--- | :--- | :--- | :--- | :--- |
-| *UC01* | *Memesan Produk* | *Pelanggan memilih produk hingga pesanan tersimpan di sistem.* | *Pelanggan* | *KF01, KF02* |
-| *UC02* | *Melihat Keranjang* | *Pelanggan melihat daftar item yang telah dipilih sebelum checkout.* | *Pelanggan* | *KF02* |
-| *UC03* | *Melakukan Pembayaran* | *Pelanggan menyelesaikan pembayaran atas pesanan yang dibuat.* | *Pelanggan* | *KF03, KF04, KF05* |
-| *UC04* | *Memilih Metode Pembayaran* | *Pelanggan memilih metode pembayaran alternatif (kartu atau e-wallet).* | *Pelanggan* | *KF03* |
-| *UC05* | *Melihat Riwayat Pesanan* | *Pelanggan melihat daftar pesanan yang pernah dibuat beserta statusnya.* | *Pelanggan* | *KF06* |
-| *...* | *...* | *...* | *...* | *...* |
+| UC01 | Melakukan Registrasi Akun | Penyedia & Pengguna Jasa mengisi dan mengirimkan formulir registrasi terkait data diri | User Penyedia & Pengguna Jasa | KF01 |
+| UC02 | Melakukan *Login* | Pengguna Jasa atau Penyedia Jasa atau Admin melakukan login menggunakan kredensial akun pengguna | Pengguna Jasa, Penyedia Jasa, Admin | KF02 |
+| UC03 | Mengisi Portofolio | Penyedia Jasa mengisi portofolio dan lampiran pengalman kerja | Penyedia Jasa  | KF03, KF04 |
+| UC04 | Mengunggah Penawaran Jasa | Penyedia Jasa mengunggah jasa yang ia tawarkan | Penyedia Jasa | KF05 |
+| UC05 | Mencari Penawaran Jasa | Pengguna Jasa melakukan pencarian jasa dengan memasukkan kata kunci, menggunakan filter, sekaligus dapat membandingkan jasa yang ditawarkan | Pengguna Jasa | KF06, KF07,  KF16 |
+| UC06 | Melihat Informasi Jasa| Pengguna dapat melihat informasi detail terkait jasa yang dipilih | Pengguna Jasa | KF08 |
+| UC07 | Menggunakan *Bookmark* | Pengguna Jasa menggunakan *bookmark* untuk menyimpan jasa yang menarik | Pengguna Jasa | KF09, KF10, KF11, KF12 |
+| UC08 | Melakukan Komunikasi | Pengguna Jasa dan Penyedia Jasa dapat berkomunikasi melalui *chat* instan untuk bernegosiasi, bertanya, ataupun berkoordinasi dalam pemesanan jasa | Pengguna Jasa, Penyedia Jasa, Admin | KF13, KF14, KF15 |
+| UC09 | Melakukan Pemesanan Jasa | Pengguna mengisi formulir pemesanan, memilih metode, dan menyelesaikan  transaksi | Pengguna Jasa | KF17, KF18, KF19, KF20 |
+| UC10 | Melakukan Konfirmasi Pesanan | Penyedia Jasa menerima notifikasi pemesanan, lalu melakukan konfirmasi (mengambil/tidak mengambil) | Penyedia Jasa | KF21, KF22, KF23, KF24 |
+| UC11 | Menyerahkan hasil Pekerjaan | Setelah Penyedia Jasa menyelesaikan hasil pekerjaan, Penyedia Jasa mengirimkannya melalui platform yang sudah disediakan | Penyedia Jasa | KF25 |
+| UC12 | Mengonfirmasi Hasil Pekerjaan | Pengguna Jasa melakukan konfirmasi terkait penerimaan jasa. Jika pekerjaan sudah sesuai, dilanjutkan dengan penyelesaian pemesanan seperti pencairan dana. Jika belum sesuai, Pengguna Jasa dapat mengajukan revisi terkait pekerjaan yang diberikan sesuai batas yang diberikan dan Penyedia Jasa harus melakukan revisi sesuai dengan permintaan Pengguna Jasa | Penyedia Jasa, Pengguna Jasa| KF26, KF27, KF28|
+| UC13 | Melaporkan pengguna Lain | Saat Pengguna Jasa maupun Penyedia Jasa terkendala, Pengguna dapat mengirimkan laporan melalui fitur *ticketing*  | Penyedia Jasa, Pengguna Jasa | KF29 |
+| UC14 | Memberikan Ulasan terhadap jasa yang dipesan | Pengguna Jasa memberikan ulasan dan *rating* terkait jasa yang telah dipesan | Pengguna Jasa | KF30, KF31 |
+| UC15 | Memproses Laporan | Admin memberikan tanggapan terkait laporan yang diberikan, meninjau laporan dengan bukti yang ada, dan menetapkan sanksi atau teguran jika diperlukan | Admin | KF32, KF33, KF34, KF35, KF36 |
+| UC16 | Melakukan Proses Mediasi | Admin dapat menyediakan jika terjadi sengketa pesanan antar Penyedia Jasa dan Pengguna Jasa | Admin, Penyedia Jasa, Pengguna Jasa | KF37, KF38 |
 
 ## 4.3 Use Case Diagram
-Salin ulang Use Case Diagram dari BAB 3.3 dokumen *Use Case & Scenario Use Case* atau *Class Diagram* (gunakan versi paling akhir/terbaru apabila terdapat perubahan).
 
 <p align="center">
-<img alt="Contoh Use Case Diagram" src="./assets/diagram/contoh-uc-diagram.webp" width="70%">
+<img alt="Use Case Diagram CariJasa" src="../M3/assets/diagram/diagram%20use%20case.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 2. Contoh Use Case Diagram</i>
@@ -263,27 +270,516 @@ Salin ulang skenario **setiap** use case (skenario normal dan alternatif) dari B
 
 ### 4.4.1 Skenario UC01
 
-**Nama Use Case:** *Memesan Produk*
+**Nama Use Case:** Melakukan Registrasi Akun
 
 **Skenario Normal**
 
+| No | Aksi Aktor                                                   | Reaksi Perangkat Lunak                                            |
+|----|--------------------------------------------------------------|-------------------------------------------------------------------|
+| 1  | Pengguna memilih menu registrasi.                            | Sistem menampilkan halaman registrasi akun.                       |
+| 2  | Pengguna mengisi nama, email, nomor telepon, dan kata sandi. | Sistem menerima dan menampilkan data yang dimasukkan pada form.   |
+| 3  | Pengguna menekan tombol daftar.                              | Sistem memvalidasi data pengguna yang dimasukkan.                 |
+| 4  |  -                                                           | Sistem memeriksa apakah email atau nomor telepon sudah terdaftar. |
+| 5  | -                                                            | Sistem membuat akun baru berdasarkan data yang telah diberikan.   |
+| 6  | -                                                            | Sistem menampilkan notifikasi bahwa registrasi berhasil.          |
+| 7  | Pengguna memilih untuk masuk ke halaman login.               | Sistem menampilkan halaman login.                                 |
+---
+<br>
+
+**Skenario Alternatif 1: Data Registrasi Tidak Valid**
+
+
+| No | Aksi Aktor                                                   | Reaksi Perangkat Lunak                                                                |
+|----|--------------------------------------------------------------|---------------------------------------------------------------------------------------|
+| 1  | Pengguna memilih menu registrasi.                            | Sistem menampilkan halaman registrasi akun.                                           |
+| 2  | Pengguna mengisi nama, email, nomor telepon, dan kata sandi. | Sistem menerima dan menampilkan data yang dimasukkan pada form.                       |
+| 3  | Pengguna menekan tombol daftar.                              | Sistem memvalidasi data pengguna yang dimasukkan dan menemukan data yang tidak valid. |
+| 4  |  -                                                           | Sistem menampilkan pesan kesalahan dan meminta pengguna memperbaikki data registrasi. |
+| 5  | Pengguna memperbaiki data yang tidak valid.                  | Sistem memperbarui data pada form..                                                   |
+| 6  | Pengguna menekan tombol daftar kembali.                      | Sistem melakukan validasi ulang terhadap data registrasi.                             |
+| 7  | -                                                            | Sistem melanjutkan proses registrasi apabila seluruh data telah valid.                |
+---
+**Skenario Alternatif 2: Email atau Nomor Telepon Sudah Terdaftar**
+
+| No | Aksi Aktor                                                                    | Reaksi Perangkat Lunak                                                   |
+|----|-------------------------------------------------------------------------------|--------------------------------------------------------------------------|
+| 1  | Pengguna memilih menu registrasi.                                             | Sistem menampilkan halaman registrasi akun.                              |
+| 2  | Pengguna mengisi nama, email, nomor telepon, dan kata sandi.                  | Sistem menerima dan menampilkan data yang dimasukkan pada form.          |
+| 3  | Pengguna menekan tombol daftar.                                               | Sistem memvalidasi data pengguna yang dimasukkan.                        |
+| 4  |  -                                                                            | Sistem memeriksa apakah email atau nomor telepon sudah terdaftar.        |
+| 5  | -                                                                             | Sistem menemukan bahwa email atau nomor telepon telah terdaftar.         |
+| 6  | -                                                                             | Sistem menampilkan pesan bahwa email atau nomor telepon telah digunakan. |
+| 7  | Pengguna mengganti email atau nomor telepon dengan data yang belum terdaftar. | Sistem memperbarui data pada form.                                       |
+| 8  | Pengguna menekan tombol daftar kembali.                                       | Sistem memvalidasi kembali data yang dimasukkan pengguna.                |
+---
+
+### 4.4.2 Skenario UC02
+
+**Nama Use Case:** Melakukan *login*
+
+**Skenario Normal**
+
+| No | Aksi Aktor                                | Reaksi Perangkat Lunak                                                          |
+|----|-------------------------------------------|---------------------------------------------------------------------------------|
+| 1  | Pengguna memilih menu Login.              | Sistem menampilkan halaman login.                                               |
+| 2  | Pengguna memasukkan email dan kata sandi. | Sistem menampilkan data yang dimasukkan pada form login.                        |
+| 3  | Pengguna menekan tombol Login.            | Sistem memvalidasi data login yang dimasukkan.                                  |
+| 4  | Pengguna menunggu proses login.           | Sistem memeriksa kesesuaian email dan password dengan data akun yang terdaftar. |
+| 5  | Pengguna menunggu proses login.           | Sistem membuat sesi login pengguna.                                             |
+| 6  | Pengguna masuk ke halaman utama.          | Sistem mengarahkan pengguna ke halaman utama CariJasa.                          |
+---
+**Skenario Alternatif 1: Email atau Password Salah**
+
+| No | Aksi Aktor                                            | Reaksi Perangkat Lunak                                                           |
+|----|-------------------------------------------------------|----------------------------------------------------------------------------------|
+| 1  | Pengguna memasukkan email atau kata sandi yang salah. | Sistem menampilkan data yang dimasukkan pada form login.                         |
+| 2  | Pengguna menekan tombol Login.                        | Sistem memvalidasi data login.                                                   |
+| 3  | Pengguna menunggu proses login.                       | Sistem menemukan bahwa email atau kata sandi tidak sesuai dengan data akun.      |
+| 4  | Pengguna memperbaiki email atau kata sandi.           | Sistem menampilkan kembali form login yang dapat diisi ulang.                    |
+| 5  | Pengguna menekan tombol Login kembali.                | Sistem memvalidasi kembali data login dan melanjutkan proses apabila data benar. |
+---
+**Skenario Alternatif 2: Data Login Tidak Lengkap**
+
+| No | Aksi Aktor                                                                    | Reaksi Perangkat Lunak                                                                         |
+|----|-------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------|
+| 1  | Pengguna tidak mengisi email atau kata sandi.                                 | Sistem menampilkan form login dengan data yang belum lengkap.                                  |
+| 2  | Pengguna menekan tombol Login.                                                | Sistem memvalidasi kelengkapan data login.                                                     |
+| 3  | Pengguna memperbaiki data login dengan mengisi seluruh kolom yang diperlukan. | Sistem menerima data yang telah dilengkapi.                                                    |
+| 4  | Pengguna menekan tombol Login kembali.                                        | Sistem melakukan validasi terhadap data login dan melanjutkan proses login apabila data valid. |
+---
+### 4.4.3 Skenario UC03
+
+**Nama Use Case:** Mengisi Portofolio
+
+**Skenario Normal**
+
+| No | Aksi Aktor                                                                                                  | Reaksi Perangkat Lunak                                      |
+|----|-------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------|
+| 1  | Pengguna memilih menu Portofolio pada profil.                                                               | Sistem menampilkan halaman portofolio pengguna.             |
+| 2  | Pengguna memilih opsi Tambah Portofolio.                                                                    | Sistem menampilkan form untuk mengisi portofolio.           |
+| 3  | Pengguna mengisi judul, deskripsi, dan informasi portofolio serta mengunggah gambar atau dokumen pendukung. | Sistem menampilkan data dan berkas yang telah dimasukkan.   |
+| 4  | Pengguna menekan tombol Simpan.                                                                             | Sistem memvalidasi data portofolio yang dimasukkan.         |
+| 5  | Pengguna menunggu proses penyimpanan.                                                                       | Sistem menyimpan data portofolio ke dalam profil pengguna.  |
+| 6  | Pengguna melihat portofolio yang telah ditambahkan.                                                         | Sistem menampilkan portofolio pada halaman profil pengguna. |
+---
+**Skenario Alternatif 1: Data Portofolio Tidak Lengkap**
+
+| No | Aksi Aktor                                                              | Reaksi Perangkat Lunak                                                        |
+|----|-------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| 1  | Pengguna mengisi form portofolio tanpa melengkapi data yang diperlukan. | Sistem menampilkan data yang telah dimasukkan.                                |
+| 2  | Pengguna menekan tombol Simpan.                                         | Sistem memvalidasi kelengkapan data portofolio.                               |
+| 3  | Pengguna melihat pesan kesalahan pada form.                             | Sistem menampilkan pesan bahwa data yang diperlukan belum lengkap.            |
+| 4  | Pengguna melengkapi data portofolio.                                    | Sistem menerima data yang telah dilengkapi.                                   |
+| 5  | Pengguna menekan tombol Simpan kembali.                                 | Sistem memvalidasi dan menyimpan portofolio apabila seluruh data telah valid. |
+---
+
+
+### 4.4.4 Skenario UC04
+
+**Nama Use Case:** Mengunggah Penawaran Jasa
+
+**Skenario Normal**
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Pelanggan memilih produk dari katalog* | *Sistem menampilkan detail produk dan menambahkannya ke keranjang* |
-| 2 | *Pelanggan menekan tombol checkout* | *Sistem membuat pesanan baru dari isi keranjang dan menampilkan ringkasan pesanan* |
-| ... | *...* | *...* |
+| 1. | Penyedia Jasa memilih menu tambah penawaran jasa. | Sistem menampilkan formulir penawaran jasa (judul, kategori, deskripsi, harga, dan lampiran gambar). |
+| 2. | Penyedia Jasa mengisi detail jasa dan mengunggah gambar, lalu menekan tombol "Unggah". | Sistem memvalidasi kelengkapan data dan format berkas yang diunggah. |
+| 3. | - | Sistem menyimpan data penawaran jasa ke dalam *database*. |
+| 4. | - | Sistem menampilkan notifikasi berhasil dan memunculkan jasa tersebut di halaman profil Penyedia Jasa sesuai kategori yang dipilih. |
+---
 
-**Skenario Alternatif 1: Produk Tidak Tersedia**
+**Skenario Alternatif: Data atau Format Berkas Tidak Valid**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Penyedia Jasa memilih menu tambah penawaran jasa. | Sistem menampilkan formulir penawaran jasa. |
+| 2. | Penyedia Jasa mengosongkan kolom wajib atau mengunggah berkas yang tidak didukung, lalu menekan tombol "Unggah". | Sistem memvalidasi kelengkapan data dan format berkas yang dimasukkan. |
+| 3. | - | Sistem mendeteksi adanya ketidaksesuaian data. |
+| 4. | - | Sistem menolak proses simpan dan menampilkan pesan peringatan pada form. |
+| 5. | Penyedia Jasa memperbaiki data dan menekan tombol "Unggah" kembali. | Sistem memvalidasi ulang dan melanjutkan proses penyimpanan ke dalam *database*. |
+---
+
+### 4.4.5 Skenario UC05
+
+**Nama Use Case:** Mencari Penawaran Jasa
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa memasukkan kata kunci pencarian dan menekan tombol "Cari". | Sistem menampilkan daftar jasa yang relevan dengan kata kunci tersebut. |
+| 2. | Pengguna Jasa memilih menu filter (berdasarkan harga, waktu pengerjaan, atau *rating*) dan menekan "Terapkan". | Sistem menyaring hasil pencarian dan memperbarui daftar jasa sesuai dengan kriteria filter yang digunakan. |
+| 3. | Pengguna Jasa memilih dua *listing* jasa dan menekan tombol "Bandingkan". | Sistem menampilkan matriks perbandingan harga, *rating*, dan informasi teknis antar kedua *listing* jasa tersebut. |
+---
+
+**Skenario Alternatif: Hasil Pencarian Tidak Ditemukan**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa memasukkan kata kunci pencarian yang tidak memiliki kecocokan, lalu menekan tombol "Cari". | Sistem mencari kecocokan data pada *database*. |
+| 2. | - | Sistem mendeteksi ketiadaan hasil yang cocok. |
+| 3. | - | Sistem menampilkan pesan "Jasa tidak ditemukan" beserta saran kategori atau kata kunci populer lainnya. |
+---
+
+### 4.4.6 Skenario UC06
+
+**Nama Use Case:** Melihat Informasi Jasa
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa menekan satu *listing* jasa dari daftar hasil pencarian. | Sistem memproses permintaan dan mengambil detail informasi jasa dari *database*. |
+| 2. | - | Sistem menampilkan halaman detail jasa yang berisikan informasi seperti deskripsi, harga, profil penyedia, dan riwayat ulasan. |
+---
+
+**Skenario Alternatif**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+|   |   |   |
+---
+
+
+### 4.4.7 Skenario UC07
+
+**Nama Use Case:** Menggunakan *Bookmark*
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa menekan ikon *bookmark*. | Sistem menyimpan data *listing* tersebut ke dalam daftar jasa tersimpan milik pengguna. |
+| 2. | - | Sistem mengubah ikon *bookmark* menjadi status aktif dan menampilkan notifikasi "Jasa berhasil disimpan". |
+| 3. | Pengguna Jasa membuka menu "Jasa Tersimpan" di profilnya. | Sistem menampilkan daftar seluruh jasa yang telah disimpan oleh pengguna. |
+| 4. | Pengguna Jasa menekan kembali ikon *bookmark* aktif pada salah satu *listing*. | Sistem menghapus jasa tersebut dari daftar tersimpan milik pengguna. |
+| 5. | - | Sistem menampilkan notifikasi "Jasa dihapus dari daftar tersimpan". |
+---
+
+**Skenario Eksepsi: Pengguna Belum Terautentikasi (Belum Login)**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna (*guest*) menekan ikon *bookmark* pada suatu *listing* jasa. | Sistem memeriksa status sesi *login* pengguna saat ini. |
+| 2. | - | Sistem mendeteksi pengguna belum terautentikasi. |
+| 3. | - | Sistem membatalkan aksi dan memunculkan *pop-up* yang meminta pengguna untuk *login* terlebih dahulu. |
+---
+
+### 4.4.8 Skenario UC08
+
+**Nama Use Case:** Melakukan Komunikasi
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1.  | Pengguna Jasa membuka platform chat.                            | Menampilkan menu chat beserta riwayat pesan jika ada.                                   |
+| 2.  | Pengguna Jasa mengetik dan mengirim pesan kepada Penyedia Jasa. | Menampilkan pesan di layar dan mengirimkan pesan serta notifikasi kepada Penyedia Jasa. |
+| 3.  | Pengguna Jasa mengetik dan mengirim pesan kepada Admin.         | Menampilkan pesan di layar dan mengirimkan pesan serta notifikasi kepada Admin.         |
+| 4.  | Penyedia Jasa membuka platform chat.                            | Menampilkan menu chat beserta riwayat pesan jika ada.                                   |
+| 5.  | Penyedia Jasa mengetik dan mengirim pesan kepada Pengguna Jasa. | Menampilkan pesan di layar dan mengirimkan pesan serta notifikasi kepada Pengguna Jasa. |
+| 6.  | Penyedia Jasa mengetik dan mengirim pesan kepada Admin.         | Menampilkan pesan di layar dan mengirimkan pesan serta notifikasi kepada Admin.         |
+| 7.  | Admin membuka platform chat                                     | Menampilkan menu chat beserta riwayat pesan jika ada.                                   |
+| 8.  | Admin mengetik dan mengirim pesan kepada pengguna.              | Menampilkan pesan di layar dan mengirim notifikasi kepada pengguna.                     |
+---
+
+**Skenario Alternatif 1: Pengiriman Pesan Gagal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1.  | Pengguna Jasa membuka platform chat.                           | Menampilkan menu chat beserta riwayat pesan jika ada.         |
+| 2.  | Pengguna Jasa mengirim pesan kosong kepada Penyedia Jasa.      | Memvalidasi input dan tidak mengirimkan pesan apa pun.        |
+| 3.  | Pengguna Jasa mengirim pesan ketika koneksi internet terputus. | Menampilkan notifikasi atau icon bahwa pesan belum terkirim.  |
+| 4.  | Penyedia Jasa membuka platform chat.                           | Menampilkan menu chat beserta riwayat pesan jika ada.         |
+| 5.  | Penyedia Jasa mengirim pesan kosong kepada Pengguna Jasa.      | Memvalidasi input dan tidak mengirimkan pesan apa pun.        |
+| 6.  | Penyedia Jasa mengirim pesan ketika koneksi internet terputus. | Menampilkan notifikasi atau icon bahwa pesan belum terkirim.  |
+| 7.  | Admin mengirim pesan kosong kepada pengguna.                   | Memvalidasi input dan tidak mengirimkan pesan apa pun.        |
+| 8.  | Admin mengirim pesan ketika koneksi internet terputus.         | Menampilkan notifikasi atau icon bahwa pesan belum terkirim.  |
+---
+
+### 4.4.9 Skenario UC09
+
+**Nama Use Case:** Melakukan Pemesanan Jasa
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1.  | Pengguna Jasa memilih jasa yang ingin dipesan dan menekan tombol pesan.     | Menampilkan formulir pemesanan jasa.                                                                        |
+| 2.  | Pengguna Jasa mengisi formulir pemesanan dan mengirimkan formulir tersebut. | Menerima data pesanan dan memproses pesanan tersebut.                                                       |
+| 3.  | Pengguna Jasa masuk ke halaman pembayaran.                                  | Menampilkan metode pembayaran yang tersedia beserta rincian pembayaran.                                     |
+| 4.  | Pengguna Jasa memilih metode pembayaran dan melakukan pembayaran.           | Memvalidasi status bahwa pembayaran tersebut berhasil dan menampilkan notifikasi bahwa pembayaran berhasil. |
+---
+
+**Skenario Alternatif 1: Formulir Pemesanan Tidak Lengkap**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1.  | Pengguna Jasa memilih jasa yang ingin dipesan dan menekan tombol pesan.                            | Menampilkan formulir pemesanan jasa.                                  |
+| 2.  | Pengguna Jasa mengosongkan beberapa bagian wajib pada formulir pemesanan dan menekan tombol kirim. | Memvalidasi input dan menampilkan pesan pada bagian yang belum diisi. |
+---
+
+**Skenario Alternatif 2: Pembayaran Gagal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1.  | Pengguna Jasa masuk ke halaman pembayaran.                        | Menampilkan metode pembayaran yang tersedia beserta rincian pembayaran. |
+| 2.  | Pengguna Jasa memilih metode pembayaran dan melakukan pembayaran. | Memvalidasi status dan mendeteksi adanya kegagalan.                     |
+| 3.  |                                                                   | Menampilkan pesan bahwa pembayaran tidak berhasil.                      |
+
+### 4.4.10 Skenario UC10
+
+**Nama Use Case:** Melakukan Konfirmasi Pesanan
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1.  | Penyedia Jasa mendapatkan notifikasi pesanan baru.     | Mengirimkan notifikasi pesanan ke akun Penyedia Jasa.                                                          |
+| 2.  | Penyedia Jasa membuka notifikasi pesanan.              | Menampilkan detail pesanan.                                                                                    |
+| 3.  | Penyedia Jasa mengonfirmasi menerima pesanan tersebut. | Menyimpan dan menampilkan status bahwa pesanan tersebut sudah diterima dan sedang diproses oleh Penyedia Jasa. |
+---
+
+**Skenario Alternatif 1: Penyedia Jasa Menolak Pesanan**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1.  | Pengguna Jasa masuk ke halaman pembayaran. | Menampilkan metode pembayaran yang tersedia beserta rincian pembayaran.             |
+| 2.  | Penyedia Jasa membuka notifikasi pesanan.  | Menampilkan detail pesanan.                                                         |
+| 3.  | Penyedia Jasa menolak pesanan tersebut.    | Menyimpan dan menampilkan status bahwa pesanan tersebut ditolak oleh Penyedia Jasa. |
+---
+
+### 4.4.11 Skenario UC11
+
+**Nama Use Case:** 	Menyerahkan hasil Pekerjaan
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Penyedia Jasa memilih pekerjaan aktif yang ingin diselesaikan | Menampilkan halaman detail pekerjaan dan tempat pengumpulan hasil kerja |
+| 2. | Penyedia Jasa mengunggah berkas hasil pekerjaan, lalu menekan tombol "Kirim Hasil pekerjaan" | Sistem memvalidasi kelengkapan data, ukuran berkas dan menyimpan berkas ke dalam *database* |
+| 3. | | Mengirimkan Notifikasi "Pekerjaan Berhasil Dikirim"|
+---
+
+**Skenario Alternatif 1 :** Menyerahkan / Mengirim Ulang Hasil Pekerjaan (Revisi)
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Penyedia Jasa memilih pekerjaan dengan status "Revisi" yang ingin diselesaikan | Menampilkan halaman detail pekerjaan dan tempat pengumpulan hasil kerja |
+| 2. | Penyedia Jasa mengunggah berkas hasil revisi pekerjaan, lalu menekan tombol "Kirim hasil pekerjaan" | Sistem memvalidasi kelengkapan data, ukuran berkas dan menyimpan berkas ke dalam *database* |
+| 3. | | Mengirimkan Notifikasi "Pekerjaan Berhasil Dikirim"|
+
+**Skenario Alternatif 2 :** Penyedia Jasa Mengirimkan Hasil Pekerjaan berupa URL atau tautan
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Penyedia Jasa memilih pekerjaan aktif yang ingin diselesaikan | Menampilkan halaman detail pekerjaan dan tempat pengumpulan hasil kerja |
+| 2. | Penyedia Jasa melampirkan tautan hasil pekerjaan dan deskripsi singkat, lalu menekan tombol "Kirim hasil pekerjaan" | Sistem memvalidasi format tautan (URL) dan menyimpan berkas ke dalam *database* |
+| 3. | | Mengirimkan Notifikasi "Pekerjaan Berhasil Dikirim"|
+
+**Skenario Eksepsi 1 :** Koneksi Terputus atau Kegagalan Server saat *upload* berkas
 
 | No | Aksi Aktor | Reaksi Perangkat Lunak |
 | :--- | :--- | :--- |
-| 1 | *Pelanggan memilih produk dari katalog* | *Sistem menampilkan pesan "Produk tidak tersedia" karena stok habis* |
-| 2 | *Pelanggan memilih produk lain* | *Sistem kembali ke langkah 1 skenario normal* |
-| ... | *...* | *...* |
+| 1. | Penyedia Jasa memilih pekerjaan aktif yang ingin diselesaikan | Menampilkan halaman detail pekerjaan dan tempat pengumpulan hasil kerja |
+| 2. | Penyedia Jasa mengunggah berkas hasil pekerjaan, lalu menekan tombol "Kirim Hasil pekerjaan" | Sistem memvalidasi kelengkapan data, ukuran berkas dan menyimpan berkas ke dalam *database* |
+| 3. | | Mengirimkan Notifikasi "Proses *upload* gagal. Periksa koneksi internet Anda dan coba lagi." |
 
-<sub>*Lanjutkan pola 4.4.x ini untuk setiap ID UC pada 4.2, sampai seluruh use case memiliki skenarionya masing-masing.*<sub>
+**Skenario Eksepsi 2 :** Ukuran Berkas Hasil Pekerjaan terlalu besar
+
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Penyedia Jasa memilih pekerjaan aktif yang ingin diselesaikan | Menampilkan halaman detail pekerjaan dan tempat pengumpulan hasil kerja |
+| 2. | Penyedia Jasa mengunggah berkas hasil pekerjaan, lalu menekan tombol "Kirim Hasil pekerjaan" | Sistem memvalidasi kelengkapan data, ukuran berkas dan menyimpan berkas ke dalam *database* |
+| 3. | | Mengirimkan Notifikasi "Ukuran Berkas yang diunggah terlalu besar, maksimal 50 MB. Jika lebih, silahkan melampirkan tautan untuk berkas yang anda kumpulkan" |
+---
+
+### 4.4.12 Skenario UC12
+
+**Nama Use Case:** Mengonfirmasi Hasil Pekerjaan
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa membuka daftar pesanan yang sudah diselesaikan | Menampilkan daftar pesanan yang telah dilakukan Pengguna jasa  |
+| 2. | Pengguna Jasa melakukan evaluasi dan pengecekan terhadap hasil pekerjaan yang diberikan Penyedia Jasa | Menampilkan hasil pekerjaan yang telah diunggah oleh Penyedia Jasa |
+| 3. | Pengguna Jasa mengonfirmasi pesanan (sudah sesuai) dengan menandai pesanan sebagai "Selesai" | Memproses status konfirmasi pengguna jasa ke dalam sistem pencairan dana agar Penyedia Jasa mendapatkan haknya|
+---
+
+**Skenario Alternatif 1 :** Penggguna Mengajukan Revisi
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa membuka daftar pesanan yang sudah diselesaikan | Menampilkan daftar pesanan yang telah dilakukan Pengguna jasa  |
+| 2. | Pengguna Jasa melakukan evaluasi dan pengecekan terhadap hasil pekerjaan | Menampilkan hasil pekerjaan yang telah diunggah oleh Penyedia Jasa |
+| 3. | Pengguna Jasa mengajukan revisi | Memproses status konfirmasi kepada pihak Penyedia Jasa agar pihak tersebut dapat melakukan revisi |
+
+**Skenario Alternatif 2 :** Pengguna Jasa tidak mengonfirmasi hasil pekerjaan dalam waktu yang telah ditentukan
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa membuka daftar pesanan yang sudah diselesaikan | Menampilkan daftar pesanan yang telah dilakukan Pengguna jasa  |
+| 2. | - | Menampilkan hasil pekerjaan yang telah diunggah oleh Penyedia Jasa tanpa dapat mengajukan revisi |
+
+
+**Skenario Eksepsi 1 :** Server tidak menanggapi saat Pengguna Jasa melakukan konfirmasi 
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa membuka daftar pesanan yang sudah diselesaikan | Menampilkan daftar pesanan yang telah dilakukan Pengguna jasa  |
+| 2. | Pengguna Jasa melakukan evaluasi dan pengecekan terhadap hasil pekerjaan | Menampilkan hasil pekerjaan yang telah diunggah oleh Penyedia Jasa |
+| 3. | Pengguna Jasa mengajukan revisi atau mengonfirmasi pesanan | Tidak merespons dalam kurun waktu >10 detik |
+| 4. | - | Menampilkan Pesan Error Berupa "Proses Konfirmasi Gagal. Periksa koneksi internet Anda dan coba lagi."|
+
+**Skenario Eksepsi 2 :** Pengguna Jasa mengajukan Revisi melebihi kuota yang telah disediakan
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa membuka daftar pesanan yang sudah diselesaikan | Menampilkan daftar pesanan yang telah dilakukan Pengguna jasa  |
+| 2. | Pengguna Jasa melakukan evaluasi dan pengecekan terhadap hasil pekerjaan | Menampilkan hasil pekerjaan yang telah diunggah oleh Penyedia Jasa |
+| 3. | Pengguna Jasa mengajukan revisi | Menampilkan Pesan Error Berupa "Kuota Revisi yang diajukan sudah habis. Jika dirasa kualitas masih jauh dari kata sesuai dengan kesepakatan awal, silahkan ajukan tiket laporan." |
+---
+
+### 4.4.13 Skenario UC13
+
+**Nama Use Case:** 	Melaporkan pengguna Lain
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Memilih opsi "Laporkan Pengguna" | Menampilkan formulir pelaporan (berisi kategori pelanggaran, deskripsi masalah, dan lampiran bukti)  |
+| 2. | Memilih kategori pelanggaran dan mengisi deskripsi laporan, serta mengunggah bukti yang diperlukan, lalu tekan tombol "Kirim Laporan" | Melakukan validasi kelengkapan pengisian formulir dan ukuran berkas bukti |
+| 3. | | Menyimpan data tiket laporan ke dalam *database* dengan status *Pending* |
+| 4. | | Menampilkan pesan konfirmasi laporan berhasil dikirim beserta nomor unik tiket|
+| 5. | | Mengirimkan notifikasi tiket baru ke *dashboard* Admin |
 
 ---
+
+**Skenario Alternatif 1 :** Formulir / Deskripsi Belum Lengkap
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Memilih opsi "Laporkan Pengguna" | Menampilkan formulir pelaporan (berisi kategori pelanggaran, deskripsi masalah, dan lampiran bukti)  |
+| 2. | Memilih kategori pelanggaran dan mengisi deskripsi laporan, serta mengunggah bukti yang diperlukan, lalu tekan tombol "Kirim Laporan" | Melakukan validasi kelengkapan pengisian formulir dan ukuran berkas bukti |
+| 3. | | Menampilkan pesan error sesuai bagian yang belum diisi, sebagai contoh : "Kategori Pelanggaran dan Deskripsi Wajib diisi" |
+| 4. | Mengisi kembali kategori yang belum diisi, lalu menekan tombol "Kirim Laporan" | Melakukan validasi kelengkapan pengisian formulir dan ukuran berkas bukti |
+| 5. | | Menyimpan data tiket laporan ke dalam *database* dengan status *Pending* |
+| 6. | | Menampilkan pesan konfirmasi laporan berhasil dikirim beserta nomor unik tiket|
+| 7. | | Mengirimkan notifikasi tiket baru ke *dashboard* Admin |
+
+**Skenario Alternatif 2 :** Formulir / Deskripsi Belum Lengkap
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Memilih opsi "Laporkan Pengguna" | Menampilkan formulir pelaporan (berisi kategori pelanggaran, deskripsi masalah, dan lampiran bukti)  |
+| 2. | Memilih kategori pelanggaran dan mengisi deskripsi laporan, serta mengunggah bukti yang diperlukan, lalu tekan tombol "Kirim Laporan" | Melakukan validasi kelengkapan pengisian formulir dan ukuran berkas bukti |
+| 3. | | Menampilkan pesan error sesuai bagian yang belum diisi, "Ukuran atau Format Ekstensi Bukti Tidak didukung. Gunakan Ekstensi PDF, png, jpg, jpeg, xlsx, atau docx" |
+| 4. | Memperbaiki berkas laporan, lalu menekan tombol "Kirim Laporan" | Melakukan validasi kelengkapan pengisian formulir dan ukuran berkas bukti |
+| 5. | | Menyimpan data tiket laporan ke dalam *database* dengan status *Pending* |
+| 6. | | Menampilkan pesan konfirmasi laporan berhasil dikirim beserta nomor unik tiket|
+| 7. | | Mengirimkan notifikasi tiket baru ke *dashboard* Admin |
+
+**Skenario Eksepsi 1 :** Server tidak merespons
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Memilih opsi "Laporkan Pengguna" | Menampilkan formulir pelaporan (berisi kategori pelanggaran, deskripsi masalah, dan lampiran bukti)  |
+| 2. | Memilih kategori pelanggaran dan mengisi deskripsi laporan, serta mengunggah bukti yang diperlukan, lalu tekan tombol "Kirim Laporan" | Melakukan validasi kelengkapan pengisian formulir dan ukuran berkas bukti |
+| 3. | | Menampilkan pesan error "Pengiriman Laporan Gagal. Periksa Koneksi Internet anda atau tunggu 10 menit" |
+---
+
+### 4.4.14 Skenario UC14
+
+**Nama Use Case:** Memberikan Ulasan terhadap jasa yang dipesan
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa memilih opsi "Beri Ulasan" pada pesanan jasa yang telah selesai. | Menampilkan halaman pengisian ulasan (terdapat penilaian bintang, fitur unggah dokumentasi, dan kolom komentar). |
+| 2. | Pengguna Jasa memberikan penilaian bintang, mengunggah dokumentasi (opsional), mengisi komentar (opsional), lalu menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 3. |  | Menyimpan ulasan ke dalam *database*, memperbarui rata-rata rating pada profil Penyedia Jasa, dan menampilkan ulasan tersebut pada halaman jasa. |
+| 4. |  | Menampilkan notifikasi bahwa ulasan berhasil dikirim. |
+---
+
+**Skenario Alternatif 1: Formulir Ulasan Tidak Lengkap**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa memilih opsi "Beri Ulasan" pada pesanan jasa yang telah selesai. | Menampilkan halaman pengisian ulasan (terdapat penilaian bintang, fitur unggah dokumentasi, dan kolom komentar). |
+| 2. | Pengguna Jasa mengisi ulasan, tidak memilih jumlah bintang, lalu menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 3. |  | Menampilkan pesan peringatan bahwa penilaian bintang wajib diisi. |
+| 4. | Pengguna Jasa melengkapi penilaian bintang dan menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 5. |  | Menyimpan ulasan ke dalam *database*, memperbarui rata-rata rating pada profil Penyedia Jasa, dan menampilkan ulasan tersebut pada halaman jasa. |
+| 6. |  | Menampilkan notifikasi bahwa ulasan berhasil dikirim. |
+---
+
+**Skenario Alternatif 2: Kriteria Berkas Dokumentasi Tidak Sesuai**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. |  Pengguna Jasa memilih opsi "Beri Ulasan" pada pesanan jasa yang telah selesai. | Menampilkan halaman pengisian ulasan (terdapat penilaian bintang, fitur unggah dokumentasi, dan kolom komentar). |
+| 2. | Pengguna Jasa memberikan penilaian bintang dan mengunggah berkas dokumentasi yang format atau ukurannya tidak sesuai, lalu menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 3. |  | Menampilkan pesan *error* bahwa berkas tidak didukung (contoh: "Gunakan ekstensi .jpeg, .jpg, atau .png dengan ukuran maksimal 10 MB"). |
+| 4. | Pengguna Jasa mengunggah berkas baru yang sesuai dengan kriteria dan menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 5. |  | Menyimpan ulasan ke dalam *database*, memperbarui rata-rata rating pada profil Penyedia Jasa, dan menampilkan ulasan tersebut pada halaman jasa. |
+| 6. |  | Menampilkan notifikasi bahwa ulasan berhasil dikirim. |
+---
+
+**Skenario Alternatif 3: Kriteria Komentar Tidak Sesuai**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. |  Pengguna Jasa memilih opsi "Beri Ulasan" pada pesanan jasa yang telah selesai. | Menampilkan halaman pengisian ulasan (terdapat penilaian bintang, fitur unggah dokumentasi, dan kolom komentar). |
+| 2. | Pengguna Jasa memberikan penilaian bintang dan mengisi komentar yang melebihi batas karakter, lalu menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 3. |  | Menampilkan pesan *error* bahwa komentar terlalu panjang (contoh: "Komentar maksimal terdiri dari 300 kata"). |
+| 4. | Pengguna Jasa memendekkan komentar agar sesuai kriteria dan menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 5. |  | Menyimpan ulasan ke dalam *database*, memperbarui rata-rata rating pada profil Penyedia Jasa, dan menampilkan ulasan tersebut pada halaman jasa. |
+| 6. |  | Menampilkan notifikasi bahwa ulasan berhasil dikirim. |
+---
+
+**Skenario Eksepsi 1: Server tidak merespons**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Pengguna Jasa memilih opsi "Beri Ulasan" pada pesanan jasa yang telah selesai. | Menampilkan halaman pengisian ulasan (terdapat penilaian bintang, fitur unggah dokumentasi, dan kolom komentar). |
+| 2. | Pengguna Jasa memberikan penilaian bintang, mengunggah dokumentasi (opsional), mengisi komentar (opsional), lalu menekan tombol "Kirim Ulasan". | Melakukan validasi terhadap kelengkapan dan kesesuaian data ulasan yang dimasukkan. |
+| 3. |  | Menampilkan pesan *error* berupa "Pengiriman ulasan gagal. Periksa koneksi internet Anda atau coba beberapa saat lagi." |
+---
+
+### 4.4.15 Skenario UC15
+
+**Nama Use Case:** Memproses Laporan
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Admin membuka tiket laporan yang masuk melalui *dashboard*. | Menampilkan detail dari tiket laporan (berisi kategori pelanggaran, deskripsi masalah, dan lampiran bukti). |
+| 2. | Admin memeriksa bukti dan memilih jenis tindakan yang sesuai (pilihan: tidak ada sanksi, teguran, pembekuan sementara, atau pemblokiran akun). | Sistem menerima input pilihan tindakan dari Admin. |
+| 3. | Admin menekan tombol "Selesaikan Laporan". | Menerapkan sanksi pada akun terkait sesuai dengan pilihan Admin (misalnya mengirimkan notifikasi peringatan pelanggaran, menonaktifkan fitur transaksi, atau mencabut hak akses login). |
+| 4. |  | Mengubah status tiket laporan menjadi "Selesai" pada *database*. |
+---
+
+**Skenario Alternatif 1: Bukti Tidak Mencukupi**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Admin membuka tiket laporan yang masuk melalui *dashboard*. | Menampilkan detail dari tiket laporan (berisi kategori pelanggaran, deskripsi masalah, dan lampiran bukti). |
+| 2. | Admin meninjau laporan dan menemukan bahwa bukti yang diberikan tidak cukup untuk menentukan tindakan lanjut. | |
+| 3. | Admin menekan tombol "Mulai Mediasi" untuk menggali informasi lebih lanjut dari kedua belah pihak. | Memvalidasi perintah dan mengubah status tiket laporan menjadi "Mediasi". |
+| 3. |  | Menampilkan antarmuka ruang mediasi. |
+---
+
+**Skenario Eksepsi 1: Server tidak merespons**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Admin membuka tiket laporan yang masuk melalui *dashboard*. | Menampilkan detail dari tiket laporan (berisi kategori pelanggaran, deskripsi masalah, dan lampiran bukti). |
+| 2. | Admin memeriksa bukti dan memilih jenis tindakan yang sesuai (pilihan: tidak ada sanksi, teguran, pembekuan sementara, atau pemblokiran akun). | Sistem menerima input pilihan tindakan dari Admin. |
+| 3. | Admin menekan tombol "Selesaikan Laporan". | Gagal memproses data dan menampilkan pesan *error* "Penyelesaian laporan gagal. Periksa koneksi internet Anda atau coba beberapa saat lagi." |
+---
+
+### 4.4.16 Skenario UC16
+
+**Nama Use Case:** Melakukan Proses Mediasi
+
+**Skenario Normal**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Admin membuka tiket laporan pada *dashboard* dan memilih opsi "Mulai Mediasi". | Menampilkan antarmuka ruang mediasi (berupa *chat*) yang menghubungkan Admin, Pengguna Jasa, dan Penyedia Jasa. |
+| 2. | Admin, Pengguna Jasa, dan Penyedia Jasa berdiskusi melalui ruang obrolan untuk mencari solusi atas permasalahan. | Menyimpan riwayat pesan dan menampilkannya pada layar ruang mediasi |
+| 3. | Admin memilih jenis tindakan yang sesuai (pilihan: tidak ada sanksi, teguran, pembekuan sementara, atau pemblokiran akun). | Sistem menerima input pilihan tindakan dari Admin. |
+| 4. | Admin menekan tombol "Akhiri Mediasi". | Menerapkan sanksi pada akun terkait sesuai dengan pilihan Admin (misalnya mengirimkan notifikasi peringatan pelanggaran, menonaktifkan fitur transaksi, atau mencabut hak akses login). |
+| 5. |  | Menutup akses ruang mediasi, memperbarui status tiket laporan menjadi "Selesai" pada *database*, dan menampilkan notifikasi bahwa proses mediasi telah selesai. |
+---
+
+**Skenario Alternatif 1: Salah Satu Pihak Tidak Merespons**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Admin membuka tiket laporan pada *dashboard* dan memilih opsi "Mulai Mediasi". | Menampilkan antarmuka ruang mediasi (berupa *chat*) yang menghubungkan Admin, Pengguna Jasa, dan Penyedia Jasa. |
+| 2. | Admin, Pengguna Jasa, dan Penyedia Jasa berdiskusi melalui ruang obrolan untuk mencari solusi atas permasalahan, tetapi salah satu pihak tidak membalas pesan dalam batas waktu yang ditentukan. | Menyimpan riwayat pesan dan menampilkannya pada layar ruang mediasi |
+| 3. | Admin memilih jenis tindakan yang sesuai berdasarkan bukti sebelumnya dan tambahan dari pihak yang merespons (pilihan: tidak ada sanksi, teguran, pembekuan sementara, atau pemblokiran akun). | Sistem menerima input pilihan tindakan dari Admin. |
+| 4. | Admin menekan tombol "Akhiri Mediasi". | Menerapkan sanksi pada akun terkait sesuai dengan pilihan Admin (misalnya mengirimkan notifikasi peringatan pelanggaran, menonaktifkan fitur transaksi, atau mencabut hak akses login). |
+| 5. |  | Menutup akses ruang mediasi, memperbarui status tiket laporan menjadi "Selesai" pada *database*, dan menampilkan notifikasi bahwa proses mediasi telah selesai. |
+---
+
+**Skenario Eksepsi 1: Server tidak merespons**
+| No | Aksi Aktor | Reaksi Perangkat Lunak |
+| :--- | :--- | :--- |
+| 1. | Admin membuka tiket laporan pada *dashboard* dan memilih opsi "Mulai Mediasi". | Menampilkan pesan *error* "Gagal membuka ruang mediasi. Periksa koneksi internet Anda atau coba beberapa saat lagi." |
+---
+
+
+<br>
 
 # BAB 5: Pemodelan Kelas
 
