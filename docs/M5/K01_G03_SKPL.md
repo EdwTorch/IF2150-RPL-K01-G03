@@ -229,12 +229,11 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 # BAB 4: Pemodelan Use Case
 
 ## 4.1 Identifikasi Aktor
-Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Case* atau *Class Diagram*. Tambahkan ID Aktor mengikuti Aturan Penomoran pada 1.4.
-
-| ID Aktor | Aktor | Deskripsi |
-| :--- | :--- | :--- |
-| *A01* | *Pelanggan* | *Pengguna yang memesan produk, mengelola keranjang, dan menyelesaikan pembayaran melalui sistem.* |
-| *...* | *...* | *...* |
+| Aktor | Deskripsi |
+| :--- | :--- |
+| Penyedia Jasa | Memanfaatkan keterampilan yang dimilikinya untuk menawarkan layanan digital tanpa adanya hubungan kerja formal. Penyedia jasa menampilkan portofolio, mempromosikan jasa, menentukan harga, serta bernegosiasi dan menyelesaikan pesanan (termasuk mengirim draf dan revisi) secara mandiri. Aktor ini juga dapat melaporkan pengguna jasa yang bermasalah. |
+| Pengguna Jasa | Membutuhkan layanan digital untuk kebutuhan pribadi maupun pekerjaan. Pengguna jasa menggunakan platform untuk mencari penyedia jasa berdasarkan kriteria spesifiknya (melalui filter, perbandingan, dan fitur simpan jasa), bernegosiasi, melakukan pemesanan serta pembayaran digital, mengajukan revisi, memberikan ulasan, dan mengajukan tiket pengaduan kepada admin. Pengguna jasa dapat ditanyakan mengenai tujuan penggunaan aplikasinya pada saat awal login sehingga menerima rekomendasi jasa dan tampilan antarmuka yang disesuaikan dengan preferensinya. |
+| Admin | Pengelola operasional situs yang bertugas memantau aktivitas pengguna dan interaksinya. Admin memberikan respons pada tiket pengaduan, menindaklanjuti pelanggaran sesuai SOP (seperti memblokir atau menghapus akun), bertindak sebagai mediator jika terjadi konflik transaksi, serta mengelola alur keuangan. Admin memiliki hak akses eksklusif terhadap *dashboard* yang mencakup seluruh rekapitulasi data, log aktivitas, dan tiket pengaduan. |
 
 ## 4.2 Identifikasi Use Case
 | ID UC | Nama Use Case | Deskripsi Singkat | Aktor Terlibat | ID KF Terkait |
@@ -266,7 +265,6 @@ Salin ulang daftar aktor final dari BAB 3.1 dokumen *Use Case & Scenario Use Cas
 </p>
 
 ## 4.4 Skenario Use Case
-Salin ulang skenario **setiap** use case (skenario normal dan alternatif) dari BAB 3.4 dokumen *Use Case & Scenario Use Case*, sesuaikan dengan daftar UC final pada 4.2. Jika use case melibatkan lebih dari satu aktor manusia yang benar-benar berinteraksi langsung (misalnya *Kasir* yang memverifikasi transaksi setelah *Pelanggan* membayar), tambahkan kolom aksi tersendiri untuk aktor tersebut di samping kolom "Reaksi Perangkat Lunak". Sistem eksternal otomatis seperti *payment gateway* **bukan aktor**, sehingga interaksinya cukup dituliskan sebagai bagian dari "Reaksi Perangkat Lunak", bukan kolom aktor terpisah.
 
 ### 4.4.1 Skenario UC01
 
