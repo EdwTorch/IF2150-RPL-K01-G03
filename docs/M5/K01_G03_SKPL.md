@@ -168,32 +168,61 @@ Spesifikasi *operating system* atau lingkungan yang dibutuhkan P/L untuk beroper
 # BAB 3: Deskripsi Kebutuhan Perangkat Lunak
 
 ## 3.1 Kebutuhan Fungsional (KF)
-Salin ulang **seluruh Kebutuhan Fungsional (KF)** versi terbaru dari BAB 2.1 dokumen *Class Diagram* (sudah versi final dan sudah memakai format EARS). Pastikan ID Kebutuhan (kolom "ID Kebutuhan") juga konsisten dengan ID pada tabel Pemetaan Kebutuhan di dokumen *Requirement Gathering*.
-
 Tabel 3.1. Kebutuhan Fungsional
 
 | ID KF | ID Kebutuhan | Penjelasan |
 | :--- | :--- | :--- |
-| *KF01* | *R01* | *Ketika pelanggan membuka halaman katalog, sistem harus menampilkan daftar produk yang tersedia.* |
-| *KF02* | *R02* | *Ketika pelanggan memilih "Tambah ke Keranjang" pada suatu produk, sistem harus menyimpan produk tersebut ke dalam keranjang pelanggan.* |
-| *KF03* | *R03* | *Ketika pelanggan menekan tombol checkout, sistem harus menampilkan pilihan metode pembayaran yang tersedia.* |
-| *KF04* | *R04* | *Ketika pelanggan memilih metode pembayaran, sistem harus mengirimkan permintaan otorisasi beserta nominal tagihan dan ID pesanan ke payment gateway (dummy).* |
-| *KF05* | *R04* | *Ketika payment gateway (dummy) mengembalikan status pembayaran berhasil, sistem harus memperbarui status pesanan menjadi "Lunas" dan menampilkan notifikasi pembayaran berhasil.* |
-| *KF06* | *R05* | *Ketika pelanggan membuka menu riwayat pesanan, sistem harus menampilkan daftar pesanan beserta statusnya.* |
-| *KFXX* | *...* | *...* |
+| KF01 | R01, R02, R03, R04, R31, R32 | Ketika pengguna mengirimkan formulir registrasi dengan data valid, sistem harus menyimpan informasi data diri pengguna ke dalam basis data | 
+| KF02 | R05, R06,R34, R35, R56 | Ketika pengguna memasukkan kredensial login, sistem harus mengautentikasi kesesuaian email dan kata sandi |
+| KF03 | R31, R32, R33 | Ketika penyedia jasa mengunggah data portofolio dan lampiran pekerjaan, sistem harus menyimpannya ke dalam basis data |
+| KF04 | R33 | Sistem harus menampilkan data portofolio dan proyek yang telah diunggah pada halaman profil penyedia jasa |
+| KF05 | R38,R39 | Ketika penyedia jasa mengunggah penawaran jasa baru, sistem harus menyimpan dan menampilkannya sesuai kategori yang dipilih |
+| KF06 | R07, R08 | Ketika pengguna memasukkan kata kunci dan/atau memilih kategori, sistem harus menampilkan daftar jasa yang relevan |
+| KF07 | R09, R10 | Ketika pengguna menggunakan filter, sistem harus menyaring hasil pencarian berdasarkan kriteria tambahan yang digunakan |
+| KF08 | R11,R12 | Ketika pencari jasa memilih suatu listing, sistem harus menampilkan informasi detail terkait jasa tersebut |
+| KF09 | R15, R16 | Sistem harus menyediakan fitur *(bookmark/favorite)* pada setiap postingan  jasa |
+| KF10 | R15, R16 | Ketika pengguna menekan fitur simpan pada suatu jasa, sistem harus menyimpannya ke dalam daftar jasa tersimpan milik pengguna |
+| KF11 | R15, R16 | Sistem harus dapat menampilkan daftar jasa yang telah disimpan pada halaman khusus, seperti "Jasa yang tersimpan" |
+| KF12 | R15,R16 | Ketika pengguna membatalkan tanda simpan pada suatu jasa, sistem harus menghapus jasa tersebut dari daftar tersimpan |
+| KF13 | R17, R18 | Sistem harus menyediakan fitur pesan instan (*instant messaging*) antara calon pembeli dan penyedia jasa |
+| KF14 | R17, R18 | Ketika terdapat pesan baru yang masuk, sistem harus mengirimkan notifikasi kepada penerima pesan |
+| KF15 | R17, R18 | Sistem harus dapat menampilkan riwayat pesan antara pembeli dan penyedia jasa |
+| KF16 | R13,R14 | Ketika pengguna memilih fitur perbandingan, sistem harus menampilkan perbandingan harga, rating, dan informasi teknis antar dua postingan jasa |
+| KF17 | R19,R20 | Ketika pengguna mengirimkan formulir pemesanan, sistem harus membuat data pesanan baru |
+| KF18 | R19,R20 | Sistem harus memproses urutan langkah pemesanan jasa oleh pembeli|
+| KF19 | R21,R22 | Ketika pembeli diarahkan ke halaman pembayaran, sistem harus menampilkan opsi metode pembayaran digital yang tersedia |
+| KF20 | R21, R22, R23 | Ketika pembeli mengonfirmasi metode pembayaran yang dipilih, sistem harus memvalidasi status transaksi pembayaran tersebut |
+| KF21 | R43 | Ketika terdapat pesanan baru, sistem harus mengirimkan notifikasi kepada penyedia jasa |
+| KF22 | R44,R45 | Ketika penyedia jasa menerima atau menolak pesanan, sistem harus memperbarui status pesanan sesuai keputusan tersebut |
+| KF23 | R44, R45 | Bila pesanan ditolak atau dibatalkan oleh penyedia jasa, sistem harus memproses pengembalian dana (*refund*) kepada pembeli. |
+| KF24 | R22, R23 | Sistem harus menyimpan dan menampilkan riwayat pembelian jasa beserta statusnya pada akun pembeli maupun penyedia jasa |
+| KF25 | R36, R37, R49 | Ketika penyedia jasa menyerahkan hasil pekerjaan, sistem harus meneruskan dan menampilkannya pada layar pembeli |
+| KF26 | R22, R23, R40, R41, R42 | Ketika pembeli mengonfirmasi penerimaan jasa tanpa revisi tambahan, sistem harus memperbarui status pesanan menjadi "Selesai"  |
+| KF27 | R24, R50 | Selama batas maksimal revisi (3-5 kali) belum tercapai, sistem harus memfasilitasi pengajuan permintaan revisi pekerjaan |
+| KF28 | R51, R52 | Ketika pesanan telah dikonfirmasi selesai, sistem harus mencairkan dana pembayaran tertahan ke penyedia jasa |
+| KF29 | R25, R26, R53, R54 | Ketika pengguna mengirimkan formulir aduan pelaporan, sistem harus membuat tiket laporan kendala (*ticketing*) baru. |
+| KF30 | R27, R28,R29 | Ketika pembeli mengirimkan teks ulasan dan *rating*, sistem harus memproses dan menyimpannya ke listing jasa terkait |
+| KF31 | R27, R28,R29 | Ketika pengunjung melihat listing jasa, sistem harus menampilkan daftar ulasan yang telah diberikan oleh pembeli sebelumnya  |
+| KF32 | R58 | Ketika admin memberikan tanggapan atau mengubah status pada tiket aduan, sistem harus menyimpannya dan menampilkannya kepada pihak pelapor |
+| KF33 | R59 | Ketika admin membuka dasbor peninjauan, sistem harus menampilkan log aktivitas pengguna dan berkas bukti laporan |
+| KF34 | R60, R61, R62 | Ketika admin menetapkan sanksi teguran, sistem harus mengirimkan notifikasi peringatan pelanggaran ke akun pengguna |
+| KF35 | R60, R61, R62 | Ketika admin menetapkan sanksi pembekuan, sistem harus menonaktifkan sementara fitur transaksional pada akun tersebut |
+| KF36 | R60, R61, R62 | Ketika admin menetapkan sanksi pemblokiran, sistem harus mencabut hak akses *login* pengguna tersebut ke dalam platform |
+| KF37 | R63, R64 | Sistem harus menyediakan antarmuka ruang mediasi (obrolan) khusus antara admin, pembeli, dan penyedia jasa untuk menyelesaikan sengketa pesanan |
+| KF38 | R63, R64| Ketika admin menetapkan keputusan mediasi, sistem harus memproses eksekusi penerusan dana atau pengembalian dana sesuai perintah admin |
 
 ## 3.2 Kebutuhan Non-Fungsional (KNF)
-Salin ulang Kebutuhan Non-Fungsional dari BAB 2.5 dokumen *Requirement Gathering*, sesuaikan ID Kebutuhan (kolom "ID Kebutuhan") apabila terjadi perubahan penomoran pada BAB 3.1 di atas.
-
 Tabel 3.2. Kebutuhan Non-Fungsional
 
 | ID KNF | ID Kebutuhan | Parameter | Deskripsi Kebutuhan |
 | :--- | :--- | :--- | :--- |
-| *KNF01* | *R03* | *Reliability* | *Proses transaksi pembayaran harus memenuhi prinsip ACID untuk mencegah terjadinya data tersangkut (lost update) apabila terjadi kegagalan jaringan di tengah proses.* |
-| *KNF02* | *R04* | *Security* | *Sistem harus mengenkripsi PIN atau password pengguna menggunakan algoritma SHA-256 sebelum data dikirimkan ke server, serta tidak menyimpannya dalam bentuk plain-text di database.* |
-| *...* | *...* | *...* | *...* |
-
-<sub>*Silakan pilih parameter yang relevan dengan P/L kalian (Availability, Reliability, Ergonomy, Portability, Memory, Response time, Safety, Security, dsb), tidak perlu semua parameter diisi. Lihat kembali dokumen Requirement Gathering untuk penjelasan tiap parameter.*<sub>
+| KNF01 | R01, R02, R03, R04, R31, R32 | *Portability* | Selama platform diakses melalui berbagai variasi perangkat keras dengan resolusi viewport antara 320px (batas bawah *smartphone*) hingga 1920px (standar untuk monitor), sistem harus merender antarmuka yang adaptif tanpa kemunculan *horizontal scrollbar* |
+| KNF02 | R07, R08, R09, R10 | *Response time* | Ketika pengguna mengeksekusi pencarian dan filter jasa pada volume data sebesar 1.000 listing, sistem harus menampilkan hasilnya dalam waktu ≤3 detik pada minimal 95% pencarian |
+| KNF03 | R19, R20, R21, R22, R23 | *Ergonomy* | Ketika pengguna baru melakukan alur pemesanan hingga pembayaran tanpa bantuan panduan eksternal, sistem harus memfasilitasi penyelesaian navigasi tersebut dalam batas waktu ≤5 menit |
+| KNF04 | R21, R22, R23 | *Reliability* | Bila terjadi kegagalan jaringan secara tiba-tiba pada saat memproses transaksi pembayaran yang aktif, sistem harus menggagalkan transaksi dan kembali ke keadaan awal tanpa kehilangan integritas data |
+| KNF05 | R23 | *Security* | Selama proses transaksi, sistem harus mengenkripsi lalu lintas jaringan tersebut menggunakan protokol komunikasi terenkripsi HTTPS |
+| KNF06 | R30 | *Security* | Ketika sistem menyimpan kata sandi pengguna ke dalam basis data, sistem harus memprosesnya menggunakan algoritma hashing |
+| KNF07 | R56, R57, R58, R59, R05, R06 | *Availability* | Platform harus dapat diakses secara terus-menerus dengan *uptime* minimal 99% setiap bulannya. |
 
 ---
 
