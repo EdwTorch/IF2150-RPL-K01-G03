@@ -137,33 +137,30 @@ CariJasa adalah perangkat lunak berbasis web responsif yang dirancang untuk memf
 
 ## 2.4 Batasan Perangkat Lunak
 
-### Batasan regulasi/hukum :
-1. Sistem yang digunakan harus menjamin keamanan data, kredensial pengguna, informasi transaksi, *brief* dan konten yang dihasilkan, serta komunikasi antar pengguna. Hal ini ditujukan untuk menjamin data pengguna agar tidak terekspos ke publik tanpa perizinan yang sah.
-2. Sistem harus memfasilitasi pengguna terutama Pengguna Jasa dalam mengajukan revisi dengan jumlah batas yang wajar sehingga pengguna mendapatkan kualitas terbaik dari uang yang dikeluarkan.
-3. Sistem hanya berfungsi sebagai perantara yang menghubungkan penjual jasa dan Pengguna Jasa. Segala bentuk orisinalitas portofolio, karya, dan hasil yang diberikan ditanggungkan kepada masing-masing penjual.
-### Keterbatasan sumber daya 
-1. Waktu *development* yang terbatas karena dilakukan dalam proses perkuliahan sebagai tugas besar.
-2. Ketiadaan biaya atau anggaran yang diberikan dalam melakukan *development*.
-3. Penggunaan server atau infrastruktur *deployment* gratis.
-4. Keterbatasan jumlah anggota dan kapasitas teknis tim yang melakukan *development*.
-5. Keterbatasan pengetahuan terkait rekayasa perangkat lunak bagi beberapa anggota.
-
-### Ruang lingkup solusi :  
 1. Sistem hanya terbatas pada sirkulasi pembayaran menggunakan uang  *virtual* tanpa adanya sirkulasi uang ril di dalam aplikasi.
 2. Sistem tidak menyediakan layanan customer service secara real time selama 24 jam, layanan customer service hanya dibatasi pada pengajuan tiket atau formulir.
 3. Sistem hanya menyediakan komunikasi langsung secara teks, tidak mendukung modul komunikasi dalam bentuk video, maupun audio.
 4. Sistem hanya menyediakan beberapa jasa pada kategori utama dalam penawaran jasa.
+5. Sistem hanya menyediakan fitur laporan untuk Pengguna Jasa, Penyedia Jasa belum dapat melaporkan pengguna lainnya.
+6. Fitur chat hanya menyediakan fitur komunikasi dengan pesan, foto, dan dokumen.
+7. Registrasi kredensial akun dan login diinput secara manual.
+8. Portofolio terbatas pada text, link, foto, dan dokumen pdf dengan maksimal 20 MB per file dengan maksimal jumlah file dan/atau foto adalah 5.
+9. Prosedur Pengunggahan Jasa hanya terbatas pada *template* yang diberikan.
+10. Kategori Penawaran Jasa terbatas pada 4 kategori.
+11. Filter Penawaran Jasa terbatas pada penyaringan harga, kategori, waktu pengerjaan, dan rating.
+12. Konektivitas komunikasi berjalan secara lokal.
+13. Pemesanan Maksimal dari satu pengguna dalam satu waktu adalah 2 pesanan.
+14. Revisi terbatas pada 3 kali revisi.
+15. Status sanksi atau teguran hanya bersifat representasi visual.
 
 ## 2.5 Lingkungan Operasi Perangkat Lunak
-Spesifikasi *operating system* atau lingkungan yang dibutuhkan P/L untuk beroperasi. Bagian ini digunakan untuk memastikan pengguna memiliki spesifikasi yang cukup untuk menjalankan P/L. Misalnya mencakup komponen server, client, OS, DBMS, tetapi tidak menutupi kemungkinan komponen lain.
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
-| *Server* | *[contoh: Node.js v20, dijalankan pada layanan cloud]* |
-| *Client* | *[contoh: Web Browser modern (Chrome, Firefox terbaru)]* |
-| *DBMS* | *[contoh: PostgreSQL 15]* |
-| *OS* | *[contoh: Cross-platform (Windows/Linux/MacOS) melalui browser]* |
-| *...* | *...* |
+| Server | Lokal |
+| Client | Web Browser Modern Berbasis Chromium |
+| DBMS | PostGresSQL |
+| OS | Cross-platform (Windows/Linux/MacOS/Android/IOS) melalui perangkat lunak browser modern |
 
 ---
 
