@@ -46,7 +46,6 @@ Tuliskan dengan ringkas tujuan dokumen SKPL ini dibuat dan siapa saja yang akan 
 Tuliskan dengan ringkas nama aplikasi dan deskripsi singkatnya. Bagian ini maksimal berisi satu paragraf, dapat diringkas dari BAB 1 *Analisis Permasalahan* pada dokumen *Topic Brainstorming*.
 
 ## 1.3 Definisi, Istilah, dan Singkatan
-Semua definisi dan singkatan yang digunakan dalam dokumen ini beserta penjelasannya.
 
 Tabel 1.3. Definisi Istilah dan Singkatan
 
@@ -57,8 +56,12 @@ Tabel 1.3. Definisi Istilah dan Singkatan
 | *KF* | *Singkatan dari Kebutuhan Fungsional.* |
 | *KNF* | *Singkatan dari Kebutuhan Non-Fungsional.* |
 | *UC* | *Singkatan dari Use Case.* |
-| *EARS* | *Easy Approach to Requirements Syntax, yaitu pola penulisan kebutuhan agar konsisten dan mudah diuji.* |
-| *...* | *...* |
+| *BCE* | *Singkatan dari Boundary-Controller-Entity*. pola arsitektur yang memisahkan sistem ke dalam tiga peran yaitu antarmuka (*Boundary*), pengendali logika (*Controller*), dan data (*Entity*). |
+| *UML* | *Unified Modeling Language*, bahasa visual standar untuk mendokumentasikan artefak sistem perangkat lunak. |
+| *Listing Jasa* | Produk jasa digital yang telah dipublikasikan oleh Penyedia Jasa dan tersedia untuk dipesan oleh Pengguna Jasa.|
+| *Deliverables* | Berkas, dokumen, atau tautan hasil pekerjaan akhir yang diserahkan oleh Penyedia Jasa kepada Pengguna Jasa untuk dievaluasi. |
+| *Bookmark* | Fitur untuk menandai dan menyimpan penawaran jasa ke dalam daftar tersimpan pengguna agar mudah diakses kembali. |
+| *Ticketing* | Sistem pencatatan, pelacakan, dan penanganan tiket keluhan serta laporan sengketa transaksi pengguna oleh Admin. |
 
 ## 1.4 Aturan Penomoran
 Tuliskan aturan penomoran (ID) yang digunakan dalam dokumen ini. Gunakan pola ID yang **sama** dengan yang sudah dipakai pada dokumen-dokumen sebelumnya, jangan membuat pola baru di dokumen ini.
@@ -67,12 +70,11 @@ Tabel 1.4. Aturan Penomoran
 
 | Hal/Bagian | Penomoran | Keterangan |
 | :--- | :--- | :--- |
-| *Kebutuhan Fungsional* | *KFXX* | |
-| *Kebutuhan Non-Fungsional* | *KNFXX* | |
-| *Aktor* | *AXX* | |
-| *Use Case* | *UCXX* | |
-| *Kelas* | *CXX* | |
-| *...* | *...* |
+| *Kebutuhan Awal* | *RXX* | Nomor identifikasi kebutuhan mentah dari tahap elisitasi kebutuhan dengan format dua digit. |
+| *Kebutuhan Fungsional* | *KFXX* | Nomor urut kebutuhan fungsional dengan format dua digit. |
+| *Kebutuhan Non-Fungsional* | *KNFXX* | Nomor urut kebutuhan non-fungsional dengan format dua digit. | 
+| *Use Case* | *UCXX* | Nomor urut kasus penggunaan sistem dengan format dua digit, dimulai dari UC01 hingga UC16. |
+| *Kelas* | *CXX* | Nomor identifikasi unik kelas analisis arsitektur BCE, dimulai dari C01 hingga C53. |
 
 ## 1.5 Referensi
 Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini.
@@ -1267,14 +1269,62 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 ---
 
 # BAB 6: Traceability
-Salin ulang tabel Traceability dari BAB 5 dokumen *Class Diagram*, cocokkan setiap Kebutuhan Fungsional, Use Case, dan Kelas yang saling terkait.
 
 | ID Kelas | ID Use Case | ID KF |
 | :--- | :--- | :--- |
-| *C01* | *UC01, UC05* | *KF01, KF06* |
-| *C02* | *UC01, UC03, UC05* | *KF01, KF02, KF05, KF06* |
-| *C03* | *UC01, UC02* | *KF01, KF02* |
-| *...* | *...* | *...* |
+| C01 | UC01, UC02, UC08, UC13 | KF01, KF02, KF13, KF14, KF15, KF29 |
+| C02 | UC01, UC02, UC03, UC04, UC06, UC08, UC10, UC11, UC12, UC13 | KF01, KF02, KF03, KF04, KF05, KF08, KF13, KF14, KF15, KF21, KF22, KF23, KF24, KF25, KF26, KF27, KF28, KF29 |
+| C03 | UC01, UC02, UC05, UC06, UC07, UC08, UC09, UC12, UC13, UC14 | KF01, KF02, KF06, KF07, KF08, KF09, KF10, KF11, KF12, KF13, KF14, KF15, KF17, KF18, KF19, KF20, KF26. KF27, KF28, KF29, KF30, KF31 |
+| C04 | UC01 | KF01 |
+| C05 | UC01 | KF01 |
+| C06 | UC02 | KF02 |
+| C07 | UC02 | KF02 |
+| C08 | UC03 | KF03, KF04 |
+| C09 | UC03 | KF03, KF04 |
+| C10 | UC03, UC04, UC11 | KF03, KF04, KF05, KF25 |
+| C11 | UC04, UC05, UC06, UC07 | KF03, KF04, KF05, KF06, KF07, KF08, KF09, KF10, KF11, KF12 KF16 |
+| C12 | UC04 | KF05 |
+| C13 | UC04 | KF05 |
+| C14 | UC04, UC06 | KF05, KF08 |
+| C15 | UC05 | KF06, KF07, KF16 |
+| C16 | UC05 | KF06, KF07, KF16 |
+| C17 | UC05 | KF06, KF07, KF16 |
+| C18 | UC05 | KF06, KF07, KF16 |
+| C19 | UC06 | KF08 |
+| C20 | UC07 | KF09, KF10, KF11, KF12 |
+| C21 | UC07 | KF09, KF10, KF11, KF12 |
+| C22 | UC07 | KF09, KF10, KF11, KF12 |
+| C23 | UC08, UC16 | KF13, KF14, KF15, KF37, KF38 |
+| C24 | UC08, UC16 | KF13, KF14, KF15, KF37, KF38 |
+| C25 | UC08, UC16 | KF13, KF14, KF15, KF37, KF38 |
+| C26 | UC08, UC16 | KF13, KF14, KF15, KF37, KF38 |
+| C27 | UC09, UC10, UC12, UC14 | KF17, KF18, KF19, KF20, KF21, KF22, KF23, KF24, KF26, KF27, KF28, KF30, KF31 |
+| C28 | UC09 | KF17, KF18, KF19, KF20 |
+| C29 | UC09 | KF17, KF18, KF19, KF20|
+| C30 | UC09, UC14| KF17, KF18, KF19, KF20, KF30, KF31 |
+| C31 | UC09, UC10, UC12| KF17, KF18, KF19, KF20, KF21, KF22, KF23, KF24, KF26, KF27, KF28 |
+| C32 | UC09, UC12, UC14| KF17, KF18, KF19, KF20, KF26, KF27, KF28, KF30, KF31 |
+| C33 | UC09 | KF17, KF18, KF19, KF20   |
+| C34 | UC09, UC10, UC14| KF17, KF18, KF19, KF20, KF21, KF22, KF23, KF24, KF30, KF31 |
+| C35 | UC10 | KF21, KF22, KF23, KF24 |
+| C36 | UC11 | KF25 |
+| C37 | UC11 | KF25 |
+| C38 | UC12 | KF26, KF27, KF28 |
+| C39 | UC12 | KF26, KF27, KF28 |
+| C40 | UC12 | KF26, KF27, KF28 |
+| C41 | UC12 | KF26, KF27, KF28 |
+| C42 | UC12 | KF26, KF27, KF28 |
+| C43 | UC13, UC15, UC16 | KF29, KF32, KF33, KF34, KF35, KF36, KF37, KF38 |
+| C44 | UC13 | KF29|
+| C45 | UC13, UC15, UC16 | KF29, KF32, KF33, KF34, KF35, KF36, KF37, KF38|
+| C46 | UC06, UC14 | KF08, KF30, KF31 |
+| C47 | UC14 | KF30, KF31 |
+| C48 | UC14 | KF30, KF31 |
+| C49 | UC15, UC16 | KF32, KF33, KF34, KF35, KF36, KF37, KF38 |
+| C50 | UC16 | KF37, KF38 |
+| C51 | UC16 | KF37, KF38 |
+| C52 | UC15, UC16 | KF32, KF33, KF34, KF35, KF36, KF37, KF38 |
+| C53 | UC15, UC16 | KF32, KF33, KF34, KF35, KF36, KF37, KF38 |
 
 ---
 
