@@ -73,8 +73,8 @@ Tabel 1.4. Aturan Penomoran
 | *Kebutuhan Awal* | *RXX* | Nomor identifikasi kebutuhan mentah dari tahap elisitasi kebutuhan dengan format dua digit. |
 | *Kebutuhan Fungsional* | *KFXX* | Nomor urut kebutuhan fungsional dengan format dua digit. |
 | *Kebutuhan Non-Fungsional* | *KNFXX* | Nomor urut kebutuhan non-fungsional dengan format dua digit. | 
-| *Use Case* | *UCXX* | Nomor urut kasus penggunaan sistem dengan format dua digit, dimulai dari UC01 hingga UC16. |
-| *Kelas* | *CXX* | Nomor identifikasi unik kelas analisis arsitektur BCE, dimulai dari C01 hingga C53. |
+| *Use Case* | *UCXX* | Nomor urut kasus penggunaan sistem dengan format dua digit. |
+| *Kelas* | *CXX* | Nomor identifikasi unik kelas analisis arsitektur BCE. |
 
 ## 1.5 Referensi
 Dokumentasi P/L yang dirujuk oleh dokumen ini. Referensi dapat berupa buku, panduan, ataupun dokumentasi lain yang dipakai dalam pengembangan P/L ini.
