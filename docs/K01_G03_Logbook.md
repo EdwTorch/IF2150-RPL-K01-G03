@@ -117,6 +117,7 @@
 | *27-09-2026* | Theresia | Mengerjakan Bab 5 | <15 menit | Done | - |
 | *27-09-2026* | Necia | Mengerjakan Bab 4 | <10 menit | Done | - |
 | *27-09-2026* | Edward| Mengerjakan Bab 2 | 30 Menit | Done | Tidak tahu spek apa yang harus dipilih |
+| *27-09-2026* | Revandra | Mengerjakan bab 3 | < 10 menit | Done | - |
 | *29-09-2026* | Danesh, Revandra, Theresia, Edward, Necia | Asistensi |1 Jam | -|
 
 **Catatan/Evaluasi Milestone 5:**
