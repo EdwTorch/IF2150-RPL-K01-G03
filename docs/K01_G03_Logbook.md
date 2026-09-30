@@ -29,6 +29,7 @@
     - [Milestone 2](#milestone-2)
     - [Milestone 3](#milestone-3)
     - [Milestone 4](#milestone-4)
+    - [Milestone 5](#milestone-5)
 ---
 
 ### Milestone 1
@@ -108,4 +109,13 @@
 **Catatan/Evaluasi Milestone 4:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
+
+### Milestone 5
+**Periode:** [23 September 2026] - [30 September 2026]
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *27-09-2026* | Theresia | Mengerjakan Bab 5 | <15 menit | Done | - |
+
+**Catatan/Evaluasi Milestone 5:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
