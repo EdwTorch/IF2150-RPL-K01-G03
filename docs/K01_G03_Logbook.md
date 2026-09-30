@@ -115,6 +115,7 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *27-09-2026* | Theresia | Mengerjakan Bab 5 | <15 menit | Done | - |
+| *27-09-2026* | Necia | Mengerjakan Bab 4 | <10 menit | Done | - |
 
 **Catatan/Evaluasi Milestone 5:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
