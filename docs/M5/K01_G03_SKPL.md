@@ -85,7 +85,9 @@ Tabel 1.4. Aturan Penomoran
 6. Program Studi Teknik Informatika ITB. (2026). *Materi perkuliahan IF2150 Rekayasa Perangkat Lunak*. Edunex ITB. https://edunex.itb.ac.id/
 
 ## 1.6 Deskripsi Umum Dokumen (Ikhtisar)
-Tuliskan sistematika pembahasan dokumen SKPL ini secara runut (misalnya: BAB 2 membahas deskripsi umum P/L, BAB 3 membahas kebutuhan fungsional dan non-fungsional, dst).
+Dokumen Spesifikasi Kebutuhan Perangkat Lunak (SKPL) ini disusun dalam enam bab pembahasan. Bab 1 memaparkan fondasi penyusunan dokumen, meliputi tujuan penulisan, lingkup masalah sistem CariJasa, definisi istilah dan singkatan teknis, konvensi aturan penomoran, daftar referensi, serta sistematika penulisan. Selanjutnya, Bab 2 menguraikan gambaran umum perangkat lunak, pemodelan proses bisnis melalui diagram aktivitas, karakteristik dan kebutuhan pengguna, batasan operasional sistem, serta spesifikasi lingkungan operasi yang dibutuhkan.  
+
+Pada Bab 3, disajikan spesifikasi rinci kebutuhan perangkat lunak yang mencakup kebutuhan fungsional berbasis pola EARS serta kebutuhan non-fungsional lengkap dengan parameter pengukurannya. Aspek fungsionalitas tersebut kemudian dimodelkan pada Bab 4 melalui identifikasi aktor, diagram *use case*, serta rincian skenario alur normal, alternatif, dan eksepsi. Pemodelan struktur dibahas pada Bab 5 melalui identifikasi kelas berbasis *Boundary-Controller-Entity* (BCE) yang mencakup diagram kelas per kasus penggunaan, diagram kelas keseluruhan, serta detail atribut dan metode tiap kelas. Rangkaian dokumen ini diakhiri oleh Bab 6 yang memuat tabel keterlacakan (*traceability*) untuk memetakan keterhubungan antara kelas, *use case*, dan kebutuhan fungsional sistem.
 
 ---
 
