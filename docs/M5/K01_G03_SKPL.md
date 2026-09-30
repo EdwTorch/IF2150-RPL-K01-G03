@@ -32,7 +32,7 @@ Dipersiapkan oleh:
 | :--- | :--- |
 | 1. | Deskripsi Umum Sistem Berubah dari Pembeli menjadi Pengguna Jasa dan penghapusan peran admin sebagai penjaga transaksi|
 | 2. | Menghapus Peran Admin sebagai penjaga transaksi dan penyedia jasa untuk melaporkan pengguna lain |
-| *C* |  |
+| 3. | Perubahan Atribut Chatroom (menghapus Riwayat Pesan) dan menambahkan NamaRoom |
 | ... |  |
 
 <br>
@@ -40,7 +40,7 @@ Dipersiapkan oleh:
 # BAB 1: Pendahuluan
 
 ## 1.1 Tujuan Penulisan Dokumen
-Tuliskan dengan ringkas tujuan dokumen SKPL ini dibuat dan siapa saja yang akan menggunakan dokumen ini.
+Dokumen ini dibuat untuk pembuatan aplikasi bernama CariJasa, yaitu platform pencarian jasa digital khusus untuk regional Indonesia. Dokumen ini digunakan untuk oleh developer untuk menyamakan desain fungsi, kelas, dan arsitektur dari aplikasi yang dibuat, juga mendesain program dengan model yang berorientasi objek.
 
 ## 1.2 Lingkup Masalah
 CariJasa adalah platform *marketplace* jasa berbasis web yang dirancang untuk memudahkan pencarian dan penawaran jasa digital bagi masyarakat Indonesia. Aplikasi ini dibuat untuk mengatasi masalah informasi jasa yang saat ini masih tersebar di berbagai media sosial dan kanal lain, sehingga pengguna kesulitan mencari serta membandingkan tarif, keahlian, dan ulasan penyedia jasa secara mudah. Selain itu, platform ini hadir untuk membantu *freelancer* maupun penyedia jasa lokal memperoleh penghasilan tambahan tanpa harus terikat hubungan kerja tetap. Ruang lingkup aplikasi berfokus pada penyediaan daftar pilihan jasa, fitur pembanding jasa (*compare*), ruang kirim pesan langsung (*chat*), pembayaran digital yang aman, pengiriman hasil kerja dan pengajuan revisi, hingga pelaporan kendala serta bantuan penyelesaian masalah oleh admin.
@@ -1012,7 +1012,7 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | C01 | Pengguna | nama, email, noTelepon, password, statusOnline, statusAkun,sanksi| buatAkun(), simpanProfil(), login(), setStatusAkun(), setSanksi() | 
 | C02 | PenyediaJasa | idPenyediaJasa, daftarPenawaranJasa, pengalaman, prestasi | isiPortofolio(), unggahPortofolio(), tambahPenawaranJasa(), bukaNotifikasiPesanan(), terimaPesanan(), tolakPesanan(), kumpulkanProdukAkhir(), getStatusPengerjaan(), kumpulkanRevisi(), cekPengirimanDana(), getRevisi() |
 | C03 | PenggunaJasa | idPenggunaJasa, daftarJasa,  minatkategoriJasa, statusKonfirmasi | cariJasa(), gunakanFilter(), bukaDetailJasa(), bukaDaftarBoomark(), pilihJasa(), isiFormPemesanan(), getStatusPengerjaan(), getDeliverables(), selesaikanPesanan(), AjukanRevisi(), BeriUlasan(), beriPenilaian(), pilihMetodePembayaran() |
-| C23 | ChatRoom | idChatRoom, idAnggota, riwayatPesan, waktuDibuat | getRiwayatPesan() |
+| C23 | ChatRoom | idChatRoom, namaRoom, waktuDibuat | getRiwayatPesan() |
 | C24 | HalamanChat | idSesiChat, inputPesan, statusKoneksi | tampilkanMenuChat(), tampilkanRiwayatPesan(), inputPesan(), tombolKirimTerklik(), tampilkanPesanError(), tampilkanStatusBelumTerkirim() |
 | C25 | LayananPesanInstan | - | buatSesiChat(), validasiInputPesan(), kirimPesan(), simpanKeDatabase(), updateStatusBaca() |
 | C26 | LayananNotifikasiChat | - | kirimNotifikasiPesan(), tampilkanPopUpNotifikasi() |
