@@ -70,7 +70,12 @@ Client-Server Architecture adalah sebuah pola arsitektur perangkat lunak yang me
 
 ## 1.3 Penerapan Style Arsitektur P/L
 
-
+### 1.3.2 Diagram Client-Server Architecture
+<p align="center">
+<img alt="Contoh Arsitektur MVC" src="./assets/diagram/ClientServer.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 1.3.2 Client-Server Architecture</i>
 
 Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 
@@ -80,7 +85,6 @@ Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 | Client | Web Browser Modern berbasis Chromium (Chrome, Firefox terbaru) |
 | DBMS | PostgreSQL 15 pada Supabase sebagai basis data terpusat |
 | OS | Cross-platform (Windows/Linux/MacOS) melalui browser |
-
 
 <sub><b><i>Catatan</i></b>: <i>Style/pattern yang dipilih di bab ini menjadi acuan untuk BAB 2 (pengelompokan komponen) dan BAB 3 (model arsitektur). Contoh pada dokumen ini memakai MVC secara konsisten dari BAB 1 sampai BAB 3. Kelompok boleh memakai pattern lain selama alasannya dijelaskan dan BAB 2 serta BAB 3 disesuaikan. Tabel 1.1 harus sama persis dengan subbab 2.5 dokumen SKPL; jangan menambah atau mengubah isinya karena SKPL sudah final.</i></sub>
 
