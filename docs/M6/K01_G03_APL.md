@@ -7,25 +7,25 @@ ARSITEKTUR PERANGKAT LUNAK (APL)
 </h1>
 <br>
 
-## *Nama Perangkat Lunak*
+## CariJasa
 
-### Untuk: *[Nama Asisten]*
+### Untuk: Mikhael Andrian Yonathan
 
 Dipersiapkan oleh:
 
 | Informasi | Keterangan |
 | --- | --- |
-| Kelas | *\[Kelas\]* |
-| Kelompok | *\[Nomor Kelompok\]*  |
-| Nama Kelompok | *\[Nama Kelompok\]*  |
+| Kelas | K-01 |
+| Kelompok | G05  |
+| Nama Kelompok | MAYOOOOOR  |
 
-| NIM       | Nama               |
-| --------- | ------------------ |
-| *[NIM 1]* | *[Nama Anggota 1]* |
-| *[NIM 2]* | *[Nama Anggota 2]* |
-| *[NIM 3]* | *[Nama Anggota 3]* |
-| *[NIM 4]* | *[Nama Anggota 4]* |
-| *[NIM 5]* | *[Nama Anggota 5]* |
+| NIM | Nama |
+|---|---|
+| 13525031 | Revandra Zacky Maharta |
+| 13525079 | Danesh Rasyad Damotino |
+| 13525088 | Theresia Estelina Ratu Udju |
+| 13525127 | Edward Terrance Lie |
+| 13525130 | Necia Aurely Greva Dedevi |
 
 ---
 
@@ -42,23 +42,40 @@ Pada bagian ini, tentukan *architectural style* atau *pattern* yang menjadi acua
 <p align="center">
 <i>Gambar 1. Contoh Arsitektur MVC</i>
 </p>
+---
 
-Isi bab ini dengan hal-hal berikut:
 1. **Style/pattern yang dipilih** beserta penjelasan singkat peran setiap bagiannya. Untuk MVC, jelaskan peran *Model*, *View*, dan *Controller*.
 2. **Alasan pemilihan** berdasarkan karakteristik P/L Anda, misalnya jenis pengguna, alur proses bisnis, serta KF dan KNF pada dokumen SKPL.
 3. **Gambar style/pattern yang diterapkan pada P/L Anda.** Jangan hanya menyalin Gambar 1. Isi setiap bagian pattern dengan komponen milik P/L Anda. Misalnya, kotak *Controller* berisi daftar *controller* yang ada di aplikasi dan kotak *Model* berisi daftar *model* yang ada di aplikasi.
 
 Selain *style/pattern*, tuliskan juga lingkungan operasi P/L. Tabel berikut **disalin dari subbab 2.5 *Lingkungan Operasi Perangkat Lunak* pada dokumen SKPL** tanpa perubahan. Setelah tabel, jelaskan kaitan teknologi yang dipakai dengan *style/pattern* yang dipilih. Contohnya, Django (Python) secara bawaan mengikuti pola MVT (*Model-View-Template*), yaitu varian dari MVC.
 
+---
+## 1.1 Sytle Arsitektur Perangkat Lunak
+
+### 1.1.1 Layered Architecture 
+
+### 1.1.2 Client-Server Achitecture
+## 1.2 Alasan Pemilihan Style Arsitektur Perangkat Lunak 
+### 1.2.1 Layered Architecture 
+
+### 1.2.2 Client-Server Achitecture
+
+### Alasan Digabung
+
+## 1.3 Penerapan Style Arsitektur P/L
+
+
+
 Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 
 | Komponen | Spesifikasi |
 | :--- | :--- |
-| *Server* | *[contoh: Node.js v20 dengan Next.js, dijalankan secara lokal (localhost)]* |
-| *Client* | *[contoh: Web Browser modern (Chrome, Firefox terbaru)]* |
-| *DBMS* | *[contoh: PostgreSQL 15 pada Supabase sebagai basis data terpusat]* |
-| *OS* | *[contoh: Cross-platform (Windows/Linux/MacOS) melalui browser]* |
-| *...* | *...* |
+| Server | Node.js v22 dengan Next.js, dijalankan secara lokal (localhost) |
+| Client | Web Browser Modern berbasis Chromium (Chrome, Firefox terbaru) |
+| DBMS | PostgreSQL 15 pada Supabase sebagai basis data terpusat |
+| OS | Cross-platform (Windows/Linux/MacOS) melalui browser |
+
 
 <sub><b><i>Catatan</i></b>: <i>Style/pattern yang dipilih di bab ini menjadi acuan untuk BAB 2 (pengelompokan komponen) dan BAB 3 (model arsitektur). Contoh pada dokumen ini memakai MVC secara konsisten dari BAB 1 sampai BAB 3. Kelompok boleh memakai pattern lain selama alasannya dijelaskan dan BAB 2 serta BAB 3 disesuaikan. Tabel 1.1 harus sama persis dengan subbab 2.5 dokumen SKPL; jangan menambah atau mengubah isinya karena SKPL sudah final.</i></sub>
 
