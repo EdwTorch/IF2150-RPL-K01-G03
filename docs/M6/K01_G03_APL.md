@@ -115,9 +115,16 @@ Karena dilakukan pemisahan akses dan interaksi dari pengguna. Kondisi ini akan m
 2. Untuk platform yang menangani berbagai data penting seperti informasi akun, transaksi, dan berkas, Client-Server Achitecture menempatkan *server* sebagai pusat penyimpanan dan logika utama. Hal tersebut memastikan setiap *request* yang dikirim oleh *client* dikelola dengan standar keamanan dan aturan yang sama sehingga integritas dan standar data tetap terjaga.
 3. Dapat menghubungkan banyak pengguna yang tersebar di berbagai lokasi yang berbeda. Dengan memanfaatkan protokol jaringan seperti HTTP, sistem memungkinkan terjadinya komunikasi dan sinkronisasi data antarpengguna melalui perantara *server* sehingga interaksi seperti pertukaran pesan dan pengiriman notifikasi dapat berjalan dengan lancar.
 
-### Alasan Digabung
+### 1.2.3 Alasan Digabung
+Kedua Sudut Pandang ini dibutuhkan karena keduanya berada di tingkat operasi yang berbeda. Client-Server Architecture lebih berfokus pada pengembangan di tingkat global, mulai dari interaksi dengan client hingga memproses interaksi dari client. Sedagkan, Layered Architecture lebih berfokus pada menjamin ketersediaan fitur, kemudahan pengujian, hingga manajemen dalam penggunaan server. Dengan menggabungkan kedua arsitektur ini, pembuatan perangkat lunak akan menjadi lebih rapi dan terstruktur.
 
 ## 1.3 Penerapan Style Arsitektur P/L
+### 1.3.1 Diagram Layered Architecture 
+<p align="center">
+<img alt="Arsitektur Layered Architecture" src="./assets/diagram/Layered Architecture.drawio.png" width="20%">
+</p>
+<p align="center">
+<i>Gambar 1.3.1 Diagram Layered Architecture</i>
 
 ### 1.3.2 Diagram Client-Server Architecture
 <p align="center">
@@ -126,12 +133,6 @@ Karena dilakukan pemisahan akses dan interaksi dari pengguna. Kondisi ini akan m
 <p align="center">
 <i>Gambar 1.3.2 Client-Server Architecture</i>
   
-### 1.3.3 Diagram Layered Architecture 
-<p align="center">
-<img alt="Arsitektur Layered Architecture" src="./assets/diagram/Layered Architecture.drawio.png" width="20%">
-</p>
-<p align="center">
-<i>Gambar 1.3.3 Diagram Layered Architecture</i>
   
 Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 
