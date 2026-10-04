@@ -56,6 +56,8 @@ Selain *style/pattern*, tuliskan juga lingkungan operasi P/L. Tabel berikut **di
 ### 1.1.1 Layered Architecture 
 
 ### 1.1.2 Client-Server Achitecture
+Client-Server Architecture adalah sebuah pola arsitektur perangkat lunak yang membagi sistem menjadi dua bagian utama, yaitu *client* dan *server*. Kedua belah pihak saling berkomunikasi dan bertukar data melalui sebuah protokol jaringan, misalnya HTTP. Dalam penggunaannya, *client* yang biasanya berupa antarmuka pengguna seperti *web browser* atau aplikasi *mobile*, bertugas untuk mengirimkan *request* sesuai dengan keperluannya. Sementara itu, *server* yang merupakan tempat pemrosesan dan penyimpanan data, bertugas menerima *request*, memprosesnya, lalu mengirimkan kembali *response* kepada *client*.
+
 ## 1.2 Alasan Pemilihan Style Arsitektur Perangkat Lunak 
 ### 1.2.1 Layered Architecture 
 
