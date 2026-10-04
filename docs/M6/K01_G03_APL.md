@@ -76,7 +76,14 @@ Client-Server Architecture adalah sebuah pola arsitektur perangkat lunak yang me
 </p>
 <p align="center">
 <i>Gambar 1.3.2 Client-Server Architecture</i>
-
+  
+### 1.3.3 Diagram Layered Architecture 
+<p align="center">
+<img alt="Arsitektur Layered Architecture" src="./assets/diagram/Layered Architecture.drawio.png" width="20%">
+</p>
+<p align="center">
+<i>Gambar 1.3.3 Diagram Layered Architecture</i>
+  
 Tabel 1.1. Lingkungan Operasi Perangkat Lunak
 
 | Komponen | Spesifikasi |
