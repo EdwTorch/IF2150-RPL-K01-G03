@@ -36,21 +36,7 @@ Dipersiapkan oleh:
 
 Pada bagian ini, tentukan *architectural style* atau *pattern* yang menjadi acuan untuk aplikasi yang Anda kembangkan. Misalnya *layered architecture*, *client-server*, *repository*, *pipe and filter architecture*, atau MVC (*Model-View-Controller*).
 
-<p align="center">
-<img alt="Contoh Arsitektur MVC" src="./assets/diagram/contoh-arsitektur-mvc.webp" width="70%">
-</p>
-<p align="center">
-<i>Gambar 1. Contoh Arsitektur MVC</i>
-</p>
----
 
-1. **Style/pattern yang dipilih** beserta penjelasan singkat peran setiap bagiannya. Untuk MVC, jelaskan peran *Model*, *View*, dan *Controller*.
-2. **Alasan pemilihan** berdasarkan karakteristik P/L Anda, misalnya jenis pengguna, alur proses bisnis, serta KF dan KNF pada dokumen SKPL.
-3. **Gambar style/pattern yang diterapkan pada P/L Anda.** Jangan hanya menyalin Gambar 1. Isi setiap bagian pattern dengan komponen milik P/L Anda. Misalnya, kotak *Controller* berisi daftar *controller* yang ada di aplikasi dan kotak *Model* berisi daftar *model* yang ada di aplikasi.
-
-Selain *style/pattern*, tuliskan juga lingkungan operasi P/L. Tabel berikut **disalin dari subbab 2.5 *Lingkungan Operasi Perangkat Lunak* pada dokumen SKPL** tanpa perubahan. Setelah tabel, jelaskan kaitan teknologi yang dipakai dengan *style/pattern* yang dipilih. Contohnya, Django (Python) secara bawaan mengikuti pola MVT (*Model-View-Template*), yaitu varian dari MVC.
-
----
 ## 1.1 Sytle Arsitektur Perangkat Lunak
 
 ### 1.1.1 Layered Architecture 
@@ -92,7 +78,6 @@ Client-Server Architecture adalah sebuah pola arsitektur perangkat lunak yang me
 ## 1.2 Alasan Pemilihan Style Arsitektur Perangkat Lunak 
 
 ### 1.2.1 Layered Architecture 
-berdasarkan karakteristik P/L Anda, misalnya jenis pengguna, alur proses bisnis, serta KF dan KNF pada dokumen SKPL.
 
 Perangkat Lunak CariJasa memiliki karakteristik berupa satu aplikasi web yang memiliki beberapa fitur terpisah yang digunakan untuk menjalankan layanan dengan baik. Perangkat lunak ini memerlukan beberapa karakteristik utama, seperti  Reliability, Security, dan Maintanaibility. Reliability diperlukan agar proses pencarian dapat dieksekusi dengan cepat dan tepat. Selain itu, perangkat lunak juga harus memastikan setiap respons dari server serta transaksi berjalan dengan baik. Kemudian, Security juga diperlukan karena setiap transaksi yang dilakukan berkaitan dengan ekonomi (uang) yang dipercayakan Pengguna Jasa maupun Penyedia Jasa, beserta keamanan kredensialnya. Terakhir, perangkat lunak juga harus dapat dikelola untuk memastikan keberjalana setiap fitur dengan baik. Oleh karena itu, diperlukan berbagai unit testing yang perlu dilakukan untuk setiap fitur yang ada. 
 
@@ -225,13 +210,26 @@ Gambar 2 adalah contoh *Logical View* dalam bentuk *block diagram*. Seluruh komp
 Logical View dapat menunjukkan bagian-bagian utama dalam sistem beserta fungsi dan hubungan antarkomponennya. View ini sesuai untuk aplikasi yang dikembangkan karena dapat memperlihatkan pembagian tanggung jawab setiap komponen sehingga alur kerja sistem dapat terlihat dengan lebih jelas.
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/LogicalView.png" width="100%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/LogicalView.png" width="40%">
 </p>
 <p align="center">
 <i>Gambar 3.1 Diagram Logical View</i>
 </p>
 
 ---
+
+## 3.2 Development View (Package Diagram)
+Development view akan mendeskripsikan organisasi statis kode dalam package modul, subsistem, dan dependensi di dalam penerapannya. 
+
+
+Package diagram adalah diagram yang menampilkan perencanaan dan pengorganisasikan elemen, modul, *package* dalam sebuah proyek perangkat lunak. Package diagram akan menampilkan structure dan dependensi antar subsistem maupun modul serta menampilkan perbedaan sudut pandang dari sistem.
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/Package Diagram.jpg" width="60%">
+</p>
+<p align="center">
+<i>Gambar 3.2 Diagram Development View</i>
+</p>
 
 # Referensi
 
