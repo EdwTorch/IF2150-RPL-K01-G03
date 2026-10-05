@@ -131,7 +131,7 @@ Kedua Sudut Pandang ini dibutuhkan karena keduanya berada di tingkat operasi yan
 <img alt="Contoh Arsitektur MVC" src="./assets/diagram/ClientServer.png" width="70%">
 </p>
 <p align="center">
-<i>Gambar 1.3.2 Client-Server Architecture</i>
+<i>Gambar 1.3.2 Diagram Client-Server Architecture</i>
   
   
 Tabel 1.1. Lingkungan Operasi Perangkat Lunak
@@ -219,6 +219,17 @@ Tuliskan secara singkat mengenai model arsitektur perangkat lunak yang Anda pili
 Gambar 2 adalah contoh *Logical View* dalam bentuk *block diagram*. Seluruh komponen pada Tabel 2.1 digambarkan dan dikelompokkan sesuai pola MVC (*View*, *Controller*, *Model*), ditambah komponen pendukung dan basis data. Sistem di luar P/L, seperti *Payment Gateway (dummy)*, digambarkan dengan garis putus-putus dan tidak perlu dimasukkan ke Tabel 2.1. Setiap garis diberi label: "Memanggil" untuk *View* yang memanggil *Controller*, "akses" untuk *Controller* yang mengakses *Model*, serta agregasi dan komposisi untuk hubungan antar-*Model*.
 
 <sub><b><i>Catatan</i></b>: <i>Ganti XXX dengan nama view yang dibuat, misalnya Logical View. Gambar 2 hanya contoh untuk P/L e-commerce, ganti dengan view milik kelompok Anda yang memuat seluruh komponen pada Tabel 2.1. Jenis view dan notasinya boleh berbeda dari contoh. Jika membuat view tambahan, lanjutkan pola 3.x ini (3.2, 3.3, dan seterusnya).</i></sub>
+
+## 3.1 Logical View
+
+Logical View dapat menunjukkan bagian-bagian utama dalam sistem beserta fungsi dan hubungan antarkomponennya. View ini sesuai untuk aplikasi yang dikembangkan karena dapat memperlihatkan pembagian tanggung jawab setiap komponen sehingga alur kerja sistem dapat terlihat dengan lebih jelas.
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/LogicalView.png" width="100%">
+</p>
+<p align="center">
+<i>Gambar 3.1 Diagram Logical View</i>
+</p>
 
 ---
 
