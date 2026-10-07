@@ -4,32 +4,35 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | *\[Hari\]* |
-| **Tanggal** | *\[DD/MM/YYYY\]* |
-| **Kelas** | *\[Kelas\]* |
-| **Nomor Kelompok** | *\[Nomor Kelompok\]*  |
-| **Nama Kelompok** | *\[Nama Kelompok\]*  |
-| **Nama Perangkat Lunak** | *\[Nama P/L\]*  |
-| **Dokumen** | *\[Nama Dokumen yang diasistensikan\]*  |
+| **Hari** | Senin |
+| **Tanggal** | 05/10/2026 |
+| **Kelas** | K-01 |
+| **Nomor Kelompok** | G-03  |
+| **Nama Kelompok** | MAYOOOOOR  |
+| **Nama Perangkat Lunak** | CariJasa |
+| **Dokumen** | K01_G03_SKPL.md  |
 
 ### Anggota Kelompok
 
 | NIM | Nama |
 | --- | --- |
-| *\[NIM 1\]* | *\[Nama Anggota 1\]* |
-| *\[NIM 2\]* | *\[Nama Anggota 2\]* |
-| *\[NIM 3\]* | *\[Nama Anggota 3\]* |
-| *\[NIM 4\]* | *\[Nama Anggota 4\]* |
-| *\[NIM 5\]* | *\[Nama Anggota 5\]* |
+| 13525031 | Revandra Zacky Maharta |
+| 13525079 | Danesh Rasyad Damotino |
+| 13525088 | Theresia Estelina Ratu Udju |
+| 13525127 | Edward Terrance Lie |
+| 13525130 | Necia Aurely Greva Dedevi |
+
 
 ### Catatan
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+| 1. Entitas di business layer hanya dipakai untuk transit data, method ditaruh di data access layer. |
+| 2. Beban kerja dibagi ke client untuk tampilan dan validasi awal, tetapi server dan database tetap ada *checker*. |
+| 3. Database tidak perlu dikelompokkan (di Client-Server), satukan semua saja. Nanti ada tabel entitas dan tabel relasi. |
+| 4. Bagian pengguna sebaiknya dipecah menjadi tabel pengguna, tabel penyedia jasa, dan tabel pengguna jasa yang nantinya saling terhubung. |
+| 5. Database terpusat nantinya menggunakan Supabase. |
+| 6. Model arsitektur cukup menampilkan logical view dan development view. |
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
@@ -38,7 +41,7 @@
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/asistensi-6.jpeg" width="100%">
 </p>
 
 <p align="center">
