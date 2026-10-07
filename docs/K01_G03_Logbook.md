@@ -130,11 +130,12 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *04-10-2026* | Danesh, Revandra, There, Edward, Necia  | Membagi Tugas dan berdiskusi untuk memilih arsitektur yang digunakan | 2 Jam | Done | - |
 | *04-10-2026* | Edward  | Mengerjakan Pengertian dan Alasan Pemilihan Layered Architecture | 2 Jam | Done | - |
-| *05-10-2026* | Edward  | Mengerjakan Package Diagram | 2 Jam | Done | - |
-| *04-10-2026* | Danesh, Revandra, There, Edward, Necia  | Asistensi M6 | 1 Jam | Done | - |
 | *04-10-2026* | There  | Mengerjakan Diagram Client-Server | 1 Jam | Done | - |
 | *04-10-2026* | Necia  | Mengerjakan Diagram Layered Architecture | <2 Jam | Done | - |
-| *05-10-2026* | There  | Mengerjakan Diagram Logical View | 1 Jam | Done | - |
+| *04-10-2026* | Revandra | Mengerjakan pengertian dan alasan memilih Client-Server Achitecture | 2 Jam | Done | - |
+| *05-10-2026* | Danesh, Revandra, There, Edward, Necia  | Asistensi M6 | 1 Jam | Done | - |
+| *05-10-2026* | Revandra | Mengerjakan Diagram Process View dengan mengambil salah satu use case sebagai sampel untuk asistensi | 1 Jam | Done | Tidak digunakan |
+| *05-10-2026* | Edward  | Mengerjakan Package Diagram | 2 Jam | Done | - |
 | *05-10-2026* | There  | Mengerjakan Diagram Logical View | 1 Jam | Done | - |
 | *05-10-2026* | Danesh  | Mengerjakan Tabel 2.1. Identifikasi Komponen/Modul/Subsistem  | >1 Jam | Done | Validasi kesesuaian tabel |
 
