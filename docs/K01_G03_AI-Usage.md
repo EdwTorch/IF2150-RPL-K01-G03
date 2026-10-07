@@ -77,6 +77,9 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | Gemini | Mendapatkan Penjelasan dan Referensi Pembuatan Diagram Client-Server dan Logical View  | Jelaskan dan berikan contoh diagram terkait client-server dan logical view | AI memberikan penjelasan secara detail dan memberikan contoh diagram. Saya (There) memeriksa kembali jawaban AI tersebut melalui membandingkannya dengan ppt asistensi akbar |
 | Claude | Mendapatkan penjelasan tentang Diagram Layered Architecture   | Jelaskan dengan jelas tentang Layered Architecture beserta bagian-bagiannya | AI memberikan penjelasan mengenai kategori class pada layered architecture dengan jelas, saya (necia) mengonfirmasi kepada asisten melalui chat apakah jawaban AI tersebut benar. |
+| Gemini | Mendapatkan Pemahaman Terkait Arsitektur yang sesuai untuk Tugas Besar Kami | Jelaskan perbedaan MVC, Client Server, dan Layered Architecture dan contoh proyek yang cocok untuk menggunakannya  | AI memberikan penjelasan secara mendetail dan memberikan pemahaman terkait proyek yang cocok digunakan. Saya (Edward) mempertimbangkan jawaban AI tersebut dengan membandingkannya dengan ppt asistensi akbar serta berdiskusi dengan kawan sekelompok |
+| Gemini | Mendapatkan Pemahaman Terkait Model Sudut Pandang Arsitektur  | Bagaimana Contoh Development View serta bagaimana cara memilih konten yang sesuai dengan kebutuhan saya dengan informasi class diagram  | AI memberikan pilihan Development yang mendetail dan memberikan pemahaman terkait setiap sudut pandang arsitektur development. Saya (Edward) mempertimbangkan jawaban AI tersebut dengan mengelaborasikan kebutuhan dengan tugas besar kami |
+
 
 ### Pernyataan Integritas dan Persetujuan
 
