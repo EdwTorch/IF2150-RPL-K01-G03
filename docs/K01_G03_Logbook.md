@@ -135,6 +135,8 @@
 | *04-10-2026* | There  | Mengerjakan Diagram Client-Server | 1 Jam | Done | - |
 | *04-10-2026* | Necia  | Mengerjakan Diagram Layered Architecture | <2 Jam | Done | - |
 | *05-10-2026* | There  | Mengerjakan Diagram Logical View | 1 Jam | Done | - |
+| *05-10-2026* | There  | Mengerjakan Diagram Logical View | 1 Jam | Done | - |
+| *05-10-2026* | Danesh  | Mengerjakan Tabel 2.1. Identifikasi Komponen/Modul/Subsistem  | >1 Jam | Done | Validasi kesesuaian tabel |
 
 
 **Catatan/Evaluasi Milestone 6:**
