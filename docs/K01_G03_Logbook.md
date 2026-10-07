@@ -30,6 +30,7 @@
     - [Milestone 3](#milestone-3)
     - [Milestone 4](#milestone-4)
     - [Milestone 5](#milestone-5)
+    - [Milestone 6](#milestone-6)
 ---
 
 ### Milestone 1
@@ -127,10 +128,13 @@
 **Periode:** [1 Oktober 2026] -[7 Oktober 2026]
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
-| *04-09-2026* | Danesh, Revandra, There, Edward, Necia  | Membagi Tugas dan berdiskusi untuk memilih arsitektur yang digunakan | 2 Jam | Done | - |
-| *04-09-2026* | Edward  | Mengerjakan Pengertian dan Alasan Pemilihan Layered Architecture | 2 Jam | Done | - |
-| *05-09-2026* | Edward  | Mengerjakan Package Diagram | 2 Jam | Done | - |
-| *04-09-2026* | Danesh, Revandra, There, Edward, Necia  | Asistensi M6 | 1 Jam | Done | - |
+| *04-10-2026* | Danesh, Revandra, There, Edward, Necia  | Membagi Tugas dan berdiskusi untuk memilih arsitektur yang digunakan | 2 Jam | Done | - |
+| *04-10-2026* | Edward  | Mengerjakan Pengertian dan Alasan Pemilihan Layered Architecture | 2 Jam | Done | - |
+| *05-10-2026* | Edward  | Mengerjakan Package Diagram | 2 Jam | Done | - |
+| *04-10-2026* | Danesh, Revandra, There, Edward, Necia  | Asistensi M6 | 1 Jam | Done | - |
+| *04-10-2026* | There  | Mengerjakan Diagram Client-Server | 1 Jam | Done | - |
+| *05-10-2026* | There  | Mengerjakan Diagram Logical View | 1 Jam | Done | - |
+
 **Catatan/Evaluasi Milestone 6:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``

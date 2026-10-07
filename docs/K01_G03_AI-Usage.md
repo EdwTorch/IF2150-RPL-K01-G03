@@ -25,6 +25,8 @@
 * [Milestone 1](#milestone-1)
 * [Milestone 2](#milestone-2)
 * [Milestone 3](#milestone-3)
+* [Milestone 4](#milestone-4)
+* [Milestone 6](#milestone-6)
 
 
 ---
@@ -70,6 +72,10 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Mendapatkan Penjelasan Terkait Relasi AntarKelas dan Contoh Atribut dan Method sebuah kelas | Berikan Contoh UC dengan Class yang tersedia di dalamnya, beserta relasinya  | AI menjelaskan penjelasan detail terkait relasi, diagram UML UC Dummy sebagai contoh. Saya (Edward) memahami dan menerapkan ilmu yang didapatkan kedalam pembuatan diagram dan class yang ada dari UC yang disediakan  |
 | Gemini | APAKAH HUBUNGAN ANTAR KELASNYA SUDAH OPTIMAL UNTUK MAINTENANCE | Membantu memberikan analisis terhadap draf diagram yang sudah dibuat. Setelah itu, saya (Revandra) menganalisis ulang dengan arahan yang sudah diberi beserta arahan tambahan yang diberikan oleh asisten pada saat itu, tidak terdapat perubahan pada diagram yang dibuat. |
 
+### Milestone 6
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Mendapatkan Penjelasan dan Referensi Pembuatan Diagram Client-Server dan Logical View  | Jelaskan dan berikan contoh diagram terkait client-server dan logical view | AI memberikan penjelasan secara detail dan memberikan contoh diagram. Saya (There) memeriksa kembali jawaban AI tersebut melalui membandingkannya dengan ppt asistensi akbar |
 
 ### Pernyataan Integritas dan Persetujuan
 
