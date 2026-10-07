@@ -76,6 +76,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | Gemini | Mendapatkan Penjelasan dan Referensi Pembuatan Diagram Client-Server dan Logical View  | Jelaskan dan berikan contoh diagram terkait client-server dan logical view | AI memberikan penjelasan secara detail dan memberikan contoh diagram. Saya (There) memeriksa kembali jawaban AI tersebut melalui membandingkannya dengan ppt asistensi akbar |
+| Claude | Mendapatkan penjelasan tentang Diagram Layered Architecture   | Jelaskan dengan jelas tentang Layered Architecture beserta bagian-bagiannya | AI memberikan penjelasan mengenai kategori class pada layered architecture dengan jelas, saya (necia) mengonfirmasi kepada asisten melalui chat apakah jawaban AI tersebut benar. |
 
 ### Pernyataan Integritas dan Persetujuan
 
