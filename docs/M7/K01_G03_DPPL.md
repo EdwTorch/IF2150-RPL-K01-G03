@@ -32,7 +32,7 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
+| Method Class | Penambahan Read Method di Class Pengguna |
 | *B* |  |
 | *C* |  |
 | ... |  |
@@ -306,7 +306,7 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 **Bagian ini diisi dengan diagram kelas keseluruhan.**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-class_diargam.png" width="35%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/Keseluruhan diagram.svg" width="35%">
 </p>
 <p align="center">
 <i>Gambar 4.1. Diagram Kelas Perancangan Keseluruhan [Nama P/L]</i>
@@ -316,10 +316,59 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| *[C01]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *[C02]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *[C03]* | *[Nama kelas]* | *[Daftar atribut]* | *[Daftar metode/operasi]* |
-| *...* | *...* | *...* | *...* |
+| C01 | Pengguna | - nama <br> - email <br>   # password <br> - statusOnline <br> - statusAkun <br> - sanksi| <br> + buatAkun(), <br> - simpanProfil() <br> + login() <br> + setStatusAkun() <br> + setSanksi() <br> + getNama() <br> + getEmail() <br> + getStatusOnline <br> + getStatusAkun <br> | 
+| C02 | PenyediaJasa | - idPenyediaJasa <br> - daftarPenawaranJasa <br> - pengalaman <br> - prestasi | <br> + isiPortofolio() <br> + unggahPortofolio() <br> + tambahPenawaranJasa() <br> + bukaNotifikasiPesanan() <br> + terimaPesanan() <br> + tolakPesanan(), <br> + kumpulkanProdukAkhir() <br> + getStatusPengerjaan() <br> + kumpulkanRevisi() <br> + cekPengirimanDana() <br> + getRevisi() <br> + getIdPenyediaJasa() <br> + getdaftarPenawaranJasa <br> + getPengalamandanPrestasi() <br> |
+| C03 | PenggunaJasa | - idPenggunaJasa <br> - daftarJasa <br> - minatkategoriJasa <br> - statusKonfirmasi | <br> + cariJasa() <br> + gunakanFilter() <br> + bukaDetailJasa() <br> + bukaDaftarBoomark() <br> + pilihJasa() <br> + isiFormPemesanan() <br> + getStatusPengerjaan() <br> + getDeliverables() <br> + selesaikanPesanan() <br> + ajukanRevisi() <br> + beriUlasan() <br> + beriPenilaian() <br> + pilihMetodePembayaran() <br> + getIdPenyediaJasa() <br> + getMinatKategoriJasa <br> + getStatusKonfirmasi <br>  |
+| C04      | HalamanRegistrasi       |<br>  - formRegistrasi <br> - pesanError  <br> | <br> + tampilkanForm() <br> + kirimRegistrasi() <br> + tampilkanError() <br>|
+| C05      | LayananRegistrasi       | -                                                                       | <br> + validasiData() <br> + cekEmail() <br> + cekNoTelepon() <br> + registrasiPengguna() <br> |
+| C06      | HalamanLogin             | - inputEmail <br> - inputPassword <br> - pesanError | <br> + tampilkanForm() <br> + kirimLogin() <br> +  pesanError() <br> |
+| C07      | Autentikator             | -                                     | <br> + validasiKredensial() <br> + sesiLogin()           <br> |
+| C08      | HalamanPortofolio        | <br> - formPortofolio <br> - pesanError        | <br> + tampilkanPortofolio() <br> + tampilkanForm() <br> +  kirimPortofolio() <br> + tampilkanError() <br> |
+| C09      | Portofolio               | <br> - judul <br> - deskripsi <br> - berkasPendukung <br> | <br> + simpanPortofolio() <br> |
+| C10      | PengontrolPortofolio     | -                                 | <br> + validasiInputBerkas() <br> + SimpanPortofolio() <br>|
+| C11      | LayananUploadFile        | -                                 | <br> + uploadFile() <br> + getStatusUpload() <br> + validasiFormatUkuran() <br> + saveDeliverables() <br> |
+| C12 | Jasa | - idJasa <br> - idPenyediaJasa <br> -  namaJasa <br> -  deskripsi <br> -  kategori <br> - harga <br> - statusAktif | <br> + simpanJasa() <br> + dapatkanDetailJasa() <br> + perbaruiJasa() <br> + hapusJasa() <br> |
+| C13 | HalamanUploadJasa | - formNamaJasa <br> - formKategori <br> - formDeskripsi <br> - formHarga <br> - inputUploadBerkas <br> - tombolUnggah <br> - pesanError | <br> + tampilkanForm() <br> + klikUnggah() <br> +  tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() <br> |
+| C14 | JasaController | - | <br> + ambilDetailJasa() <br> + validasiDataJasa() <br> + simpanPenawaranJasa() |
+| C15 | HalamanPencarian | <br> - searchBar <br> - filterHarga <br> - filterDurasi <br> - filterRating <br> - tombolCari <br> - pesanError | <br> + tampilkanHalaman() <br> + inputKataKunci() <br> + klikCari() <br> + tampilkanPesanError() |
+| C16 | HasilPencarian | <br> - daftarListingJasa <br> - tombolBandingkan | <br> + tampilkanDaftarHasil() <br> + pilihJasaUntukDibandingkan() <br> + klikBandingkan() |
+| C17 | LayananPencarian | - | <br> + cariJasaBerdasarkanKeyword() <br> + terapkanFilterPencarian() |
+| C18 | LayananPembandingJasa | - | <br> + bandingkanSpesifikasiJasa() |
+| C19 | HalamanDetailJasa | <br> - tampilanDeskripsi <br> - tampilanHarga <br> - infoProfilPenyedia <br> - tampilanRiwayatUlasan, <br> -pesanError | <br> + tampilkanDetailJasa() <br> +  tampilkanPesanError() |
+| C20 | Bookmark | <br> - idBookmark <br> - idPenggunaJasa <br> - idJasa <br> - waktuDisimpan <br> - daftarBookmark | <br> + simpanBookmark() <br> + hapusBookmark() <br> + lihatBookmark() |
+| C21 | HalamanBookmark | <br> - daftarJasaTersimpan <br> - ikonBookmarkAktif <br> - ikonBookmarkNonaktif <br> - tombolHapusBookmark | <br> + tampilkanDaftarTersimpan() <br> + klikIkonBookmark() <br> + klikIkonHapus() <br> + tampilkanNotifikasi() |
+| C22 | PengontrolBookmark | - | <br> + tambahDataBookmark() <br> + hapusDataBookmark() <br> + ambilDaftarBookmarkPengguna() |
+| C23 | ChatRoom | <br> - idChatRoom <br> - idAnggota <br> - riwayatPesan <br> - waktuDibuat | <br> + getRiwayatPesan() <br> - simpanPesan() <br> + getidChatRoom() <br> + getidAnggota() |
+| C24 | HalamanChat | - idSesiChat <br> - inputPesan <br> - statusKoneksi | <br> + tampilkanMenuChat() <br> + tampilkanRiwayatPesan() <br> + inputPesan() <br> + tombolKirimTerklik() <br> + tampilkanPesanError() <br> + tampilkanStatusBelumTerkirim() |
+| C25 | LayananPesanInstan | - | <br> + buatSesiChat() <br> + validasiInputPesan() <br> + kirimPesan() <br> + simpanKeDatabase() <br> + updateStatusBaca() |
+| C26 | LayananNotifikasiChat | - | <br> + kirimNotifikasiPesan() <br> + tampilkanPopUpNotifikasi() |
+| C27 | Pesanan | <br> - idPesanan <br> - idPenggunaJasa <br> - idPenyediaJasa <br> - idJasa <br> - brief <br> - totalBiaya <br> - statusPesanan | <br> + getDetailPesanan() <br> + setStatusDiproses() <br> + setStatusSelesai() |
+| C28 | HalamanPemesanan | <br> - idJasaDipilih <br> - briefPemesanan | <br> + tampilkanFormPemesanan() <br> + inputBriefPemesanan() <br> + tombolPesanTerklik() |
+| C29 | HalamanPembayaran | <br> - totalHarga <br> - idMetodePembayaran | <br> + tampilkanPilihanPembayaran() <br> + tampilkanRincianPembayaran() <br> + tombolBayarTerklik() <br> + tampilkanNotifikasiBerhasil() |
+| C30 | HalamanRiwayatTransaksi | <br> - idTransaksi | <br> + tampilkanRiwayatTransaksi() |
+| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() <br> +  hitungTotalBiaya() <br> + updateStatusPesanan() |
+| C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() <br> + validasiPembayaran() <br> +  updateStatusPembayaran() |
+| C33 | MetodePembayaran | <br> - idMetode <br> - namaMetode <br> - nomorRekeningVA | <br> + getDetailMetode() |
+| C34 | RiwayatTransaksi | idRiwayat, idPesanan, tanggalTransaksi, statusTransaksi | simpanTransaksi() |
+| C35 | HalamanKonfirmasi | idPesanan, detailBrief | tampilkanDetailPesanan(), tombolTerimaTerklik(), tombolTolakTerklik(), tampilkanStatusPesanan() |
+| C36 | ProdukAkhir | idProdukAkhir, idPesanan, outputpath, deskripsiProdukAkhir, tanggalPengumpulan,  statusPemeriksaan, fileURL | simpanProdukAkhir(), updateStatusPengerjaan(), getDetailJasa() | 
+| C37 | HalamanPengumpulan | deskripsiHasil, fileURL, tombolKirim, pesanError  | tampilkanFormPengumpulan(), inputDeskripsiHasil(), unggahDeliverables(), tampilkanPesanError(), kirimHasil(), inputLink(), tampilkanStatusPengiriman() |
+| C38 | HalamanDeliverables | deskripsiHasil, fileURL, tombolKonfirmasi, tombolRevisi, jumlahRevisi, pesanError, tombolBantuan, lampiranDeliverables | tampilkanDeliverables(), ajukanRevisi(), konfirmasiPesanan(), tampilkanError, panggilBantuan() |
+| C39 | PengajuanRevisi | deskripsiRevisi, jmlRevisiTersedia, lampiranRevisi, idRevisi, idPesanan, statusPengerjaan | setStatusPengerjaan(), getStatusPengerjaan(), setDeskripsiRevisi(), getDeskripsiRevisi(), setjmlRevisi(), getjmlRevisi() setIdRevisi(), getIdPesanan(), getIdRevisi() |
+| C40 | HalamanRequestRevisi | formRevisi, detailRevisi, kuotaRevisi, tombolRevisi, pesanUntukPenyedia  | tampilkanformRevisi(), tampilkanFieldPengisianRevisi(), tampilkanKuotaRevisi(), isTombolRevisiPressed(), tampilkanPesan()  |
+| C41 | RevisiHandler | - | isJumlahRevisiValid(), isDeskripsiComplete(), sendRevisi(), setNotifikasiRevisi(), updateStatusPengerjaan(), updateIdRevisi()  |
+| C42 | PencairanDana | stateTransaksi, statePencairanDana | setKondisiTransaksi(), setPencairanDana() |
+| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | setIdTiket(), getIdTiket(), setURLBukti(), getURLBukti(), setStatusTiket, UpdateStatusTiket(), getStatusTicket(), setTanggapan(), getTanggapan(), setStatusLaporan()  |
+| C44 | HalamanPelaporan | formLaporan, kategoriPelanggaran, deskripsiPelanggaran, kolomBukti, statusLaporan, noTiket, pesanError, tanggapanAdmin | tampilkanFormLaporan(), tampilkanOpsiKategoriPelanggaran(), tampilkanDeskripsiPelanggaran, tampilkanNomorTiket(), tampilkanPesanError(), tampilkanTanggapanAdmin(), tampilkanPesanError() | 
+| C45 | LaporanHandler  | - | validasiFormatLaporan(), createTiket(), getStatusTiket(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() |
+| C46 | Ulasan | Menyimpan feedback dan rating oleh Pengguna Jasa terhadap jasa yang telah dipesan |
+| C47 | HalamanUlasan | rating, teksKomentar, fileDokumentasi, pesanError | tampilkanFormUlasan(), inputRatingBintang(), inputKomentar(), unggahDokumentasi(), tampilkanPesanError(), tampilkanNotifikasiBerhasil() |
+| C48 | UlasanHandler | - | validasiKelengkapanRating(), validasiFormatBerkas(), validasiPanjangKomentar(), prosesUlasan(), perbaruiRating() |
+| C49 | TanggapanLaporan | idTanggapan, idTiket, jenisTindakan, catatanTanggapan | catatKeputusanTindakan(), getDetailTanggapan() |
+| C50 | HalamanPengajuanMediasi | detailPelaporan, riwayatPesan, opsiTindakan, pesanError | - |
+| C51 | MediasiHandler | idSesiMediasi | inputTindakan(), akhiriMediasi(), tampilkanPesanError(), tampilkanNotifikasiSelesai() |
+| C52 | Admin | idAdmin, nama | mulaiMediasi(), bukaTiketLaporan(), selesaikanLaporan(), kirimPesanMediasi(), pilihJenisTindakan(), akhiriMediasi() |
+| C53 | HalamanDashboardAdmin | daftarTiket, detailTiket, opsiTindakan, pesanError | tampilkanDetailTiket(), inputTindakan(), selesaikanTiket(), mulaiMediasi(), tampilkanPesanError() |
 
 <br>
 
