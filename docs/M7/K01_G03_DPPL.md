@@ -376,12 +376,60 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 # BAB 5: Matriks Kerunutan
 
-Petakan kelas perancangan dengan use case yang terkait. Gunakan **BAB 6 Traceability pada dokumen SKPL** sebagai acuan keterkaitan kelas analisis dan use case, lalu sesuaikan dengan realisasi use case dan kelas perancangan pada BAB 3–BAB 5 DPPL.
-
-Tabel 7.1. Matriks Kerunutan Kelas terhadap Use Case
+Tabel 5.1. Matriks Kerunutan Kelas terhadap Use Case
 
 | Kelas | Use Case Terkait |
 | :--- | :--- |
-| *[ID kelas - Nama kelas]* | *[ID UC - Nama use case]* |
-| *[ID kelas - Nama kelas]* | *[ID UC - Nama use case]* |
-| *...* | *...* |
+| C01 - Pengguna | UC01 - Melakukan Registrasi Akun <br> UC02 - Melakukan Login <br> UC08 - Melakukan Komunikasi <br> UC13 - Melaporkan Pengguna Lain | 
+| C02 - PenyediaJasa | UC01 - Melakukan Registrasi Akun <br> UC02 - Melakukan Login <br> UC03 - Mengisi Portofolio <br> UC04 - Mengunggah Penawaran Jasa <br> UC06 - Melihat Informasi Jasa <br> UC08 - Melakukan Komunikasi <br> UC10 - Melakukan Konfirmasi Pesanan <br> UC11 - Menyerahkan hasil Pekerjaan <br> UC12 - Mengonfirmasi Hasil Pekerjaan <br> UC13 - Melaporkan Pengguna Lain |
+| C03 - PenggunaJasa | UC01 - Melakukan Registrasi Akun <br> UC02 - Melakukan Login <br> UC05 - Mencari Penawaran Jasa <br> UC06 - Melihat Informasi Jasa <br> UC07 - Menggunakan Bookmark	 <br> UC08 - Melakukan Komunikasi <br> UC09 - Melakukan Pemesanan Jasa <br> UC12 - Mengonfirmasi Hasil Pekerjaan <br> UC13 - Melaporkan Pengguna Lain <br> UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C04 - HalamanRegistrasi | UC01 - Melakukan Registrasi Akun |
+| C05 - LayananRegistrasi | UC01 - Melakukan Registrasi Akun |
+| C06 - HalamanLogin | UC02 - Melakukan Login |
+| C07 - Autentikator | UC02 - Melakukan Login |
+| C08 - HalamanPortofolio | UC03 - Mengisi Portofolio |
+| C09 - Portofolio | UC03 - Mengisi Portofolio |
+| C10 - PengontrolPortofolio | UC03 - Mengisi Portofolio |
+| C11 - LayananUploadFile | UC03 - Mengisi Portofolio <br> UC04 - Mengunggah Penawaran Jasa <br> UC11 - Menyerahkan hasil Pekerjaan |
+| C12 - Jasa | UC04 - Mengunggah Penawaran Jasa <br> UC05 - Mencari Penawaran Jasa <br> UC06 - Melihat Informasi Jasa <br> UC07 - Menggunakan Bookmark	 |
+| C13 - HalamanUploadJasa | UC04 - Mengunggah Penawaran Jasa |
+| C14 - JasaController | UC04 - Mengunggah Penawaran Jasa <br> UC06 - Melihat Informasi Jasa |
+| C15 - HalamanPencarian | UC05 - Mencari Penawaran Jasa |
+| C16 - HasilPencarian | UC05 - Mencari Penawaran Jasa |
+| C17 - LayananPencarian | UC05 - Mencari Penawaran Jasa |
+| C18 - LayananPembandingJasa | UC05 - Mencari Penawaran Jasa |
+| C19 - HalamanDetailJasa | UC06 - Melihat Informasi Jasa |
+| C20 - Bookmark | UC07 - Menggunakan Bookmark	 |
+| C21 - HalamanBookmark | UC07 - Menggunakan Bookmark	 |
+| C22 - PengontrolBookmark | UC07 - Menggunakan Bookmark	 |
+| C23 - ChatRoom | UC08 - Melakukan Komunikasi <br> UC16 - Melakukan Proses Mediasi |
+| C24 - HalamanChat | UC08 - Melakukan Komunikasi <br> UC16 - Melakukan Proses Mediasi |
+| C25 - LayananPesanInstan | UC08 - Melakukan Komunikasi <br> UC16 - Melakukan Proses Mediasi |
+| C26 - LayananNotifikasiChat | UC08 - Melakukan Komunikasi <br> UC16 - Melakukan Proses Mediasi |
+| C27 - Pesanan | UC09 - Melakukan Pemesanan Jasa <br> UC10 - Melakukan Konfirmasi Pesanan <br> UC12 - Mengonfirmasi Hasil Pekerjaan <br> UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C28 - HalamanPemesanan | UC09 - Melakukan Pemesanan Jasa |
+| C29 - HalamanPembayaran | UC09 - Melakukan Pemesanan Jasa |
+| C30 - HalamanRiwayatTransaksi | UC09 - Melakukan Pemesanan Jasa <br> UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C31 - PengontrolPesanan | UC09 - Melakukan Pemesanan Jasa <br> UC10 - Melakukan Konfirmasi Pesanan <br> UC12 - Mengonfirmasi Hasil Pekerjaan <br> UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C32 - PengontrolTransaksi | UC09 - Melakukan Pemesanan Jasa <br> UC10 - Melakukan Konfirmasi Pesanan <br> UC12 - Mengonfirmasi Hasil Pekerjaan <br> UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C33 - MetodePembayaran | UC09 - Melakukan Pemesanan Jasa <br> UC10 - Melakukan Konfirmasi Pesanan |
+| C34 - RiwayatTransaksi | UC09 - Melakukan Pemesanan Jasa <br> UC10 - Melakukan Konfirmasi Pesanan <br> UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C35 - HalamanKonfirmasi | UC10 - Melakukan Konfirmasi Pesanan |
+| C36 - ProdukAkhir | UC11 - Menyerahkan hasil Pekerjaan | 
+| C37 - HalamanPengumpulan | UC11 - Menyerahkan hasil Pekerjaan |
+| C38 - HalamanDeliverables | UC12 - Mengonfirmasi Hasil Pekerjaan |
+| C39 - PengajuanRevisi | UC12 - Mengonfirmasi Hasil Pekerjaan |
+| C40 - HalamanRequestRevisi | UC12 - Mengonfirmasi Hasil Pekerjaan |
+| C41 - RevisiHandler | UC12 - Mengonfirmasi Hasil Pekerjaan |
+| C42 - PencairanDana | UC12 - Mengonfirmasi Hasil Pekerjaan |
+| C43 - TiketLaporan | UC13 - Melaporkan Pengguna Lain <br> UC15 - 	Memproses Laporan <br> UC16 - Melakukan Proses Mediasi |
+| C44 - HalamanPelaporan | UC13 - Melaporkan Pengguna Lain |
+| C45 - LaporanHandler | UC13 - Melaporkan Pengguna Lain <br> UC15 - 	Memproses Laporan <br> UC16 - Melakukan Proses Mediasi |
+| C46 - Ulasan | UC06 - Melihat Informasi Jasa <br> UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C47 - HalamanUlasan | UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C48 - UlasanHandler | UC14 - Memberikan Ulasan terhadap Jasa yang Dipesan |
+| C49 - TanggapanLaporan | UC15 - 	Memproses Laporan <br> UC16 - Melakukan Proses Mediasi |
+| C50 - HalamanPengajuanMediasi | UC16 - Melakukan Proses Mediasi |
+| C51 - MediasiHandler | UC16 - Melakukan Proses Mediasi |
+| C52 - Admin | UC15 - 	Memproses Laporan <br> UC16 - Melakukan Proses Mediasi |
+| C53 - HalamanDashboardAdmin | UC15 - 	Memproses Laporan <br> UC16 - Melakukan Proses Mediasi |
