@@ -1236,7 +1236,8 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | C16 | HasilPencarian | daftarListingJasa, tombolBandingkan | tampilkanDaftarHasil(), pilihJasaUntukDibandingkan(), klikBandingkan() |
 | C17 | LayananPencarian | - | cariJasaBerdasarkanKeyword(), terapkanFilterPencarian() |
 | C18 | LayananPembandingJasa | - | bandingkanSpesifikasiJasa() |
-| C19 | HalamanDetailJasa | Menyediakan antarmuka untuk menampilkan informasi lengkap listing jasa: deskripsi, paket harga, profil penyedia, dan ulasan. |
+| C19 | HalamanDetailJasa | tampilanDeskripsi, tampilanHarga, infoProfilPenyedia, tampilanRiwayatUlasan,pesanError |  tampilkanDetailJasa(), tampilkanPesanError() |
+
 | C20 | Bookmark | idBookmark, idPenggunaJasa, idJasa, waktuDisimpan, daftarBookmark | simpanBookmark(), hapusBookmark(), lihatBookmark() |
 | C21 | HalamanBookmark | daftarJasaTersimpan, ikonBookmarkAktif, ikonBookmarkNonaktif, tombolHapusBookmark | tampilkanDaftarTersimpan(), klikIkonBookmark(), klikIkonHapus(), tampilkanNotifikasi() |
 | C22 | PengontrolBookmark | - | tambahDataBookmark(), hapusDataBookmark(), ambilDaftarBookmarkPengguna() |
@@ -1263,7 +1264,7 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | setIdTiket(), getIdTiket(), setURLBukti(), getURLBukti(), setStatusTiket, UpdateStatusTiket(), getStatusTicket(), setTanggapan(), getTanggapan(), setStatusLaporan()  |
 | C44 | HalamanPelaporan | formLaporan, kategoriPelanggaran, deskripsiPelanggaran, kolomBukti, statusLaporan, noTiket, pesanError, tanggapanAdmin | tampilkanFormLaporan(), tampilkanOpsiKategoriPelanggaran(), tampilkanDeskripsiPelanggaran, tampilkanNomorTiket(), tampilkanPesanError(), tampilkanTanggapanAdmin(), tampilkanPesanError() | 
 | C45 | LaporanHandler  | - | validasiFormatLaporan(), createTiket(), getStatusTiket(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() |
-| C46 | Ulasan | Menyimpan feedback dan rating oleh Pengguna Jasa terhadap jasa yang telah dipesan |
+| C46 | Ulasan | idUlasan,  idPesanan, idPenyediaJasa, rating, komentar, dokumentasi | simpanUlasan(), getDetailUlasan() |
 | C47 | HalamanUlasan | rating, teksKomentar, fileDokumentasi, pesanError | tampilkanFormUlasan(), inputRatingBintang(), inputKomentar(), unggahDokumentasi(), tampilkanPesanError(), tampilkanNotifikasiBerhasil() |
 | C48 | UlasanHandler | - | validasiKelengkapanRating(), validasiFormatBerkas(), validasiPanjangKomentar(), prosesUlasan(), perbaruiRating() |
 | C49 | TanggapanLaporan | idTanggapan, idTiket, jenisTindakan, catatanTanggapan | catatKeputusanTindakan(), getDetailTanggapan() |
