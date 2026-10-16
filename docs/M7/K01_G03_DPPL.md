@@ -33,7 +33,7 @@ Dipersiapkan oleh:
 | Revisi | Deskripsi |
 | :--- | :--- |
 | Method Class | Penambahan Read Method di Class Pengguna |
-| *B* |  |
+| C19 dan C46 Class Diagram Method dan Atribut | Mengganti Isinya karena salah saat traceability di SKPL  |
 | *C* |  |
 | ... |  |
 
@@ -349,26 +349,26 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C31 | PengontrolPesanan | - | <br> + buatPesananBaru() <br> +  hitungTotalBiaya() <br> + updateStatusPesanan() |
 | C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() <br> + validasiPembayaran() <br> +  updateStatusPembayaran() |
 | C33 | MetodePembayaran | <br> - idMetode <br> - namaMetode <br> - nomorRekeningVA | <br> + getDetailMetode() |
-| C34 | RiwayatTransaksi | idRiwayat, idPesanan, tanggalTransaksi, statusTransaksi | simpanTransaksi() |
-| C35 | HalamanKonfirmasi | idPesanan, detailBrief | tampilkanDetailPesanan(), tombolTerimaTerklik(), tombolTolakTerklik(), tampilkanStatusPesanan() |
-| C36 | ProdukAkhir | idProdukAkhir, idPesanan, outputpath, deskripsiProdukAkhir, tanggalPengumpulan,  statusPemeriksaan, fileURL | simpanProdukAkhir(), updateStatusPengerjaan(), getDetailJasa() | 
-| C37 | HalamanPengumpulan | deskripsiHasil, fileURL, tombolKirim, pesanError  | tampilkanFormPengumpulan(), inputDeskripsiHasil(), unggahDeliverables(), tampilkanPesanError(), kirimHasil(), inputLink(), tampilkanStatusPengiriman() |
-| C38 | HalamanDeliverables | deskripsiHasil, fileURL, tombolKonfirmasi, tombolRevisi, jumlahRevisi, pesanError, tombolBantuan, lampiranDeliverables | tampilkanDeliverables(), ajukanRevisi(), konfirmasiPesanan(), tampilkanError, panggilBantuan() |
-| C39 | PengajuanRevisi | deskripsiRevisi, jmlRevisiTersedia, lampiranRevisi, idRevisi, idPesanan, statusPengerjaan | setStatusPengerjaan(), getStatusPengerjaan(), setDeskripsiRevisi(), getDeskripsiRevisi(), setjmlRevisi(), getjmlRevisi() setIdRevisi(), getIdPesanan(), getIdRevisi() |
-| C40 | HalamanRequestRevisi | formRevisi, detailRevisi, kuotaRevisi, tombolRevisi, pesanUntukPenyedia  | tampilkanformRevisi(), tampilkanFieldPengisianRevisi(), tampilkanKuotaRevisi(), isTombolRevisiPressed(), tampilkanPesan()  |
-| C41 | RevisiHandler | - | isJumlahRevisiValid(), isDeskripsiComplete(), sendRevisi(), setNotifikasiRevisi(), updateStatusPengerjaan(), updateIdRevisi()  |
-| C42 | PencairanDana | stateTransaksi, statePencairanDana | setKondisiTransaksi(), setPencairanDana() |
-| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | setIdTiket(), getIdTiket(), setURLBukti(), getURLBukti(), setStatusTiket, UpdateStatusTiket(), getStatusTicket(), setTanggapan(), getTanggapan(), setStatusLaporan()  |
-| C44 | HalamanPelaporan | formLaporan, kategoriPelanggaran, deskripsiPelanggaran, kolomBukti, statusLaporan, noTiket, pesanError, tanggapanAdmin | tampilkanFormLaporan(), tampilkanOpsiKategoriPelanggaran(), tampilkanDeskripsiPelanggaran, tampilkanNomorTiket(), tampilkanPesanError(), tampilkanTanggapanAdmin(), tampilkanPesanError() | 
-| C45 | LaporanHandler  | - | validasiFormatLaporan(), createTiket(), getStatusTiket(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() |
-| C46 | Ulasan | Menyimpan feedback dan rating oleh Pengguna Jasa terhadap jasa yang telah dipesan |
-| C47 | HalamanUlasan | rating, teksKomentar, fileDokumentasi, pesanError | tampilkanFormUlasan(), inputRatingBintang(), inputKomentar(), unggahDokumentasi(), tampilkanPesanError(), tampilkanNotifikasiBerhasil() |
-| C48 | UlasanHandler | - | validasiKelengkapanRating(), validasiFormatBerkas(), validasiPanjangKomentar(), prosesUlasan(), perbaruiRating() |
-| C49 | TanggapanLaporan | idTanggapan, idTiket, jenisTindakan, catatanTanggapan | catatKeputusanTindakan(), getDetailTanggapan() |
-| C50 | HalamanPengajuanMediasi | detailPelaporan, riwayatPesan, opsiTindakan, pesanError | - |
-| C51 | MediasiHandler | idSesiMediasi | inputTindakan(), akhiriMediasi(), tampilkanPesanError(), tampilkanNotifikasiSelesai() |
-| C52 | Admin | idAdmin, nama | mulaiMediasi(), bukaTiketLaporan(), selesaikanLaporan(), kirimPesanMediasi(), pilihJenisTindakan(), akhiriMediasi() |
-| C53 | HalamanDashboardAdmin | daftarTiket, detailTiket, opsiTindakan, pesanError | tampilkanDetailTiket(), inputTindakan(), selesaikanTiket(), mulaiMediasi(), tampilkanPesanError() |
+| C34 | RiwayatTransaksi | <br> - idRiwayat <br> - idPesanan <br> - tanggalTransaksi <br> - statusTransaksi | <br> + simpanTransaksi() |
+| C35 | HalamanKonfirmasi | <br> - idPesanan <br> - detailBrief | <br> + tampilkanDetailPesanan() <br> + tombolTerimaTerklik(), <br> + tombolTolakTerklik() <br> + tampilkanStatusPesanan() |
+| C36 | ProdukAkhir | <br> -idProdukAkhir <br> - idPesanan <br> - outputpath <br> - deskripsiProdukAkhir <br> - <br>- tanggalPengumpulan <br> - statusPemeriksaan <br> - fileURL | <br> + simpanProdukAkhir() <br> + updateStatusPengerjaan() <br> + getDetailJasa() | 
+| C37 | HalamanPengumpulan | <br> - deskripsiHasil <br> - fileURL <br> - tombolKirim <br> - pesanError  | <br> + tampilkanFormPengumpulan() <br> + inputDeskripsiHasil() <br> + unggahDeliverables() <br> + tampilkanPesanError() <br> + kirimHasil() <br> + inputLink() <br> + tampilkanStatusPengiriman() |
+| C38 | HalamanDeliverables | <br> - deskripsiHasil <br> - fileURL <br> - tombolKonfirmasi <br> - tombolRevisi <br> - jumlahRevisi <br> - pesanError <br> - tombolBantuan <br> - lampiranDeliverables | <br> + tampilkanDeliverables() <br> + ajukanRevisi() <br> + konfirmasiPesanan() <br> + tampilkanError() <br> + panggilBantuan() |
+| C39 | PengajuanRevisi | <br> - deskripsiRevisi <br> - jmlRevisiTersedia <br> - lampiranRevisi <br> - idRevisi <br> - idPesanan <br> - statusPengerjaan | <br> + setStatusPengerjaan() <br> + getStatusPengerjaan() <br> + setDeskripsiRevisi() <br> + getDeskripsiRevisi() <br> + setjmlRevisi() <br> + getjmlRevisi() <br> + setIdRevisi() <br> + getIdPesanan() <br> + getIdRevisi() |
+| C40 | HalamanRequestRevisi | <br> - formRevisi <br> - detailRevisi <br> - kuotaRevisi <br> - tombolRevisi <br> - pesanUntukPenyedia  | <br> + tampilkanformRevisi() <br> + tampilkanFieldPengisianRevisi() <br> + tampilkanKuotaRevisi() <br> +  <br> +isTombolRevisiPressed() <br> + tampilkanPesan()  |
+| C41 | RevisiHandler | - | <br> + isJumlahRevisiValid() <br> + isDeskripsiComplete() <br> +  sendRevisi() <br> + setNotifikasiRevisi() <br> + updateStatusPengerjaan() <br> + updateIdRevisi()  |
+| C42 | PencairanDana | <br> - stateTransaksi <br> - statePencairanDana | <br> + setKondisiTransaksi() <br> + setPencairanDana() |
+| C43 | TiketLaporan | <br> - idTiket <br> - deskripsiLaporan <br> - urlbukti <br> - lampiranBukti <br> - statusTiket <br> - TanggapanAdmin | <br> + setIdTiket() <br> + getIdTiket() <br> + setURLBukti() <br> + getURLBukti() <br> + setStatusTiket <br> + UpdateStatusTiket() <br> + getStatusTicket() <br> + setTanggapan() <br> + getTanggapan() <br> + setStatusLaporan()  |
+| C44 | HalamanPelaporan | <br> - formLaporan <br> - kategoriPelanggaran <br> - deskripsiPelanggaran <br> - kolomBukti <br> - statusLaporan <br> - noTiket <br> - pesanError <br> - tanggapanAdmin | <br> + tampilkanFormLaporan() <br> +  tampilkanOpsiKategoriPelanggaran() <br> +  tampilkanDeskripsiPelanggaran <br> + tampilkanNomorTiket() <br> + tampilkanPesanError() <br> + tampilkanTanggapanAdmin() <br> +  tampilkanPesanError() | 
+| C45 | LaporanHandler  | - | <br> + validasiFormatLaporan() <br> + createTiket() <br> + getStatusTiket() <br> + kirimNotifAdmin() <br> + simpanData() <br> + banPengguna() <br> + skorsPengguna() <br> + kirimTanggapan() <br> + saveTanggapan() <br> + saveLaporan() <br> + updateStatusTiket() |
+| C46 | Ulasan | <br> - idUlasan <br> - idPesanan <br> - idPenyediaJasa <br> - rating <br> - komentar <br> - dokumentasi | <br> + simpanUlasan() <br> + getDetailUlasan() |
+| C47 | HalamanUlasan | <br> - rating <br> - teksKomentar <br> - fileDokumentasi <br> - pesanError | <br> + tampilkanFormUlasan() <br> + inputRatingBintang() <br> + inputKomentar() <br> + unggahDokumentasi() <br> + tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() |
+| C48 | UlasanHandler | - | <br> + validasiKelengkapanRating() <br> + validasiFormatBerkas() <br> + validasiPanjangKomentar() <br> + prosesUlasan() <br> + perbaruiRating() |
+| C49 | TanggapanLaporan | <br> - idTanggapan <br> - idTiket <br> - jenisTindakan <br> - catatanTanggapan | <br> - catatKeputusanTindakan() <br> - getDetailTanggapan() |
+| C50 | HalamanPengajuanMediasi | <br> + detailPelaporan <br> + riwayatPesan <br> + opsiTindakan <br> + pesanError | - |
+| C51 | MediasiHandler | <br> - idSesiMediasi | <br> - inputTindakan() <br> - akhiriMediasi() <br> - tampilkanPesanError(), <br> - tampilkanNotifikasiSelesai() |
+| C52 | Admin | <br> - idAdmin <br> - nama | <br> + mulaiMediasi() <br> + bukaTiketLaporan() <br> + selesaikanLaporan() <br> + kirimPesanMediasi() <br> + pilihJenisTindakan() <br> + akhiriMediasi() |
+| C53 | HalamanDashboardAdmin | <br> - daftarTiket <br> - detailTiket <br> - opsiTindakan <br> - pesanError | <br> + tampilkanDetailTiket() <br> + inputTindakan() <br> + selesaikanTiket() <br> + mulaiMediasi() <br> + tampilkanPesanError() |
 
 <br>
 
