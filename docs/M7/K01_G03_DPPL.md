@@ -38,6 +38,7 @@ Dipersiapkan oleh:
 | Refactor Method C37 | ganti kirimHasil() menjadi klikKirimHasil()  |
 | Add new Class | Class Pengumpulan Controller |  
 | Refactor Class Diagram UC11 | Tambahin Class Baru beserta detailnya |
+| Menghapus Method Class ProdukAhir | getDetailJasa --> getDetailProduk |  
 
 ---
 
@@ -321,6 +322,50 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
+
+## 3.4 Use Case Mengunggah Penawaran Jasa
+
+**ID Use Case:** UC04  
+**Nama Use Case:** Mengunggah Penawaran Jasa
+
+### 3.4.1 Identifikasi Kelas
+Tabel 3.4. Identifikasi Kelas Use Case [UC04]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| ... | *...* | *...* |
+
+### 3.1.2 Sequence Diagram
+
+- **Skenario Normal dan Alternatif**
+
+<p align="center">
+<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
+</p>
+
+### 3.1.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Diagram Kelas UC04" src="" width="35%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+
 ## 3.11 Use Case Menyerahkan Hasil Pekerjaan
 
 **ID Use Case:** UC11  
@@ -368,49 +413,6 @@ Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.
 
 ---
 
-## 3.4 Use Case Mengunggah Penawaran Jasa
-
-**ID Use Case:** UC04  
-**Nama Use Case:** Mengunggah Penawaran Jasa
-
-### 3.4.1 Identifikasi Kelas
-Tabel 3.4. Identifikasi Kelas Use Case [UC04]
-
-| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
-|:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
-
-### 3.1.2 Sequence Diagram
-
-- **Skenario Normal dan Alternatif**
-
-<p align="center">
-<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="100%">
-</p>
-<p align="center">
-<i>Gambar X. Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
-</p>
-
-### 3.1.3 Diagram Kelas
-
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
-
-<p align="center">
-<img alt="Diagram Kelas UC04" src="" width="35%">
-</p>
-<p align="center">
-<i>Gambar X. Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
-</p>
-
-Pada diagram, pastikan:
-- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
-- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
-- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
-- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
-- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
-
 # BAB 4: Diagram Kelas Keseluruhan
 
 ## 4.1 Diagram Kelas
@@ -429,7 +431,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
 | C01 | Pengguna | - nama <br> - email <br>   # password <br> - statusOnline <br> - statusAkun <br> - sanksi <br> - daftarProduk | <br> + buatAkun(), <br> - simpanProfil() <br> + login() <br> + setStatusAkun() <br> + setSanksi() <br> + getNama() <br> + getEmail() <br> + getStatusOnline <br> + getStatusAkun <br> | 
-| C02 | PenyediaJasa | - idPenyediaJasa <br> - daftarPenawaranJasa <br> - pengalaman <br> - prestasi <br> - daftarProduk | <br> + isiPortofolio() <br> + unggahPortofolio() <br> + tambahPenawaranJasa() <br> + bukaNotifikasiPesanan() <br> + terimaPesanan() <br> + tolakPesanan(), <br> + saveProdukAkhir() <br> + getStatusPengerjaan() <br> + kumpulkanRevisi() <br> + cekPengirimanDana() <br> + getRevisi() <br> + getIdPenyediaJasa() <br> + getdaftarPenawaranJasa <br> + getPengalamandanPrestasi() <br> |
+| C02 | PenyediaJasa | - idPenyediaJasa : string <br> - daftarPenawaranJasa : list of string <br> - pengalaman : list of string <br> - prestasi : list of string <br> - daftarProduk : list of string | <br> + isiPortofolio() <br> + unggahPortofolio() <br> + tambahPenawaranJasa() <br> + bukaNotifikasiPesanan() <br> + terimaPesanan() <br> + tolakPesanan(), <br> + saveProdukAkhir(idProduk : string, idPenyediaJasa : string) : void <br> + getStatusPengerjaan() : boolean <br> + kumpulkanRevisi() <br> + cekPengirimanDana() <br> + getRevisi() <br> + getIdPenyediaJasa() : string <br> + getdaftarPenawaranJasa : list of string <br> + getPengalamandanPrestasi() : list of string <br> |
 | C03 | PenggunaJasa | - idPenggunaJasa <br> - daftarJasa <br> - minatkategoriJasa <br> - statusKonfirmasi | <br> + cariJasa() <br> + gunakanFilter() <br> + bukaDetailJasa() <br> + bukaDaftarBoomark() <br> + pilihJasa() <br> + isiFormPemesanan() <br> + getStatusPengerjaan() <br> + getDeliverables() <br> + selesaikanPesanan() <br> + ajukanRevisi() <br> + beriUlasan() <br> + beriPenilaian() <br> + pilihMetodePembayaran() <br> + getIdPenyediaJasa() <br> + getMinatKategoriJasa <br> + getStatusKonfirmasi <br>  |
 | C04      | HalamanRegistrasi       |<br>  - formRegistrasi <br> - pesanError  <br> | <br> + tampilkanForm() <br> + kirimRegistrasi() <br> + tampilkanError() <br>|
 | C05      | LayananRegistrasi       | -                                                                       | <br> + validasiData() <br> + cekEmail() <br> + cekNoTelepon() <br> + registrasiPengguna() <br> |
@@ -438,7 +440,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C08      | HalamanPortofolio        | <br> - formPortofolio <br> - pesanError        | <br> + tampilkanPortofolio() <br> + tampilkanForm() <br> +  kirimPortofolio() <br> + tampilkanError() <br> |
 | C09      | Portofolio               | <br> - judul <br> - deskripsi <br> - berkasPendukung <br> | <br> + simpanPortofolio() <br> |
 | C10      | PengontrolPortofolio     | -                                 | <br> + validasiInputBerkas() <br> + SimpanPortofolio() <br>|
-| C11      | LayananUploadFile        | -                                 | <br> + getStatusUpload() <br> + validasiFormatUkuran() <br> + saveDeliverables() <br> |
+| C11      | LayananUploadFile        | -                                 | <br> + getStatusUpload() : boolean <br> + validasiFormatUkuran(file : FILE) : boolean <br> + saveDeliverables(file :FILE) : string  <br> + uploadFile() |
 | C12 | Jasa | - idJasa <br> - idPenyediaJasa <br> -  namaJasa <br> -  deskripsi <br> -  kategori <br> - harga <br> - statusAktif | <br> + simpanJasa() <br> + dapatkanDetailJasa() <br> + perbaruiJasa() <br> + hapusJasa() <br> |
 | C13 | HalamanUploadJasa | - formNamaJasa <br> - formKategori <br> - formDeskripsi <br> - formHarga <br> - inputUploadBerkas <br> - tombolUnggah <br> - pesanError | <br> + tampilkanForm() <br> + klikUnggah() <br> +  tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() <br> |
 | C14 | JasaController | - | <br> + ambilDetailJasa() <br> + validasiDataJasa() <br> + simpanPenawaranJasa() |
@@ -463,8 +465,8 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C33 | MetodePembayaran | <br> - idMetode <br> - namaMetode <br> - nomorRekeningVA | <br> + getDetailMetode() |
 | C34 | RiwayatTransaksi | <br> - idRiwayat <br> - idPesanan <br> - tanggalTransaksi <br> - statusTransaksi | <br> + simpanTransaksi() |
 | C35 | HalamanKonfirmasi | <br> - idPesanan <br> - detailBrief | <br> + tampilkanDetailPesanan() <br> + tombolTerimaTerklik() <br> + tombolTolakTerklik() <br> + tampilkanStatusPesanan() |
-| C36 | ProdukAkhir | <br> -idProdukAkhir <br> - idPesanan <br> - outputpath <br> - deskripsiProdukAkhir <br> - <br>- tanggalPengumpulan <br> - statusPemeriksaan <br> - fileURL | <br> + simpanProdukAkhir() <br> + updateStatusPengerjaan() <br> + getDetailJasa() | 
-| C37 | HalamanPengumpulan | <br> - deskripsiHasil <br> - fileURL <br> - tombolKirim <br> - pesanError  | <br> + tampilkanFormPengumpulan() <br> + inputDeskripsiHasil() <br> + unggahDeliverables() <br> + tampilkanPesanError() <br> + klikKirimHasil() <br> + inputLink() <br> + tampilkanStatusPengiriman() |
+| C36 | ProdukAkhir | <br> -idProdukAkhir : string <br> - idPesanan : string <br> - outputpath : string <br> - deskripsiProdukAkhir : string  <br>- tanggalPengumpulan : list of short <br> - statusPemeriksaan : boolean <br> - fileURL : string | <br> + simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void  <br> + updateStatusPengerjaan() <br> + getDetailProduk()  | 
+| C37 | HalamanPengumpulan | <br> - deskripsiHasil : string <br> - fileURL : string <br> - tombolKirim : void <br> - pesanError : string  | <br> + tampilkanFormPengumpulan() : void <br> + inputDeskripsiHasil() : string <br> + unggahDeliverables() : FILE <br> + tampilkanPesanError(pesanError : string) : void <br> + klikKirimHasil() : boolean <br> + inputLink() : string <br> + tampilkanStatusPengiriman(terkirim : boolean) : void |
 | C38 | HalamanDeliverables | <br> - deskripsiHasil <br> - fileURL <br> - tombolKonfirmasi <br> - tombolRevisi <br> - jumlahRevisi <br> - pesanError <br> - tombolBantuan <br> - lampiranDeliverables | <br> + tampilkanDeliverables() <br> + ajukanRevisi() <br> + konfirmasiPesanan() <br> + tampilkanError() <br> + panggilBantuan() |
 | C39 | PengajuanRevisi | <br> - deskripsiRevisi <br> - jmlRevisiTersedia <br> - lampiranRevisi <br> - idRevisi <br> - idPesanan <br> - statusPengerjaan | <br> + setStatusPengerjaan() <br> + getStatusPengerjaan() <br> + setDeskripsiRevisi() <br> + getDeskripsiRevisi() <br> + setjmlRevisi() <br> + getjmlRevisi() <br> + setIdRevisi() <br> + getIdPesanan() <br> + getIdRevisi() |
 | C40 | HalamanRequestRevisi | <br> - formRevisi <br> - detailRevisi <br> - kuotaRevisi <br> - tombolRevisi <br> - pesanUntukPenyedia  | <br> + tampilkanformRevisi() <br> + tampilkanFieldPengisianRevisi() <br> + tampilkanKuotaRevisi() <br> + +isTombolRevisiPressed() <br> + tampilkanPesan()  |
@@ -481,7 +483,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C51 | MediasiHandler | <br> - idSesiMediasi | <br> - inputTindakan() <br> - akhiriMediasi() <br> - tampilkanPesanError() <br> - tampilkanNotifikasiSelesai() |
 | C52 | Admin | <br> - idAdmin <br> - nama | <br> + mulaiMediasi() <br> + bukaTiketLaporan() <br> + selesaikanLaporan() <br> + kirimPesanMediasi() <br> + pilihJenisTindakan() <br> + akhiriMediasi() |
 | C53 | HalamanDashboardAdmin | <br> - daftarTiket <br> - detailTiket <br> - opsiTindakan <br> - pesanError | <br> + tampilkanDetailTiket() <br> + inputTindakan() <br> + selesaikanTiket() <br> + mulaiMediasi() <br> + tampilkanPesanError() |
-| C54 | PengumpulanController | - | <br> + validasiDeskripsi() <br> + validasiPengumpulan()  |
+| C54 | PengumpulanController | - | <br> + validasiDeskripsi() : boolean <br> + validasiPengumpulan() : boolean |
 
 <br>
 
