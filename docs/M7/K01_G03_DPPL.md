@@ -327,6 +327,49 @@ Silahkan lanjutkan untuk  *use case* berikutnya dengan content yang sama dengan 
 
 ---
 
+## 3.4 Use Case Mengunggah Penawaran Jasa
+
+**ID Use Case:** UC04  
+**Nama Use Case:** Mengunggah Penawaran Jasa
+
+### 3.4.1 Identifikasi Kelas
+Tabel 3.4. Identifikasi Kelas Use Case [UC04]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| ... | *...* | *...* |
+
+### 3.1.2 Sequence Diagram
+
+- **Skenario Normal dan Alternatif**
+
+<p align="center">
+<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
+</p>
+
+### 3.1.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Diagram Kelas UC04" src="" width="35%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+
 # BAB 4: Diagram Kelas Keseluruhan
 
 ## 4.1 Diagram Kelas
