@@ -601,7 +601,57 @@ Pada diagram, pastikan:
 - Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
---- 
+---
+
+# 3.14 Use Case Memberikan Ulasan terhadap Jasa yang Dipesan
+
+**ID Use Case:** *UC14*  
+**Nama Use Case:** *Memberikan Ulasan terhadap Jasa yang Dipesan*
+
+### 3.14.1 Identifikasi Kelas
+
+Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC014]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| ... | *...* | *...* |
+
+### 3.14.2 Sequence Diagram
+
+Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramSekuens.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 3.1.2 Sequence Diagram [UC014]</i>
+</p>
+
+
+### 3.14.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas [UC14]</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+---
 
 # BAB 4: Diagram Kelas Keseluruhan
 
@@ -622,7 +672,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | :--- | :--- | :--- | :--- |
 | C01 | Pengguna | - nama <br> - email <br>   # password <br> - statusOnline <br> - statusAkun <br> - sanksi <br> - daftarProduk | <br> + buatAkun(), <br> - simpanProfil() <br> + login() <br> + setStatusAkun() <br> + setSanksi() <br> + getNama() <br> + getEmail() <br> + getStatusOnline <br> + getStatusAkun <br> | 
 | C02 | PenyediaJasa | - idPenyediaJasa : string <br> - daftarPenawaranJasa : list of string <br> - pengalaman : list of string <br> - prestasi : list of string <br> - daftarProduk : list of string | <br> + isiPortofolio() <br> + unggahPortofolio() <br> + tambahPenawaranJasa() <br> + bukaNotifikasiPesanan() <br> + terimaPesanan() <br> + tolakPesanan(), <br> + saveProdukAkhir(idProduk : string, idPenyediaJasa : string) : void <br> + getStatusPengerjaan() : boolean <br> + kumpulkanRevisi() <br> + cekPengirimanDana() <br> + getRevisi() <br> + getIdPenyediaJasa() : string <br> + getdaftarPenawaranJasa : list of string <br> + getPengalamandanPrestasi() : list of string <br> |
-| C03 | PenggunaJasa | - idPenggunaJasa <br> - daftarJasa <br> - minatkategoriJasa <br> - statusKonfirmasi | <br> + cariJasa() <br> + gunakanFilter() <br> + bukaDetailJasa() <br> + bukaDaftarBoomark() <br> + pilihJasa() <br> + isiFormPemesanan() <br> + getStatusPengerjaan() <br> + getDeliverables() <br> + selesaikanPesanan() <br> + ajukanRevisi() <br> + beriUlasan() <br> + beriPenilaian() <br> + pilihMetodePembayaran() <br> + getIdPenyediaJasa() <br> + getMinatKategoriJasa <br> + getStatusKonfirmasi <br>  |
+| C03 | PenggunaJasa | - idPenggunaJasa <br> - daftarJasa <br> - minatkategoriJasa <br> - statusKonfirmasi | <br> + cariJasa() <br> + gunakanFilter() <br> + bukaDetailJasa() <br> + bukaDaftarBoomark() <br> + pilihJasa() <br> + isiFormPemesanan() <br> + getStatusPengerjaan() <br> + getDeliverables() <br> + selesaikanPesanan() <br> + ajukanRevisi() <br> + beriUlasan(idPesanan: integer) <br> + beriPenilaian() <br> + pilihMetodePembayaran() <br> + getIdPenyediaJasa() <br> + getMinatKategoriJasa <br> + getStatusKonfirmasi <br>  |
 | C04      | HalamanRegistrasi       |<br>  - formRegistrasi <br> - pesanError  <br> | <br> + tampilkanForm() <br> + kirimRegistrasi() <br> + tampilkanError() <br>|
 | C05      | LayananRegistrasi       | -                                                                       | <br> + validasiData() <br> + cekEmail() <br> + cekNoTelepon() <br> + registrasiPengguna() <br> |
 | C06      | HalamanLogin             | - inputEmail <br> - inputPassword <br> - pesanError | <br> + tampilkanForm() <br> + kirimLogin() <br> +  pesanError() <br> |
@@ -650,7 +700,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C28 | HalamanPemesanan | <br> - idJasaDipilih <br> - briefPemesanan | <br> + tampilkanFormPemesanan() <br> + inputBriefPemesanan() <br> + tombolPesanTerklik() |
 | C29 | HalamanPembayaran | <br> - totalHarga <br> - idMetodePembayaran | <br> + tampilkanPilihanPembayaran() <br> + tampilkanRincianPembayaran() <br> + tombolBayarTerklik() <br> + tampilkanNotifikasiBerhasil() |
 | C30 | HalamanRiwayatTransaksi | <br> - idTransaksi | <br> + tampilkanRiwayatTransaksi() |
-| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() <br> +  hitungTotalBiaya() <br> + updateStatusPesanan() |
+| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() <br> +  hitungTotalBiaya() <br> + updateStatusPesanan(idPesanan: integer, status: STATUS) |
 | C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() <br> + validasiPembayaran() <br> +  updateStatusPembayaran() |
 | C33 | MetodePembayaran | <br> - idMetode <br> - namaMetode <br> - nomorRekeningVA | <br> + getDetailMetode() |
 | C34 | RiwayatTransaksi | <br> - idRiwayat <br> - idPesanan <br> - tanggalTransaksi <br> - statusTransaksi | <br> + simpanTransaksi() |
@@ -666,8 +716,8 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C44 | HalamanPelaporan | <br> - formLaporan <br> - kategoriPelanggaran <br> - deskripsiPelanggaran <br> - kolomBukti <br> - statusLaporan <br> - noTiket <br> - pesanError <br> - tanggapanAdmin | <br> + tampilkanFormLaporan() <br> +  tampilkanTiketdanTanggapan() <br>  + tampilkanPesanError()  | 
 | C45 | LaporanHandler  | - | <br> + validasiFormatLaporan() <br> + kirimNotifAdmin() <br> + simpanData() <br> + banPengguna() <br> + skorsPengguna() <br> + kirimTanggapan() <br> + saveTanggapan() <br> + saveLaporan() <br> + updateStatusTiket() |
 | C46 | Ulasan | <br> - idUlasan <br> - idPesanan <br> - idPenyediaJasa <br> - rating <br> - komentar <br> - dokumentasi | <br> + simpanUlasan() <br> + getDetailUlasan() |
-| C47 | HalamanUlasan | <br> - rating <br> - teksKomentar <br> - fileDokumentasi <br> - pesanError | <br> + tampilkanFormUlasan() <br> + inputRatingBintang() <br> + inputKomentar() <br> + unggahDokumentasi() <br> + tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() |
-| C48 | UlasanHandler | - | <br> + validasiKelengkapanRating() <br> + validasiFormatBerkas() <br> + validasiPanjangKomentar() <br> + prosesUlasan() <br> + perbaruiRating() |
+| C47 | HalamanUlasan | <br> - rating <br> - teksKomentar <br> - fileDokumentasi <br> - pesanError | <br> + tampilkanFormUlasan() <br> + inputRatingBintang(rating: integer) <br> + inputKomentar(teksKomentar: string) <br> + unggahDokumentasi(fileDokumentasi: FILE) <br> + submitUlasan() <br> +tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() |
+| C48 | UlasanHandler | - | <br> + validasiKelengkapanRating(rating: integer) <br> + validasiFormatBerkas(fileDokumentasi: FILE) <br> + validasiPanjangKomentar(teksKomentar: string) <br> + prosesUlasan(idPesanan: integer, rating: integer, teksKomentar: string, fileDokumentasi: FILE) <br> + perbaruiRating(idPenyediaJasa: integer, rating: integer) |
 | C49 | TanggapanLaporan | <br> - idTanggapan <br> - idTiket <br> - jenisTindakan <br> - catatanTanggapan | <br> - catatKeputusanTindakan() <br> - getDetailTanggapan() |
 | C50 | HalamanPengajuanMediasi | <br> + detailPelaporan <br> + riwayatPesan <br> + opsiTindakan <br> + pesanError | - |
 | C51 | MediasiHandler | <br> - idSesiMediasi | <br> - inputTindakan() <br> - akhiriMediasi() <br> - tampilkanPesanError() <br> - tampilkanNotifikasiSelesai() |
