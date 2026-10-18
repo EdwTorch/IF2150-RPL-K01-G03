@@ -39,7 +39,7 @@ Dipersiapkan oleh:
 | Add new Class | Class Pengumpulan Controller |  
 | Refactor Class Diagram UC11 | Tambahin Class Baru beserta detailnya |
 | Menghapus Method Class ProdukAhir | getDetailJasa --> getDetailProduk |  
-
+| Menghapus dan menambah Method baru pada Class  HalamanPelaporan | tampilkanDeskripsiPelanggaran(), tampilkanNomorTiket(), tampilkanOpsiKategoriPelanggaran(), tampilkanTanggapanAdmin() ---> dihapus. Ditambahkan : tampilkanTiketdanTanggapan() |
 ---
 
 <br>
@@ -337,97 +337,6 @@ Tabel 3.4. Identifikasi Kelas Use Case [UC04]
 | 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
 | ... | *...* | *...* |
 
-### 3.1.2 Sequence Diagram
-
-- **Skenario Normal dan Alternatif**
-
-<p align="center">
-<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="100%">
-</p>
-<p align="center">
-<i>Gambar X. Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
-</p>
-
-### 3.1.3 Diagram Kelas
-
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
-
-<p align="center">
-<img alt="Diagram Kelas UC04" src="" width="35%">
-</p>
-<p align="center">
-<i>Gambar X. Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
-</p>
-
-Pada diagram, pastikan:
-- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
-- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
-- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
-- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
-- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
-
-## 3.11 Use Case Menyerahkan Hasil Pekerjaan
-
-**ID Use Case:** UC11  
-**Nama Use Case:** Menyerahkan Hasil Pekerjaan
-
-### 3.11.1 Identifikasi Kelas
-
-Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
-
-Tabel 3.1. Identifikasi Kelas Use Case [UC01]
-
-| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
-|:--- | :--- | :--- |
-| 1 | UploadFileHandler | LayananUploadFile |
-| 2 | HalamanPengumpulan | HalamanPengumpulan |
-| 3 | FinalProduct | ProdukAkhir |
-| 4 | PenyediaJasa | PenyediaJasa|
-| 5 | PengumpulanController | PengumpulanController |
-
-### 3.11.2 Sequence Diagram
-
-Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
-
-- **Skenario Keseluruhan**
-
-<p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramSekuens.svg" width="100%">
-</p>
-<p align="center">
-<i>Gambar 3.11 Sequence Diagram [UC11]</i>
-</p>
-
-
-
-### 3.11.3 Diagram Kelas
-
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
-
-<p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramKelas.svg" width="70%">
-</p>
-<p align="center">
-<i>Gambar 11. Diagram Kelas Menyerahkan Hasil pekerjaan</i>
-</p>
-
----
-
-<<<<<<< HEAD
-## 3.4 Use Case Mengunggah Penawaran Jasa
-
-**ID Use Case:** UC04  
-**Nama Use Case:** Mengunggah Penawaran Jasa
-
-### 3.4.1 Identifikasi Kelas
-Tabel 3.4. Identifikasi Kelas Use Case [UC04]
-
-| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
-|:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
-
 ### 3.4.2 Sequence Diagram
 
 - **Skenario Normal dan Alternatif**
@@ -500,8 +409,111 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
-=======
->>>>>>> 415ba14eaf151569e3977aace180f3aeaab8fccf
+## 3.11 Use Case Menyerahkan Hasil Pekerjaan
+
+**ID Use Case:** UC11  
+**Nama Use Case:** Menyerahkan Hasil Pekerjaan
+
+### 3.11.1 Identifikasi Kelas
+
+Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC11]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | UploadFileHandler | LayananUploadFile |
+| 2 | HalamanPengumpulan | HalamanPengumpulan |
+| 3 | FinalProduct | ProdukAkhir |
+| 4 | PenyediaJasa | PenyediaJasa|
+| 5 | PengumpulanController | PengumpulanController |
+
+### 3.11.2 Sequence Diagram
+
+Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
+
+- **Skenario Keseluruhan**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramSekuens.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar 3.11 Sequence Diagram [UC11]</i>
+</p>
+
+
+
+### 3.11.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramKelas.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 11. Diagram Kelas Menyerahkan Hasil pekerjaan</i>
+</p>
+
+---
+## 3.13 Use Case Melaporkan Pengguna Lain
+
+**ID Use Case:** UC13
+**Nama Use Case:** Melaporkan Pengguna Lain
+
+### 3.13.1 Identifikasi Kelas
+
+Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC01]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | HalamanPelaporan | HalamanPelaporan |
+| 2 | LaporanHandler | LaporanHandler |
+| 3 | TiketLaporan | PenggunaJasa |
+| 4 | Pengguna | Pengguna (Inheritance with PenggunaJasa) |
+
+### 3.1.2 Sequence Diagram
+
+Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-sequence_diagram.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram [UC01]</i>
+</p>
+
+- **Skenario Alternatif [Nomor]: [Nama Skenario]**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-sequence_diagram.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram [UC01] - [Nama skenario alternatif]</i>
+</p>
+
+### 3.1.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagram2.jpg" width="35%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+--- 
+
 # BAB 4: Diagram Kelas Keseluruhan
 
 ## 4.1 Diagram Kelas
@@ -561,9 +573,9 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C40 | HalamanRequestRevisi | <br> - formRevisi <br> - detailRevisi <br> - kuotaRevisi <br> - tombolRevisi <br> - pesanUntukPenyedia  | <br> + tampilkanformRevisi() <br> + tampilkanFieldPengisianRevisi() <br> + tampilkanKuotaRevisi() <br> + +isTombolRevisiPressed() <br> + tampilkanPesan()  |
 | C41 | RevisiHandler | - | <br> + isJumlahRevisiValid() <br> + isDeskripsiComplete() <br> +  sendRevisi() <br> + setNotifikasiRevisi() <br> + updateStatusPengerjaan() <br> + updateIdRevisi()  |
 | C42 | PencairanDana | <br> - stateTransaksi <br> - statePencairanDana | <br> + setKondisiTransaksi() <br> + setPencairanDana() |
-| C43 | TiketLaporan | <br> - idTiket <br> - deskripsiLaporan <br> - urlbukti <br> - lampiranBukti <br> - statusTiket <br> - TanggapanAdmin | <br> + setIdTiket() <br> + getIdTiket() <br> + setURLBukti() <br> + getURLBukti() <br> + setStatusTiket <br> + UpdateStatusTiket() <br> + getStatusTicket() <br> + setTanggapan() <br> + getTanggapan() <br> + setStatusLaporan()  |
-| C44 | HalamanPelaporan | <br> - formLaporan <br> - kategoriPelanggaran <br> - deskripsiPelanggaran <br> - kolomBukti <br> - statusLaporan <br> - noTiket <br> - pesanError <br> - tanggapanAdmin | <br> + tampilkanFormLaporan() <br> +  tampilkanOpsiKategoriPelanggaran() <br> +  tampilkanDeskripsiPelanggaran <br> + tampilkanNomorTiket() <br> + tampilkanPesanError() <br> + tampilkanTanggapanAdmin() <br> +  tampilkanPesanError() | 
-| C45 | LaporanHandler  | - | <br> + validasiFormatLaporan() <br> + createTiket() <br> + getStatusTiket() <br> + kirimNotifAdmin() <br> + simpanData() <br> + banPengguna() <br> + skorsPengguna() <br> + kirimTanggapan() <br> + saveTanggapan() <br> + saveLaporan() <br> + updateStatusTiket() |
+| C43 | TiketLaporan | <br> - idTiket <br> - deskripsiLaporan <br> - urlbukti <br> - lampiranBukti <br> - statusTiket <br> - TanggapanAdmin | <br> + getDetailTiket() <br> + createTiket() <br> +  UpdateStatusTiket() <br> +  saveTanggapan() <br> + saveStatusTindakan()  |
+| C44 | HalamanPelaporan | <br> - formLaporan <br> - kategoriPelanggaran <br> - deskripsiPelanggaran <br> - kolomBukti <br> - statusLaporan <br> - noTiket <br> - pesanError <br> - tanggapanAdmin | <br> + tampilkanFormLaporan() <br> +  tampilkanTiketdanTanggapan() <br>  + tampilkanPesanError()  | 
+| C45 | LaporanHandler  | - | <br> + validasiFormatLaporan() <br> + kirimNotifAdmin() <br> + simpanData() <br> + banPengguna() <br> + skorsPengguna() <br> + kirimTanggapan() <br> + saveTanggapan() <br> + saveLaporan() <br> + updateStatusTiket() |
 | C46 | Ulasan | <br> - idUlasan <br> - idPesanan <br> - idPenyediaJasa <br> - rating <br> - komentar <br> - dokumentasi | <br> + simpanUlasan() <br> + getDetailUlasan() |
 | C47 | HalamanUlasan | <br> - rating <br> - teksKomentar <br> - fileDokumentasi <br> - pesanError | <br> + tampilkanFormUlasan() <br> + inputRatingBintang() <br> + inputKomentar() <br> + unggahDokumentasi() <br> + tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() |
 | C48 | UlasanHandler | - | <br> + validasiKelengkapanRating() <br> + validasiFormatBerkas() <br> + validasiPanjangKomentar() <br> + prosesUlasan() <br> + perbaruiRating() |
