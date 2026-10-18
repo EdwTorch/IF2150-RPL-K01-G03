@@ -498,6 +498,122 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
+## 3.8 Use Case Melakukan Komunikasi
+
+**ID Use Case:** *UC08*  
+**Nama Use Case:** *Melakukan Komunikasi*
+
+### 3.8.1 Identifikasi Kelas
+Tabel 3.8. Identifikasi Kelas Use Case [UC08]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | ChatRoom | ChatRoom |
+| 2 | HalamanChat | HalamanChat |
+| 3 | LayananPesanInstan | LayananPesanInstan |
+| 4 | LayananNotifikasiChat | LayananNotifikasiChat |
+
+### 3.8.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Sequence Diagram UC08" src="./assets/diagram/SequenceDiagramUC08.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 3.8.2 Sequence Diagram [UC08]</i>
+</p>
+
+
+### 3.8.3 Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC08" src="./assets/diagram/ClassDiagramUC08.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 3.8.3 Diagram Kelas Melakukan Komunikasi</i>
+</p>
+
+
+## 3.9 Use Case Melakukan Pemesanan Jasa
+
+**ID Use Case:** *UC09*  
+**Nama Use Case:** *Melakukan Pemesanan Jasa*
+
+### 3.9.1 Identifikasi Kelas
+
+Tabel 3.9. Identifikasi Kelas Use Case [UC09]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | Pesanan | Pesanan |
+| 2 | HalamanPemesanan | HalamanPemesanan |
+| 3 | HalamanPembayaran | HalamanPembayaran |
+| 4 |HalamanRiwayatTransaksi | HalamanRiwayatTransaksi |
+| 5 | PengontrolPesanan | PengontrolPesanan |
+| 6 | PengontrolTransaksi | PengontrolTransaksi |
+| 7 | MetodePembayaran | MetodePembayaran |
+| 8 | RiwayatTransaksi | RiwayatTransaksi |
+
+### 3.9.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Sequence Diagram UC09" src="./assets/diagram/SequenceDiagramUC09.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 3.9.2 Sequence Diagram [UC09]</i>
+</p>
+
+### 3.9.3 Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC09" src="./assets/diagram/ClassDiagramUC09.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 3.9.3 Diagram Kelas Melakukan Pemesanan Jasa</i>
+</p>
+
+## 3.10 Use Case Melakukan Konfirmasi Pesanan
+
+**ID Use Case:** *UC10*  
+**Nama Use Case:** *Melakukan Konfirmasi Pesanan*
+
+### 3.10.1 Identifikasi Kelas
+
+Tabel 3.10. Identifikasi Kelas Use Case [UC10]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | Pesanan | Pesanan |
+| 2 | PengontrolPesanan | PengontrolPesanan |
+| 3 | PengontrolTransaksi | PengontrolTransaksi |
+| 4 | MetodePembayaran | MetodePembayaran |
+| 5 | RiwayatTransaksi | RiwayatTransaksi |
+| 6 | HalamanKonfirmasi | HalamanKonfirmasi |
+
+### 3.10.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Sequence Diagram UC10" src="./assets/diagram/SequenceDiagramUC10.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 3.10.2 Sequence Diagram [UC10]</i>
+</p>
+
+
+### 3.10.3 Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC10" src="./assets/diagram/ClassDiagramUC10.png" width="35%">
+</p>
+<p align="center">
+<i>Gambar 3.10.3 Diagram Kelas Melakukan Konfirmasi Pesanan</i>
+</p>
+
 ## 3.11 Use Case Menyerahkan Hasil Pekerjaan
 
 **ID Use Case:** UC11  
