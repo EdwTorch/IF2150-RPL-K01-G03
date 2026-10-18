@@ -122,7 +122,7 @@ Tabel 2.1 Rancangan Lingkungan Implementasi Perangkat Lunak
 | OS | Cross-platform (Windows/Linux/MacOS/Android/IOS) melalui perangkat lunak browser modern |
 | Development Tools | Visual Studio Code, Git, Github |
 | Bahasa Pemrograman | Next.js |
-| Filing System | *yang ini masih ditanyain* |
+| Filing System | NTFS |
 
 ## 2.2 Style/Pattern Arsitektur Acuan
 
@@ -267,8 +267,8 @@ Package diagram adalah diagram yang menampilkan perencanaan dan pengorganisasika
 
 ## 3.1 Use Case [Nama Use Case 1]
 
-**ID Use Case:** *[UC01 sesuai SKPL]*  
-**Nama Use Case:** *[Nama use case sesuai SKPL]*
+**ID Use Case:** *UC01*  
+**Nama Use Case:** *Melakukan Registrasi Akun*
 
 ### 3.1.1 Identifikasi Kelas
 
