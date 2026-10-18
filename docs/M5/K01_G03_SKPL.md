@@ -33,6 +33,7 @@ Dipersiapkan oleh:
 | 1. | Deskripsi Umum Sistem Berubah dari Pembeli menjadi Pengguna Jasa dan penghapusan peran admin sebagai penjaga transaksi|
 | 2. | Menghapus Peran Admin sebagai penjaga transaksi dan penyedia jasa untuk melaporkan pengguna lain |
 | 3. | Perubahan Atribut Chatroom (menghapus Riwayat Pesan) dan menambahkan NamaRoom |
+| 4. | Perubahan nama method pengontrol portofolio dari SimpanPortofolio() menjadi prosesSimpanPortofolio() |
 | ... |  |
 
 <br>
@@ -905,7 +906,7 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | C02 | PenyediaJasa | idPenyediaJasa, daftarPenawaranJasa, pengalaman, prestasi | isiPortofolio(), unggahPortofolio(), tambahPenawaranJasa(), bukaNotifikasiPesanan(), terimaPesanan(), tolakPesanan(), kumpulkanProdukAkhir(), getStatusPengerjaan(), kumpulkanRevisi(), cekPengirimanDana(), getRevisi(), getProfilDetail() |
 | C08      | HalamanPortofolio        | formPortofolio, pesanError        | tampilkanPortofolio(), tampilkanForm(), kirimPortofolio(), tampilkanError(), |
 | C09      | Portofolio               | judul, deskripsi, berkasPendukung | simpanPortofolio()                                                           |
-| C10      | PengontrolPortofolio     | -                                 | validasiInputBerkas(),  SimpanPortofolio()                 |
+| C10      | PengontrolPortofolio     | -                                 | validasiInputBerkas(),  prosesSimpanPortofolio()                 |
 | C11      | LayananUploadFile        | -                                 | uploadFile(), getStatusUpload(), validasiFormatUkuran(), saveDeliverables() |
 
 
