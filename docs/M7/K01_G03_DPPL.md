@@ -798,13 +798,16 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC014]
 | 4 | UlasanHandler | UlasanHandler |
 | 5 | PengontrolPesanan | PengontrolPesanan |
 | 6 | Pesanan | Pesanan |
+| 7 | PengontrolTransaksi | PengontrolTransaksi |
+| 8 | Ulasan | Ulasan |
+| 9 | RiwayatTransaksi | RiwayatTransaksi |
 
 ### 3.14.2 Sequence Diagram
 
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramSekuens.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramSekuens.svg" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.1.2 Sequence Diagram [UC014]</i>
@@ -813,10 +816,9 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC014]
 
 ### 3.14.3 Diagram Kelas
 
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramKelas.svg" width="35%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas [UC14]</i>
