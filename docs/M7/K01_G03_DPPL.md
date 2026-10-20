@@ -40,6 +40,8 @@ Dipersiapkan oleh:
 | Refactor Class Diagram UC11 | Tambahin Class Baru beserta detailnya |
 | Menghapus Method Class ProdukAhir | getDetailJasa --> getDetailProduk |  
 | Menghapus dan menambah Method baru pada Class  HalamanPelaporan | tampilkanDeskripsiPelanggaran(), tampilkanNomorTiket(), tampilkanOpsiKategoriPelanggaran(), tampilkanTanggapanAdmin() ---> dihapus. Ditambahkan : tampilkanTiketdanTanggapan() |
+| Add Argument | Menambahkan argumen pada: <br> C03: beriUlasan; <br> C31: updateStatusPesanan, C47: inputRatingBintang, inputKomentar, unggahDokumentasi, C48: validasiKelengkapanRating, validasiFormatBerkas, validasiPanjangKomentar, prosesUlasan, perbaruiRating |
+| Method Class | Menambahkan submitUlasan method pada C47 |
 ---
 
 <br>
