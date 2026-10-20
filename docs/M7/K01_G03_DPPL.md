@@ -518,7 +518,7 @@ Tabel 3.8. Identifikasi Kelas Use Case [UC08]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC08" src="./assets/diagram/SequenceDiagramUC08.png" width="50%">
+<img alt="Sequence Diagram UC08" src="./assets/diagram/SequenceDiagramUC08.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.8.2 Sequence Diagram [UC08]</i>
@@ -528,7 +528,7 @@ Tabel 3.8. Identifikasi Kelas Use Case [UC08]
 ### 3.8.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC08" src="./assets/diagram/ClassDiagramUC08.png" width="35%">
+<img alt="Diagram Kelas UC08" src="./assets/diagram/ClassDiagramUC08.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.8.3 Diagram Kelas Melakukan Komunikasi</i>
@@ -560,7 +560,7 @@ Tabel 3.9. Identifikasi Kelas Use Case [UC09]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC09" src="./assets/diagram/SequenceDiagramUC09.png" width="50%">
+<img alt="Sequence Diagram UC09" src="./assets/diagram/SequenceDiagramUC09.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.9.2 Sequence Diagram [UC09]</i>
@@ -569,7 +569,7 @@ Tabel 3.9. Identifikasi Kelas Use Case [UC09]
 ### 3.9.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC09" src="./assets/diagram/ClassDiagramUC09.png" width="35%">
+<img alt="Diagram Kelas UC09" src="./assets/diagram/ClassDiagramUC09.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.9.3 Diagram Kelas Melakukan Pemesanan Jasa</i>
@@ -598,7 +598,7 @@ Tabel 3.10. Identifikasi Kelas Use Case [UC10]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC10" src="./assets/diagram/SequenceDiagramUC10.png" width="50%">
+<img alt="Sequence Diagram UC10" src="./assets/diagram/SequenceDiagramUC10.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.10.2 Sequence Diagram [UC10]</i>
@@ -608,7 +608,7 @@ Tabel 3.10. Identifikasi Kelas Use Case [UC10]
 ### 3.10.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC10" src="./assets/diagram/ClassDiagramUC10.png" width="35%">
+<img alt="Diagram Kelas UC10" src="./assets/diagram/ClassDiagramUC10.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.10.3 Diagram Kelas Melakukan Konfirmasi Pesanan</i>
