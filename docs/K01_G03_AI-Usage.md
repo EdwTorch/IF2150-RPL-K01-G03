@@ -27,6 +27,7 @@
 * [Milestone 3](#milestone-3)
 * [Milestone 4](#milestone-4)
 * [Milestone 6](#milestone-6)
+* [Milestone 7](#milestone-7)
 
 
 ---
@@ -81,6 +82,10 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Mendapatkan Pemahaman Terkait Model Sudut Pandang Arsitektur  | Bagaimana Contoh Development View serta bagaimana cara memilih konten yang sesuai dengan kebutuhan saya dengan informasi class diagram  | AI memberikan pilihan Development yang mendetail dan memberikan pemahaman terkait setiap sudut pandang arsitektur development. Saya (Edward) mempertimbangkan jawaban AI tersebut dengan mengelaborasikan kebutuhan dengan tugas besar kami |
 | Gemini | Mendapatkan pemahaman lebih lanjut mengenai Client-Server Achitecture | Bisakah kau jelaskan pengertian mengenai Client-Server Achitecture | AI memberikan penjelasan lebih lanjut mengenai Client-Server Achitecture, saya (Revandra) menggunakan jawaban tersebut beserta salindia asistensi akbar untuk melengkapi jawaban |
 
+### Milestone 7
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Mendapatkan Penjelasan dan Referensi Pembuatan Sequence Diagram  | Jelaskan dan berikan contoh cara membuat sequence diagram | AI memberikan penjelasan secara detail dan memberikan contoh diagram. Saya (There) memeriksa kembali jawaban AI tersebut melalui membandingkannya dengan ppt asistensi akbar |
 
 ### Pernyataan Integritas dan Persetujuan
 

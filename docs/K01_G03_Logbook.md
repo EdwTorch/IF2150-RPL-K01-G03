@@ -31,6 +31,7 @@
     - [Milestone 4](#milestone-4)
     - [Milestone 5](#milestone-5)
     - [Milestone 6](#milestone-6)
+    - [Milestone 7](#milestone-7)
 ---
 
 ### Milestone 1
@@ -139,7 +140,18 @@
 | *05-10-2026* | There  | Mengerjakan Diagram Logical View | 1 Jam | Done | - |
 | *05-10-2026* | Danesh  | Mengerjakan Tabel 2.1. Identifikasi Komponen/Modul/Subsistem  | >1 Jam | Done | Validasi kesesuaian tabel |
 
-
 **Catatan/Evaluasi Milestone 6:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
+### Milestone 7
+**Periode:** [7 Oktober 2026] -[21 Oktober 2026]
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *14-10-2026* | There  | Mengerjakan Bab 1 DPPL | 30 menit | Done | - |
+| *18-10-2026* | There  | Mengerjakan Bab 3 bagian UC08, UC09, dan UC10 | > 4 jam | Done | - |
+| *20-10-2026* | There  | Merevisi Bab 3 bagian UC08, UC09, dan UC10 | 1 jam | Done | - |
+
+**Catatan/Evaluasi Milestone 7:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
