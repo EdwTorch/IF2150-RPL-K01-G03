@@ -778,26 +778,25 @@ Pada diagram, pastikan:
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 ---
 
-# 3.14 Use Case Memberikan Ulasan terhadap Jasa yang Dipesan
+## 3.14 Use Case Memberikan Ulasan terhadap Jasa yang Dipesan
 
 **ID Use Case:** *UC14*  
 **Nama Use Case:** *Memberikan Ulasan terhadap Jasa yang Dipesan*
 
 ### 3.14.1 Identifikasi Kelas
 
-Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
-
 Tabel 3.1. Identifikasi Kelas Use Case [UC014]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | PenggunaJasa | PenggunaJasa |
+| 2 | HalamanRiwayatTransaksi | HalamanRiwayatTransaksi |
+| 3 | HalamanUlasan | HalamanUlasan |
+| 4 | UlasanHandler | UlasanHandler |
+| 5 | PengontrolPesanan | PengontrolPesanan |
+| 6 | Pesanan | Pesanan |
 
 ### 3.14.2 Sequence Diagram
-
-Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
 
 - **Skenario Normal**
 
