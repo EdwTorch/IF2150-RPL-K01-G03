@@ -851,7 +851,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC015]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramSekuens.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar 3.1.2 Sequence Diagram [UC014]</i>
+<i>Gambar 3.1.2 Sequence Diagram [UC015]</i>
 </p>
 
 
@@ -861,8 +861,50 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC015]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramKelas.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [UC14]</i>
+<i>Gambar X. Diagram Kelas [UC15]</i>
 </p>
+
+---
+
+## 3.16 Use Case Memproses Laporan
+
+**ID Use Case:** *UC16*  
+**Nama Use Case:** *Melakukan Proses Mediasi*
+
+### 3.16.1 Identifikasi Kelas
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC016]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | Admin | Admin |
+| 2 | HalamanDashboardAdmin | HalamanDashboardAdmin |
+| 3 | LaporanHandler | LaporanHandler |
+| 4 | TiketLaporan | TiketLaporan |
+| 5 | HalamanPengajuanMediasi | HalamanPengajuanMediasi |
+| 6 | MediasiHandler | MediasiHandler |
+
+### 3.16.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramSekuens.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 3.1.2 Sequence Diagram [UC016]</i>
+</p>
+
+
+### 3.16.3 Diagram Kelas
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramKelas.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas [UC16]</i>
+</p>
+
 ---
 
 # BAB 4: Diagram Kelas Keseluruhan
