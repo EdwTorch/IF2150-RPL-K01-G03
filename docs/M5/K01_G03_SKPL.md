@@ -33,6 +33,7 @@ Dipersiapkan oleh:
 | 1. | Deskripsi Umum Sistem Berubah dari Pembeli menjadi Pengguna Jasa dan penghapusan peran admin sebagai penjaga transaksi|
 | 2. | Menghapus Peran Admin sebagai penjaga transaksi dan penyedia jasa untuk melaporkan pengguna lain |
 | 3. | Perubahan Atribut Chatroom (menghapus Riwayat Pesan) dan menambahkan NamaRoom |
+| 4. | Perubahan nama method pengontrol portofolio dari SimpanPortofolio() menjadi prosesSimpanPortofolio() |
 | ... |  |
 
 <br>
@@ -905,7 +906,7 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | C02 | PenyediaJasa | idPenyediaJasa, daftarPenawaranJasa, pengalaman, prestasi | isiPortofolio(), unggahPortofolio(), tambahPenawaranJasa(), bukaNotifikasiPesanan(), terimaPesanan(), tolakPesanan(), kumpulkanProdukAkhir(), getStatusPengerjaan(), kumpulkanRevisi(), cekPengirimanDana(), getRevisi(), getProfilDetail() |
 | C08      | HalamanPortofolio        | formPortofolio, pesanError        | tampilkanPortofolio(), tampilkanForm(), kirimPortofolio(), tampilkanError(), |
 | C09      | Portofolio               | judul, deskripsi, berkasPendukung | simpanPortofolio()                                                           |
-| C10      | PengontrolPortofolio     | -                                 | validasiInputBerkas(),  SimpanPortofolio()                 |
+| C10      | PengontrolPortofolio     | -                                 | validasiInputBerkas(),  prosesSimpanPortofolio()                 |
 | C11      | LayananUploadFile        | -                                 | uploadFile(), getStatusUpload(), validasiFormatUkuran(), saveDeliverables() |
 
 
@@ -1128,11 +1129,10 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
 | C01 | Pengguna | nama, email, noTelepon, password, statusOnline, statusAkun,sanksi| buatAkun(), simpanProfil(), login(), setStatusAkun(), setSanksi() | 
-| C02 | PenyediaJasa | idPenyediaJasa, daftarPenawaranJasa, pengalaman, prestasi | isiPortofolio(), unggahPortofolio(), tambahPenawaranJasa(), bukaNotifikasiPesanan(), terimaPesanan(), tolakPesanan(), kumpulkanProdukAkhir(), getStatusPengerjaan(), kumpulkanRevisi(), cekPengirimanDana(), getRevisi(), getProfilDetail() |
 | C03 | PenggunaJasa | idPenggunaJasa, daftarJasa,  minatkategoriJasa, statusKonfirmasi | cariJasa(), gunakanFilter(), bukaDetailJasa(), bukaDaftarBoomark(), pilihJasa(), isiFormPemesanan(), getStatusPengerjaan(), getDeliverables(), selesaikanPesanan(), AjukanRevisi(), BeriUlasan(), beriPenilaian(), pilihMetodePembayaran() |
-| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | setIdTiket(), getIdTiket(), setURLBukti(), getURLBukti(), setStatusTiket, UpdateStatusTiket(), getStatusTicket(), setTanggapan(), getTanggapan(), setStatusLaporan()  |
-| C44 | HalamanPelaporan | formLaporan, kategoriPelanggaran, deskripsiPelanggaran, kolomBukti, statusLaporan, noTiket, pesanError, tanggapanAdmin | tampilkanFormLaporan(), tampilkanOpsiKategoriPelanggaran(), tampilkanDeskripsiPelanggaran, tampilkanNomorTiket(), tampilkanPesanError(), tampilkanTanggapanAdmin(), tampilkanPesanError() | 
-| C45 | LaporanHandler  | - | validasiFormatLaporan(), createTiket(), getStatusTiket(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() | 
+| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | getDetailTiket(), createTiket(), UpdateStatusTiket(), saveTanggapan(), saveStatusTindakan() |
+| C44 | HalamanPelaporan | formLaporan, kategoriPelanggaran, deskripsiPelanggaran, kolomBukti, statusLaporan, noTiket, pesanError, tanggapanAdmin | tampilkanFormLaporan(), tampilkanTiketdanTanggapan(), tampilkanPesanError() | 
+| C45 | LaporanHandler  | - | validasiFormatLaporan(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() | 
 
 
 ### 5.2.14 Use Case UC14
@@ -1174,8 +1174,8 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | setIdTiket(), getIdTiket(), setURLBukti(), getURLBukti(), setStatusTiket, UpdateStatusTiket(), getStatusTicket(), setTanggapan(), getTanggapan(), setStatusLaporan()  |
-| C45 | LaporanHandler  | - | validasiFormatLaporan(), createTiket(), getStatusTiket(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() | 
+| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | getDetailTiket(), createTiket(), UpdateStatusTiket(), saveTanggapan(), saveStatusTindakan() |
+| C45 | LaporanHandler  | - | validasiFormatLaporan(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() |  
 | C49 | TanggapanLaporan | idTanggapan, idTiket, jenisTindakan, catatanTanggapan | catatKeputusanTindakan(), getDetailTanggapan() |
 | C52 | Admin | idAdmin, nama | mulaiMediasi(), bukaTiketLaporan(), selesaikanLaporan(), kirimPesanMediasi(), pilihJenisTindakan(), akhiriMediasi() |
 | C53 | HalamanDashboardAdmin | daftarTiket, detailTiket, opsiTindakan, pesanError | tampilkanDetailTiket(), inputTindakan(), selesaikanTiket(), mulaiMediasi(), tampilkanPesanError() |
@@ -1199,7 +1199,7 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | C24 | HalamanChat | idSesiChat, inputPesan, statusKoneksi | tampilkanMenuChat(), tampilkanRiwayatPesan(), inputPesan(), tombolKirimTerklik(), tampilkanPesanError(), tampilkanStatusBelumTerkirim() |
 | C25 | LayananPesanInstan | idLayanan | buatSesiChat(), validasiInputPesan(), kirimPesan(), simpanKeDatabase(), updateStatusBaca() |
 | C26 | LayananNotifikasiChat | idNotifikasi | kirimNotifikasiPesan(), tampilkanPopUpNotifikasi() |
-| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | setIdTiket(), getIdTiket(), setURLBukti(), getURLBukti(), setStatusTiket, UpdateStatusTiket(), getStatusTicket(), setTanggapan(), getTanggapan(), setStatusLaporan()  |
+| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | getDetailTiket(), createTiket(), UpdateStatusTiket(), saveTanggapan(), saveStatusTindakan() |
 | C45 | LaporanHandler  | - | validasiFormatLaporan(), createTiket(), getStatusTiket(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() | 
 | C49 | TanggapanLaporan | idTanggapan, idTiket, jenisTindakan, catatanTanggapan | catatKeputusanTindakan(), getDetailTanggapan() |
 | C50 | HalamanPengajuanMediasi | detailPelaporan, riwayatPesan, opsiTindakan, pesanError | - |
@@ -1262,9 +1262,9 @@ Tabel 3.2. Kebutuhan Non-Fungsional
 | C40 | HalamanRequestRevisi | formRevisi, detailRevisi, kuotaRevisi, tombolRevisi, pesanUntukPenyedia  | tampilkanformRevisi(), tampilkanFieldPengisianRevisi(), tampilkanKuotaRevisi(), isTombolRevisiPressed(), tampilkanPesan()  |
 | C41 | RevisiHandler | - | isJumlahRevisiValid(), isDeskripsiComplete(), sendRevisi(), setNotifikasiRevisi(), updateStatusPengerjaan(), updateIdRevisi()  |
 | C42 | PencairanDana | stateTransaksi, statePencairanDana | setKondisiTransaksi(), setPencairanDana() |
-| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | setIdTiket(), getIdTiket(), setURLBukti(), getURLBukti(), setStatusTiket, UpdateStatusTiket(), getStatusTicket(), setTanggapan(), getTanggapan(), setStatusLaporan()  |
-| C44 | HalamanPelaporan | formLaporan, kategoriPelanggaran, deskripsiPelanggaran, kolomBukti, statusLaporan, noTiket, pesanError, tanggapanAdmin | tampilkanFormLaporan(), tampilkanOpsiKategoriPelanggaran(), tampilkanDeskripsiPelanggaran, tampilkanNomorTiket(), tampilkanPesanError(), tampilkanTanggapanAdmin(), tampilkanPesanError() | 
-| C45 | LaporanHandler  | - | validasiFormatLaporan(), createTiket(), getStatusTiket(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() |
+| C43 | TiketLaporan | idTiket, deskripsiLaporan, urlbukti, lampiranBukti, statusTiket, TanggapanAdmin | getDetailTiket(), createTiket(), UpdateStatusTiket(), saveTanggapan(), saveStatusTindakan() |
+| C44 | HalamanPelaporan | formLaporan, kategoriPelanggaran, deskripsiPelanggaran, kolomBukti, statusLaporan, noTiket, pesanError, tanggapanAdmin | tampilkanFormLaporan(), tampilkanTiketdanTanggapan(), tampilkanPesanError() | 
+| C45 | LaporanHandler  | - | validasiFormatLaporan(), kirimNotifAdmin(), simpanData(), banPengguna(), skorsPengguna(), kirimTanggapan(), saveTanggapan(), saveLaporan(), updateStatusTiket() | 
 | C46 | Ulasan | idUlasan,  idPesanan, idPenyediaJasa, rating, komentar, dokumentasi | simpanUlasan(), getDetailUlasan() |
 | C47 | HalamanUlasan | rating, teksKomentar, fileDokumentasi, pesanError | tampilkanFormUlasan(), inputRatingBintang(), inputKomentar(), unggahDokumentasi(), tampilkanPesanError(), tampilkanNotifikasiBerhasil() |
 | C48 | UlasanHandler | - | validasiKelengkapanRating(), validasiFormatBerkas(), validasiPanjangKomentar(), prosesUlasan(), perbaruiRating() |

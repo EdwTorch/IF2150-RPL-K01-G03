@@ -39,7 +39,11 @@ Dipersiapkan oleh:
 | Add new Class | Class Pengumpulan Controller |  
 | Refactor Class Diagram UC11 | Tambahin Class Baru beserta detailnya |
 | Menghapus Method Class ProdukAhir | getDetailJasa --> getDetailProduk |  
-
+| Menghapus dan menambah Method baru pada Class  HalamanPelaporan | tampilkanDeskripsiPelanggaran(), tampilkanNomorTiket(), tampilkanOpsiKategoriPelanggaran(), tampilkanTanggapanAdmin() ---> dihapus. Ditambahkan : tampilkanTiketdanTanggapan() |
+| Add Argument | Menambahkan argumen pada: <br> C03: beriUlasan; <br> C31: updateStatusPesanan, C47: inputRatingBintang, inputKomentar, unggahDokumentasi, C48: validasiKelengkapanRating, validasiFormatBerkas, validasiPanjangKomentar, prosesUlasan, perbaruiRating |
+| Method Class | Menambahkan submitUlasan method pada C47 |
+| Method Class | Menambahkan catatRiwayatTransaksi method pada C32 |
+| Method Class | Menambahkan getDetailTiket pada C45, tampilkanHalamanMediasi pada C53, UpdateStatusTiket pada C51 |
 ---
 
 <br>
@@ -122,7 +126,7 @@ Tabel 2.1 Rancangan Lingkungan Implementasi Perangkat Lunak
 | OS | Cross-platform (Windows/Linux/MacOS/Android/IOS) melalui perangkat lunak browser modern |
 | Development Tools | Visual Studio Code, Git, Github |
 | Bahasa Pemrograman | Next.js |
-| Filing System | *yang ini masih ditanyain* |
+| Filing System | NTFS |
 
 ## 2.2 Style/Pattern Arsitektur Acuan
 
@@ -265,10 +269,10 @@ Package diagram adalah diagram yang menampilkan perencanaan dan pengorganisasika
 
 # BAB 3: Realisasi Use Case
 
-## 3.1 Use Case [Nama Use Case 1]
+## 3.1 Use Case Melakukan Registrasi Akun
 
-**ID Use Case:** *[UC01 sesuai SKPL]*  
-**Nama Use Case:** *[Nama use case sesuai SKPL]*
+**ID Use Case:** *UC01*  
+**Nama Use Case:** *Melakukan Registrasi Akun*
 
 ### 3.1.1 Identifikasi Kelas
 
@@ -289,27 +293,19 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-sequence_diagram.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceregis.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram [UC01]</i>
+<i>Gambar 3.1.2 Sequence Diagram [UC01]</i>
 </p>
 
-- **Skenario Alternatif [Nomor]: [Nama Skenario]**
-
-<p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-sequence_diagram.png" width="50%">
-</p>
-<p align="center">
-<i>Gambar X. Sequence Diagram [UC01] - [Nama skenario alternatif]</i>
-</p>
 
 ### 3.1.3 Diagram Kelas
 
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagram2.jpg" width="35%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
@@ -322,14 +318,16 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
+## 3.2 Use Case Melakukan Login
 
-## 3.4 Use Case Mengunggah Penawaran Jasa
+**ID Use Case:** *UC02*  
+**Nama Use Case:** *Melakukan Login*
 
-**ID Use Case:** UC04  
-**Nama Use Case:** Mengunggah Penawaran Jasa
+### 3.2.1 Identifikasi Kelas
 
-### 3.4.1 Identifikasi Kelas
-Tabel 3.4. Identifikasi Kelas Use Case [UC04]
+Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
+
+Tabel 3.2.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -337,26 +335,29 @@ Tabel 3.4. Identifikasi Kelas Use Case [UC04]
 | 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
 | ... | *...* | *...* |
 
-### 3.1.2 Sequence Diagram
+### 3.2.2 Sequence Diagram
 
-- **Skenario Normal dan Alternatif**
+Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
+
+- **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="100%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequencelogin.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
+<i>Gambar 3.2.2 Sequence Diagram [UC02]</i>
 </p>
 
-### 3.1.3 Diagram Kelas
+
+### 3.2.3 Diagram Kelas
 
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Diagram Kelas UC04" src="" width="35%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
+<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
 </p>
 
 Pada diagram, pastikan:
@@ -366,54 +367,55 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
-## 3.11 Use Case Menyerahkan Hasil Pekerjaan
+## 3.3 Use Case Mengisi Portofolio
 
-**ID Use Case:** UC11  
-**Nama Use Case:** Menyerahkan Hasil Pekerjaan
+**ID Use Case:** *UC03*  
+**Nama Use Case:** *Mengisi Portofolio*
 
-### 3.11.1 Identifikasi Kelas
+### 3.3.1 Identifikasi Kelas
 
 Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
 
-Tabel 3.1. Identifikasi Kelas Use Case [UC01]
+Tabel 3.3.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | UploadFileHandler | LayananUploadFile |
-| 2 | HalamanPengumpulan | HalamanPengumpulan |
-| 3 | FinalProduct | ProdukAkhir |
-| 4 | PenyediaJasa | PenyediaJasa|
-| 5 | PengumpulanController | PengumpulanController |
+| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| ... | *...* | *...* |
 
-### 3.11.2 Sequence Diagram
+### 3.3.2 Sequence Diagram
 
 Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
 
-- **Skenario Keseluruhan**
+- **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramSekuens.svg" width="100%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceporto.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 3.11 Sequence Diagram [UC11]</i>
+<i>Gambar 3.3.3 Sequence Diagram [UC02]</i>
 </p>
 
 
-
-### 3.11.3 Diagram Kelas
+### 3.3.3 Diagram Kelas
 
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramKelas.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
 </p>
 <p align="center">
-<i>Gambar 11. Diagram Kelas Menyerahkan Hasil pekerjaan</i>
+<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
 </p>
 
----
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
-<<<<<<< HEAD
 ## 3.4 Use Case Mengunggah Penawaran Jasa
 
 **ID Use Case:** UC04  
@@ -500,8 +502,412 @@ Pada diagram, pastikan:
 - Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
 - Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
-=======
->>>>>>> 415ba14eaf151569e3977aace180f3aeaab8fccf
+## 3.8 Use Case Melakukan Komunikasi
+
+**ID Use Case:** *UC08*  
+**Nama Use Case:** *Melakukan Komunikasi*
+
+### 3.8.1 Identifikasi Kelas
+Tabel 3.8. Identifikasi Kelas Use Case [UC08]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | ChatRoom | ChatRoom |
+| 2 | HalamanChat | HalamanChat |
+| 3 | LayananPesanInstan | LayananPesanInstan |
+| 4 | LayananNotifikasiChat | LayananNotifikasiChat |
+
+### 3.8.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Sequence Diagram UC08" src="./assets/diagram/SequenceDiagramUC08.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 3.8.2 Sequence Diagram [UC08]</i>
+</p>
+
+
+### 3.8.3 Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC08" src="./assets/diagram/ClassDiagramUC08.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 3.8.3 Diagram Kelas Melakukan Komunikasi</i>
+</p>
+
+
+## 3.9 Use Case Melakukan Pemesanan Jasa
+
+**ID Use Case:** *UC09*  
+**Nama Use Case:** *Melakukan Pemesanan Jasa*
+
+### 3.9.1 Identifikasi Kelas
+
+Tabel 3.9. Identifikasi Kelas Use Case [UC09]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | Pesanan | Pesanan |
+| 2 | HalamanPemesanan | HalamanPemesanan |
+| 3 | HalamanPembayaran | HalamanPembayaran |
+| 4 |HalamanRiwayatTransaksi | HalamanRiwayatTransaksi |
+| 5 | PengontrolPesanan | PengontrolPesanan |
+| 6 | PengontrolTransaksi | PengontrolTransaksi |
+| 7 | MetodePembayaran | MetodePembayaran |
+| 8 | RiwayatTransaksi | RiwayatTransaksi |
+
+### 3.9.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Sequence Diagram UC09" src="./assets/diagram/SequenceDiagramUC09.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 3.9.2 Sequence Diagram [UC09]</i>
+</p>
+
+### 3.9.3 Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC09" src="./assets/diagram/ClassDiagramUC09.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 3.9.3 Diagram Kelas Melakukan Pemesanan Jasa</i>
+</p>
+
+## 3.10 Use Case Melakukan Konfirmasi Pesanan
+
+**ID Use Case:** *UC10*  
+**Nama Use Case:** *Melakukan Konfirmasi Pesanan*
+
+### 3.10.1 Identifikasi Kelas
+
+Tabel 3.10. Identifikasi Kelas Use Case [UC10]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | Pesanan | Pesanan |
+| 2 | PengontrolPesanan | PengontrolPesanan |
+| 3 | PengontrolTransaksi | PengontrolTransaksi |
+| 4 | MetodePembayaran | MetodePembayaran |
+| 5 | RiwayatTransaksi | RiwayatTransaksi |
+| 6 | HalamanKonfirmasi | HalamanKonfirmasi |
+
+### 3.10.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Sequence Diagram UC10" src="./assets/diagram/SequenceDiagramUC10.png" width="70%">
+</p>
+<p align="center">
+<i>Gambar 3.10.2 Sequence Diagram [UC10]</i>
+</p>
+
+
+### 3.10.3 Diagram Kelas
+
+<p align="center">
+<img alt="Diagram Kelas UC10" src="./assets/diagram/ClassDiagramUC10.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 3.10.3 Diagram Kelas Melakukan Konfirmasi Pesanan</i>
+</p>
+
+## 3.11 Use Case Menyerahkan Hasil Pekerjaan
+
+**ID Use Case:** UC11  
+**Nama Use Case:** Menyerahkan Hasil Pekerjaan
+
+### 3.11.1 Identifikasi Kelas
+
+Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC11]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | UploadFileHandler | LayananUploadFile |
+| 2 | HalamanPengumpulan | HalamanPengumpulan |
+| 3 | FinalProduct | ProdukAkhir |
+| 4 | PenyediaJasa | PenyediaJasa|
+| 5 | PengumpulanController | PengumpulanController |
+
+### 3.11.2 Sequence Diagram
+
+Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
+
+- **Skenario Keseluruhan**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramSekuens.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 3.11 Sequence Diagram [UC11]</i>
+</p>
+
+
+
+### 3.11.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramKelas.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 11. Diagram Kelas Menyerahkan Hasil pekerjaan</i>
+</p>
+
+---
+
+## 3.12 Use Case UC12
+
+**ID Use Case:** UC12
+
+**Nama Use Case:** Mengonfirmasi Hasil Pekerjaan   
+
+### 3.12.1 Identifikasi Kelas
+
+Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC12]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | HalamanDeliverables | HalamanDeliverables |
+| 2 | PengontrolPesanan | PengontrolPesanan |
+| 3 | Pesanan | Pesanan |
+| 4 | PengontrolTransaksi | PengontrolTransaksi |
+| 5 | PencairanDana | PencairanDana | 
+| 6 | PenyediaJasa | PenyediaJasa |
+| 7 | PenggunaJasa | PenggunaJasa |
+| 8 | RevisiHandler| RevisiHandler|
+| 9 | HalamanRequestRevisi | HalamanRequestRevisi | 
+| 10| PengajuanRevisi | PengajuanRevisi |
+
+### 3.1.2 Sequence Diagram
+
+Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC12_DPPL_Normal.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 23. Sequence Diagram UC12 </i>
+</p>
+
+- **Skenario Alternatif : Mengajukan Revisi**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC12_DPPL_Alt.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 24. Sequence Diagram UC12 - Mengajukan Revisi</i>
+</p>
+
+### 3.1.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DiagramKelas.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 25. Diagram Kelas Mengonfirmasi Hasil Pekerjaan</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+---
+
+## 3.13 Use Case Melaporkan Pengguna Lain
+
+**ID Use Case:** UC13
+
+**Nama Use Case:** Melaporkan Pengguna Lain
+
+### 3.13.1 Identifikasi Kelas
+
+Identifikasi kelas yang terkait dengan use case tersebut. Kelas di tahap perancangan dapat berbeda dengan dengan kelas di tahap analisis. Dapat menggunakan tabel di bawah:
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC13]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | HalamanPelaporan | HalamanPelaporan |
+| 2 | LaporanHandler | LaporanHandler |
+| 3 | TiketLaporan | PenggunaJasa |
+| 4 | Pengguna | Pengguna (Inheritance with PenggunaJasa dan PenyediaJasa) |
+
+### 3.13.2 Sequence Diagram
+
+Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario normal dan alternatif pada subbab 4.4 SKPL. Diagram melibatkan kelas-kelas yang telah diidentifikasi pada SKPL. 
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DPPL.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar 26. Sequence Diagram [UC13]</i>
+</p>
+
+### 3.13.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DPPL-DiagramKelas.svg" width="70%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+---
+
+## 3.14 Use Case Memberikan Ulasan terhadap Jasa yang Dipesan
+
+**ID Use Case:** *UC14*  
+**Nama Use Case:** *Memberikan Ulasan terhadap Jasa yang Dipesan*
+
+### 3.14.1 Identifikasi Kelas
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC014]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | PenggunaJasa | PenggunaJasa |
+| 2 | HalamanRiwayatTransaksi | HalamanRiwayatTransaksi |
+| 3 | HalamanUlasan | HalamanUlasan |
+| 4 | UlasanHandler | UlasanHandler |
+| 5 | PengontrolPesanan | PengontrolPesanan |
+| 6 | Pesanan | Pesanan |
+| 7 | PengontrolTransaksi | PengontrolTransaksi |
+| 8 | Ulasan | Ulasan |
+| 9 | RiwayatTransaksi | RiwayatTransaksi |
+
+### 3.14.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramSekuens.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 3.1.2 Sequence Diagram [UC014]</i>
+</p>
+
+
+### 3.14.3 Diagram Kelas
+
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramKelas.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas [UC14]</i>
+</p>
+
+---
+
+## 3.15 Use Case Memproses Laporan
+
+**ID Use Case:** *UC15*  
+**Nama Use Case:** *Memproses Laporan*
+
+### 3.15.1 Identifikasi Kelas
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC015]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | Admin | Admin |
+| 2 | HalamanDashboardAdmin | HalamanDashboardAdmin |
+| 3 | LaporanHandler | LaporanHandler |
+| 4 | TiketLaporan | TiketLaporan |
+| 5 | TanggapanLaporan | TanggapanLaporan |
+
+### 3.15.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramSekuens.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 3.1.2 Sequence Diagram [UC015]</i>
+</p>
+
+
+### 3.15.3 Diagram Kelas
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramKelas.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas [UC15]</i>
+</p>
+
+---
+
+## 3.16 Use Case Memproses Laporan
+
+**ID Use Case:** *UC16*  
+**Nama Use Case:** *Melakukan Proses Mediasi*
+
+### 3.16.1 Identifikasi Kelas
+
+Tabel 3.1. Identifikasi Kelas Use Case [UC016]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | Admin | Admin |
+| 2 | HalamanDashboardAdmin | HalamanDashboardAdmin |
+| 3 | LaporanHandler | LaporanHandler |
+| 4 | TiketLaporan | TiketLaporan |
+| 5 | HalamanPengajuanMediasi | HalamanPengajuanMediasi |
+| 6 | MediasiHandler | MediasiHandler |
+
+### 3.16.2 Sequence Diagram
+
+- **Skenario Normal**
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramSekuens.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar 3.1.2 Sequence Diagram [UC016]</i>
+</p>
+
+
+### 3.16.3 Diagram Kelas
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramKelas.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas [UC16]</i>
+</p>
+
+---
+
 # BAB 4: Diagram Kelas Keseluruhan
 
 ## 4.1 Diagram Kelas
@@ -519,9 +925,9 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 | ID Kelas | Nama Kelas | Atribut | Metode/Operasi |
 | :--- | :--- | :--- | :--- |
-| C01 | Pengguna | - nama <br> - email <br>   # password <br> - statusOnline <br> - statusAkun <br> - sanksi <br> - daftarProduk | <br> + buatAkun(), <br> - simpanProfil() <br> + login() <br> + setStatusAkun() <br> + setSanksi() <br> + getNama() <br> + getEmail() <br> + getStatusOnline <br> + getStatusAkun <br> | 
-| C02 | PenyediaJasa | - idPenyediaJasa : string <br> - daftarPenawaranJasa : list of string <br> - pengalaman : list of string <br> - prestasi : list of string <br> - daftarProduk : list of string | <br> + isiPortofolio() <br> + unggahPortofolio() <br> + tambahPenawaranJasa() <br> + bukaNotifikasiPesanan() <br> + terimaPesanan() <br> + tolakPesanan(), <br> + saveProdukAkhir(idProduk : string, idPenyediaJasa : string) : void <br> + getStatusPengerjaan() : boolean <br> + kumpulkanRevisi() <br> + cekPengirimanDana() <br> + getRevisi() <br> + getIdPenyediaJasa() : string <br> + getdaftarPenawaranJasa : list of string <br> + getPengalamandanPrestasi() : list of string <br> |
-| C03 | PenggunaJasa | - idPenggunaJasa <br> - daftarJasa <br> - minatkategoriJasa <br> - statusKonfirmasi | <br> + cariJasa() <br> + gunakanFilter() <br> + bukaDetailJasa() <br> + bukaDaftarBoomark() <br> + pilihJasa() <br> + isiFormPemesanan() <br> + getStatusPengerjaan() <br> + getDeliverables() <br> + selesaikanPesanan() <br> + ajukanRevisi() <br> + beriUlasan() <br> + beriPenilaian() <br> + pilihMetodePembayaran() <br> + getIdPenyediaJasa() <br> + getMinatKategoriJasa <br> + getStatusKonfirmasi <br>  |
+| C01 | Pengguna | - nama : string <br> - email : string <br>   # password : string <br> - statusOnline : boolean <br> - statusAkun : boolean <br> - sanksi : string <br> - daftarProduk : list of string | <br> + buatAkun() : void <br> - simpanProfil() : void <br> + login() : void <br> + setStatusAkun() : void <br> + setSanksi() : void <br> + getNama() : string  <br> + getEmail() : string <br> + getStatusOnline() : string <br> + getStatusAkun() : boolean <br> | 
+| C02 | PenyediaJasa | - idPenyediaJasa : string <br> - daftarPenawaranJasa : list of string <br> - pengalaman : list of string <br> - prestasi : list of string <br> - daftarProduk : list of string | <br> + isiPortofolio() <br> + unggahPortofolio() <br> + tambahPenawaranJasa() : void <br> + bukaNotifikasiPesanan() <br> + terimaPesanan() <br> + tolakPesanan(), <br> + saveProdukAkhir(idProduk : string, idPenyediaJasa : string) : void <br> + getStatusPengerjaan() : boolean <br> + kumpulkanRevisi() <br> + cekPengirimanDana() <br> + getRevisi() <br> + getIdPenyediaJasa() : string <br> + getdaftarPenawaranJasa : list of string <br> + getPengalamandanPrestasi() : list of string <br> |
+| C03 | PenggunaJasa | - idPenggunaJasa <br> - daftarJasa <br> - minatkategoriJasa <br> - statusKonfirmasi | <br> + cariJasa() <br> + gunakanFilter() <br> + bukaDetailJasa() <br> + bukaDaftarBoomark() <br> + pilihJasa() <br> + isiFormPemesanan() <br> + getStatusPengerjaan() <br> + getDeliverables() <br> + selesaikanPesanan() <br> + ajukanRevisi() <br> + beriUlasan(idPesanan: integer) <br> + beriPenilaian() <br> + pilihMetodePembayaran() <br> + getIdPenyediaJasa() <br> + getMinatKategoriJasa <br> + getStatusKonfirmasi <br>  |
 | C04      | HalamanRegistrasi       |<br>  - formRegistrasi <br> - pesanError  <br> | <br> + tampilkanForm() <br> + kirimRegistrasi() <br> + tampilkanError() <br>|
 | C05      | LayananRegistrasi       | -                                                                       | <br> + validasiData() <br> + cekEmail() <br> + cekNoTelepon() <br> + registrasiPengguna() <br> |
 | C06      | HalamanLogin             | - inputEmail <br> - inputPassword <br> - pesanError | <br> + tampilkanForm() <br> + kirimLogin() <br> +  pesanError() <br> |
@@ -529,11 +935,11 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C08      | HalamanPortofolio        | <br> - formPortofolio <br> - pesanError        | <br> + tampilkanPortofolio() <br> + tampilkanForm() <br> +  kirimPortofolio() <br> + tampilkanError() <br> |
 | C09      | Portofolio               | <br> - judul <br> - deskripsi <br> - berkasPendukung <br> | <br> + simpanPortofolio() <br> |
 | C10      | PengontrolPortofolio     | -                                 | <br> + validasiInputBerkas() <br> + SimpanPortofolio() <br>|
-| C11      | LayananUploadFile        | -                                 | <br> + getStatusUpload() : boolean <br> + validasiFormatUkuran(file : FILE) : boolean <br> + saveDeliverables(file :FILE) : string  <br> + uploadFile() |
-| C12 | Jasa | - idJasa <br> - idPenyediaJasa <br> -  namaJasa <br> -  deskripsi <br> -  kategori <br> - harga <br> - statusAktif | <br> + simpanJasa() <br> + dapatkanDetailJasa() <br> + perbaruiJasa() <br> + hapusJasa() <br> |
-| C13 | HalamanUploadJasa | - formNamaJasa <br> - formKategori <br> - formDeskripsi <br> - formHarga <br> - inputUploadBerkas <br> - tombolUnggah <br> - pesanError | <br> + tampilkanForm() <br> + klikUnggah() <br> +  tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() <br> |
-| C14 | JasaController | - | <br> + ambilDetailJasa() <br> + validasiDataJasa() <br> + simpanPenawaranJasa() |
-| C15 | HalamanPencarian | <br> - searchBar <br> - filterHarga <br> - filterDurasi <br> - filterRating <br> - tombolCari <br> - pesanError | <br> + tampilkanHalaman() <br> + inputKataKunci() <br> + klikCari() <br> + tampilkanPesanError() |
+| C11      | LayananUploadFile        | -                                 | <br> + getStatusUpload() : boolean <br> + validasiFormatUkuran(file : FILE) : boolean <br> + saveDeliverables(file :FILE) : string  <br> + uploadFile() : void |
+| C12 | Jasa | - idJasa <br> - idPenyediaJasa <br> -  namaJasa <br> -  deskripsi <br> -  kategori <br> - harga <br> - statusAktif | <br> + simpanJasa() : void <br> + dapatkanDetailJasa() <br> + perbaruiJasa() <br> + hapusJasa() <br> |
+| C13 | HalamanUploadJasa | - formNamaJasa <br> - formKategori <br> - formDeskripsi <br> - formHarga <br> - inputUploadBerkas <br> - tombolUnggah <br> - pesanError |  <br> + klikUnggah() <br> +  tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() <br> |
+| C14 | JasaController | - | <br> + ambilDetailJasa() <br> + validasiDataJasa() : boolean <br> + simpanPenawaranJasa() : void |
+| C15 | HalamanPencarian | <br> - searchBar <br> - filterHarga <br> - filterDurasi <br> - filterRating <br> - tombolCari <br> - pesanError | <br> + inputKataKunci() : void <br> + klikCari() : void <br> + tampilkanPesanError(pesan : string) : void |
 | C16 | HasilPencarian | <br> - daftarListingJasa <br> - tombolBandingkan | <br> + tampilkanDaftarHasil() <br> + pilihJasaUntukDibandingkan() <br> + klikBandingkan() |
 | C17 | LayananPencarian | - | <br> + cariJasaBerdasarkanKeyword() <br> + terapkanFilterPencarian() |
 | C18 | LayananPembandingJasa | - | <br> + bandingkanSpesifikasiJasa() |
@@ -545,33 +951,33 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C24 | HalamanChat | - idSesiChat <br> - inputPesan <br> - statusKoneksi | <br> + tampilkanMenuChat() <br> + tampilkanRiwayatPesan() <br> + inputPesan() <br> + tombolKirimTerklik() <br> + tampilkanPesanError() <br> + tampilkanStatusBelumTerkirim() |
 | C25 | LayananPesanInstan | - | <br> + buatSesiChat() <br> + validasiInputPesan() <br> + kirimPesan() <br> + simpanKeDatabase() <br> + updateStatusBaca() |
 | C26 | LayananNotifikasiChat | - | <br> + kirimNotifikasiPesan() <br> + tampilkanPopUpNotifikasi() |
-| C27 | Pesanan | <br> - idPesanan <br> - idPenggunaJasa <br> - idPenyediaJasa <br> - idJasa <br> - brief <br> - totalBiaya <br> - statusPesanan | <br> + getDetailPesanan() <br> + setStatusDiproses() <br> + setStatusSelesai() |
-| C28 | HalamanPemesanan | <br> - idJasaDipilih <br> - briefPemesanan | <br> + tampilkanFormPemesanan() <br> + inputBriefPemesanan() <br> + tombolPesanTerklik() |
+| C27 | Pesanan | <br> - idPesanan : string <br> - idPenggunaJasa : string <br> - idPenyediaJasa : string <br> - idJasa : string <br> - brief : string <br> - totalBiaya : string <br> - statusPesanan : boolean |  <br> + setStatusDiproses() : void <br> + setStatusSelesai(): void |
+| C28 | HalamanPemesanan | <br> - idJasaDipilih : string <br> - briefPemesanan : element | <br> + tampilkanFormPemesanan() : void <br> + inputBriefPemesanan() : void <br> + tombolPesanTerklik() : void |
 | C29 | HalamanPembayaran | <br> - totalHarga <br> - idMetodePembayaran | <br> + tampilkanPilihanPembayaran() <br> + tampilkanRincianPembayaran() <br> + tombolBayarTerklik() <br> + tampilkanNotifikasiBerhasil() |
 | C30 | HalamanRiwayatTransaksi | <br> - idTransaksi | <br> + tampilkanRiwayatTransaksi() |
-| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() <br> +  hitungTotalBiaya() <br> + updateStatusPesanan() |
-| C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() <br> + validasiPembayaran() <br> +  updateStatusPembayaran() |
+| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() : boolean <br> +  hitungTotalBiaya() : double <br> + updateStatusPesanan(idPesanan: integer, status: STATUS) : void <br> + getDetailPesanan() : string |
+| C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() : void <br> + validasiPembayaran() : boolean <br> +  updateStatusPembayaran() : void <br> + setPencairanDana(selesai : boolean) : void <br> + catatRiwayatTransaksi(idPesanan) : void |
 | C33 | MetodePembayaran | <br> - idMetode <br> - namaMetode <br> - nomorRekeningVA | <br> + getDetailMetode() |
-| C34 | RiwayatTransaksi | <br> - idRiwayat <br> - idPesanan <br> - tanggalTransaksi <br> - statusTransaksi | <br> + simpanTransaksi() |
+| C34 | RiwayatTransaksi | <br> - idRiwayat : string <br> - idPesanan : string <br> - tanggalTransaksi : DATE <br> - statusTransaksi : boolean | <br> + simpanTransaksi() : void |
 | C35 | HalamanKonfirmasi | <br> - idPesanan <br> - detailBrief | <br> + tampilkanDetailPesanan() <br> + tombolTerimaTerklik() <br> + tombolTolakTerklik() <br> + tampilkanStatusPesanan() |
 | C36 | ProdukAkhir | <br> -idProdukAkhir : string <br> - idPesanan : string <br> - outputpath : string <br> - deskripsiProdukAkhir : string  <br>- tanggalPengumpulan : list of short <br> - statusPemeriksaan : boolean <br> - fileURL : string | <br> + simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void  <br> + updateStatusPengerjaan() <br> + getDetailProduk()  | 
 | C37 | HalamanPengumpulan | <br> - deskripsiHasil : string <br> - fileURL : string <br> - tombolKirim : void <br> - pesanError : string  | <br> + tampilkanFormPengumpulan() : void <br> + inputDeskripsiHasil() : string <br> + unggahDeliverables() : FILE <br> + tampilkanPesanError(pesanError : string) : void <br> + klikKirimHasil() : boolean <br> + inputLink() : string <br> + tampilkanStatusPengiriman(terkirim : boolean) : void |
-| C38 | HalamanDeliverables | <br> - deskripsiHasil <br> - fileURL <br> - tombolKonfirmasi <br> - tombolRevisi <br> - jumlahRevisi <br> - pesanError <br> - tombolBantuan <br> - lampiranDeliverables | <br> + tampilkanDeliverables() <br> + ajukanRevisi() <br> + konfirmasiPesanan() <br> + tampilkanError() <br> + panggilBantuan() |
-| C39 | PengajuanRevisi | <br> - deskripsiRevisi <br> - jmlRevisiTersedia <br> - lampiranRevisi <br> - idRevisi <br> - idPesanan <br> - statusPengerjaan | <br> + setStatusPengerjaan() <br> + getStatusPengerjaan() <br> + setDeskripsiRevisi() <br> + getDeskripsiRevisi() <br> + setjmlRevisi() <br> + getjmlRevisi() <br> + setIdRevisi() <br> + getIdPesanan() <br> + getIdRevisi() |
-| C40 | HalamanRequestRevisi | <br> - formRevisi <br> - detailRevisi <br> - kuotaRevisi <br> - tombolRevisi <br> - pesanUntukPenyedia  | <br> + tampilkanformRevisi() <br> + tampilkanFieldPengisianRevisi() <br> + tampilkanKuotaRevisi() <br> + +isTombolRevisiPressed() <br> + tampilkanPesan()  |
-| C41 | RevisiHandler | - | <br> + isJumlahRevisiValid() <br> + isDeskripsiComplete() <br> +  sendRevisi() <br> + setNotifikasiRevisi() <br> + updateStatusPengerjaan() <br> + updateIdRevisi()  |
-| C42 | PencairanDana | <br> - stateTransaksi <br> - statePencairanDana | <br> + setKondisiTransaksi() <br> + setPencairanDana() |
-| C43 | TiketLaporan | <br> - idTiket <br> - deskripsiLaporan <br> - urlbukti <br> - lampiranBukti <br> - statusTiket <br> - TanggapanAdmin | <br> + setIdTiket() <br> + getIdTiket() <br> + setURLBukti() <br> + getURLBukti() <br> + setStatusTiket <br> + UpdateStatusTiket() <br> + getStatusTicket() <br> + setTanggapan() <br> + getTanggapan() <br> + setStatusLaporan()  |
-| C44 | HalamanPelaporan | <br> - formLaporan <br> - kategoriPelanggaran <br> - deskripsiPelanggaran <br> - kolomBukti <br> - statusLaporan <br> - noTiket <br> - pesanError <br> - tanggapanAdmin | <br> + tampilkanFormLaporan() <br> +  tampilkanOpsiKategoriPelanggaran() <br> +  tampilkanDeskripsiPelanggaran <br> + tampilkanNomorTiket() <br> + tampilkanPesanError() <br> + tampilkanTanggapanAdmin() <br> +  tampilkanPesanError() | 
-| C45 | LaporanHandler  | - | <br> + validasiFormatLaporan() <br> + createTiket() <br> + getStatusTiket() <br> + kirimNotifAdmin() <br> + simpanData() <br> + banPengguna() <br> + skorsPengguna() <br> + kirimTanggapan() <br> + saveTanggapan() <br> + saveLaporan() <br> + updateStatusTiket() |
-| C46 | Ulasan | <br> - idUlasan <br> - idPesanan <br> - idPenyediaJasa <br> - rating <br> - komentar <br> - dokumentasi | <br> + simpanUlasan() <br> + getDetailUlasan() |
-| C47 | HalamanUlasan | <br> - rating <br> - teksKomentar <br> - fileDokumentasi <br> - pesanError | <br> + tampilkanFormUlasan() <br> + inputRatingBintang() <br> + inputKomentar() <br> + unggahDokumentasi() <br> + tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() |
-| C48 | UlasanHandler | - | <br> + validasiKelengkapanRating() <br> + validasiFormatBerkas() <br> + validasiPanjangKomentar() <br> + prosesUlasan() <br> + perbaruiRating() |
-| C49 | TanggapanLaporan | <br> - idTanggapan <br> - idTiket <br> - jenisTindakan <br> - catatanTanggapan | <br> - catatKeputusanTindakan() <br> - getDetailTanggapan() |
-| C50 | HalamanPengajuanMediasi | <br> + detailPelaporan <br> + riwayatPesan <br> + opsiTindakan <br> + pesanError | - |
-| C51 | MediasiHandler | <br> - idSesiMediasi | <br> - inputTindakan() <br> - akhiriMediasi() <br> - tampilkanPesanError() <br> - tampilkanNotifikasiSelesai() |
-| C52 | Admin | <br> - idAdmin <br> - nama | <br> + mulaiMediasi() <br> + bukaTiketLaporan() <br> + selesaikanLaporan() <br> + kirimPesanMediasi() <br> + pilihJenisTindakan() <br> + akhiriMediasi() |
-| C53 | HalamanDashboardAdmin | <br> - daftarTiket <br> - detailTiket <br> - opsiTindakan <br> - pesanError | <br> + tampilkanDetailTiket() <br> + inputTindakan() <br> + selesaikanTiket() <br> + mulaiMediasi() <br> + tampilkanPesanError() |
+| C38 | HalamanDeliverables | <br> - deskripsiHasil : element <br> - fileURL : string <br> - tombolKonfirmasi : element <br> - tombolRevisi : element <br> - jumlahRevisi : int <br> - pesanError : string <br> - tombolBantuan : element <br> - lampiranDeliverables : FILE | <br> + tampilkanDeliverables() : void <br> + ajukanRevisi() : void <br> + konfirmasiPesanan() : void <br> + tampilkanError(msg : string) : void  |
+| C39 | PengajuanRevisi | <br> - deskripsiRevisi : string <br> - jmlRevisiTersedia : int <br> - lampiranRevisi : FILE <br> - idRevisi : string <br> - idPesanan : string <br> - statusPengerjaan : string| <br> + getDetailRevisi() : string  |
+| C40 | HalamanRequestRevisi | <br> - formRevisi : element <br> - detailRevisi : element <br> - kuotaRevisi : int <br> - tombolRevisi : elemt <br> - pesanUntukPenyedia : string | <br> + tampilkanformRevisi() : void <br> + tampilkanFieldPengisianRevisi() : void <br> + tampilkanKuotaRevisi() : void <br> + kirimRevisi() : void <br> + tampilkanPesan() : void  |
+| C41 | RevisiHandler | - | <br> + isRevisiRequestValid() : void <br> +  sendRevisi() : void <br> + sendNotifikasiRevisi() : void <br> + updateStatusPengerjaan() : void  |
+| C42 | PencairanDana | <br> - stateTransaksi : boolean <br> - statePencairanDana : boolean | - |
+| C43 | TiketLaporan | - idTiket : string <br> - deskripsiLaporan : string <br> - urlBukti : string <br> - lampiranBukti : FILE <br> - statusTiket : boolean <br> - TanggapanAdmin : string | + getDetailTiket() : void <br> + createTiket() : void <br> +  UpdateStatusTiket() : void <br> +  saveTanggapan() : void <br> + saveStatusTindakan() : void  |
+| C44 | HalamanPelaporan | <br> - formLaporan : element <br> - kategoriPelanggaran : element <br> - deskripsiPelanggaran : element <br> - kolomBukti : element <br> - statusLaporan : boolean <br> - noTiket : string <br> - pesanError : string <br> - tanggapanAdmin : string | <br> + tampilkanFormLaporan() : void <br> +  tampilkanTiketdanTanggapan() : void <br>  + tampilkanPesanError() : void  | 
+| C45 | LaporanHandler  | - | + validasiFormatLaporan() : boolean <br> + kirimNotifAdmin() : void <br> + simpanData() : void <br> + banPengguna() : void <br> + skorsPengguna() : void <br> + kirimTanggapan() : void <br> + saveTanggapan() : void <br> + saveLaporan() : void <br> + updateStatusTiket() : void <br> + getDetailTiket() : void |
+| C46 | Ulasan | <br> - idUlasan : string <br> - idPesanan : string <br> - idPenyediaJasa : string <br> - rating : integer <br> - komentar : string <br> - dokumentasi : FILE | <br> + simpanUlasan() : void <br> + getDetailUlasan() |
+| C47 | HalamanUlasan | <br> - rating : integer <br> - teksKomentar : string <br> - fileDokumentasi : FILE <br> - pesanError : string | <br> + tampilkanFormUlasan() : void <br> + inputRatingBintang(rating: integer) : void <br> + inputKomentar(teksKomentar: string) : void <br> + unggahDokumentasi(fileDokumentasi: FILE) : void <br> + submitUlasan() : void <br> + tampilkanPesanError() : void <br> + tampilkanNotifikasiBerhasil() : void |
+| C48 | UlasanHandler | - | <br> + validasiKelengkapanRating(rating: integer) : boolean <br> + validasiFormatBerkas(fileDokumentasi: FILE) : boolean <br> + validasiPanjangKomentar(teksKomentar: string) : boolean <br> + prosesUlasan(idPesanan: integer, rating: integer, teksKomentar: string, fileDokumentasi: FILE) : void <br> + perbaruiRating(idPenyediaJasa: integer, rating: integer) : void |
+| C49 | TanggapanLaporan | - idTanggapan : string <br> - idTiket : string <br> - jenisTindakan : TINDAKAN <br> - catatanTanggapan : string | <br> - catatKeputusanTindakan() : void <br> - getDetailTanggapan() : void |
+| C50 | HalamanPengajuanMediasi | + detailPelaporan <br> + riwayatPesan <br> + opsiTindakan <br> + pesanError | - |
+| C51 | MediasiHandler | - idSesiMediasi : string | - inputTindakan() : void <br> - akhiriMediasi() : void <br> - tampilkanPesanError(pesanError: string) : void <br> - tampilkanNotifikasiSelesai() : void <br> + UpdateStatusTiket() : void |
+| C52 | Admin | - idAdmin : string | + mulaiMediasi() : void <br> + bukaTiketLaporan() : void <br> + selesaikanLaporan() : void <br> + kirimPesanMediasi() : void <br> + pilihJenisTindakan() : void <br> + akhiriMediasi() : void |
+| C53 | HalamanDashboardAdmin | - daftarTiket : list of TiketLaporan <br> - detailTiket : TiketLaporan <br> - opsiTindakan : TINDAKAN <br> - pesanError : string | + tampilkanDetailTiket() : void <br> + inputTindakan() : void <br> + selesaikanTiket() : void <br> + mulaiMediasi() : void <br> + tampilkanPesanError() : void <br> + tampilkanHalamanMediasi() : void |
 | C54 | PengumpulanController | - | <br> + validasiDeskripsi() : boolean <br> + validasiPengumpulan() : boolean |
 
 <br>
