@@ -4,13 +4,13 @@
 
 | Informasi | Keterangan |
 | --- | --- |
-| **Hari** | Jumat |
-| **Tanggal** | 09/10/2026 |
+| **Hari** | Minggu |
+| **Tanggal** | 18/10/2026 |
 | **Kelas** | K01 |
 | **Nomor Kelompok** | G03  |
 | **Nama Kelompok** | MAYOOOOOR  |
 | **Nama Perangkat Lunak** | CariJasa  |
-| **Dokumen** | PPT Asistensi Akbar  |
+| **Dokumen** | K01_G03_DPPL.md  |
 
 ### Anggota Kelompok
 
@@ -26,19 +26,18 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
-**Notes for this section:**  
-*Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
+| 1. Private dan public sebenarnya ga terlalu relevan di web. Itu cuma ngejelasin atribut atau method tersebut bisa diakes dimana aja. |
+| 2. Untuk skenario alternatif boleh pake alt aja di sequence diagram, tapi kalau kepanjangan dipisah aja diagramnya.|
+| 3. Atribut dan method yang dimasukin ke class diagram cuma yang dipake pada use case terkait. |
+| 4. neg pada sequence diagram itu merupakan alternatif dari nulis alt. |
+| 5. create pada sequence diagram itu membuat entity baru. |
+| 6. Method yang ada pada entity class itu sebenarnya bukan method asli, tapi cuma menggambarkan kalau entity tersebut bisa diapain aja. Method aslinya sebenarnya dipegang controllernya. |
 
 ## Dokumentasi
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/asistensi.jpg" width="100%">
 </p>
 
 <p align="center">
