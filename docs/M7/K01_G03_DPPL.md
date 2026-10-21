@@ -8,7 +8,9 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 <br>
 
 ## Cari Jasa
-### *[Logo Perangkat Lunak]*
+<p align="left">
+<img alt="logo carijasa" src="../M7/assets/logo%20carijasa.png" width="50%">
+</p>
 
 ### Untuk: Kak Mikhael Andrian Yonatan
 
@@ -282,9 +284,11 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | Pengguna | Pengguna |
+| 2 | PenyediaJasa | PenyediaJasa |
+| 3 | PenggunaJasa | PenggunaJasa |
+| 4 | HalamanRegistrasi | HalamanRegistrasi |
+| 5 | LayananRegistrasi | LayananRegistrasi |
 
 ### 3.1.2 Sequence Diagram
 
@@ -293,7 +297,7 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceregis.png" width="50%">
+<img alt="diagram sequence registrasi" src="./assets/diagram/seqregis.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.1.2 Sequence Diagram [UC01]</i>
@@ -305,10 +309,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+<img alt="diagram class uc01" src="./assets/diagram/cdregis.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar 3.1.3. Diagram Kelas Melakukan Registrasi Akun</i>
 </p>
 
 Pada diagram, pastikan:
@@ -331,9 +335,11 @@ Tabel 3.2.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | Pengguna | Pengguna |
+| 2 | PenyediaJasa | PenyediaJasa |
+| 3 | PenggunaJasa | PenggunaJasa |
+| 4 | HalamanLogin | HalamanLogin |
+| 5 | Autentikator | Autentikator |
 
 ### 3.2.2 Sequence Diagram
 
@@ -342,7 +348,7 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequencelogin.png" width="50%">
+<img alt="diagram sequence login" src="./assets/diagram/seqlogin.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.2.2 Sequence Diagram [UC02]</i>
@@ -354,10 +360,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+<img alt="Diagram Kelas Melakukan Login" src="./assets/diagram/cdlogin.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar 3.2.3. Diagram Kelas Melakukan Login</i>
 </p>
 
 Pada diagram, pastikan:
@@ -380,9 +386,12 @@ Tabel 3.3.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | PenyediaJasa | PenyediaJasa |
+| 2 | Portofolio | Portofolio |
+| 3 | HalamanPortofolio | HalamanPortofolio |
+| 4 | PengontrolPortofolio | PengontrolPortofolio |
+| 5 | LayananUploadFile | LayananUploadFile |
+
 
 ### 3.3.2 Sequence Diagram
 
@@ -391,10 +400,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceporto.png" width="50%">
+<img alt="diagram sequence portofolio" src="./assets/diagram/seqporto.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 3.3.3 Sequence Diagram [UC02]</i>
+<i>Gambar 3.3.2 Sequence Diagram [UC03]</i>
 </p>
 
 
@@ -403,10 +412,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+<img alt="Diagram Kelas Mengisi Portofolio" src="./assets/diagram/cdporto.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar 3.3.3. Diagram Kelas Mengisi Portofolio</i>
 </p>
 
 Pada diagram, pastikan:
@@ -1014,47 +1023,47 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C01 | Pengguna | - nama : string <br> - email : string <br>   # password : string <br> - statusOnline : boolean <br> - statusAkun : boolean <br> - sanksi : string <br> - daftarProduk : list of string | <br> + buatAkun() : void <br> - simpanProfil() : void <br> + login() : void <br> + setStatusAkun() : void <br> + setSanksi() : void <br> + getNama() : string  <br> + getEmail() : string <br> + getStatusOnline() : string <br> + getStatusAkun() : boolean <br> | 
 | C02 | PenyediaJasa | - idPenyediaJasa : string <br> - daftarPenawaranJasa : list of string <br> - pengalaman : list of string <br> - prestasi : list of string <br> - daftarProduk : list of string | <br> + isiPortofolio() <br> + unggahPortofolio() <br> + tambahPenawaranJasa() : void <br> + bukaNotifikasiPesanan() <br> + terimaPesanan() <br> + tolakPesanan(), <br> + saveProdukAkhir(idProduk : string, idPenyediaJasa : string) : void <br> + getStatusPengerjaan() : boolean <br> + kumpulkanRevisi() <br> + cekPengirimanDana() <br> + getRevisi() <br> + getIdPenyediaJasa() : string <br> + getdaftarPenawaranJasa : list of string <br> + getPengalamandanPrestasi() : list of string <br> |
 | C03 | PenggunaJasa | - idPenggunaJasa <br> - daftarJasa <br> - minatkategoriJasa <br> - statusKonfirmasi | <br> + cariJasa() <br> + gunakanFilter() <br> + bukaDetailJasa() <br> + bukaDaftarBoomark() <br> + pilihJasa() <br> + isiFormPemesanan() <br> + getStatusPengerjaan() <br> + getDeliverables() <br> + selesaikanPesanan() <br> + ajukanRevisi() <br> + beriUlasan(idPesanan: integer) <br> + beriPenilaian() <br> + pilihMetodePembayaran() <br> + getIdPenyediaJasa() <br> + getMinatKategoriJasa <br> + getStatusKonfirmasi <br>  |
-| C04      | HalamanRegistrasi       |<br>  - formRegistrasi <br> - pesanError  <br> | <br> + tampilkanForm() <br> + kirimRegistrasi() <br> + tampilkanError() <br>|
-| C05      | LayananRegistrasi       | -                                                                       | <br> + validasiData() <br> + cekEmail() <br> + cekNoTelepon() <br> + registrasiPengguna() <br> |
-| C06      | HalamanLogin             | - inputEmail <br> - inputPassword <br> - pesanError | <br> + tampilkanForm() <br> + kirimLogin() <br> +  pesanError() <br> |
-| C07      | Autentikator             | -                                     | <br> + validasiKredensial() <br> + sesiLogin()           <br> |
-| C08      | HalamanPortofolio        | <br> - formPortofolio <br> - pesanError        | <br> + tampilkanPortofolio() <br> + tampilkanForm() <br> +  kirimPortofolio() <br> + tampilkanError() <br> |
-| C09      | Portofolio               | <br> - judul <br> - deskripsi <br> - berkasPendukung <br> | <br> + simpanPortofolio() <br> |
-| C10      | PengontrolPortofolio     | -                                 | <br> + validasiInputBerkas() <br> + SimpanPortofolio() <br>|
-| C11      | LayananUploadFile        | -                                 | <br> + getStatusUpload() : boolean <br> + validasiFormatUkuran(file : FILE) : boolean <br> + saveDeliverables(file :FILE) : string  <br> + uploadFile() : void |
+| C04      | HalamanRegistrasi       |<br>  - formRegistrasi : Form <br> - pesanError : String  | <br> + tampilkanForm() : void <br> + kirimRegistrasi() : void <br> + tampilkanError() : void |
+| C05      | LayananRegistrasi       | -                                                                       | <br> + validasiData() : boolean <br> + cekEmail() : boolean <br> + cekNoTelepon() : boolean <br> + registrasiPengguna() : void |
+| C06      | HalamanLogin             | <br> - pesanError : string <br> - formLogin : string | <br> + tampilkanForm() : void <br> + kirimLogin(email : String) : void <br> +  tampilkanError() : void  |
+| C07      | Autentikator             | -                                     | <br> + validasiKredensial(email : String, password : String) <br> + sesiLogin() : void           <br> |
+| C08      | HalamanPortofolio        | <br> - formPortofolio : string <br> - pesanError : string        | <br> + tampilkanPortofolio() : void  <br> +  kirimPortofolio(data : Portofolio) : void <br> + tampilkanError() : void <br> |
+| C09      | Portofolio               | <br> - judul : string <br> - deskripsi : string <br> - berkasPendukung : FILE  | <br> + simpanPortofolio() : void <br> |
+| C10      | PengontrolPortofolio     | -                                 | <br> + validasiInputBerkas(data : Portofolio) : boolean <br> + simpanPortofolio() : void <br>|
+| C11      | LayananUploadFile        | -                                 | <br> + getStatusUpload() : String <br> + validasiFormatUkuran(file : FILE) : boolean <br> + saveDeliverables(file :FILE) : string  <br> + uploadFile(berkas: FILE) : void |
 | C12 | Jasa | - idJasa <br> - idPenyediaJasa <br> -  namaJasa <br> -  deskripsi <br> -  kategori <br> - harga <br> - statusAktif | <br> + simpanJasa() : void <br> + dapatkanDetailJasa() <br> + perbaruiJasa() <br> + hapusJasa() <br> |
 | C13 | HalamanUploadJasa | - formNamaJasa <br> - formKategori <br> - formDeskripsi <br> - formHarga <br> - inputUploadBerkas <br> - tombolUnggah <br> - pesanError |  <br> + klikUnggah() <br> +  tampilkanPesanError() <br> + tampilkanNotifikasiBerhasil() <br> |
 | C14 | JasaController | - | <br> + ambilDetailJasa() <br> + validasiDataJasa() : boolean <br> + simpanPenawaranJasa() : void |
-| C15 | HalamanPencarian | <br> - searchBar <br> - filterHarga <br> - filterDurasi <br> - filterRating <br> - tombolCari <br> - pesanError | <br> + inputKataKunci() : void <br> + klikCari() : void <br> + tampilkanPesanError(pesan : string) : void |
-| C16 | HasilPencarian | <br> - daftarListingJasa <br> - tombolBandingkan | <br> + tampilkanDaftarHasil() <br> + pilihJasaUntukDibandingkan() <br> + klikBandingkan() |
-| C17 | LayananPencarian | - | <br> + cariJasaBerdasarkanKeyword() <br> + terapkanFilterPencarian() |
-| C18 | LayananPembandingJasa | - | <br> + bandingkanSpesifikasiJasa() |
-| C19 | HalamanDetailJasa | <br> - tampilanDeskripsi <br> - tampilanHarga <br> - infoProfilPenyedia <br> - tampilanRiwayatUlasan, <br> -pesanError | <br> + tampilkanDetailJasa() <br> +  tampilkanPesanError() |
-| C20 | Bookmark | <br> - idBookmark <br> - idPenggunaJasa <br> - idJasa <br> - waktuDisimpan <br> - daftarBookmark | <br> + simpanBookmark() <br> + hapusBookmark() <br> + lihatBookmark() |
-| C21 | HalamanBookmark | <br> - daftarJasaTersimpan <br> - ikonBookmarkAktif <br> - ikonBookmarkNonaktif <br> - tombolHapusBookmark | <br> + tampilkanDaftarTersimpan() <br> + klikIkonBookmark() <br> + klikIkonHapus() <br> + tampilkanNotifikasi() |
-| C22 | PengontrolBookmark | - | <br> + tambahDataBookmark() <br> + hapusDataBookmark() <br> + ambilDaftarBookmarkPengguna() |
-| C23 | ChatRoom | <br> - idChatRoom <br> - idAnggota <br> - riwayatPesan <br> - waktuDibuat | <br> + getRiwayatPesan() <br> - simpanPesan() <br> + getidChatRoom() <br> + getidAnggota() |
-| C24 | HalamanChat | - idSesiChat <br> - inputPesan <br> - statusKoneksi | <br> + tampilkanMenuChat() <br> + tampilkanRiwayatPesan() <br> + inputPesan() <br> + tombolKirimTerklik() <br> + tampilkanPesanError() <br> + tampilkanStatusBelumTerkirim() |
-| C25 | LayananPesanInstan | - | <br> + buatSesiChat() <br> + validasiInputPesan() <br> + kirimPesan() <br> + simpanKeDatabase() <br> + updateStatusBaca() |
-| C26 | LayananNotifikasiChat | - | <br> + kirimNotifikasiPesan() <br> + tampilkanPopUpNotifikasi() |
-| C27 | Pesanan | <br> - idPesanan : string <br> - idPenggunaJasa : string <br> - idPenyediaJasa : string <br> - idJasa : string <br> - brief : string <br> - totalBiaya : string <br> - statusPesanan : boolean |  <br> + setStatusDiproses() : void <br> + setStatusSelesai(): void |
-| C28 | HalamanPemesanan | <br> - idJasaDipilih : string <br> - briefPemesanan : element | <br> + tampilkanFormPemesanan() : void <br> + inputBriefPemesanan() : void <br> + tombolPesanTerklik() : void |
-| C29 | HalamanPembayaran | <br> - totalHarga <br> - idMetodePembayaran | <br> + tampilkanPilihanPembayaran() <br> + tampilkanRincianPembayaran() <br> + tombolBayarTerklik() <br> + tampilkanNotifikasiBerhasil() |
-| C30 | HalamanRiwayatTransaksi | <br> - idTransaksi | <br> + tampilkanRiwayatTransaksi() |
-| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() : boolean <br> +  hitungTotalBiaya() : double <br> + updateStatusPesanan(idPesanan: integer, status: STATUS) : void <br> + getDetailPesanan() : string |
-| C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() : void <br> + validasiPembayaran() : boolean <br> +  updateStatusPembayaran() : void <br> + setPencairanDana(selesai : boolean) : void <br> + catatRiwayatTransaksi(idPesanan) : void |
-| C33 | MetodePembayaran | <br> - idMetode <br> - namaMetode <br> - nomorRekeningVA | <br> + getDetailMetode() |
+| C15 | HalamanPencarian | <br> - searchBar : void <br> - filterHarga : void <br> - filterDurasi : void <br> - filterRating : void <br> - tombolCari : void <br> - pesanError : string | <br> + inputKataKunci() : void <br> + klikCari() : void <br> + tampilkanPesanError(pesan : string) : void |
+| C16 | HasilPencarian | <br> - daftarListingJasa : list of string <br> - tombolBandingkan : void | <br> + tampilkanDaftarHasil() : void <br> + pilihJasaUntukDibandingkan() : void <br> + klikBandingkan() : void |
+| C17 | LayananPencarian | - | <br> + cariJasaBerdasarkanKeyword() : void <br> + terapkanFilterPencarian() : void |
+| C18 | LayananPembandingJasa | - | <br> + bandingkanSpesifikasiJasa() : void |
+| C19 | HalamanDetailJasa | <br> - tampilanDeskripsi : void <br> - tampilanHarga : void <br> - infoProfilPenyedia : list of string <br> - tampilanRiwayatUlasan : void <br> - pesanError : string | <br> + tampilkanDetailJasa() : void <br> +  tampilkanPesanError() : void |
+| C20 | Bookmark | <br> - idBookmark : string <br> - idPenggunaJasa : string <br> - idJasa : string <br> - waktuDisimpan : list of short <br> - daftarBookmark : list of bookmark | <br> + simpanBookmark() : boolean <br> + hapusBookmark() : boolean <br> + lihatBookmark() : void |
+| C21 | HalamanBookmark | <br> - daftarJasaTersimpan : list of Jasa <br> - ikonBookmarkAktif : void <br> - ikonBookmarkNonaktif : void <br> - tombolHapusBookmark : void | <br> + tampilkanDaftarTersimpan() : void  <br> + klikIkonBookmark() : void <br> + klikIkonHapus() : void <br> + tampilkanNotifikasi() : void |
+| C22 | PengontrolBookmark | - | <br> + tambahDataBookmark() : boolean <br> + hapusDataBookmark() : boolean <br> + ambilDaftarBookmarkPengguna() : void |
+| C23 | ChatRoom | <br> - idChatRoom : string <br> - idAnggota : string <br> - riwayatPesan : list of string <br> - waktuDibuat : Date | <br> + getRiwayatPesan() : list of string <br> - simpanPesan() : void <br> + getidChatRoom() : string <br> + getidAnggota() : string |
+| C24 | HalamanChat | - idSesiChat : string <br> - inputPesan : string <br> - statusKoneksi : string | <br> + tampilkanMenuChat() : void <br> + tampilkanRiwayatPesan() : void <br> + inputPesan() : void <br> + tombolKirimTerklik() : void <br> + tampilkanPesanError() : void <br> + tampilkanStatusBelumTerkirim() : void |
+| C25 | LayananPesanInstan | - | <br> + buatSesiChat() : void <br> + validasiInputPesan() : boolean <br> + kirimPesan() : void <br> + simpanKeDatabase() : void <br> + updateStatusBaca() : void |
+| C26 | LayananNotifikasiChat | - | <br> + kirimNotifikasiPesan() : void <br> + tampilkanPopUpNotifikasi() : void |
+| C27 | Pesanan | <br> - idPesanan : string <br> - idPenggunaJasa : string <br> - idPenyediaJasa : string <br> - idJasa : string <br> - brief : string <br> - totalBiaya : double <br> - statusPesanan : boolean |  <br> + setStatusDiproses()  : void <br> + setStatusSelesai(): void |
+| C28 | HalamanPemesanan | <br> - idJasaDipilih : string <br> - briefPemesanan : string | <br> + tampilkanFormPemesanan() : void <br> + inputBriefPemesanan() : void <br> + tombolPesanTerklik() : void |
+| C29 | HalamanPembayaran | <br> - totalHarga : Double <br> - idMetodePembayaran : string | <br> + tampilkanPilihanPembayaran() : void <br> + tampilkanRincianPembayaran() : void <br> + tombolBayarTerklik() : void <br> + tampilkanNotifikasiBerhasil() : void |
+| C30 | HalamanRiwayatTransaksi | <br> - idTransaksi : string | <br> + tampilkanRiwayatTransaksi() : void |
+| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() : void <br> +  hitungTotalBiaya() : double <br> + updateStatusPesanan(idPesanan: integer, status: STATUS) : void <br> + getDetailPesanan() : string |
+| C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() : void <br> + validasiPembayaran() : boolean <br> +  updateStatusPembayaran() : void <br> + setPencairanDana(selesai : boolean) : void <br> + catatRiwayatTransaksi(idPesanan : string) : void |
+| C33 | MetodePembayaran | <br> - idMetode : string <br> - namaMetode : string <br> - nomorRekeningVA : string | <br> + getDetailMetode() : MetodePembayaran |
 | C34 | RiwayatTransaksi | <br> - idRiwayat : string <br> - idPesanan : string <br> - tanggalTransaksi : DATE <br> - statusTransaksi : boolean | <br> + simpanTransaksi() : void |
-| C35 | HalamanKonfirmasi | <br> - idPesanan <br> - detailBrief | <br> + tampilkanDetailPesanan() <br> + tombolTerimaTerklik() <br> + tombolTolakTerklik() <br> + tampilkanStatusPesanan() |
-| C36 | ProdukAkhir | <br> -idProdukAkhir : string <br> - idPesanan : string <br> - outputpath : string <br> - deskripsiProdukAkhir : string  <br>- tanggalPengumpulan : list of short <br> - statusPemeriksaan : boolean <br> - fileURL : string | <br> + simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void  <br> + updateStatusPengerjaan() <br> + getDetailProduk()  | 
+| C35 | HalamanKonfirmasi | <br> - idPesanan : string <br> - detailBrief : string | <br> + tampilkanDetailPesanan() : void <br> + tombolTerimaTerklik() : void <br> + tombolTolakTerklik() : void <br> + tampilkanStatusPesanan() : void |
+| C36 | ProdukAkhir | <br> -idProdukAkhir : string <br> - idPesanan : string <br> - outputpath : string <br> - deskripsiProdukAkhir : string  <br>- tanggalPengumpulan : Date <br> - statusPemeriksaan : boolean <br> - fileURL : string | <br> + simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void  <br> + updateStatusPengerjaan() <br> + getDetailProduk()  | 
 | C37 | HalamanPengumpulan | <br> - deskripsiHasil : string <br> - fileURL : string <br> - tombolKirim : void <br> - pesanError : string  | <br> + tampilkanFormPengumpulan() : void <br> + inputDeskripsiHasil() : string <br> + unggahDeliverables() : FILE <br> + tampilkanPesanError(pesanError : string) : void <br> + klikKirimHasil() : boolean <br> + inputLink() : string <br> + tampilkanStatusPengiriman(terkirim : boolean) : void |
-| C38 | HalamanDeliverables | <br> - deskripsiHasil : element <br> - fileURL : string <br> - tombolKonfirmasi : element <br> - tombolRevisi : element <br> - jumlahRevisi : int <br> - pesanError : string <br> - tombolBantuan : element <br> - lampiranDeliverables : FILE | <br> + tampilkanDeliverables() : void <br> + ajukanRevisi() : void <br> + konfirmasiPesanan() : void <br> + tampilkanError(msg : string) : void  |
+| C38 | HalamanDeliverables | <br> - deskripsiHasil : void <br> - fileURL : string <br> - tombolKonfirmasi : void <br> - tombolRevisi : void <br> - jumlahRevisi : int <br> - pesanError : string <br> - tombolBantuan : void <br> - lampiranDeliverables : FILE | <br> + tampilkanDeliverables() : void <br> + ajukanRevisi() : void <br> + konfirmasiPesanan() : void <br> + tampilkanError(msg : string) : void  |
 | C39 | PengajuanRevisi | <br> - deskripsiRevisi : string <br> - jmlRevisiTersedia : int <br> - lampiranRevisi : FILE <br> - idRevisi : string <br> - idPesanan : string <br> - statusPengerjaan : string| <br> + getDetailRevisi() : string  |
-| C40 | HalamanRequestRevisi | <br> - formRevisi : element <br> - detailRevisi : element <br> - kuotaRevisi : int <br> - tombolRevisi : elemt <br> - pesanUntukPenyedia : string | <br> + tampilkanformRevisi() : void <br> + tampilkanFieldPengisianRevisi() : void <br> + tampilkanKuotaRevisi() : void <br> + kirimRevisi() : void <br> + tampilkanPesan() : void  |
+| C40 | HalamanRequestRevisi | <br> - formRevisi : void <br> - detailRevisi : void <br> - kuotaRevisi : int <br> - tombolRevisi : elemt <br> - pesanUntukPenyedia : string | <br> + tampilkanformRevisi() : void <br> + tampilkanFieldPengisianRevisi() : void <br> + tampilkanKuotaRevisi() : void <br> + kirimRevisi() : void <br> + tampilkanPesan() : void  |
 | C41 | RevisiHandler | - | <br> + isRevisiRequestValid() : void <br> +  sendRevisi() : void <br> + sendNotifikasiRevisi() : void <br> + updateStatusPengerjaan() : void  |
 | C42 | PencairanDana | <br> - stateTransaksi : boolean <br> - statePencairanDana : boolean | - |
 | C43 | TiketLaporan | - idTiket : string <br> - deskripsiLaporan : string <br> - urlBukti : string <br> - lampiranBukti : FILE <br> - statusTiket : boolean <br> - TanggapanAdmin : string | + getDetailTiket() : void <br> + createTiket() : void <br> +  UpdateStatusTiket() : void <br> +  saveTanggapan() : void <br> + saveStatusTindakan() : void  |
-| C44 | HalamanPelaporan | <br> - formLaporan : element <br> - kategoriPelanggaran : element <br> - deskripsiPelanggaran : element <br> - kolomBukti : element <br> - statusLaporan : boolean <br> - noTiket : string <br> - pesanError : string <br> - tanggapanAdmin : string | <br> + tampilkanFormLaporan() : void <br> +  tampilkanTiketdanTanggapan() : void <br>  + tampilkanPesanError() : void  | 
+| C44 | HalamanPelaporan | <br> - formLaporan : void <br> - kategoriPelanggaran : void <br> - deskripsiPelanggaran : void <br> - kolomBukti : void <br> - statusLaporan : boolean <br> - noTiket : string <br> - pesanError : string <br> - tanggapanAdmin : string | <br> + tampilkanFormLaporan() : void <br> +  tampilkanTiketdanTanggapan() : void <br>  + tampilkanPesanError() : void  | 
 | C45 | LaporanHandler  | - | + validasiFormatLaporan() : boolean <br> + kirimNotifAdmin() : void <br> + simpanData() : void <br> + banPengguna() : void <br> + skorsPengguna() : void <br> + kirimTanggapan() : void <br> + saveTanggapan() : void <br> + saveLaporan() : void <br> + updateStatusTiket() : void <br> + getDetailTiket() : void |
 | C46 | Ulasan | <br> - idUlasan : string <br> - idPesanan : string <br> - idPenyediaJasa : string <br> - rating : integer <br> - komentar : string <br> - dokumentasi : FILE | <br> + simpanUlasan() : void <br> + getDetailUlasan() |
 | C47 | HalamanUlasan | <br> - rating : integer <br> - teksKomentar : string <br> - fileDokumentasi : FILE <br> - pesanError : string | <br> + tampilkanFormUlasan() : void <br> + inputRatingBintang(rating: integer) : void <br> + inputKomentar(teksKomentar: string) : void <br> + unggahDokumentasi(fileDokumentasi: FILE) : void <br> + submitUlasan() : void <br> + tampilkanPesanError() : void <br> + tampilkanNotifikasiBerhasil() : void |
