@@ -148,16 +148,19 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *14-10-2026* | There  | Mengerjakan Bab 1 DPPL | 30 menit | Done | - |
+| *16-10-2026* | Edward | Memperbaiki Bab 4 (atribu dan methodnya) | 2 jam | Done | - |
+| *16-10-2026* | Edward | Menambahkan Bab 4 | 1 jam | Done | - |
+| *16-10-2026* | Revandra | Mengerjakan Bab 5 DDPL | 1 jam | Done | - |
 | *17-10-2026* | Necia  | Menambahkan 2.1 dan 2.2 M7 | <1 jam | Done | - |
+| *17-10-2026* | Danesh  | Membuat *sequence diagram* UC04-UC07 | ~3 jam | Done | Aturan sequence diagram yang ideal |
+| *17-10-2026 dan 18-10-2026* | Edward | Mengerjakan Diagram Sekuens UC11-13 | 7 jam | Done | Pusing Banget sama atribut dan penggunaannya |
+| *18-10-2026* sampai *21-10-2026* | Revandra | Mengerjakan diagram sekuens dan diagram kelas UC14, UC15, UC16 (termasuk merevisi atribut dan method class yang relevan). | 5 jam | Done | - |
 | *18-10-2026* | Necia  | Menambahkan diagram sequence UC01-UC03 | 1 jam | Done | - |
 | *18-10-2026* | There  | Mengerjakan Bab 3 bagian UC08, UC09, dan UC10 | > 4 jam | Done | - |
 | *20-10-2026* | There  | Merevisi Bab 3 bagian UC08, UC09, dan UC10 | 1 jam | Done | - |
 | *20-10-2026* | Necia  | Merevisi diagram sequence dan mengerjakan diagram class UC01-UC03 | <2 jam | Done | - |
-| *16-10-2026* | Edward | Menambahkan Bab 4 | 1 jam | Done | - |
-| *17-10-2026 dan 18-10-2026* | Edward | Mengerjakan Diagram Sekuens UC11-13 | 7 jam | Done | Pusing Banget sama atribut dan penggunaannya |
-| *16-10-2026* | Edward | Memperbaiki Bab 4 (atribu dan methodnya) | 2 jam | Done | - |
-| *16-10-2026* | Revandra | Mengerjakan Bab 5 DDPL | 1 jam | Done | - |
-| *18-10-2026* sampai *21-10-2026* | Revandra | Mengerjakan diagram sekuens dan diagram kelas UC14, UC15, UC16 (termasuk merevisi atribut dan method class yang relevan). | 5 jam | Done | - |
+| *21-01-2026* | Danesh | Membuat *class diagram* UC04-UC07 | <2 jam | Done | - |
+| *21-01-2026* | Danesh | Memasukan aset-aset yang diperlukan dan merapikan dokumen | ~1 jam | Done | - |
 
 **Catatan/Evaluasi Milestone 7:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
