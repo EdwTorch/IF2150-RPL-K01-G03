@@ -470,9 +470,12 @@ Tabel 3.5 Identifikasi Kelas Use Case [UC05]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | HalamanPencarian | HalamanPencarian |
+| 2 | HasilPencarian | HasilPencarian |
+| 3 | LayananPencarian | LayananPencarian |
+| 4 | LayananPembandingJasa | LayananPembandingJasa |
+| 5 | Jasa | Jasa |
+| 6 | PenggunaJasa | PenggunaJasa |
 
 ### 3.5.2 Sequence Diagram
 
