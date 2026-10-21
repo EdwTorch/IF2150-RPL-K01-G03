@@ -507,9 +507,12 @@ Tabel 3.6 Identifikasi Kelas Use Case [UC06]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | HalamanDetailJasa | HalamanDetailJasa |
+| 2 | JasaController | JasaController |
+| 3 | Jasa | Jasa |
+| 4 | Ulasan | Ulasan |
+| 5 | PenggunaJasa | PenggunaJasa |
+| 6 | PenyediaJasa | PenyediaJasa |
 
 ### 3.6.2 Sequence Diagram
 
