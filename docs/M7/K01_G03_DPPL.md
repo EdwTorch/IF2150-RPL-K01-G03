@@ -544,9 +544,11 @@ Tabel 3.7 Identifikasi Kelas Use Case [UC07]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | HalamanBookmark | HalamanBookmark |
+| 2 | PengontrolBookmark | PengontrolBookmark |
+| 3 | Bookmark | Bookmark |
+| 4 | Jasa | Jasa |
+| 5 | PenggunaJasa | PenggunaJasa |
 
 ### 3.7.2 Sequence Diagram
 
