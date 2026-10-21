@@ -86,6 +86,8 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | Gemini | Mendapatkan Penjelasan dan Referensi Pembuatan Sequence Diagram  | Jelaskan dan berikan contoh cara membuat sequence diagram | AI memberikan penjelasan secara detail dan memberikan contoh diagram. Saya (There) memeriksa kembali jawaban AI tersebut melalui membandingkannya dengan ppt asistensi akbar |
+| Claude | Mendapatkan penjelasan dan referensi mengenai diagram class (bagian public dan private)  | Apa maksud + dan - pada diagram class? | Saya (Necia) kembali memeriksa bagian method yang dikelompokkan oleh AI berdasarkan public/private - nya method tersebut  |
+
 
 ### Pernyataan Integritas dan Persetujuan
 

@@ -9,7 +9,7 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 
 ## Cari Jasa
 <p align="left">
-<img alt="logo carijasa" src="../M7/assets/logo%20carijasa.png" width="20%">
+<img alt="logo carijasa" src="../M7/assets/logo%20carijasa.png" width="50%">
 </p>
 
 ### Untuk: Kak Mikhael Andrian Yonatan
@@ -312,7 +312,7 @@ Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.
 <img alt="diagram class uc01" src="./assets/diagram/cdregis.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Melakukan Registrasi Akun</i>
+<i>Gambar 3.1.3. Diagram Kelas Melakukan Registrasi Akun</i>
 </p>
 
 Pada diagram, pastikan:

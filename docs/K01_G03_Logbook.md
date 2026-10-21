@@ -148,8 +148,11 @@
 | Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *14-10-2026* | There  | Mengerjakan Bab 1 DPPL | 30 menit | Done | - |
+| *17-10-2026* | Necia  | Menambahkan 2.1 dan 2.2 M7 | <1 jam | Done | - |
+| *18-10-2026* | Necia  | Menambahkan diagram sequence UC01-UC03 | 1 jam | Done | - |
 | *18-10-2026* | There  | Mengerjakan Bab 3 bagian UC08, UC09, dan UC10 | > 4 jam | Done | - |
 | *20-10-2026* | There  | Merevisi Bab 3 bagian UC08, UC09, dan UC10 | 1 jam | Done | - |
+| *20-10-2026* | Necia  | Merevisi diagram sequence dan mengerjakan diagram class UC01-UC03 | <2 jam | Done | - |
 
 **Catatan/Evaluasi Milestone 7:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
