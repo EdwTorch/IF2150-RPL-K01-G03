@@ -489,10 +489,96 @@ Tabel 3.5. Identifikasi Kelas Use Case [UC05]
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Diagram Kelas UC04" src="" width="35%">
+<img alt="Diagram Kelas UC05" src="" width="35%">
 </p>
 <p align="center">
 <i>Gambar X. Diagram Kelas Mencari Penawaran Jasa [UC05]</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+
+## 3.6 Use Case Melihat Informasi Jasa
+
+**ID Use Case:** UC06
+**Nama Use Case:** Melihat Informasi Jasa
+
+### 3.6.1 Identifikasi Kelas
+Tabel 3.5. Identifikasi Kelas Use Case [UC06]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| ... | *...* | *...* |
+
+### 3.6.2 Sequence Diagram
+
+- **Skenario Normal dan Alternatif**
+
+<p align="center">
+<img alt="Sequence Diagram UC06" src="./assets/diagram/diagram-uc6.svg" width="100%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram Melihat Informasi Jasa [UC06]</i>
+</p>
+
+### 3.6.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Diagram Kelas UC06" src="" width="35%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas Melihat Informasi Jasa [UC06]</i>
+</p>
+
+Pada diagram, pastikan:
+- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
+- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
+- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
+- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
+- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
+
+## 3.7 Use Case Menggunakan Bookmark
+
+**ID Use Case:** UC07
+**Nama Use Case:** Menggunakan Bookmark
+
+### 3.7.1 Identifikasi Kelas
+Tabel 3.7. Identifikasi Kelas Use Case [UC07]
+
+| No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
+|:--- | :--- | :--- |
+| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
+| ... | *...* | *...* |
+
+### 3.7.2 Sequence Diagram
+
+- **Skenario Normal dan Alternatif**
+
+<p align="center">
+<img alt="Sequence Diagram UC07" src="./assets/diagram/diagram-uc7.svg" width="80%">
+</p>
+<p align="center">
+<i>Gambar X. Sequence Diagram Menggunakan Bookmark [UC07]</i>
+</p>
+
+### 3.6.3 Diagram Kelas
+
+Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+
+<p align="center">
+<img alt="Diagram Kelas UC07" src="" width="35%">
+</p>
+<p align="center">
+<i>Gambar X. Diagram Kelas Menggunakan Bookmark [UC07]</i>
 </p>
 
 Pada diagram, pastikan:
