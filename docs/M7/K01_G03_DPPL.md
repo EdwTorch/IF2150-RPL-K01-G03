@@ -435,9 +435,11 @@ Tabel 3.4 Identifikasi Kelas Use Case [UC04]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | HalamanUploadJasa | HalamanUploadJasa |
+| 2 | JasaController | JasaController |
+| 3 | LayananUploadFile | LayananUploadFile |
+| 4 | Jasa | Jasa |
+| 5 | PenyediaJasa | PenyediaJasa |
 
 ### 3.4.2 Sequence Diagram
 
