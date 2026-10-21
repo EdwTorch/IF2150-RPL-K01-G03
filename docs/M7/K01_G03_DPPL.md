@@ -282,9 +282,11 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | Pengguna | Pengguna |
+| 2 | PenyediaJasa | PenyediaJasa |
+| 3 | PenggunaJasa | PenggunaJasa |
+| 4 | HalamanRegistrasi | HalamanRegistrasi |
+| 5 | LayananRegistrasi | LayananRegistrasi |
 
 ### 3.1.2 Sequence Diagram
 
@@ -293,7 +295,7 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceregis.png" width="50%">
+<img alt="diagram sequence registrasi" src="./assets/diagram/seqregis.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.1.2 Sequence Diagram [UC01]</i>
@@ -305,10 +307,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+<img alt="diagram class uc01" src="./assets/diagram/cdregis.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar X. Diagram Kelas Melakukan Registrasi Akun</i>
 </p>
 
 Pada diagram, pastikan:
@@ -331,9 +333,11 @@ Tabel 3.2.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | Pengguna | Pengguna |
+| 2 | PenyediaJasa | PenyediaJasa |
+| 3 | PenggunaJasa | PenggunaJasa |
+| 4 | HalamanLogin | HalamanLogin |
+| 5 | Autentikator | Autentikator |
 
 ### 3.2.2 Sequence Diagram
 
@@ -342,7 +346,7 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequencelogin.png" width="50%">
+<img alt="diagram sequence login" src="./assets/diagram/seqlogin.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.2.2 Sequence Diagram [UC02]</i>
@@ -354,10 +358,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+<img alt="Diagram Kelas Melakukan Login" src="./assets/diagram/cdlogin.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar 3.2.3. Diagram Kelas Melakukan Login</i>
 </p>
 
 Pada diagram, pastikan:
@@ -380,9 +384,12 @@ Tabel 3.3.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | PenyediaJasa | PenyediaJasa |
+| 2 | Portofolio | Portofolio |
+| 3 | HalamanPortofolio | HalamanPortofolio |
+| 4 | PengontrolPortofolio | PengontrolPortofolio |
+| 5 | LayananUploadFile | LayananUploadFile |
+
 
 ### 3.3.2 Sequence Diagram
 
@@ -391,10 +398,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceporto.png" width="50%">
+<img alt="diagram sequence portofolio" src="./assets/diagram/seqporto.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 3.3.3 Sequence Diagram [UC02]</i>
+<i>Gambar 3.3.2 Sequence Diagram [UC03]</i>
 </p>
 
 
@@ -403,10 +410,10 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh_class-diagra" width="35%">
+<img alt="Diagram Kelas Mengisi Portofolio" src="./assets/diagram/cdporto.png" width="35%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar 3.3.3. Diagram Kelas Mengisi Portofolio</i>
 </p>
 
 Pada diagram, pastikan:
