@@ -8,7 +8,9 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 <br>
 
 ## Cari Jasa
-### *[Logo Perangkat Lunak]*
+<p align="left">
+<img alt="logo carijasa" src="../M7/assets/logo%20carijasa.png" width="20%">
+</p>
 
 ### Untuk: Kak Mikhael Andrian Yonatan
 
