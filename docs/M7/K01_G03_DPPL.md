@@ -282,9 +282,11 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | Pengguna | Pengguna |
+| 2 | PenyediaJasa | PenyediaJasa |
+| 3 | PenggunaJasa | PenggunaJasa |
+| 4 | HalamanRegistrasi | HalamanRegistrasi |
+| 5 | LayananRegistrasi | LayananRegistrasi |
 
 ### 3.1.2 Sequence Diagram
 
@@ -293,7 +295,7 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceregis.png" width="50%">
+<img alt="diagram sequence registrasi" src="./assets/diagram/seqregis.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.1.2 Sequence Diagram [UC01]</i>
@@ -331,9 +333,11 @@ Tabel 3.2.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | Pengguna | Pengguna |
+| 2 | PenyediaJasa | PenyediaJasa |
+| 3 | PenggunaJasa | PenggunaJasa |
+| 4 | HalamanLogin | HalamanLogin |
+| 5 | Autentikator | Autentikator |
 
 ### 3.2.2 Sequence Diagram
 
@@ -342,7 +346,7 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequencelogin.png" width="50%">
+<img alt="diagram sequence login" src="./assets/diagram/seqlogin.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.2.2 Sequence Diagram [UC02]</i>
@@ -380,9 +384,12 @@ Tabel 3.3.1 Identifikasi Kelas Use Case [UC01]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL]* |
-| ... | *...* | *...* |
+| 1 | PenyediaJasa | PenyediaJasa |
+| 2 | Portofolio | Portofolio |
+| 3 | HalamanPortofolio | HalamanPortofolio |
+| 4 | PengontrolPortofolio | PengontrolPortofolio |
+| 5 | LayananUploadFile | LayananUploadFile |
+
 
 ### 3.3.2 Sequence Diagram
 
@@ -391,7 +398,7 @@ Buat *sequence diagram* untuk **setiap skenario use case**, mencakup skenario no
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/sequenceporto.png" width="50%">
+<img alt="diagram sequence portofolio" src="./assets/diagram/seqporto.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.3.2 Sequence Diagram [UC03]</i>
