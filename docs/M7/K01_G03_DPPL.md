@@ -39,7 +39,7 @@ Dipersiapkan oleh:
 | Add Atribut | Penambahan atribut daftarProduk di class PenyediaJasa  |
 | Refactor Method C37 | ganti kirimHasil() menjadi klikKirimHasil()  |
 | Add new Class | Class Pengumpulan Controller |  
-| Refactor Class Diagram UC11 | Tambahin Class Baru beserta detailnya |
+| Refactor Class Diagram UC11 | Tambahin Class Baru (PengumpulanController) beserta detailnya |
 | Menghapus Method Class ProdukAhir | getDetailJasa --> getDetailProduk |  
 | Menghapus dan menambah Method baru pada Class  HalamanPelaporan | tampilkanDeskripsiPelanggaran(), tampilkanNomorTiket(), tampilkanOpsiKategoriPelanggaran(), tampilkanTanggapanAdmin() ---> dihapus. Ditambahkan : tampilkanTiketdanTanggapan() |
 | Add Argument | Menambahkan argumen pada: <br> C03: beriUlasan; <br> C31: updateStatusPesanan, C47: inputRatingBintang, inputKomentar, unggahDokumentasi, C48: validasiKelengkapanRating, validasiFormatBerkas, validasiPanjangKomentar, prosesUlasan, perbaruiRating |
@@ -663,7 +663,7 @@ Tabel 3.10. Identifikasi Kelas Use Case [UC10]
 
 ### 3.11.1 Identifikasi Kelas
 
-Tabel 3.1. Identifikasi Kelas Use Case [UC11]
+Tabel 3.11. Identifikasi Kelas Use Case [UC11]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -681,7 +681,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC11]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramSekuens.svg" width="70%">
 </p>
 <p align="center">
-<i>Gambar 3.11 Sequence Diagram [UC11]</i>
+<i>Gambar 3.11.1 Sequence Diagram [UC11]</i>
 </p>
 
 
@@ -692,7 +692,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC11]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramKelas.svg" width="70%">
 </p>
 <p align="center">
-<i>Gambar 11. Diagram Kelas Menyerahkan Hasil pekerjaan</i>
+<i>Gambar 3.11.2 Diagram Kelas Menyerahkan Hasil pekerjaan</i>
 </p>
 
 ---
@@ -705,7 +705,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC11]
 
 ### 3.12.1 Identifikasi Kelas
 
-Tabel 3.1. Identifikasi Kelas Use Case [UC12]
+Tabel 3.12. Identifikasi Kelas Use Case [UC12]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -720,7 +720,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC12]
 | 9 | HalamanRequestRevisi | HalamanRequestRevisi | 
 | 10| PengajuanRevisi | PengajuanRevisi |
 
-### 3.1.2 Sequence Diagram
+### 3.12.2 Sequence Diagram
 
 - **Skenario Normal**
 
@@ -728,7 +728,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC12]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC12_DPPL_Normal.svg" width="70%">
 </p>
 <p align="center">
-<i>Gambar 23. Sequence Diagram UC12 </i>
+<i>Gambar 3.12.1 Sequence Diagram UC12 </i>
 </p>
 
 - **Skenario Alternatif : Mengajukan Revisi**
@@ -737,16 +737,16 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC12]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC12_DPPL_Alt.svg" width="70%">
 </p>
 <p align="center">
-<i>Gambar 24. Sequence Diagram UC12 - Mengajukan Revisi</i>
+<i>Gambar 3.12.2 Sequence Diagram UC12 - Mengajukan Revisi</i>
 </p>
 
-### 3.1.3 Diagram Kelas
+### 3.12.3 Diagram Kelas
 
 <p align="center">
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DiagramKelas.svg" width="70%">
 </p>
 <p align="center">
-<i>Gambar 25. Diagram Kelas Mengonfirmasi Hasil Pekerjaan</i>
+<i>Gambar 3.12.3 Diagram Kelas Mengonfirmasi Hasil Pekerjaan</i>
 </p>
 
 ## 3.13 Use Case Melaporkan Pengguna Lain
@@ -774,7 +774,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC13]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DPPL.svg" width="70%">
 </p>
 <p align="center">
-<i>Gambar 26. Sequence Diagram [UC13]</i>
+<i>Gambar 3.13.1 Sequence Diagram [UC13]</i>
 </p>
 
 ### 3.13.3 Diagram Kelas
@@ -783,7 +783,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC13]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DPPL-DiagramKelas.svg" width="70%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [Nama Uce Case]</i>
+<i>Gambar 3.13.2 Diagram Kelas [Nama Uce Case]</i>
 </p>
 
 ## 3.14 Use Case Memberikan Ulasan terhadap Jasa yang Dipesan
@@ -793,7 +793,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC13]
 
 ### 3.14.1 Identifikasi Kelas
 
-Tabel 3.1. Identifikasi Kelas Use Case [UC014]
+Tabel 3.14. Identifikasi Kelas Use Case [UC014]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -815,7 +815,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC014]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramSekuens.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar 3.1.2 Sequence Diagram [UC014]</i>
+<i>Gambar 3.14.1 Sequence Diagram [UC014]</i>
 </p>
 
 
@@ -826,7 +826,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC014]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramKelas.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [UC14]</i>
+<i>Gambar 3.14.2 Diagram Kelas [UC14]</i>
 </p>
 
 ---
@@ -838,7 +838,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC014]
 
 ### 3.15.1 Identifikasi Kelas
 
-Tabel 3.1. Identifikasi Kelas Use Case [UC015]
+Tabel 3.15. Identifikasi Kelas Use Case [UC015]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -856,7 +856,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC015]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramSekuens.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar 3.1.2 Sequence Diagram [UC015]</i>
+<i>Gambar 3.15.1 Sequence Diagram [UC015]</i>
 </p>
 
 
@@ -866,7 +866,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC015]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramKelas.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [UC15]</i>
+<i>Gambar 3.15.2 Diagram Kelas [UC15]</i>
 </p>
 
 ---
@@ -878,7 +878,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC015]
 
 ### 3.16.1 Identifikasi Kelas
 
-Tabel 3.1. Identifikasi Kelas Use Case [UC016]
+Tabel 3.16. Identifikasi Kelas Use Case [UC016]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -897,7 +897,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC016]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramSekuens.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar 3.1.2 Sequence Diagram [UC016]</i>
+<i>Gambar 3.16.1 Sequence Diagram [UC016]</i>
 </p>
 
 
@@ -907,7 +907,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC016]
 <img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramKelas.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas [UC16]</i>
+<i>Gambar 3.16.2 Diagram Kelas [UC16]</i>
 </p>
 
 ---
