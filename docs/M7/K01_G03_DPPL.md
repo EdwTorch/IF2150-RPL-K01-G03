@@ -431,7 +431,7 @@ Pada diagram, pastikan:
 **Nama Use Case:** Mengunggah Penawaran Jasa
 
 ### 3.4.1 Identifikasi Kelas
-Tabel 3.4. Identifikasi Kelas Use Case [UC04]
+Tabel 3.4 Identifikasi Kelas Use Case [UC04]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -444,29 +444,19 @@ Tabel 3.4. Identifikasi Kelas Use Case [UC04]
 - **Skenario Normal dan Alternatif**
 
 <p align="center">
-<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="100%">
+<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
+<i>Gambar 3.4.1 Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
 </p>
 
 ### 3.4.3 Diagram Kelas
-
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
-
 <p align="center">
-<img alt="Diagram Kelas UC04" src="" width="35%">
+<img alt="Diagram Kelas UC04" src="./assets/diagram/kelas-uc4-h.svg" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
+<i>Gambar 3.4.2 Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
 </p>
-
-Pada diagram, pastikan:
-- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
-- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
-- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
-- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
-- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
 ## 3.5 Use Case Mencari Penawaran Jasa
 
@@ -474,7 +464,7 @@ Pada diagram, pastikan:
 **Nama Use Case:** Mencari Penawaran Jasa
 
 ### 3.5.1 Identifikasi Kelas
-Tabel 3.5. Identifikasi Kelas Use Case [UC05]
+Tabel 3.5 Identifikasi Kelas Use Case [UC05]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -487,29 +477,20 @@ Tabel 3.5. Identifikasi Kelas Use Case [UC05]
 - **Skenario Normal dan Alternatif**
 
 <p align="center">
-<img alt="Sequence Diagram UC05" src="./assets/diagram/diagram-uc5.svg" width="100%">
+<img alt="Sequence Diagram UC05" src="./assets/diagram/diagram-uc5.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram Mencari Penawaran Jasa [UC05]</i>
+<i>Gambar 3.5.1 Sequence Diagram Mencari Penawaran Jasa [UC05]</i>
 </p>
 
 ### 3.5.3 Diagram Kelas
 
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
-
 <p align="center">
-<img alt="Diagram Kelas UC05" src="" width="35%">
+<img alt="Diagram Kelas UC05" src="./assets/diagram/kelas-uc5-h.svg" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Mencari Penawaran Jasa [UC05]</i>
+<i>Gambar 3.5.2 Diagram Kelas Mencari Penawaran Jasa [UC05]</i>
 </p>
-
-Pada diagram, pastikan:
-- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
-- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
-- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
-- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
-- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
 ## 3.6 Use Case Melihat Informasi Jasa
 
@@ -517,7 +498,7 @@ Pada diagram, pastikan:
 **Nama Use Case:** Melihat Informasi Jasa
 
 ### 3.6.1 Identifikasi Kelas
-Tabel 3.5. Identifikasi Kelas Use Case [UC06]
+Tabel 3.6 Identifikasi Kelas Use Case [UC06]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -530,29 +511,20 @@ Tabel 3.5. Identifikasi Kelas Use Case [UC06]
 - **Skenario Normal dan Alternatif**
 
 <p align="center">
-<img alt="Sequence Diagram UC06" src="./assets/diagram/diagram-uc6.svg" width="100%">
+<img alt="Sequence Diagram UC06" src="./assets/diagram/diagram-uc6.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram Melihat Informasi Jasa [UC06]</i>
+<i>Gambar 3.6.1 Sequence Diagram Melihat Informasi Jasa [UC06]</i>
 </p>
 
 ### 3.6.3 Diagram Kelas
 
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
-
 <p align="center">
-<img alt="Diagram Kelas UC06" src="" width="35%">
+<img alt="Diagram Kelas UC06" src="./assets/diagram/kelas-uc6-h.svg" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Melihat Informasi Jasa [UC06]</i>
+<i>Gambar 3.6.2 Diagram Kelas Melihat Informasi Jasa [UC06]</i>
 </p>
-
-Pada diagram, pastikan:
-- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
-- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
-- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
-- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
-- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
 ## 3.7 Use Case Menggunakan Bookmark
 
@@ -560,7 +532,7 @@ Pada diagram, pastikan:
 **Nama Use Case:** Menggunakan Bookmark
 
 ### 3.7.1 Identifikasi Kelas
-Tabel 3.7. Identifikasi Kelas Use Case [UC07]
+Tabel 3.7 Identifikasi Kelas Use Case [UC07]
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 |:--- | :--- | :--- |
@@ -576,26 +548,17 @@ Tabel 3.7. Identifikasi Kelas Use Case [UC07]
 <img alt="Sequence Diagram UC07" src="./assets/diagram/diagram-uc7.svg" width="80%">
 </p>
 <p align="center">
-<i>Gambar X. Sequence Diagram Menggunakan Bookmark [UC07]</i>
+<i>Gambar 3.7.1 Sequence Diagram Menggunakan Bookmark [UC07]</i>
 </p>
 
-### 3.6.3 Diagram Kelas
-
-Buatlah diagram kelas untuk use case ini yang terdiri atas kelas-kelas dari 3.1.1. **Setiap kelas pada diagram wajib menampilkan atribut dan metode/operasi langsung di dalam kotak kelasnya**, sehingga tidak perlu membuat tabel daftar atribut dan metode per kelas pada subbab ini. Daftar lengkap atribut dan metode seluruh kelas disajikan pada Tabel 4.1 (Bab 4).
+### 3.7.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC07" src="" width="35%">
+<img alt="Diagram Kelas UC07" src="./assets/diagram/kelas-uc7-h.svg" width="90%">
 </p>
 <p align="center">
-<i>Gambar X. Diagram Kelas Menggunakan Bookmark [UC07]</i>
+<i>Gambar 3.7.2 Diagram Kelas Menggunakan Bookmark [UC07]</i>
 </p>
-
-Pada diagram, pastikan:
-- Atribut dituliskan beserta visibilitas dan tipe datanya, misalnya `- email: String`.
-- Operasi dituliskan beserta visibilitas, parameter, dan tipe kembaliannya, misalnya `+ login(email: String, password: String): Boolean`.
-- Relasi antarkelas (asosiasi, agregasi, komposisi, generalisasi, dan dependensi) digambarkan lengkap dengan multiplisitas.
-- Semua operasi yang dipanggil pada sequence diagram 3.1.2 (skenario normal dan alternatif) ada pada kelas yang bersangkutan.
-- Kelas yang sama dengan kelas di use case lain memakai nama, atribut, dan metode yang konsisten.
 
 ## 3.8 Use Case Melakukan Komunikasi
 
