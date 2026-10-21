@@ -88,6 +88,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Mendapatkan Penjelasan dan Referensi Pembuatan Sequence Diagram  | Jelaskan dan berikan contoh cara membuat sequence diagram | AI memberikan penjelasan secara detail dan memberikan contoh diagram. Saya (There) memeriksa kembali jawaban AI tersebut melalui membandingkannya dengan ppt asistensi akbar |
 | Claude | Mendapatkan penjelasan dan referensi mengenai diagram class (bagian public dan private)  | Apa maksud + dan - pada diagram class? | Saya (Necia) kembali memeriksa bagian method yang dikelompokkan oleh AI berdasarkan public/private - nya method tersebut  |
 | Gemini | Mendapatkan pemahaman terhadap pembuatan sequence diagram | Bagaimana penerapan alt dan opt sekaligus cara penggunaan setiap komponen diagram sekuens | AI memberikan penjelasan dan contoh terkait pembuatan diagram sekuens. saya (Edward) memeriksa dan memahami jawabannya lalu menerapkannya dalam pembuatan diagram sekuens |
+| Gemini | Mendapatkan penjelasan mengenai penggunaan PlantUML untuk mengimplementasikan diagram sekuens | Beri tahu saya notasi-notasi PlantUML yang relevan untuk pembuatan diagram sekuens | Saya (Revandra) mendapatkan penjelasan mengenai notasi-notasi PlantUML yang mungkin relevan untuk pembuatan diagram sekuens. |
 
 
 ### Pernyataan Integritas dan Persetujuan
