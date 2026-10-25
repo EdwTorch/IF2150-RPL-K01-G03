@@ -32,7 +32,7 @@ Dipersiapkan oleh:
 | Revisi | Deskripsi |
 | :--- | :--- |
 | Logo CariJasa | Mengganti Logo CariJasa |
-| *B* |  |
+| Tambah Parameter Method di C17 | Tambah Parameter Keyword String C17   |
 | *C* |  |
 | ... |  |
 
@@ -942,7 +942,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C14 | JasaController | - | <br> + ambilDetailJasa(idJasa: string) : Jasa <br> + validasiDataJasa(dataJasa : string) : boolean <br> + simpanPenawaranJasa(dataJasa : string) : void |
 | C15 | HalamanPencarian | <br> - searchBar : void <br> - filterHarga : void <br> - filterDurasi : void <br> - filterRating : void <br> - tombolCari : void <br> - pesanError : string | <br> + inputKataKunci() : void <br> + klikCari() : void <br> + tampilkanPesanError(pesan : string) : void |
 | C16 | HasilPencarian | <br> - daftarListingJasa : list of jasa <br> - tombolBandingkan : void | <br> + tampilkanDaftarHasil() : void <br> + pilihJasaUntukDibandingkan() : void <br> + klikBandingkan() : void |
-| C17 | LayananPencarian | - | <br> + cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa <br> + terapkanFilterPencarian(filter : string) : list of Jasa |
+| C17 | LayananPencarian | - | <br> + cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa <br> + terapkanFilterPencarian(filter : string, keyword : string) : list of Jasa |
 | C18 | LayananPembandingJasa | - | <br> + bandingkanSpesifikasiJasa(idJasa1 : string, idJasa2 : string) : string |
 | C19 | HalamanDetailJasa | <br> - tampilanDeskripsi : string <br> - tampilanHarga : double <br> - infoProfilPenyedia : string <br> - tampilanRiwayatUlasan : list of string <br> - pesanError : string | <br> + tampilkanDetailJasa() : void <br> +  tampilkanPesanError() : void |
 | C20 | Bookmark | <br> - idBookmark : string <br> - idPenggunaJasa : string <br> - idJasa : string <br> - waktuDisimpan : Date <br> - daftarBookmark : list of bookmark | <br> + simpanBookmark() : boolean <br> + hapusBookmark() : boolean <br> + lihatBookmark() : list of String |
@@ -1042,10 +1042,129 @@ Tabel 5.1.1. Query Operasi [Nama Operasi]
 
 *[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 
-## 5.2 Kelas [Nama Kelas Berikutnya]
+## 5.17 Kelas LayananPencarian (C17)
 
-*[Ulangi pola 5.1: nama dan ID kelas, tabel operasi, tabel atribut, serta subbab algoritma/query untuk operasi penting jika diperlukan.]*
+**Nama Kelas:** LayananPencarian 
+**ID Kelas:** C17
 
+Tabel 5.17.1. Operasi Kelas [LayananPencarian]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa | public | mencari jasa berdasarkan keyword yang dimasukkan pengguna |
+| + terapkanFilterPencarian(filter : string) : list of Jasa | public | menerapkan pencarian sesuai dengan filter yang diterapkan |
+ 
+
+### 5.17.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Layanan Pencarian
+**Nama Operasi:** cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa  
+**ID Algoritma:** Algo-1701
+
+```Pseudocode
+Input : keyword (string)
+Ouput : list of Jasa || pesanError
+1. If keyword = null or len(keyword)< 3 then
+    Throw Exception “Keyword Pencarian Minimal 3 karakter”
+2. Jalankan Query Q-1701 dengan parameter keyword 
+3. simpan hasil pencarian ke dalam daftarJasa {variabel sementara}
+4. If len(daftarJasa) != 0 then
+5.    Jasa.dapatkanDetailJasa(daftarJasa)
+6.    HasilPencarian.tampilkanDaftarHasil(daftarJasa)
+7.    return daftarJasa
+8. Else then 
+9.    HalamanPencarian.tampilkanPesanError()
+10.    return "dataKosong" {Pesan Error Data Tidak Ditemukan}
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.17.1. Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-1701 | `SELECT * FROM jasa`<br>`WHERE nama_jasa LIKE '%keyword%'`<br>`.. OR deskripsi LIKE '%keyword%'`<br>`ORDER BY`<br>`.. CASE WHEN nama_jasa LIKE '%keyword%' THEN 1`<br>`.. ELSE 2 END ASC`<br>`LIMIT 20` | Mencari 20 data jasa teratas berdasarkan relevansi nama jasa yang dicari |
+
+
+
+### 5.17.2 Algoritma/Query
+
+**Nama Kelas:** Layanan Pencarian
+**Nama Operasi:** terapkanFilterPencarian(filter : string,keyword : string) : list of Jasa
+**ID Algoritma:** Algo-1702
+
+```Pseudocode
+Input : filter (string)
+Ouput : list of Jasa || pesanError
+1. Parse parameter filter menjadi kriteria pencarian
+2. Jalankan Query Q-1702 dengan parameter keyword dan filter 
+3. simpan hasil pencarian ke dalam daftarJasaTerfilter {variabel sementara}
+4. If len(daftarJasaTerfilter) != 0 then
+5.    Jasa.dapatkanDetailJasa(daftarJasa)
+6.    HasilPencarian.tampilkanDaftarHasil(daftarJasa)
+7.    return daftarJasa
+8. Else then 
+9.    HalamanPencarian.tampilkanPesanError()
+10.    return "dataKosong" {Pesan Error Data Tidak Ditemukan}
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.17.2. Query Operasi terapkanFilterPencarian(filter : string, keyword : string) : list of Jasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-1701 | SELECT * FROM jasa WHERE status_aktif = true AND (nama_jasa ILIKE %keyword% OR deskripsi ILIKE %keyword%) AND (%kategori% IS NULL OR kategori = %kategori%) AND (%hargaMin% IS NULL OR harga >= %hargaMin%) AND (%hargaMax% IS NULL OR harga <= %hargaMax%) AND (%rating% IS NULL OR rating >= %ratingMin%) AND (%ratingMax% IS NULL OR rating <= %ratingMax%) ORDER BY created_at DESC LIMIT 20 | Mencari 20 data jasa teratas berdasarkan relevansi filter yang diberikan |
+
+## 5.18 Kelas LayananPembandingJasa
+
+**Nama Kelas:** LayananPembandingJasa
+**ID Kelas:** C18
+
+Tabel 5.18.1. Operasi Kelas LayananPembandingJasa
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| + bandingkanSpesifikasiJasa(idJasa1 : string, idJasa2 : string) : string | public | Membandingkan dua jasa yang diminati pengguna  |
+
+
+
+
+### 5.18.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananPembandingJasa
+**Nama Operasi:** + bandingkanSpesifikasiJasa(idJasa1 : string, idJasa2 : string) : string  
+**ID Algoritma:** Algo-1801
+
+```text
+Input : idJasa1 : string dan idJasa2 : string
+Output : string
+1. Jalankan Query Q-1801 dengan parameter idJasa1 
+2. Jalankan Query Q-1801 dengan parameter idJasa2
+3. simpan Detail Jasa ke-1 pada Variabel detailJasa1 dan Jasa ke-2 pada detailJasa2
+4. Bandingkan Statistik pada kedua Jasa, seperti rating, harga, keypoints yang ditawarkan, dll.
+5. Format hasil perbandingan menjadi matriksPerbandingan (teks ringkasan / JSON)
+6. HasilPencarian.TampilkanHasilPerbandingan()
+7. return hasilperbandingan
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.18.1. Query Operasi [Nama Operasi]
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-1801 | SELECT * FROM jasa WHERE id_jasa = %idJasa% AND status_aktif = true | Mengambil detail spesifikasi data jasa aktif berdasarkan ID Jasa yang dipilih untuk dibandingkan. |
+
+
+
+### 5.3.2 Algoritma/Query
+
+*[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
 <br>
 
 ---
