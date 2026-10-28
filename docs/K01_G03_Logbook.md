@@ -177,6 +177,7 @@
 | *28-10-2026* | There | Mengerjakan Bab 5 | 3 jam | Done | - |
 | *28-10-2026* | Necia | Mengerjakan Bab 6 | 3 jam | Done | - |
 | *27-10-2026* & *28-10-2026* | Revandra | Mengerjakan Bab 5 bagian C36, C39, C41, C42, C43, C45, C46, C48, C49, C51, C52, C54 | 8 jam | Done | - |
+| *28-10-2026* | Danesh | Mengerjakan Bab 5 bagian C01, C02, C03, C05, C07, C09, C10, C11, C12, C14, C16 | ~6 jam | Done | kesibukan dan force majeure |
 
 **Catatan/Evaluasi Milestone 8:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
