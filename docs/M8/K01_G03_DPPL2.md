@@ -2146,9 +2146,25 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 
 | No | Tampilan Antarmuka |
 | :--- | :--- |
-| *[I-01]* | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400"> |
-| *[I-02]* | *[Sisipkan gambar antarmuka I-02]* |
-| *[I-XX]* | *[Sisipkan gambar antarmuka berikutnya]* |
+| I-01 | <img src="./assets/UI/C04 - HalamanRegistrasi.png" alt="UI C04" width="400"> |
+| I-02 | <img src="./assets/UI/C06 - HalamanLogin.png" alt="UI C06" width="400"> |
+| I-03 | <img src="./assets/UI/C08 - HalamanPortofolio.png" alt="UI C08" width="400"> |
+| I-04 | <img src="./assets/UI/C13 - HalamanUploadJasa.png" alt="UI C13" width="400"> |
+| I-05 | <img src="./assets/UI/C15 - HalamanPencarian.png" alt="UI C15" width="400"> |
+| I-06 | <img src="./assets/UI/C19 - HalamanDetailJasa.png" alt="UI C19" width="400"> |
+| I-07 | <img src="./assets/UI/C21 - HalamanBookmark.png" alt="UI C21" width="400"> |
+| I-08 | <img src="./assets/UI/C24 - HalamanChat.png" alt="UI C24" width="400"> |
+| I-09 | <img src="./assets/UI/C28 - HalamanPemesanan.png" alt="UI C28" width="400"> |
+| I-10 | <img src="./assets/UI/C29 - HalamanPembayaran - pilih%20metode.png" alt="UI C29" width="400"> |
+| I-11 |  |
+| I-12 |  |
+| I-13 |  |
+| I-14 |  |
+| I-15 |  |
+| I-16 |  |
+| I-17 |  |
+| I-18 |  |
+| I-19 |  |
 
 <br>
 
