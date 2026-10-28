@@ -1029,30 +1029,180 @@ Tabel 5.1.2. Atribut Kelas Pengguna
 | daftarProduk | private | list of string |
 
 ### 5.1.1 Algoritma/Query
+**Nama Kelas:** Pengguna
+**Nama Operasi:** buatAkun(nama : string, email : string, noTelepon : string, password : string) : void
+**ID Algoritma:** Algo-0101
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+```Pseudocode
+Input : nama : string, email : string, noTelepon : string, password : string
+Output : void
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
-
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+1. IF nama == NULL OR email == NULL OR password == NULL THEN
+2.     THROW Exception "Data akun tidak lengkap"
+3. hashedPassword = hashPassword(password)
+4. Jalankan Query [Q-0101] dengan parameter nama, email, noTelepon, hashedPassword
+5. Simpan status eksekusi query ke dalam variabel statusInsert
+6. IF statusInsert == false THEN
+7.     THROW Exception "Gagal membuat akun pengguna"
+8. statusOnline = false
+9. statusAkun = true
 ```
-
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.1.3. Query Operasi [Nama Operasi]
+Tabel 5.1.3. Query Operasi buatAkun
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
+| Q-0101 | INSERT INTO pengguna (nama, email, no_telepon, password, status_online, status_akun, sanksi) <br> VALUES (%nama%, %email%, %noTelepon%, %hashedPassword%, false, true, NULL); | Menambahkan data akun pengguna baru dengan *hashed password* ke database |
 
 ### 5.1.2 Algoritma/Query
+**Nama Kelas:** Pengguna
+**Nama Operasi:** login(email : string, password : string) : boolean
+**ID Algoritma:** Algo-0102
 
-*[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+```Pseudocode
+Input : email : string, password : string
+Output : boolean
+
+1. IF email == NULL OR password == NULL THEN
+2.     RETURN false
+3. Jalankan Query [Q-0102] dengan parameter email
+4. Simpan hasil query ke dalam variabel dataPengguna
+5. IF dataPengguna == NULL THEN
+6.     RETURN false
+7. isPasswordValid = verifikasiPassowrd(password, dataPengguna.password)
+8. IF isPasswordValid == true AND dataPengguna.statusAkun == true THEN
+9.     Jalankan Query [Q-0103] dengan parameter email
+10.    Simpan status eksekusi query ke dalam variabel statusUpdate
+11.    IF statusUpdate == true THEN
+12.        statusOnline = true
+13.        RETURN true
+14.    ELSE
+15.        RETURN false
+16. ELSE
+17.    RETURN false
+```
+Tabel 5.1.4. Query Operasi login
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0102 | SELECT id_pengguna, email, password, status_akun <br> FROM pengguna <br> WHERE email = %email% <br> LIMIT 1; | Mengambil data id pengguna, hash password, dan status akun pengguna berdasarkan email |
+| Q-0103 | UPDATE pengguna <br> SET status_online = true <br> WHERE email = %email%; | Memperbarui status *online* pengguna menjadi aktif saat berhasil masuk |
+
+### 5.1.3 Algoritma/Query
+**Nama Kelas:** Pengguna
+**Nama Operasi:** simpanProfil(email : string, nama : string, noTelepon : string) : void
+**ID Algoritma:** Algo-0103
+
+```Pseudocode
+Input : nama : string, noTelepon : string
+Output : void
+
+1. IF nama == NULL THEN
+2.      THROW Exception "Nama tidak boleh kosong"
+3. Jalankan Query [Q-0104] dengan parameter nama, noTelepon, email
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.      THROW Exception "Gagal memperbarui data profil pengguna"
+```
+Tabel 5.1.5. Query Operasi simpanProfil
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0104 | UPDATE pengguna <br> SET nama = %nama%, no_telepon = %noTelepon% <br> WHERE email = %email%; | Memperbarui informasi nama dan nomor telepon pengguna berdasarkan alamat email |
+
+### 5.1.4 Algoritma/Query
+**Nama Kelas:** Pengguna  
+**Nama Operasi:** setStatusAkun(email : string, statusAkun : boolean) : void  
+**ID Algoritma:** Algo-0104
+
+```Pseudocode
+Input : email : string, statusAkun : boolean
+Output : void
+
+1. IF email == NULL THEN
+2.     THROW Exception "Email pengguna tidak valid"
+3. Jalankan Query [Q-0105] dengan parameter statusAkun, email
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal memperbarui status keaktifan akun"
+```
+Tabel 5.1.6. Query Operasi setStatusAkun
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0105 | UPDATE pengguna <br> SET status_akun = %statusAkun% <br> WHERE email = %email%; | Mengubah status keaktifan akun pengguna berdasarkan alamat email |
+
+### 5.1.5 Algoritma/Query
+**Nama Kelas:** Pengguna  
+**Nama Operasi:** setSanksi(email : string, sanksi : string) : void 
+**ID Algoritma:** Algo-0105
+
+```Pseudocode
+Input : email : string, sanksi : string
+Output : void
+
+1. IF email == NULL THEN
+2.     THROW Exception "Email pengguna tidak valid"
+3. Jalankan Query [Q-0106] dengan parameter sanksi, email
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal memperbarui catatan sanksi akun"
+```
+Tabel 5.1.7. Query Operasi setSanksi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0106 | UPDATE pengguna <br> SET sanksi = %sanksi% <br> WHERE email = %email%; | Menetapkan atau memperbarui status sanksi pelanggaran pengguna berdasarkan alamat email |
+
+### 5.1.6 Algoritma/Query
+**Nama Kelas:** Pengguna  
+**Nama Operasi:** getNama() : string  
+**ID Algoritma:** Algo-0106  
+
+```Pseudocode
+Input : void
+Output : string
+
+1. RETURN nama
+```
+
+### 5.1.7 Algoritma/Query
+**Nama Kelas:** Pengguna  
+**Nama Operasi:** getEmail() : string  
+**ID Algoritma:** Algo-0107  
+
+```Pseudocode
+Input : void
+Output : string
+
+1. RETURN email
+```
+
+### 5.1.8 Algoritma/Query
+**Nama Kelas:** Pengguna  
+**Nama Operasi:** getStatusOnline() : string  
+**ID Algoritma:** Algo-0108  
+
+```Pseudocode
+Input : void
+Output : string
+
+1. IF statusOnline == true THEN
+2.     RETURN "Online"
+3. ELSE
+4.     RETURN "Offline"
+```
+
+### 5.1.9 Algoritma/Query
+**Nama Kelas:** Pengguna  
+**Nama Operasi:** getStatusAkun() : boolean  
+**ID Algoritma:** Algo-0109  
+
+```Pseudocode
+Input : void
+Output : boolean
+
+1. RETURN statusAkun
+```
 
 ## 5.2 Kelas PenyediaJasa
 
