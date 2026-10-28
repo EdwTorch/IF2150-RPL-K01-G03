@@ -997,54 +997,60 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 
 Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta *visibility*-nya, serta atribut beserta *visibility* dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
-## 5.1 Kelas [Nama Kelas 1]
+## 5.36 Kelas ProdukAkhir
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** ProdukAkhir  
+**ID Kelas:** C36
 
-Tabel 5.1.1. Operasi Kelas [Nama Kelas 1]
+Tabel 5.36.1. Operasi Kelas C36
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void | public | Menyimpan rincian hasil pekerjaan (produk akhir) beserta URL atau path file ke dalam basis data. |
+| updateStatusPengerjaan() | public | Memperbarui status pemeriksaan produk akhir. |
+| getDetailProduk() | public | Mengembalikan data dan informasi lengkap dari produk akhir yang dikumpulkan. |
 
-Tabel 5.1.2. Atribut Kelas [Nama Kelas 1]
+Tabel 5.36.2. Atribut Kelas ProdukAkhir
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| idProdukAkhir | private | string |
+| idPesanan | private | string |
+| outputpath | private | string |
+| deskripsiProdukAkhir | private | string |
+| tanggalPengumpulan | private | DATE |
+| statusPemeriksaan | private | boolean |
+| fileURL | private | string |
 
-### 5.1.1 Algoritma/Query
+### 5.36.1 Algoritma/Query
 
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+**Nama Kelas:** ProdukAkhir     
+**Nama Operasi:** simpanProdukAkhir     
+**ID Algoritma:** Algo-3601
 
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+```pseudocode
+INPUT: deskripsi (string), filepath (string), link (string)
+OUTPUT: void
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+1. IF deskripsi EMPTY OR filepath EMPTY OR link EMPTY THEN
+2.      THROW Exception "Parameter input tidak valid."
+3. idProdukAkhir = GENERATE_UUID()
+4. idPesanan = Session.getCurrentPesananId()
+5. tanggalPengumpulan = GET_CURRENT_DATE()
+6. statusPemeriksaan = false
+7. statusQuery = EXECUTE Query Q-3601 WITH (idProdukAkhirBaru, idPesananAktif, filepath, deskripsi, tanggalSekarang, statusAwal, link)
+8.
+1. IF statusQuery = true THEN
+2.      RETURN
+3.  ELSE
+4.      THROW Exception "Gagal menyimpan data produk akhir."
 ```
 
-Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
-
-Tabel 5.1.1. Query Operasi [Nama Operasi]
+Tabel 5.36.1.1. Query Operasi simpanProdukAkhir
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| *[Q-001]* | *[Tuliskan query]* | *[Fungsi query]* |
-| *...* | *...* | *...* |
-
-
-### 5.1.2 Algoritma/Query
-
-*[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
-
-## 5.2 Kelas [Nama Kelas Berikutnya]
-
-*[Ulangi pola 5.1: nama dan ID kelas, tabel operasi, tabel atribut, serta subbab algoritma/query untuk operasi penting jika diperlukan.]*
+| Q-3601 | INSERT INTO produk_akhir (id_produk_akhir, id_pesanan, outputpath, deskripsi_produk, tanggal_pengumpulan, status_pemeriksaan, file_url) VALUES (?, ?, ?, ?, ?, ?, ?); | Menyimpan produk akhir ke dalam *database* terpusat. |
 
 <br>
 
