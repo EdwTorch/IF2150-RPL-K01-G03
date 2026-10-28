@@ -1007,8 +1007,8 @@ Tabel 5.36.1. Operasi Kelas C36
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void | public | Menyimpan rincian hasil pekerjaan (produk akhir) beserta URL atau path file ke dalam basis data. |
-| updateStatusPengerjaan() | public | Memperbarui status pemeriksaan produk akhir. |
-| getDetailProduk() | public | Mengembalikan data dan informasi lengkap dari produk akhir yang dikumpulkan. |
+| updateStatusPengerjaan() : void | public | Memperbarui status pemeriksaan produk akhir. |
+| getDetailProduk() : string | public | Mengembalikan data dan informasi lengkap dari produk akhir yang dikumpulkan. |
 
 Tabel 5.36.2. Atribut Kelas ProdukAkhir
 
@@ -1155,6 +1155,293 @@ Tabel 5.39.1.1. Query Operasi getDetailRevisi
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-C3901 | SELECT deskripsi_revisi, jml_revisi_tersedia, lampiran_revisi, status_pengerjaan FROM pengajuan_revisi WHERE id_revisi = ?; | Mengambil detail informasi revisi berdasarkan ID revisi yang dipanggil. |
+
+## 5.41 Kelas RevisiHandler
+
+**Nama Kelas:** RevisiHandler      
+**ID Kelas:** C41
+
+Tabel 5.41.1. Operasi Kelas C41
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| isRevisiRequestValid() : boolean | public | Memvalidasi apakah pengajuan revisi masih diperbolehkan. |
+| sendRevisi(deskripsiRevisi : string, lampiranRevisi : FILE) : void | public | Menyimpan data pengajuan revisi ke dalam *database*. |
+| sendNotifikasiRevisi() : void | public | Mengirim notifikasi kepada penyedia jasa bahwa terdapat permintaan revisi dari pengguna jasa. |
+| updateStatusPengerjaan(statusBaru : string) : void | public | Memperbarui status pengerjaan pesanan menjadi sedang direvisi. |
+
+### 5.41.1 Algoritma/Query
+
+**Nama Kelas:** RevisiHandler     
+**Nama Operasi:** isRevisiRequestValid         
+**ID Algoritma:** Algo-4101
+
+```pseudocode
+INPUT: void
+OUTPUT: boolean
+
+1. idPesanan = Session.getCurrentPesananId()
+2. hasilQuery = EXECUTE Q-4101 WITH (idPesanan)
+3. IF hasilQuery IS NOT EMPTY AND hasilQuery.jml_revisi_tersedia > 0 THEN
+4.      RETURN true
+5. ELSE
+6.      RETURN false
+```
+
+Tabel 5.41.2. Query Operasi isRevisiRequestValid
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4101 | SELECT jml_revisi_tersedia FROM pengajuan_revisi WHERE id_pesanan = ?; | Mengambil jumlah sisa kuota revisi yang tersedia untuk pesanan terkait. |
+
+### 5.41.2 Algoritma/Query
+
+**Nama Kelas:** RevisiHandler     
+**Nama Operasi:** sendRevisi         
+**ID Algoritma:** Algo-4102
+
+```pseudocode
+INPUT: deskripsiRevisi (string), lampiranRevisi (FILE)
+OUTPUT: void
+
+1. IF deskripsiRevisi EMPTY THEN
+2.      THROW Exception "Deskripsi revisi tidak boleh kosong."
+3. 
+4. idRevisi = GENERATE_UUID()
+5. idPesanan = Session.getCurrentPesananId()
+6. statusPengerjaan = "Sedang Direvisi"
+7.
+8. hasilQuery = EXECUTE Q-4102 WITH (idRevisi, idPesanan, deskripsiRevisi, lampiranRevisi, statusPengerjaan)
+9. IF hasilQuery == true THEN
+10.      RETURN
+11. ELSE
+12.     THROW Exception "Gagal mengirimkan pengajuan revisi."
+```
+
+Tabel 5.41.3. Query Operasi sendRevisi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4102 | INSERT INTO pengajuan_revisi (id_revisi, id_pesanan, deskripsi_revisi, lampiran_revisi, status_pengerjaan) VALUES (?, ?, ?, ?, ?); | Menyimpan rincian permintaan revisi baru ke dalam tabel pengajuan_revisi pada *database*. |
+
+### 5.41.3 Algoritma/Query
+
+**Nama Kelas:** RevisiHandler     
+**Nama Operasi:** sendNotifikasiRevisi         
+**ID Algoritma:** Algo-4103
+
+```pseudocode
+INPUT: void
+OUTPUT: void
+
+1. idNotifikasi = GENERATE_UUID()
+2. idPesanan = Session.getCurrentPesananId()
+3. pesan = "Anda mendapatkan permintaan revisi baru."
+4.
+5. hasilQuery = EXECUTE Q-4103 WITH (idNotifikasi, idPesanan, pesan)
+6. IF hasilQuery == true THEN
+7.      RETURN
+8. ELSE
+9.      THROW Exception "Gagal mengirimkan notifikasi revisi."
+```
+
+Tabel 5.41.4. Query Operasi sendNotifikasiRevisi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4103 | INSERT INTO notifikasi (id_notifikasi, id_pesanan, pesan_notifikasi) VALUES (?, ?, ?); | Mencatat data notifikasi ke database agar dimunculkan pada antarmuka penyedia jasa. |
+
+### 5.41.4 Algoritma/Query
+
+**Nama Kelas:** RevisiHandler     
+**Nama Operasi:** updateStatusPengerjaan         
+**ID Algoritma:** Algo-4104
+
+```pseudocode
+INPUT: statusBaru (string)
+OUTPUT: void
+
+1. idRevisi = Session.getCurrentRevisiId()
+2.
+3. hasilQuery = EXECUTE Q-4104 WITH (statusBaru, idRevisi)
+4. IF hasilQuery == true THEN
+5.      RETURN
+6. ELSE
+7.      THROW Exception "Gagal memperbarui status pengerjaan revisi."
+```
+
+Tabel 5.41.5. Query Operasi updateStatusPengerjaan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4104 | UPDATE pengajuan_revisi SET status_pengerjaan = ? WHERE id_revisi = ?; | Memperbarui atribut status pengerjaan revisi setelah penyedia jasa merespons atau mengumpulkan ulang berkas. |
+
+## 5.42 Kelas PencairanDana
+
+**Nama Kelas:** PencairanDana      
+**ID Kelas:** C42
+
+Tabel 5.42.2. Atribut Kelas PencairanDana
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| stateTransaksi | private | boolean |
+| statePencairanDana | private | boolean |
+
+## 5.43 Kelas TiketLaporan
+
+**Nama Kelas:** TiketLaporan      
+**ID Kelas:** C43
+
+Tabel 5.43.1. Operasi Kelas C43
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| getDetailTiket(idTiket : string) : string | public | Mengembalikan rincian data keluhan atau laporan pengguna berdasarkan ID tiket. |
+| createTiket(deskripsi : string, urlBukti : string, lampiran : FILE) : void | public | Menyimpan data tiket pelaporan baru dari pengguna. |
+| UpdateStatusTiket(statusBaru : boolean) : void | public | Memperbarui status tiket. |
+| saveTanggapan(tanggapanAdmin : string) : void | public | Menyimpan tanggapan atau respons teks dari Admin terkait laporan. |
+| saveStatusTindakan(jenisTindakan : string, catatan : string) : void | public | Mencatat keputusan akhir/sanksi yang diambil Admin terhadap pihak terlapor. |
+
+Tabel 5.43.2. Atribut Kelas TiketLaporan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idTiket | private | string |
+| deskripsiLaporan | private | string |
+| urlBukti | private | string |
+| lampiranBukti | private | FILE |
+| statusTiket | private | boolean |
+| TanggapanAdmin | private | string |
+
+### 5.43.1 Algoritma/Query
+
+**Nama Kelas:** TiketLaporan     
+**Nama Operasi:** getDetailTiket         
+**ID Algoritma:** Algo-4301
+
+```pseudocode
+INPUT: idTiket (string)
+OUTPUT: string
+
+1. hasilQuery = EXECUTE Q-4301 WITH (idTiket)
+2. IF hasilQuery IS NOT EMPTY THEN
+3.      data = FORMAT_TO_JSON(hasilQuery.deskripsi_laporan, hasilQuery.url_bukti, hasilQuery.lampiran_bukti, hasilQuery.status_tiket, hasilQuery.tanggapan_admin)
+4.      RETURN data
+5. ELSE
+6.      RETURN ""
+```
+
+Tabel 5.43.3. Query Operasi getDetailTiket
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4301 | SELECT deskripsi_laporan, url_bukti, lampiran_bukti, status_tiket, tanggapan_admin FROM tiket_laporan WHERE id_tiket = ?; | Mengambil isi keluhan dan status penyelesaian tiket berdasarkan ID tiket. |
+
+### 5.43.2 Algoritma/Query
+
+**Nama Kelas:** TiketLaporan     
+**Nama Operasi:** createTiket         
+**ID Algoritma:** Algo-4302
+
+```pseudocode
+INPUT: deskripsiLaporan (string), urlBukti (string), lampiranBukti (FILE)
+OUTPUT: void
+
+1. IF deskripsiLaporan EMPTY THEN
+2.      THROW Exception "Deskripsi laporan tidak boleh kosong."
+3.
+4. idTiket = GENERATE_UUID()
+5. statusAwal = false
+6.
+7. hasilQuery = EXECUTE Query Q-4302 WITH (idTiket, deskripsiLaporan, urlBukti, lampiranBukti, statusAwal)
+8. IF hasilQuery == true THEN
+9.      RETURN
+10. ELSE
+11.     THROW Exception "Gagal membuat tiket laporan."
+```
+
+Tabel 5.43.4. Query Operasi createTiket
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4302 | INSERT INTO tiket_laporan (id_tiket, deskripsi_laporan, url_bukti, lampiran_bukti, status_tiket) VALUES (?, ?, ?, ?, ?); | Menginput aduan baru ke dalam *database*. |
+
+### 5.43.3 Algoritma/Query
+
+**Nama Kelas:** TiketLaporan     
+**Nama Operasi:** UpdateStatusTiket         
+**ID Algoritma:** Algo-4303
+
+```pseudocode
+INPUT: statusBaru (boolean)
+OUTPUT: void
+
+1. idTiket = Session.getCurrentTiketId()
+2. hasilQuery = EXECUTE Q-4303 WITH (statusBaru, idTiket)
+3.
+4. IF hasilQuery == true THEN
+5.      RETURN
+6. ELSE
+7.      THROW Exception "Gagal memperbarui status tiket."
+```
+
+Tabel 5.43.5. Query Operasi UpdateStatusTiket
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4303 | UPDATE tiket_laporan SET status_tiket = ? WHERE id_tiket = ?; | Mengubah atribut status_tiket ketika mediasi atau pelaporan selesai ditangani. |
+
+### 5.43.4 Algoritma/Query
+
+**Nama Kelas:** TiketLaporan     
+**Nama Operasi:** saveTanggapan         
+**ID Algoritma:** Algo-4304
+
+```pseudocode
+INPUT: tanggapanAdmin (string)
+OUTPUT: void
+
+1. idTiket = Session.getCurrentTiketId()
+2. hasilQuery = EXECUTE Q-4304 WITH (tanggapanAdmin, idTiket)
+3.
+4. IF hasilQuery == true THEN
+5.      RETURN
+6. ELSE
+7.      THROW Exception "Gagal menyimpan tanggapan admin."
+```
+
+Tabel 5.43.6. Query Operasi saveTanggapan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4304 | UPDATE tiket_laporan SET tanggapan_admin = ? WHERE id_tiket = ?; | Menyimpan pesan tanggapan dari Admin. |
+
+### 5.43.5 Algoritma/Query
+
+**Nama Kelas:** TiketLaporan     
+**Nama Operasi:** saveStatusTindakan         
+**ID Algoritma:** Algo-4305
+
+```pseudocode
+INPUT: jenisTindakan (string), catatanTanggapan (string)
+OUTPUT: void
+
+1. idTanggapan = GENERATE_UUID()
+2. idTiket = Session.getCurrentTiketId()
+3. hasilQuery = EXECUTE Q-4305 WITH (idTanggapan, idTiket, jenisTindakan, catatanTanggapan)
+4.
+5. IF hasilQuery == true THEN
+6.      RETURN
+7. ELSE
+8.      THROW Exception "Gagal menyimpan status tindakan laporan."
+```
+
+Tabel 5.43.7. Query Operasi saveStatusTindakan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4305 | INSERT INTO tanggapan_laporan (id_tanggapan, id_tiket, jenis_tindakan, catatan_tanggapan) VALUES (?, ?, ?, ?); | Mencatat bentuk sanksi yang diputuskan oleh Admin. |
 
 <br>
 
