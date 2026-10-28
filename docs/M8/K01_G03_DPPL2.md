@@ -1601,11 +1601,11 @@ Tabel 5.6.2. Atribut Kelas HalamanLogin
 ```text
 PROSEDUR kirimLogin(email)
     JIKA email atau kata sandi kosong MAKA
-        tampilkanError()                  // data login tidak lengkap
+        tampilkanError()                  
         KELUAR
     Autentikator.validasiKredensial(email, password)
     JIKA email atau kata sandi tidak sesuai dengan akun terdaftar MAKA
-        tampilkanError()                  // email atau kata sandi salah
+        tampilkanError()                  
         KELUAR
     Autentikator.sesiLogin()
     arahkan pengguna ke halaman utama CariJasa
@@ -1728,7 +1728,7 @@ Tabel 5.15.2. Atribut Kelas HalamanPencarian
 
 ```text
 PROSEDUR klikCari()
-    dataJasa <- LayananPencarian.cariJasaBerdasarkanKeyword(keyword)   // memanggil Jasa.dapatkanDetailJasa()
+    dataJasa <- LayananPencarian.cariJasaBerdasarkanKeyword(keyword)   
     JIKA data jasa ditemukan MAKA
         HasilPencarian.tampilkanDaftarHasil()
         JIKA filter kriteria tambahan digunakan MAKA
@@ -4040,3 +4040,5 @@ Tabel 5.1. Matriks Kerunutan Kelas terhadap Use Case
 | C52 - Admin | UC15 - 	Memproses Laporan <br> UC16 - Melakukan Proses Mediasi |
 | C53 - HalamanDashboardAdmin | UC15 - 	Memproses Laporan <br> UC16 - Melakukan Proses Mediasi |
 
+# Lampiran
+Link Figma: https://www.figma.com/design/kioxG7t0kJ99WH7kx3U3WF/Logo-CariJasa?node-id=6-26&t=H9trRz7G64Wo886k-1 
