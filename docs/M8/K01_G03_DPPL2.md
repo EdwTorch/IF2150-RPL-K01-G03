@@ -2187,31 +2187,96 @@ Output : void
 ```
 
 ## 5.11 Kelas LayananUploadFile
-**Nama Kelas:** LayananUploadFile
-**ID Kelas:** C11
+
+**Nama Kelas:** LayananUploadFile  
+**ID Kelas:** C11  
 
 Tabel 5.11.1. Operasi Kelas LayananUploadFile
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| getStatusUpload() : string | public | Mengambil status kondisi kesiapan dan keberhasilan proses pengunggahan berkas |
+| validasiFormatUkuran(file : FILE) : boolean | public | Memvalidasi tipe MIME dan batasan ukuran maksimal berkas yang diunggah |
+| saveDeliverables(file : FILE) : string | public | Menyimpan berkas hasil pekerjaan akhir ke penyimpanan server dan mengembalikan path berkas |
+| uploadFile(berkas : FILE) : void | public | Mengunggah dan menyimpan berkas fisik pendukung ke sistem penyimpanan server |
 
 Tabel 5.11.2. Atribut Kelas LayananUploadFile
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| - | - | - |
 
 ### 5.11.1 Algoritma/Query
-**Nama Kelas:** LayananUploadFile
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** LayananUploadFile  
+**Nama Operasi:** getStatusUpload() : string  
+**ID Algoritma:** Algo-1101  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : void
+Output : string
 
+1. status = periksaStatusLayananPenyimpanan()
+2. RETURN status
+```
+
+### 5.11.2 Algoritma/Query
+**Nama Kelas:** LayananUploadFile  
+**Nama Operasi:** validasiFormatUkuran(file : FILE) : boolean  
+**ID Algoritma:** Algo-1102  
+
+```Pseudocode
+Input : file : FILE
+Output : boolean
+
+1. IF file == NULL THEN
+2.     RETURN false
+3. IF file.ukuran > 10485760 THEN
+4.     RETURN false
+5. formatValid = ["image/jpeg", "image/png", "application/pdf", "application/zip"]
+6. IF file.tipe NOT IN formatValid THEN
+7.     RETURN false
+8. RETURN true
+```
+
+### 5.11.3 Algoritma/Query
+**Nama Kelas:** LayananUploadFile  
+**Nama Operasi:** saveDeliverables(file : FILE) : string  
+**ID Algoritma:** Algo-1103  
+
+```Pseudocode
+Input : file : FILE
+Output : string
+
+1. IF file == NULL THEN
+2.     THROW Exception "Berkas deliverables tidak boleh kosong"
+3. IF validasiFormatUkuran(file) == false THEN
+4.     THROW Exception "Format atau ukuran berkas deliverables tidak valid"
+5. namaUnik = generateNamaUnik(file.nama)
+6. pathTujuan = "/storage/deliverables/" + namaUnik
+7. statusSimpan = simpanBerkasKeStorage(file, pathTujuan)
+8. IF statusSimpan == false THEN
+9.     THROW Exception "Gagal menyimpan berkas deliverables ke penyimpanan"
+10. RETURN pathTujuan
+```
+
+### 5.11.4 Algoritma/Query
+**Nama Kelas:** LayananUploadFile  
+**Nama Operasi:** uploadFile(berkas : FILE) : void  
+**ID Algoritma:** Algo-1104  
+
+```Pseudocode
+Input : berkas : FILE
+Output : void
+
+1. IF berkas == NULL THEN
+2.     THROW Exception "Berkas unggahan tidak boleh kosong"
+3. IF validasiFormatUkuran(berkas) == false THEN
+4.     THROW Exception "Format atau ukuran berkas unggahan tidak valid"
+5. namaUnik = generateNamaUnik(berkas.nama)
+6. pathTujuan = "/storage/uploads/" + namaUnik
+7. statusSimpan = simpanBerkasKeStorage(berkas, pathTujuan)
+8. IF statusSimpan == false THEN
+9.     THROW Exception "Gagal mengunggah berkas ke penyimpanan"
 ```
 
 ## 5.12 Kelas Jasa
