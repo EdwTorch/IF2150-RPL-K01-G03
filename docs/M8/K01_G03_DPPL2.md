@@ -948,17 +948,17 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C20 | Bookmark | <br> - idBookmark : string <br> - idPenggunaJasa : string <br> - idJasa : string <br> - waktuDisimpan : Date <br> - daftarBookmark : list of bookmark | <br> + simpanBookmark(idPenggunaJasa : string, idJasa : string) <br> + hapusBookmark(idBookmark : string, idPenggunaJasa : string) : boolean <br> + lihatBookmark(idPenggunaJasa : string) : list of Bookmark |
 | C21 | HalamanBookmark | <br> - daftarJasaTersimpan : list of Jasa <br> - ikonBookmarkAktif : void <br> - ikonBookmarkNonaktif : void <br> - tombolHapusBookmark : void | <br> + tampilkanDaftarTersimpan() : void  <br> + klikIkonBookmark() : void <br> + klikIkonHapus() : void <br> + tampilkanNotifikasi() : void |
 | C22 | PengontrolBookmark | - | <br> + tambahDataBookmark() : boolean <br> + hapusDataBookmark() : boolean <br> + ambilDaftarBookmarkPengguna() : list of Bookmark |
-| C23 | ChatRoom | <br> - idChatRoom : string <br> - idAnggota : string <br> - riwayatPesan : list of string <br> - waktuDibuat : Date | <br> + getRiwayatPesan(idChatRoom : string) : list of string <br> + simpanPesan(pesan : string) : void <br> + getidChatRoom(idPenggunaJasa : string,idPenyediaJasa : string) : string <br> + getidAnggota(idChatRoom : string) : string |
+| C23 | ChatRoom | <br> - idChatRoom : string <br> - idAnggota : string <br> - riwayatPesan : list of string <br> - waktuDibuat : Date | <br> + getRiwayatPesan(idChatroom : string) : list of pesan <br> + simpanPesan(pesan : string) : void <br> + getidChatRoom(idPenggunaJasa : string,idPenyediaJasa : string) : string <br> + getidAnggota(idChatRoom : string) : string |
 | C24 | HalamanChat | - idSesiChat : string <br> - inputPesan : string <br> - statusKoneksi : string | <br> + tampilkanMenuChat() : void <br> + tampilkanRiwayatPesan() : void <br> + inputPesan() : void <br> + tombolKirimTerklik() : void <br> + tampilkanPesanError() : void <br> + tampilkanStatusBelumTerkirim() : void |
-| C25 | LayananPesanInstan | - | <br> + buatSesiChat() : void <br> + validasiInputPesan() : boolean <br> + kirimPesan() : void <br> + simpanKeDatabase() : void <br> + updateStatusBaca() : void |
-| C26 | LayananNotifikasiChat | - | <br> + kirimNotifikasiPesan() : void <br> + tampilkanPopUpNotifikasi() : void |
-| C27 | Pesanan | <br> - idPesanan : string <br> - idPenggunaJasa : string <br> - idPenyediaJasa : string <br> - idJasa : string <br> - brief : string <br> - totalBiaya : double <br> - statusPesanan : boolean |  <br> + setStatusDiproses()  : void <br> + setStatusSelesai(): void |
+| C25 | LayananPesanInstan | - | <br> + buatSesiChat(idPenggunaJasa : string, idPenyediaJasa) : void <br> + validasiInputPesan(pesan : string) : boolean <br> + kirimPesan(pesan : string) : void <br> + simpanKeDatabase(idChatroom : string, idPengirim : string, pesan : string) : void <br> +  updateStatusBaca(idChatroom : string, idPengguna : string) : boolean |
+| C26 | LayananNotifikasiChat | - | <br> + kirimNotifikasiPesan(idPesan : string, idPengirim : string, idPenerima : string) : void <br> + tampilkanPopUpNotifikasi(device : string, pengirim : string, pesan : string) : void  |
+| C27 | Pesanan | <br> - idPesanan : string <br> - idPenggunaJasa : string <br> - idPenyediaJasa : string <br> - idJasa : string <br> - brief : string <br> - totalBiaya : double <br> - statusPesanan : boolean |  <br> + setStatusDiproses(idPesanan : string) : void <br> + setStatusSelesai(idPesanan : string) : void  <br> + setStatus(idPesanan : string, status : string) : void |
 | C28 | HalamanPemesanan | <br> - idJasaDipilih : string <br> - briefPemesanan : string | <br> + tampilkanFormPemesanan() : void <br> + inputBriefPemesanan() : void <br> + tombolPesanTerklik() : void |
 | C29 | HalamanPembayaran | <br> - totalHarga : Double <br> - idMetodePembayaran : string | <br> + tampilkanPilihanPembayaran() : void <br> + tampilkanRincianPembayaran() : void <br> + tombolBayarTerklik() : void <br> + tampilkanNotifikasiBerhasil() : void |
 | C30 | HalamanRiwayatTransaksi | <br> - idTransaksi : string | <br> + tampilkanRiwayatTransaksi() : void |
-| C31 | PengontrolPesanan | - | <br> + buatPesananBaru() : void <br> +  hitungTotalBiaya() : double <br> + updateStatusPesanan(idPesanan: integer, status: STATUS) : void <br> + getDetailPesanan() : string |
-| C32 | PengontrolTransaksi | - | <br> + prosesPembayaran() : void <br> + validasiPembayaran() : boolean <br> +  updateStatusPembayaran() : void <br> + setPencairanDana(selesai : boolean) : void <br> + catatRiwayatTransaksi(idPesanan : string) : void |
-| C33 | MetodePembayaran | <br> - idMetode : string <br> - namaMetode : string <br> - nomorRekeningVA : string | <br> + getDetailMetode() : MetodePembayaran |
+| C31 | PengontrolPesanan | - | <br> + buatPesananBaru(briefPesanan : string, idJasa : string, idPenggunaJasa : string) : Pesanan <br> +   hitungTotalBiaya(idJasa) : double <br> + updateStatusPesanan(idPesanan: string, status: string) : void <br> + getDetailPesanan(idPesanan : string) : string |
+| C32 | PengontrolTransaksi | - | <br> + prosesPembayaran(idPesanan : string, idMetode : string) : boolean <br> + validasiPembayaran(idPesanan : string) : boolean <br> +setPencairanDana(idPesanan : string, selesai : boolean) : boolean <br> +  updateStatusPembayaran(idPesanan : string, status : string) : boolean<br> + catatRiwayatTransaksi(idPesanan : string) : void |
+| C33 | MetodePembayaran | <br> - idMetode : string <br> - namaMetode : string <br> - nomorRekeningVA : string | <br> + getDetailMetode(idMetode : string)  : MetodePembayaran |
 | C34 | RiwayatTransaksi | <br> - idRiwayat : string <br> - idPesanan : string <br> - tanggalTransaksi : DATE <br> - statusTransaksi : boolean | <br> + simpanTransaksi() : void |
 | C35 | HalamanKonfirmasi | <br> - idPesanan : string <br> - detailBrief : string | <br> + tampilkanDetailPesanan() : void <br> + tombolTerimaTerklik() : void <br> + tombolTolakTerklik() : void <br> + tampilkanStatusPesanan() : void |
 | C36 | ProdukAkhir | <br> -idProdukAkhir : string <br> - idPesanan : string <br> - outputpath : string <br> - deskripsiProdukAkhir : string  <br>- tanggalPengumpulan : Date <br> - statusPemeriksaan : boolean <br> - fileURL : string | <br> + simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void  <br> + updateStatusPengerjaan() <br> + getDetailProduk()  | 
@@ -1865,30 +1865,6 @@ Tabel 5.31.1. Operasi Kelas [PengontrolPesanan]
 | updateStatusPesanan(idPesanan: integer, status: STATUS) : void | public | mengubah status pesanan |
 |getDetailPesanan() : string | public | mendapatkan detail pesanan |
  
-
-### 5.31.1 Algoritma/Query
-
-Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
-
-**Nama Kelas:** PengontrolPesanan
-**Nama Operasi:** buatPesananBaru(briefPesanan : string, idJasa : string, idPenggunaJasa : string) : Pesanan
-**ID Algoritma:** Algo-3101
-
-```Pseudocode
-INPUT: briefPesanan : string, idJasa : string, idPenggunaJasa : string
-OUTPUT: Pesanan
-1. IF briefPesanan == NULL  THEN
-2.   Throw Exception "Pesanan tidak Valid"
-3. idPesanan = Pesanan.getIdPesanan()
-4. totalBiaya = hitungTotalBiaya(idJasa)
-5. idPenyediaJasa = Jasa.dapatkanDetailJasa(idJasa).idPenyediaJasa
-6. Jalankan Query Q-3101 dengan parameter briefPesanan,idJasa, idPesanan, idPenyediaJasa dan totalBiaya
-7. RETURN Pesanan
-
-```
-| No Query | Query | Keterangan |
-| :--- | :--- | :--- |
-| Q-3101 | INSERT INTO Pesanan (idPenggunaJasa, idJasa, totalBiaya, idPenyediaJasa, statusPesanan, waktuDibuat) VALUES (%idPenggunaJasa%, %idJasa%,totalBiaya%, %idPenyediaJasa%, "Menunggu Pembayaran", %NOW()) RETURN Pesanan | Mengupdate Status Pengerjaan |
 
 
 ## 5.32 Kelas PengontrolTransaksi (C32)
