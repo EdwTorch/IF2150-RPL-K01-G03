@@ -2097,32 +2097,46 @@ Output : void
 ```
 
 ## 5.9 Kelas Portofolio
-**Nama Kelas:** Portofolio
-**ID Kelas:** C09
+
+**Nama Kelas:** Portofolio  
+**ID Kelas:** C09  
 
 Tabel 5.9.1. Operasi Kelas Portofolio
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| simpanPortofolio() : void | public | Menyimpan data karya portofolio baru ke dalam database |
 
 Tabel 5.9.2. Atribut Kelas Portofolio
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| judul | private | string |
+| deskripsi | private | string |
+| berkasPendukung | private | FILE |
 
 ### 5.9.1 Algoritma/Query
-**Nama Kelas:** Portofolio
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** Portofolio  
+**Nama Operasi:** simpanPortofolio() : void  
+**ID Algoritma:** Algo-0901  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : void
+Output : void
 
+1. IF this.judul == NULL OR this.berkasPendukung == NULL THEN
+2.     THROW Exception "Data portofolio tidak lengkap"
+3. Jalankan Query [Q-0901] dengan parameter judul, deskripsi, berkasPendukung
+4. Simpan status eksekusi query ke dalam variabel statusInsert
+5. IF statusInsert == false THEN
+6.     THROW Exception "Gagal menyimpan portofolio ke database"
 ```
+
+Tabel 5.9.3. Query Operasi simpanPortofolio
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0901 | INSERT INTO portofolio (judul, deskripsi, berkas_pendukung) <br> VALUES (%judul%, %deskripsi%, %berkasPendukung%); | Menyimpan data karya portofolio baru ke dalam database |
 
 ## 5.10 Kelas PengontrolPortofolio
 **Nama Kelas:** PengontrolPortofolio
