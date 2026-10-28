@@ -32,6 +32,7 @@
     - [Milestone 5](#milestone-5)
     - [Milestone 6](#milestone-6)
     - [Milestone 7](#milestone-7)
+    - [Milestone 8](#milestone-8)
 ---
 
 ### Milestone 1
@@ -176,5 +177,7 @@
 | *28-10-2026* | There | Mengerjakan Bab 5 | 3 jam | Done | - |
 | *28-10-2026* | Necia | Mengerjakan Bab 6 | 3 jam | Done | - |
 
+**Catatan/Evaluasi Milestone 8:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
