@@ -32,6 +32,7 @@
     - [Milestone 5](#milestone-5)
     - [Milestone 6](#milestone-6)
     - [Milestone 7](#milestone-7)
+    - [Milestone 8](#milestone-8)
 ---
 
 ### Milestone 1
@@ -163,6 +164,20 @@
 | *21-01-2026* | Danesh | Memasukan aset-aset yang diperlukan dan merapikan dokumen | ~1 jam | Done | - |
 
 **Catatan/Evaluasi Milestone 7:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
+### Milestone 8
+**Periode:** [21 Oktober 2026] - [28 Oktober 2026]
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *24-10-2026* hingga *28-10-2026* | Edward  | Mengerjakan Algoritma C17,18, 20,22,23,25,26,27,31,32,33,34 | 10 Jam | Done | Ga paham SQL, dan terlalu banyak komponen yang harus dikerjakan,  Badan Meriang berhari-hari, demot |
+| *26-10-2026* | Revandra, There, Edward, Necia | Asistensi M8 | 30 Menit | Done | - |
+| *24-10-2026* hingga *27-10-2026* | Necia | Mengerjakan UI | >5 jam | Done | - |
+| *25-10-2026* hingga *27-10-2026* | There | Mengerjakan UI | >5 jam | Done | - |
+| *28-10-2026* | There | Mengerjakan Bab 5 | 3 jam | Done | - |
+| *28-10-2026* | Necia | Mengerjakan Bab 6 | 3 jam | Done | - |
+
+**Catatan/Evaluasi Milestone 8:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``

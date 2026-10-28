@@ -743,7 +743,7 @@ Tabel 3.12. Identifikasi Kelas Use Case [UC12]
 ### 3.12.3 Diagram Kelas
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DiagramKelas.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC12_DPPL-DiagramClass.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.12.3 Diagram Kelas Mengonfirmasi Hasil Pekerjaan</i>
