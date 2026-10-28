@@ -2196,6 +2196,38 @@ Tabel 5.27.3. Query Operasi Pesanan
 | :--- | :--- | :--- |
 | Q-2703 | UPDATE Pesanan <br> SET statusPengerjaan = %status% WHERE idPesanan = %idPesanan%| Mengupdate Status Pengerjaan |
 
+## 5.30 Kelas HalamanRiwayatTransaksi
+
+**Nama Kelas:** HalamanRiwayatTransaksi  
+**ID Kelas:** C30
+
+Tabel 5.30.1. Operasi Kelas HalamanRiwayatTransaksi
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanRiwayatTransaksi() : void | public | Menampilkan daftar transaksi yang telah dilakukan beserta harga dan status transaksi (UC09, UC14). |
+
+Tabel 5.30.2. Atribut Kelas HalamanRiwayatTransaksi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idTransaksi | private | string |
+| daftarPesananSelesai | private | list of Pesanan |
+
+### 5.30.1 Algoritma/Query
+
+**Nama Kelas:** HalamanRiwayatTransaksi  
+**Nama Operasi:** tampilkanRiwayatTransaksi() : void  
+**ID Algoritma:** Algo-3001
+
+```text
+PROSEDUR tampilkanRiwayatTransaksi()
+    tampilkan daftar transaksi beserta harga dan status transaksi
+    SAAT PenggunaJasa memilih "Beri Ulasan" pada pesanan dalam daftarPesananSelesai
+        PenggunaJasa.beriUlasan(idPesanan)           
+        HalamanUlasan.tampilkanFormUlasan()
+```
+
 ## 5.31 Kelas PengontrolPesanan (C31)
 
 **Nama Kelas:** PengontrolPesanan
@@ -2550,6 +2582,477 @@ OUTPUT: boolean
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-3401 | INSERT INTO riwayat_transaksi (id_pesanan, tanggal_transaksi, status_transaksi) VALUES (%idPesanan%, NOW(), %statusTransaksi%) RETURNING id_riwayat; | Memasukkan baris data riwayat transaksi baru ke dalam database dan mengembalikan ID riwayat yang baru saja terbentuk. |
+
+## 5.35 Kelas HalamanKonfirmasi
+
+**Nama Kelas:** HalamanKonfirmasi  
+**ID Kelas:** C35
+
+Tabel 5.35.1. Operasi Kelas HalamanKonfirmasi
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanDetailPesanan() : void | public | Menampilkan detail pesanan (brief) saat Penyedia Jasa membuka notifikasi pesanan. |
+| tombolTerimaTerklik() : void | public | Menangani aksi Penyedia Jasa menerima pesanan. |
+| tombolTolakTerklik() : void | public | Menangani aksi Penyedia Jasa menolak pesanan. |
+| tampilkanStatusPesanan() : void | public | Menampilkan status pesanan (diterima dan diproses, atau ditolak). |
+
+Tabel 5.35.2. Atribut Kelas HalamanKonfirmasi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idPesanan | private | string |
+| detailBrief | private | string |
+
+### 5.35.1 Algoritma/Query
+
+**Nama Kelas:** HalamanKonfirmasi  
+**Nama Operasi:** tampilkanDetailPesanan() : void  
+**ID Algoritma:** Algo-3501
+
+```text
+PROSEDUR tampilkanDetailPesanan()
+    detailBrief <- PengontrolPesanan.getDetailPesanan()     
+    getDetailPesanan()
+    tampilkanDetailPesanan()
+```
+
+
+### 5.35.2 Algoritma/Query
+
+**Nama Kelas:** HalamanKonfirmasi  
+**Nama Operasi:** tombolTerimaTerklik() : void  
+**ID Algoritma:** Algo-3502
+
+```text
+PROSEDUR tombolTerimaTerklik()
+    PenyediaJasa.terimaPesanan()
+    PengontrolPesanan.updateStatusPesanan()
+        Pesanan.setStatusDiproses()
+        PengontrolTransaksi.updateStatusPembayaran()
+        MetodePembayaran.getDetailMetode()
+        buat RiwayatTransaksi
+    tampilkanStatusPesanan()                                
+```
+
+
+### 5.35.3 Algoritma/Query
+
+**Nama Kelas:** HalamanKonfirmasi  
+**Nama Operasi:** tombolTolakTerklik() : void  
+**ID Algoritma:** Algo-3503
+
+```text
+PROSEDUR tombolTolakTerklik()
+    PenyediaJasa.tolakPesanan()
+    PengontrolPesanan.updateStatusPesanan()
+        PengontrolTransaksi.updateStatusPembayaran()           
+        buat RiwayatTransaksi
+    tampilkanStatusPesanan()                                 
+```
+
+## 5.37 Kelas HalamanPengumpulan
+
+**Nama Kelas:** HalamanPengumpulan  
+**ID Kelas:** C37
+
+Tabel 5.37.1. Operasi Kelas HalamanPengumpulan
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanFormPengumpulan() : void | public | Menampilkan halaman detail pekerjaan dan tempat pengumpulan hasil kerja. |
+| inputDeskripsiHasil() : string | public | Menerima deskripsi singkat hasil pekerjaan. |
+| unggahDeliverables() : FILE | public | Menerima berkas hasil pekerjaan yang diunggah. |
+| inputLink() : string | public | Menerima tautan hasil pekerjaan sebagai alternatif berkas. |
+| klikKirimHasil() : boolean | public | Menangani aksi "Kirim Hasil Pekerjaan" dan mengembalikan keberhasilan pengiriman. |
+| tampilkanStatusPengiriman(terkirim : boolean) : void | public | Menampilkan notifikasi status pengiriman hasil pekerjaan. |
+| tampilkanPesanError(pesanError : string) : void | public | Menampilkan pesan kesalahan (data tidak lengkap, ukuran berkas, koneksi). |
+
+Tabel 5.37.2. Atribut Kelas HalamanPengumpulan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| deskripsiHasil | private | string |
+| fileURL | private | string |
+| tombolKirim | private | void |
+| pesanError | private | string |
+
+### 5.37.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPengumpulan  
+**Nama Operasi:** inputDeskripsiHasil() : string  
+**ID Algoritma:** Algo-3701
+
+```text
+FUNGSI inputDeskripsiHasil() : string
+    PengumpulanController.validasiDeskripsi()
+    JIKA deskripsi tidak sesuai batasan MAKA
+        tampilkanPesanError("Deskripsi Melewati Batasan")
+```
+
+
+### 5.37.2 Algoritma/Query
+
+**Nama Kelas:** HalamanPengumpulan  
+**Nama Operasi:** klikKirimHasil() : boolean  
+**ID Algoritma:** Algo-3702
+
+```text
+FUNGSI klikKirimHasil() : boolean
+    PengumpulanController.validasiPengumpulan()
+    JIKA file kosong DAN link kosong MAKA
+        tampilkanPesanError("Unggah Berkas atau Isi Tautan")
+        KEMBALIKAN false
+    JIKA file tidak kosong MAKA
+        LayananUploadFile.validasiFormatUkuran(file)
+        JIKA file terlalu besar MAKA                         
+        tampilkanStatusPengiriman(false)
+        tampilkanPesanError("Size File Terlalu Besar")
+        KEMBALIKAN false
+        pathFile <- LayananUploadFile.saveDeliverables(file)
+    ProdukAkhir.simpanProdukAkhir(deskripsi, pathFile, link)   
+    PenyediaJasa.saveProdukAkhir(idProduk, idPenyediaJasa)
+    ProdukAkhir.updateStatusPengerjaan(true)
+    tampilkanStatusPengiriman(true)                        
+    KEMBALIKAN true
+```
+
+## 5.38 Kelas HalamanDeliverables
+
+**Nama Kelas:** HalamanDeliverables  
+**ID Kelas:** C38
+
+Tabel 5.38.1. Operasi Kelas HalamanDeliverables
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanDeliverables() : void | public | Menampilkan hasil pekerjaan, lampiran, status pekerjaan, dan jumlah revisi. |
+| ajukanRevisi() : void | public | Menangani aksi Pengguna Jasa mengajukan revisi, dengan batas kuota revisi. |
+| konfirmasiPesanan() : void | public | Menangani aksi Pengguna Jasa mengonfirmasi hasil dan menandai pesanan "Selesai". |
+| tampilkanError(msg : string) : void | public | Menampilkan pesan kesalahan (kuota revisi habis, koneksi gagal). |
+
+Tabel 5.38.2. Atribut Kelas HalamanDeliverables
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| deskripsiHasil | private | void |
+| fileURL | private | string |
+| tombolKonfirmasi | private | void |
+| tombolRevisi | private | void |
+| jumlahRevisi | private | int |
+| pesanError | private | string |
+| tombolBantuan | private | void |
+| lampiranDeliverables | private | FILE |
+
+### 5.38.1 Algoritma/Query
+
+**Nama Kelas:** HalamanDeliverables  
+**Nama Operasi:** konfirmasiPesanan() : void  
+**ID Algoritma:** Algo-3801
+
+```text
+PROSEDUR konfirmasiPesanan()
+    idPesanan <- PengontrolPesanan, melalui Pesanan.getIdPesanan()
+    PengontrolTransaksi.prosesPembayaran(idPesanan)
+        PengontrolPesanan.hitungTotalBiaya()
+        PengontrolTransaksi.validasiPembayaran()
+        PengontrolTransaksi.setPencairanDana(true)            
+        kirim notifikasi pencairan ke PenyediaJasa
+        PengontrolTransaksi.updateStatusPembayaran(true)
+        PengontrolPesanan.updateStatusPesanan(true)           
+    JIKA server tidak merespons > 10 detik MAKA             
+        tampilkanError("Proses Konfirmasi Gagal. Periksa koneksi internet Anda dan coba lagi.")
+```
+
+
+### 5.38.2 Algoritma/Query
+
+**Nama Kelas:** HalamanDeliverables  
+**Nama Operasi:** ajukanRevisi() : void  
+**ID Algoritma:** Algo-3802
+
+```text
+PROSEDUR ajukanRevisi()
+    PenggunaJasa.ajukanRevisi()
+    HalamanRequestRevisi.tampilkanformRevisi()
+```
+
+## 5.40 Kelas HalamanRequestRevisi
+
+**Nama Kelas:** HalamanRequestRevisi  
+**ID Kelas:** C40
+
+Tabel 5.40.1. Operasi Kelas HalamanRequestRevisi
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanformRevisi() : void | public | Menampilkan form revisi beserta detail pekerjaan. |
+| tampilkanFieldPengisianRevisi() : void | public | Menampilkan kolom pengisian permintaan revisi. |
+| tampilkanKuotaRevisi() : void | public | Menampilkan informasi sisa kuota revisi. |
+| kirimRevisi() : void | public | Menangani aksi "Ajukan Revisi" dan meneruskannya ke Penyedia Jasa. |
+| tampilkanPesan() : void | public | Menampilkan pesan error atau pesan untuk Penyedia Jasa. |
+
+Tabel 5.40.2. Atribut Kelas HalamanRequestRevisi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formRevisi | private | void |
+| detailRevisi | private | void |
+| kuotaRevisi | private | int |
+| tombolRevisi | private | element |
+| pesanUntukPenyedia | private | string |
+
+### 5.40.1 Algoritma/Query
+
+**Nama Kelas:** HalamanRequestRevisi  
+**Nama Operasi:** tampilkanformRevisi() : void  
+**ID Algoritma:** Algo-4001
+
+```text
+PROSEDUR tampilkanformRevisi()
+    detail <- PengontrolPesanan.getDetailPesanan()          
+    getDetailPesanan()
+    JIKA batas waktu pengajuan revisi terlewati MAKA
+        tampilkanPesan("maaf waktu pengajuan revisi sudah habis")
+        KELUAR
+    tampilkanKuotaRevisi()
+```
+
+
+### 5.40.2 Algoritma/Query
+
+**Nama Kelas:** HalamanRequestRevisi  
+**Nama Operasi:** kirimRevisi() : void  
+**ID Algoritma:** Algo-4002
+
+```text
+PROSEDUR kirimRevisi()
+    RevisiHandler.isRevisiRequestValid()
+    JIKA kuota revisi habis MAKA
+        tampilkanPesan("Kuota Revisi yang diajukan sudah habis. Jika dirasa kualitas masih jauh dari kata sesuai dengan kesepakatan awal, silakan ajukan tiket laporan")
+        KELUAR
+    buat PengajuanRevisi
+    RevisiHandler.updateStatusPengerjaan()
+    RevisiHandler.sendRevisi(deskripsi, lampiran)
+    RevisiHandler.sendNotifikasiRevisi()
+    JIKA revisi terkirim MAKA tampilkanPesan()              
+    JIKA server bermasalah MAKA
+        tampilkanPesan("Revisi Gagal Terkirim Silahkan Coba Beberapa Menit lagi")
+```
+
+## 5.44 Kelas HalamanPelaporan
+
+**Nama Kelas:** HalamanPelaporan  
+**ID Kelas:** C44
+
+Tabel 5.44.1. Operasi Kelas HalamanPelaporan
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanFormLaporan() : void | public | Menampilkan form laporan: kategori pelanggaran, deskripsi masalah, dan lampiran bukti. |
+| tampilkanTiketdanTanggapan() : void | public | Menampilkan nomor tiket, status laporan, dan tanggapan admin. |
+| tampilkanPesanError() : void | public | Menampilkan pesan kesalahan validasi atau pengiriman laporan. |
+
+Tabel 5.44.2. Atribut Kelas HalamanPelaporan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formLaporan | private | void |
+| kategoriPelanggaran | private | void |
+| deskripsiPelanggaran | private | void |
+| kolomBukti | private | void |
+| statusLaporan | private | boolean |
+| noTiket | private | string |
+| pesanError | private | string |
+| tanggapanAdmin | private | string |
+
+### 5.44.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPelaporan  
+**Nama Operasi:** tampilkanFormLaporan() : void  
+**ID Algoritma:** Algo-4401
+
+```text
+PROSEDUR tampilkanFormLaporan()
+    tampilkan form laporan
+    SAAT pengguna mengumpulkan tiket
+        LaporanHandler.validasiFormatLaporan()
+        JIKA bukti/deskripsi/kategori tidak lengkap MAKA
+            tampilkanPesanError("Bukti/Deskripsi/Kategori Tidak Lengkap")
+            KELUAR
+        idPenggunaJasa <- PenggunaJasa.getIdPenggunaJasa()
+        idPenyediaJasa <- PenyediaJasa.getIdPenyediaJasa()
+        TiketLaporan.createTiket(idPenggunaJasa, idPenyediaJasa, URLbukti, Kategori, Deskripsi)
+        JIKA tiket berhasil dibuat MAKA tampilkan "Ticket Berhasil Dibuat"
+        JIKA tidak (server bermasalah) MAKA tampilkanPesanError("Ticket Gagal dibuat")
+```
+
+## 5.47 Kelas HalamanUlasan
+
+**Nama Kelas:** HalamanUlasan  
+**ID Kelas:** C47
+
+Tabel 5.47.1. Operasi Kelas HalamanUlasan
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanFormUlasan() : void | public | Menampilkan form ulasan: penilaian bintang, unggah dokumentasi, dan komentar. |
+| inputRatingBintang(rating: integer) : void | public | Menerima penilaian bintang (wajib diisi). |
+| inputKomentar(teksKomentar: string) : void | public | Menerima komentar (opsional, maksimal 300 kata). |
+| unggahDokumentasi(fileDokumentasi: FILE) : void | public | Menerima berkas dokumentasi (opsional). |
+| submitUlasan() : void | public | Menangani aksi "Kirim Ulasan". |
+| tampilkanPesanError() : void | public | Menampilkan pesan kesalahan validasi atau pengiriman. |
+| tampilkanNotifikasiBerhasil() : void | public | Menampilkan notifikasi bahwa ulasan berhasil dikirim. |
+
+Tabel 5.47.2. Atribut Kelas HalamanUlasan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| rating | private | integer |
+| teksKomentar | private | string |
+| fileDokumentasi | private | FILE |
+| pesanError | private | string |
+
+### 5.47.1 Algoritma/Query
+
+**Nama Kelas:** HalamanUlasan  
+**Nama Operasi:** submitUlasan() : void  
+**ID Algoritma:** Algo-4701
+
+```text
+PROSEDUR submitUlasan()
+    UlasanHandler.prosesUlasan(idPesanan, rating, teksKomentar, fileDokumentasi)
+        UlasanHandler.validasiKelengkapanRating(rating)
+        UlasanHandler.validasiPanjangKomentar(teksKomentar)
+        UlasanHandler.validasiFormatBerkas(fileDokumentasi)
+    JIKA validasi berhasil MAKA
+        Ulasan.simpanUlasan()
+        UlasanHandler.perbaruiRating(idPenyediaJasa, rating)
+        PengontrolPesanan.updateStatusPesanan(idPesanan, "Selesai")   
+        PengontrolTransaksi.catatRiwayatTransaksi(idPesanan)          
+        simpanTransaksi()
+        tampilkanNotifikasiBerhasil()
+    JIKA tidak MAKA
+        tampilkanPesanError(pesanError)
+```
+
+## 5.50 Kelas HalamanPengajuanMediasi
+
+**Nama Kelas:** HalamanPengajuanMediasi  
+**ID Kelas:** C50
+
+Tabel 5.50.1. Operasi Kelas HalamanPengajuanMediasi
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanDetailPelaporan() : void | public | Menampilkan detail pelaporan (kategori pelanggaran, deskripsi masalah, dan bukti) pada ruang mediasi. |
+| tampilkanRiwayatPesan() : void | public | Menampilkan riwayat pesan ruang mediasi antara Admin, Pengguna Jasa, dan Penyedia Jasa. |
+| inputTindakan() : void | public | Menerima jenis tindakan yang dipilih Admin (tidak ada sanksi, teguran, pembekuan sementara, atau pemblokiran akun) dan meneruskannya ke MediasiHandler. |
+| akhiriMediasi() : void | public | Menangani aksi "Akhiri Mediasi" dan meneruskannya ke MediasiHandler. |
+| tampilkanNotifikasiSelesai() : void | public | Menampilkan notifikasi bahwa proses mediasi telah selesai. |
+| tampilkanPesanError(pesanError : string) : void | public | Menampilkan pesan kesalahan saat mediasi gagal dibuka atau diakhiri. |
+
+
+Tabel 5.50.2. Atribut Kelas HalamanPengajuanMediasi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| detailPelaporan | public | TiketLaporan |
+| riwayatPesan | public | list of string |
+| opsiTindakan | public | - |
+| pesanError | public | string |
+
+
+### 5.50.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPengajuanMediasi  
+**Nama Operasi:** - (kelas belum memiliki operasi; alur interaksi pada UC16)  
+**ID Algoritma:** Algo-5001
+
+```text
+    HalamanDashboardAdmin.tampilkanHalamanMediasi()          
+    tampilkan halaman mediasi dan riwayat pesan              
+    Admin.pilihJenisTindakan()
+    MediasiHandler.inputTindakan()                           
+    SAAT Admin mengakhiri mediasi
+        MediasiHandler.akhiriMediasi()
+        TiketLaporan.UpdateStatusTiket()
+        JIKA status berhasil diperbarui MAKA MediasiHandler.tampilkanNotifikasiSelesai()
+        JIKA gagal MAKA MediasiHandler.tampilkanPesanError()
+```
+
+## 5.53 Kelas HalamanDashboardAdmin
+
+**Nama Kelas:** HalamanDashboardAdmin  
+**ID Kelas:** C53
+
+Tabel 5.53.1. Operasi Kelas HalamanDashboardAdmin
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanDetailTiket() : void | public | Menampilkan detail tiket: kategori pelanggaran, deskripsi masalah, dan lampiran bukti. |
+| inputTindakan() : void | public | Menerima pilihan tindakan Admin (tidak ada sanksi, teguran, pembekuan sementara, pemblokiran akun). |
+| selesaikanTiket() : void | public | Menangani aksi "Selesaikan Laporan". |
+| mulaiMediasi() : void | public | Menangani aksi "Mulai Mediasi". |
+| tampilkanPesanError() : void | public | Menampilkan pesan kesalahan proses. |
+| tampilkanHalamanMediasi() : void | public | Menampilkan antarmuka ruang mediasi. |
+
+Tabel 5.53.2. Atribut Kelas HalamanDashboardAdmin
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| daftarTiket | private | list of TiketLaporan |
+| detailTiket | private | TiketLaporan |
+| opsiTindakan | private | TINDAKAN |
+| pesanError | private | string |
+
+### 5.53.1 Algoritma/Query
+
+**Nama Kelas:** HalamanDashboardAdmin  
+**Nama Operasi:** tampilkanDetailTiket() : void  
+**ID Algoritma:** Algo-5301
+
+```text
+PROSEDUR tampilkanDetailTiket()
+    detailTiket <- LaporanHandler.getDetailTiket()
+    tampilkanDetailTiket()
+```
+
+
+### 5.53.2 Algoritma/Query
+
+**Nama Kelas:** HalamanDashboardAdmin  
+**Nama Operasi:** selesaikanTiket() : void  
+**ID Algoritma:** Algo-5302
+
+```text
+PROSEDUR selesaikanTiket()
+    LaporanHandler.saveTanggapan()
+        TanggapanLaporan.catatKeputusanTindakan()
+    TiketLaporan.UpdateStatusTiket()
+    SESUAI opsiTindakan
+        ban pengguna   : LaporanHandler.banPengguna()
+        skors pengguna : LaporanHandler.skorsPengguna()
+    LaporanHandler.kirimTanggapan()
+    tampilkan notifikasi penyelesaian berhasil
+    JIKA server tidak merespons MAKA                         
+    tampilkanPesanError()   
+```
+
+
+### 5.53.3 Algoritma/Query
+
+**Nama Kelas:** HalamanDashboardAdmin  
+**Nama Operasi:** mulaiMediasi() : void  
+**ID Algoritma:** Algo-5303
+
+```text
+PROSEDUR mulaiMediasi()
+    LaporanHandler.getDetailTiket()                          
+    getDetailTiket()
+    tampilkanHalamanMediasi()                                
+```
+
 ---
 
 # BAB 6: Perancangan Antarmuka
@@ -2589,9 +3092,25 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 
 | No | Tampilan Antarmuka |
 | :--- | :--- |
-| *[I-01]* | <img src="./assets/diagram/contoh-design.png" alt="Contoh Desain" width="400"> |
-| *[I-02]* | *[Sisipkan gambar antarmuka I-02]* |
-| *[I-XX]* | *[Sisipkan gambar antarmuka berikutnya]* |
+| I-01 | <img src="./assets/UI/C04 - HalamanRegistrasi.png" alt="UI C04" width="400"> |
+| I-02 | <img src="./assets/UI/C06 - HalamanLogin.png" alt="UI C06" width="400"> |
+| I-03 | <img src="./assets/UI/C08 - HalamanPortofolio.png" alt="UI C08" width="400"> |
+| I-04 | <img src="./assets/UI/C13 - HalamanUploadJasa.png" alt="UI C13" width="400"> |
+| I-05 | <img src="./assets/UI/C15 - HalamanPencarian.png" alt="UI C15" width="400"> |
+| I-06 | <img src="./assets/UI/C19 - HalamanDetailJasa.png" alt="UI C19" width="400"> |
+| I-07 | <img src="./assets/UI/C21 - HalamanBookmark.png" alt="UI C21" width="400"> |
+| I-08 | <img src="./assets/UI/C24 - HalamanChat.png" alt="UI C24" width="400"> |
+| I-09 | <img src="./assets/UI/C28 - HalamanPemesanan.png" alt="UI C28" width="400"> |
+| I-10 | <img src="./assets/UI/C29 - HalamanPembayaran - pilih%20metode.png" alt="UI C29" width="400"> |
+| I-11 | <img src="./assets/UI/C30 - HalamanRiwayatTransaksi.png" alt="UI C28" width="400"> |
+| I-12 | <img src="./assets/UI/C35 - HalamanKonfirmasi.png" alt="UI C28" width="400"> |
+| I-13 | <img src="./assets/UI/C37 - HalamanPengumpulan.png" alt="UI C28" width="400"> |
+| I-14 | <img src="./assets/UI/C38 - HalamanDeliverables.png" alt="UI C28" width="400"> |
+| I-15 | <img src="./assets/UI/C40 - HalamanRequestRevisi.png" alt="UI C28" width="400"> |
+| I-16 | <img src="./assets/UI/C44 - HalamanPelaporan.png" alt="UI C28" width="400"> |
+| I-17 | <img src="./assets/UI/C47 - HalamanUlasan.png" alt="UI C28" width="400"> |
+| I-18 | <img src="./assets/UI/C50 - HalamanPengajuanMediasi.png" alt="UI C28" width="400"> |
+| I-19 | <img src="./assets/UI/C53 - HalamanDashboardAdmin.png" alt="UI C28" width="400"> |
 
 <br>
 
