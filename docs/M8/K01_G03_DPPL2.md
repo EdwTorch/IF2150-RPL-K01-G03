@@ -932,7 +932,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C04      | HalamanRegistrasi       |<br>  - formRegistrasi : Form <br> - pesanError : String  | <br> + tampilkanForm() : void <br> + kirimRegistrasi() : void <br> + tampilkanError() : void |
 | C05      | LayananRegistrasi       | -                                                                       | <br> + validasiData() : boolean <br> + cekEmail() : boolean <br> + cekNoTelepon() : boolean <br> + registrasiPengguna() : void |
 | C06      | HalamanLogin             | <br> - pesanError : string <br> - formLogin : string | <br> + tampilkanForm() : void <br> + kirimLogin(email : String) : void <br> +  tampilkanError() : void  |
-| C07      | Autentikator             | -                                     | <br> + validasiKredensial(email : String, password : String) <br> + sesiLogin() : void           <br> |
+| C07      | Autentikator             | -                                     | + validasiKredensial(email : String, password : String) <br> + sesiLogin() : void           <br> |
 | C08      | HalamanPortofolio        | <br> - formPortofolio : string <br> - pesanError : string        | <br> + tampilkanPortofolio() : void  <br> +  kirimPortofolio(data : Portofolio) : void <br> + tampilkanError() : void <br> |
 | C09      | Portofolio               | <br> - judul : string <br> - deskripsi : string <br> - berkasPendukung : FILE  | <br> + simpanPortofolio() : void <br> |
 | C10      | PengontrolPortofolio     | -                                 | <br> + validasiInputBerkas(data : Portofolio) : boolean <br> + simpanPortofolio() : void <br>|
@@ -2046,33 +2046,54 @@ Output : void
 6. Panggil Pengguna.buatAkun(nama, email, noTelepon, hashPassword)
 ```
 
-
-
 ## 5.7 Kelas Autentikator
-**Nama Kelas:** Autentikator
-**ID Kelas:** C07
+**Nama Kelas:** Autentikator  
+**ID Kelas:** C07  
 
 Tabel 5.7.1. Operasi Kelas Autentikator
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| validasiKredensial(email : string, password : string) : boolean | public | Memvalidasi kecocokan email dan kata sandi pengguna dengan memanggil operasi login pada kelas Pengguna |
+| sesiLogin() : void | public | Menginisialisasi dan menyimpan status sesi login aktif pengguna ke dalam sistem |
 
 Tabel 5.7.2. Atribut Kelas Autentikator
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| - | - | - |
 
 ### 5.7.1 Algoritma/Query
-**Nama Kelas:** Autentikator
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** Autentikator  
+**Nama Operasi:** validasiKredensial(email : string, password : string) : boolean  
+**ID Algoritma:** Algo-0701  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : email : string, password : string
+Output : boolean
+
+1. IF email == NULL OR password == NULL THEN
+2.     RETURN false
+3. statusValid = Pengguna.login(email, password)
+4. IF statusValid == true THEN
+5.     sesiLogin()
+6.     RETURN true
+7. ELSE
+8.     RETURN false
+```
+
+### 5.7.2 Algoritma/Query
+**Nama Kelas:** Autentikator  
+**Nama Operasi:** sesiLogin() : void  
+**ID Algoritma:** Algo-0702  
+
+```Pseudocode
+Input : void
+Output : void
+
+1. Inisialisasi token autentikasi sesi pengguna
+2. Simpan data sesi ke dalam session storage sistem
+3. Tetapkan status sesi pengguna menjadi aktif
 ```
 
 ## 5.9 Kelas Portofolio
