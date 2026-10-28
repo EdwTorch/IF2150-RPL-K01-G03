@@ -1204,32 +1204,325 @@ Output : boolean
 1. RETURN statusAkun
 ```
 
-## 5.2 Kelas PenyediaJasa
-
+## 5.2 Kelas PenyediaJasa (C02)
 **Nama Kelas:** PenyediaJasa  
-**ID Kelas:** C02
+**ID Kelas:** C02  
 
 Tabel 5.2.1. Operasi Kelas PenyediaJasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| isiPortofolio(idPenyediaJasa : string, pengalaman : string, prestasi : string) : void | public | Memperbarui riwayat pengalaman dan prestasi kerja penyedia jasa ke basis data |
+| unggahPortofolio(idPenyediaJasa : string, berkasPortofolio : file) : void | public | Menambahkan berkas portofolio pendukung milik penyedia jasa ke basis data |
+| tambahPenawaranJasa(idPenyediaJasa : string, idJasa : string) : void | public | Menghubungkan entitas penawaran jasa ke profil penyedia jasa terkait |
+| bukaNotifikasiPesanan(idPenyediaJasa : string) : void | public | Mengambil daftar notifikasi pesanan masuk untuk penyedia jasa |
+| terimaPesanan(idPesanan : string, idPenyediaJasa : string) : void | public | Menyetujui pesanan pekerjaan yang masuk dari pengguna jasa |
+| tolakPesanan(idPesanan : string, idPenyediaJasa : string) : void | public | Menolak pesanan pekerjaan yang diajukan oleh pengguna jasa |
+| saveProdukAkhir(idProduk : string, idPenyediaJasa : string) : void | public | Menyimpan data penyerahan berkas produk akhir pekerjaan |
+| getStatusPengerjaan(idPesanan : string) : boolean | public | Mengambil status pengerjaan pesanan saat ini |
+| kumpulkanRevisi(idPesanan : string, idPenyediaJasa : string) : void | public | Memperbarui status penyerahan revisi hasil pekerjaan ke basis data |
+| cekPengirimanDana(idPesanan : string) : void | public | Mengambil informasi status pencairan dana transaksi dari pesanan yang selesai |
+| getRevisi(idPesanan : string) : void | public | Mengambil detail catatan revisi yang diajukan oleh pengguna jasa |
+| getIdPenyediaJasa() : string | public | Mengambil identifier unik penyedia jasa |
+| getDaftarPenawaranJasa() : list of string | public | Mengambil daftar ID jasa yang ditawarkan oleh penyedia jasa |
+| getPengalamandanPrestasi() : list of string | public | Mengambil daftar riwayat pengalaman dan prestasi penyedia jasa |
 
 Tabel 5.2.2. Atribut Kelas PenyediaJasa
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| idPenyediaJasa | private | string |
+| daftarPenawaranJasa | private | list of string |
+| pengalaman | private | list of string |
+| prestasi | private | list of string |
+| daftarProduk | private | list of string |
 
 ### 5.2.1 Algoritma/Query
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** isiPortofolio(idPenyediaJasa : string, pengalaman : string, prestasi : string) : void  
+**ID Algoritma:** Algo-0201  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : idPenyediaJasa : string, pengalaman : string, prestasi : string
+Output : void
+
+1. IF idPenyediaJasa == NULL THEN
+2.     THROW Exception "ID Penyedia Jasa tidak valid"
+3. Jalankan Query [Q-0201] dengan parameter pengalaman, prestasi, idPenyediaJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal memperbarui portofolio penyedia jasa"
+```
+
+Tabel 5.2.3. Query Operasi isiPortofolio
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0201 | UPDATE penyedia_jasa <br> SET pengalaman = %pengalaman%, prestasi = %prestasi% <br> WHERE id_penyedia_jasa = %idPenyediaJasa%; | Memperbarui data pengalaman dan prestasi penyedia jasa berdasarkan ID Penyedia Jasa |
+
+### 5.2.2 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** unggahPortofolio(idPenyediaJasa : string, berkasPortofolio : file) : void  
+**ID Algoritma:** Algo-0202  
+
+```Pseudocode
+Input : idPenyediaJasa : string, berkasPortofolio : file
+Output : void
+
+1. IF idPenyediaJasa == NULL OR berkasPortofolio == NULL THEN
+2.     THROW Exception "Data portofolio tidak lengkap"
+3. Jalankan Query [Q-0202] dengan parameter idPenyediaJasa, berkasPortofolio
+4. Simpan status eksekusi query ke dalam variabel statusInsert
+5. IF statusInsert == false THEN
+6.     THROW Exception "Gagal mengunggah berkas portofolio"
+```
+
+Tabel 5.2.4. Query Operasi unggahPortofolio
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0202 | INSERT INTO portofolio (id_penyedia_jasa, berkas_pendukung) <br> VALUES (%idPenyediaJasa%, %berkasPortofolio%); | Menyimpan berkas portofolio penyedia jasa ke basis data |
+
+### 5.2.3 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** tambahPenawaranJasa(idPenyediaJasa : string, idJasa : string) : void  
+**ID Algoritma:** Algo-0203  
+
+```Pseudocode
+Input : idPenyediaJasa : string, idJasa : string
+Output : void
+
+1. IF idPenyediaJasa == NULL OR idJasa == NULL THEN
+2.     THROW Exception "Data penawaran jasa tidak valid"
+3. Jalankan Query [Q-0203] dengan parameter idPenyediaJasa, idJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal menambahkan penawaran jasa"
+```
+
+Tabel 5.2.5. Query Operasi tambahPenawaranJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0203 | UPDATE jasa <br> SET id_penyedia_jasa = %idPenyediaJasa% <br> WHERE id_jasa = %idJasa%; | Menetapkan ID penyedia jasa pada baris data penawaran jasa terkait di basis data |
+
+### 5.2.4 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** bukaNotifikasiPesanan(idPenyediaJasa : string) : void  
+**ID Algoritma:** Algo-0204  
+
+```Pseudocode
+Input : idPenyediaJasa : string
+Output : void
+
+1. IF idPenyediaJasa == NULL THEN
+2.     THROW Exception "ID Penyedia Jasa tidak valid"
+3. Jalankan Query [Q-0204] dengan parameter idPenyediaJasa
+4. Simpan hasil query ke dalam variabel daftarNotifikasi
+```
+
+Tabel 5.2.6. Query Operasi bukaNotifikasiPesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0204 | SELECT id_pesanan, id_pengguna_jasa, status_pesanan, waktu_dibuat <br> FROM pesanan <br> WHERE id_penyedia_jasa = %idPenyediaJasa% AND status_pesanan = 'Menunggu Konfirmasi' <br> ORDER BY waktu_dibuat DESC; | Mengambil daftar pesanan baru yang membutuhkan respons penyedia jasa |
+
+### 5.2.5 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** terimaPesanan(idPesanan : string, idPenyediaJasa : string) : void  
+**ID Algoritma:** Algo-0205  
+
+```Pseudocode
+Input : idPesanan : string, idPenyediaJasa : string
+Output : void
+
+1. IF idPesanan == NULL OR idPenyediaJasa == NULL THEN
+2.     THROW Exception "Identitas pesanan tidak valid"
+3. Jalankan Query [Q-0205] dengan parameter idPesanan, idPenyediaJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal menyetujui pesanan"
+```
+
+Tabel 5.2.7. Query Operasi terimaPesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0205 | UPDATE pesanan <br> SET status_pesanan = 'Diproses' <br> WHERE id_pesanan = %idPesanan% AND id_penyedia_jasa = %idPenyediaJasa%; | Mengubah status pesanan menjadi diproses oleh penyedia jasa |
+
+### 5.2.6 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** tolakPesanan(idPesanan : string, idPenyediaJasa : string) : void  
+**ID Algoritma:** Algo-0206  
+
+```Pseudocode
+Input : idPesanan : string, idPenyediaJasa : string
+Output : void
+
+1. IF idPesanan == NULL OR idPenyediaJasa == NULL THEN
+2.     THROW Exception "Identitas pesanan tidak valid"
+3. Jalankan Query [Q-0206] dengan parameter idPesanan, idPenyediaJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal menolak pesanan"
+```
+
+Tabel 5.2.8. Query Operasi tolakPesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0206 | UPDATE pesanan <br> SET status_pesanan = 'Ditolak' <br> WHERE id_pesanan = %idPesanan% AND id_penyedia_jasa = %idPenyediaJasa%; | Mengubah status pesanan menjadi ditolak oleh penyedia jasa |
+
+### 5.2.7 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** saveProdukAkhir(idProduk : string, idPenyediaJasa : string) : void  
+**ID Algoritma:** Algo-0207  
+
+```Pseudocode
+Input : idProduk : string, idPenyediaJasa : string
+Output : void
+
+1. IF idProduk == NULL OR idPenyediaJasa == NULL THEN
+2.     THROW Exception "Parameter produk akhir tidak valid"
+3. Jalankan Query [Q-0207] dengan parameter idProduk, idPenyediaJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal menyimpan relasi produk akhir"
+```
+
+Tabel 5.2.9. Query Operasi saveProdukAkhir
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0207 | UPDATE penyedia_jasa <br> SET daftar_produk = array_append(daftar_produk, %idProduk%) <br> WHERE id_penyedia_jasa = %idPenyediaJasa%; | Menambahkan ID produk akhir ke dalam daftar produk milik penyedia jasa di basis data |
+
+### 5.2.8 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** getStatusPengerjaan(idPesanan : string) : boolean  
+**ID Algoritma:** Algo-0208  
+
+```Pseudocode
+Input : idPesanan : string
+Output : boolean
+
+1. IF idPesanan == NULL THEN
+2.     RETURN false
+3. Jalankan Query [Q-0208] dengan parameter idPesanan
+4. Simpan hasil query ke dalam variabel statusPengerjaan
+5. IF statusPengerjaan == NULL THEN
+6.     RETURN false
+7. IF statusPengerjaan.status_pesanan == 'Diproses' THEN
+8.     RETURN true
+9. ELSE
+10.    RETURN false
+```
+
+Tabel 5.2.10. Query Operasi getStatusPengerjaan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0208 | SELECT status_pesanan <br> FROM pesanan <br> WHERE id_pesanan = %idPesanan% <br> LIMIT 1; | Mengambil status pengerjaan pesanan saat ini dari basis data |
+
+### 5.2.9 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** kumpulkanRevisi(idPesanan : string, idPenyediaJasa : string) : void  
+**ID Algoritma:** Algo-0209  
+
+```Pseudocode
+Input : idPesanan : string, idPenyediaJasa : string
+Output : void
+
+1. IF idPesanan == NULL OR idPenyediaJasa == NULL THEN
+2.     THROW Exception "Parameter revisi tidak valid"
+3. Jalankan Query [Q-0209] dengan parameter idPesanan
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal mengumpulkan berkas revisi"
+```
+
+Tabel 5.2.11. Query Operasi kumpulkanRevisi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0209 | UPDATE pengajuan_revisi <br> SET status_pengerjaan = 'Revisi Dikumpulkan' <br> WHERE id_pesanan = %idPesanan%; | Memperbarui status revisi menjadi telah dikumpulkan kembali oleh penyedia jasa |
+
+### 5.2.10 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** cekPengirimanDana(idPesanan : string) : void  
+**ID Algoritma:** Algo-0210  
+
+```Pseudocode
+Input : idPesanan : string
+Output : void
+
+1. IF idPesanan == NULL THEN
+2.     THROW Exception "ID Pesanan tidak valid"
+3. Jalankan Query [Q-0210] dengan parameter idPesanan
+4. Simpan hasil query ke dalam variabel statusDana
+```
+
+Tabel 5.2.12. Query Operasi cekPengirimanDana
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0210 | SELECT status_transaksi <br> FROM riwayat_transaksi <br> WHERE id_pesanan = %idPesanan% <br> LIMIT 1; | Mengambil status verifikasi pencairan dana hasil pekerjaan pesanan |
+
+### 5.2.11 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** getRevisi(idPesanan : string) : void  
+**ID Algoritma:** Algo-0211  
+
+```Pseudocode
+Input : idPesanan : string
+Output : void
+
+1. IF idPesanan == NULL THEN
+2.     THROW Exception "ID Pesanan tidak valid"
+3. Jalankan Query [Q-0211] dengan parameter idPesanan
+4. Simpan hasil query ke dalam variabel detailRevisi
+```
+
+Tabel 5.2.13. Query Operasi getRevisi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0211 | SELECT deskripsi_revisi, lampiran_revisi <br> FROM pengajuan_revisi <br> WHERE id_pesanan = %idPesanan% <br> LIMIT 1; | Mengambil deskripsi instruksi dan berkas lampiran revisi dari pengguna jasa |
+
+### 5.2.12 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** getIdPenyediaJasa() : string  
+**ID Algoritma:** Algo-0212  
+
+```Pseudocode
+Input : void
+Output : string
+
+1. RETURN idPenyediaJasa
+```
+
+### 5.2.13 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** getdaftarPenawaranJasa() : list of string  
+**ID Algoritma:** Algo-0213  
+
+```Pseudocode
+Input : void
+Output : list of string
+
+1. RETURN daftarPenawaranJasa
+```
+
+### 5.2.14 Algoritma/Query
+**Nama Kelas:** PenyediaJasa  
+**Nama Operasi:** getPengalamandanPrestasi() : list of string  
+**ID Algoritma:** Algo-0214  
+
+```Pseudocode
+Input : void
+Output : list of string
+
+1. daftarGabungan = gabungList(pengalaman, prestasi)
+2. RETURN daftarGabungan
 ```
 
 ## 5.3 Kelas PenggunaJasa
