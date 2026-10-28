@@ -1280,9 +1280,9 @@ Tabel 5.22.1. Operasi Kelas [PengontrolBookmark]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| tambahDataBookmark() : boolean | public | menambahkan data bookmark |
-| hapusDataBookmark() : boolean | public | menghapus bookmark |
-|ambilDaftarBookmarkPengguna() : list of Bookmark | public | mengambil daftar bookmark |
+| tambahDataBookmark(idPeggunaJasa : string, idJasa : string) : boolean | public | menambahkan data bookmark |
+| hapusDataBookmark(idBookmark : string, idPenggunaJasa : string) : boolean | public | menghapus bookmark |
+| ambilDaftarBookmarkPengguna(idPenggunaJasa : string) : list of Bookmark  | public | mengambil daftar bookmark |
  
 
 ### 5.22.1 Algoritma/Query
@@ -1290,14 +1290,14 @@ Tabel 5.22.1. Operasi Kelas [PengontrolBookmark]
 Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
 **Nama Kelas:** PengontrolBookmark
-**Nama Operasi:** tambahDataBookmark  
+**Nama Operasi:** tambahDataBookmark(idPeggunaJasa : string, idJasa : string) : boolean  
 **ID Algoritma:** Algo-2201
 
 ```Pseudocode
 INPUT: idPenggunaJasa (string), idJasa (string)
 OUTPUT: boolean
 
-1. if idPenggunaJasa KOSONG ATAU idJasa KOSONG THEN
+1. if idPenggunaJasa ==NULL OR idJasa == NULL THEN
 2.     THROW Exception "Parameter input tidak valid"
 3. statusSimpan = Bookmark.simpanBookmark(idPenggunaJasa, idJasa)
 4.
@@ -1361,10 +1361,10 @@ Tabel 5.23.1. Operasi Kelas Bookmark
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| getRiwayatPesan() : list of string | public | mendapatkan riwayat pesan |
-| simpanPesan() : void | public | menyimpan pesan |
-| getidChatRoom() : string| public | mendapatkan idChatroom |
-| getidAnggota() : string | public | mendapatkan idAnggota |
+| getRiwayatPesan(idChatroom : string) : list of pesan | public | mendapatkan riwayat pesan |
+| simpanPesan(pesan : string) : void | public | menyimpan pesan |
+| getidChatRoom(idPenggunaJasa : string, idPenyediaJasa : string) : string | public | mendapatkan idChatroom |
+| getidAnggota(idChatRoom : string) : string | public | mendapatkan idAnggota |
 
 Tabel 5.23.2. Atribut Kelas Bookmark
 
@@ -1496,11 +1496,11 @@ Tabel 5.25.1. Operasi Kelas [LayananPesanInstan]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| buatSesiChat() : void | public | membuat sesiChat |
-| validasiInputPesan() : boolean | public | memvalidasi input pesan yang diberikan pengguna |
-| kirimPesan() : void | public | mengirim pesan (menyimpan ke riwayat pesan) |
-| simpanKeDatabase() : void | public | menyimpan chat ke database |
-| updateStatusBaca() : void | public | mengupdate statusBaca pengguna |
+| buatSesiChat(idPenggunaJasa : string, idPenyediaJasa) : void   | public | membuat sesiChat |
+| validasiInputPesan(pesan : string) : boolean | public | memvalidasi input pesan yang diberikan pengguna |
+| kirimPesan(pesan : string) : void  | public | mengirim pesan (menyimpan ke riwayat pesan) |
+| simpanKeDatabase(idChatroom : string, idPengirim : string, pesan : string) : void | public | menyimpan chat ke database |
+| updateStatusBaca(idChatroom : string, idPengguna : string) : boolean | public | mengupdate statusBaca pengguna |
  
 
 ### 5.25.1 Algoritma/Query
@@ -1624,8 +1624,8 @@ Tabel 5.26.1. Operasi Kelas [LayananNotiifikasiChat]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| kirimNotifikasiPesan() : void | public  | mengirim notifikasi pesan |
-| tampilkanPopUpNotifikasi() : void| public  | mengirimkan Pop Up Notifikasinya | 
+| kirimNotifikasiPesan(idPesan : string, idPengirim : string, idPenerima : string) : void | public  | mengirim notifikasi pesan |
+| tampilkanPopUpNotifikasi(device : string, pengirim : string, pesan : string) : void| public  | mengirimkan Pop Up Notifikasinya | 
  
 
 ### 5.26.1 Algoritma/Query
@@ -1668,8 +1668,9 @@ Tabel 5.27.1. Operasi Kelas Pesanan
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| setStatusDiproses() : void | public | mengupdate status pengerjaan menjadi diproses|
-| setStatusSelesai() : void | public | mengupdate status pengerjaan menjadi selesai |
+| setStatusDiproses(idPesanan : string) : void | public | mengupdate status pengerjaan menjadi diproses|
+| setStatusSelesai(idPesanan: string) : void | public | mengupdate status pengerjaan menjadi selesai |
+| setStatus(idPesanan: string, status : string) : void | public | mengupdate status pengerjaan menjadi sesuai parameter |
 
 Tabel 5.27.2. Atribut Kelas Pesanan
 
@@ -1736,7 +1737,7 @@ Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Al
 
 **Nama Kelas:** Pesanan
 **Nama Operasi:** setStatus(idPesanan : string, status : string) : void
-**ID Algoritma:** Algo-2702
+**ID Algoritma:** Algo-2703
 
 ```text
 Input : idPesanan (string), status (string)
@@ -1761,10 +1762,10 @@ Tabel 5.31.1. Operasi Kelas [PengontrolPesanan]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| buatPesananBaru() : void | public | Membuat Pesanan Baru |
-| hitungTotalBiaya() : double | public | menghitung biaya pesanan |
-| updateStatusPesanan(idPesanan: integer, status: STATUS) : void | public | mengubah status pesanan |
-|getDetailPesanan() : string | public | mendapatkan detail pesanan |
+| buatPesananBaru(briefPesanan : string, idJasa : string, idPenggunaJasa : string) : Pesanan | public | Membuat Pesanan Baru |
+| hitungTotalBiaya(idJasa) : double | public | menghitung biaya pesanan |
+| updateStatusPesanan(idPesanan: integer, status: string) : void | public | mengubah status pesanan |
+| getDetailPesanan(idPesanan : string) : string | public | mendapatkan detail pesanan |
  
 
 ### 5.31.1 Algoritma/Query
@@ -2013,7 +2014,7 @@ Tabel 5.33.1. Operasi Kelas [MetodePembayaran]
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| getDetailMetode(idMetode) : MetodePembayaran | public | Mendapatkan Detail Metode Pembayaran |
+| getDetailMetode(idMetode : string) : MetodePembayaran | public | Mendapatkan Detail Metode Pembayaran |
 
  
 Tabel 5.33.2. Atribut Kelas MetodePembayaran
@@ -2030,7 +2031,7 @@ Tabel 5.33.2. Atribut Kelas MetodePembayaran
 Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
 **Nama Kelas:** MetodePembayaran
-**Nama Operasi:** getDetailMetode(idMetode)
+**Nama Operasi:** getDetailMetode(idMetode : string)
 **ID Algoritma:** Algo-3301
 
 ```Pseudocode
@@ -2080,7 +2081,7 @@ Tabel 5.34.2. Atribut Kelas MetodePembayaran
 Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
 
 **Nama Kelas:** RiwayatTransaksi
-**Nama Operasi:** simpanTransaksi() : void
+**Nama Operasi:** simpanTransaksi(idPesanan : string, statusTransaksi : boolean) : boolean
 **ID Algoritma:** Algo-3401
 
 ```Pseudocode
