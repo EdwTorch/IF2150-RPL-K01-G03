@@ -171,7 +171,10 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *24-10-2026* hingga *28-10-2026* | Edward  | Mengerjakan Algoritma C17,18, 20,22,23,25,26,27,31,32,33,34 | 10 Jam | Done | Ga paham SQL, dan terlalu banyak komponen yang harus dikerjakan,  Badan Meriang berhari-hari, demot |
 | *26-10-2026* | Revandra, There, Edward, Necia | Asistensi M8 | 30 Menit | Done | - |
-
+| *24-10-2026* hingga *27-10-2026* | Necia | Mengerjakan UI | >5 jam | Done | - |
+| *25-10-2026* hingga *27-10-2026* | There | Mengerjakan UI | >5 jam | Done | - |
+| *28-10-2026* | There | Mengerjakan Bab 5 | 3 jam | Done | - |
+| *28-10-2026* | Necia | Mengerjakan Bab 6 | 3 jam | Done | - |
 
 
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
