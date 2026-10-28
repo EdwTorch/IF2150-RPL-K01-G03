@@ -1034,16 +1034,18 @@ OUTPUT: void
 
 1. IF deskripsi EMPTY OR filepath EMPTY OR link EMPTY THEN
 2.      THROW Exception "Parameter input tidak valid."
-3. idProdukAkhir = GENERATE_UUID()
-4. idPesanan = Session.getCurrentPesananId()
-5. tanggalPengumpulan = GET_CURRENT_DATE()
-6. statusPemeriksaan = false
-7. statusQuery = EXECUTE Query Q-3601 WITH (idProdukAkhirBaru, idPesananAktif, filepath, deskripsi, tanggalSekarang, statusAwal, link)
+3.
+4. idProdukAkhir = GENERATE_UUID()
+5. idPesanan = Session.getCurrentPesananId()
+6. tanggalPengumpulan = GET_CURRENT_DATE()
+7. statusPemeriksaan = false
 8.
-1. IF statusQuery = true THEN
-2.      RETURN
-3.  ELSE
-4.      THROW Exception "Gagal menyimpan data produk akhir."
+9. statusQuery = EXECUTE Query Q-3601 WITH (idProdukAkhirBaru, idPesananAktif, filepath, deskripsi, tanggalSekarang, statusAwal, link)
+10.
+11. IF statusQuery = true THEN
+12.      RETURN
+13.  ELSE
+14.      THROW Exception "Gagal menyimpan data produk akhir."
 ```
 
 Tabel 5.36.1.1. Query Operasi simpanProdukAkhir
@@ -1051,6 +1053,55 @@ Tabel 5.36.1.1. Query Operasi simpanProdukAkhir
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-3601 | INSERT INTO produk_akhir (id_produk_akhir, id_pesanan, outputpath, deskripsi_produk, tanggal_pengumpulan, status_pemeriksaan, file_url) VALUES (?, ?, ?, ?, ?, ?, ?); | Menyimpan produk akhir ke dalam *database* terpusat. |
+
+## 5.39 Kelas PengajuanRevisi
+
+**Nama Kelas:** PengajuanRevisi     
+**ID Kelas:** C39
+
+Tabel 5.39.1. Operasi Kelas C39
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| getDetailRevisi() : string | public | Mengambil detail informasi pengajuan revisi (deskripsi masalah, sisa kuota revisi, dan lampiran). |
+
+Tabel 5.39.2. Atribut Kelas PengajuanRevisi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| deskripsiRevisi | private | string |
+| jmlRevisiTersedia | private | int |
+| lampiranRevisi | private | FILE |
+| idRevisi | private | string |
+| idPesanan | private | string |
+| statusPengerjaan | private | string |
+
+### 5.39.1 Algoritma/Query
+
+**Nama Kelas:** PengajuanRevisi     
+**Nama Operasi:** getDetailRevisi        
+**ID Algoritma:** Algo-3901
+
+```pseudocode
+INPUT: void
+OUTPUT: string
+
+1. idRevisi = Session.getCurrentRevisiId()
+2. 
+3. hasilQuery = EXECUTE Q-3901 WITH (idRevisi)
+4.
+5. IF hasilQuery IS NOT EMPTY THEN
+6.      data = FORMAT_TO_JSON(hasilQuery.deskripsi_revisi, hasilQuery.jml_revisi_tersedia, hasilQuery.lampiran_revisi, hasilQuery.status_pengerjaan)
+7.      RETURN data
+8. ELSE
+9.      RETURN ""
+```
+
+Tabel 5.39.1.1. Query Operasi getDetailRevisi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-C3901 | SELECT deskripsi_revisi, jml_revisi_tersedia, lampiran_revisi, status_pengerjaan FROM pengajuan_revisi WHERE id_revisi = ?; | Mengambil detail informasi revisi berdasarkan ID revisi yang dipanggil. |
 
 <br>
 
