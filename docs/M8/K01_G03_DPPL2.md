@@ -1574,30 +1574,372 @@ Output : list of string
 
 ## 5.3 Kelas PenggunaJasa
 
-**Nama Kelas:** PenggunaJasa
-**ID Kelas:** C03
+**Nama Kelas:** PenggunaJasa  
+**ID Kelas:** C03  
 
 Tabel 5.3.1. Operasi Kelas PenggunaJasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| cariJasa(keyword : string) : void | public | Mencari penawaran jasa berdasarkan kata kunci dan menyimpannya ke daftar jasa |
+| gunakanFilter(filter : string) : void | public | Menerapkan penyaringan kategori dan memperbarui daftar jasa yang ditampilkan |
+| bukaDetailJasa(idJasa : string) : void | public | Mengambil informasi terperinci suatu jasa untuk ditampilkan ke antarmuka detail |
+| bukaDaftarBoomark(idPenggunaJasa : string) : void | public | Mengambil seluruh penawaran jasa yang disimpan bookmark ke dalam daftar jasa |
+| pilihJasa(idJasa : string) : void | public | Memilih penawaran jasa aktif untuk dilanjutkan ke proses pemesanan |
+| isiFormPemesanan(idPenggunaJasa : string, idJasa : string, brief : string) : void | public | Menyimpan data formulir pemesanan awal pengguna jasa ke database |
+| getStatusPengerjaan(idPesanan : string) : string | public | Mengambil deskripsi status tahapan pengerjaan pesanan dari database |
+| getDeliverables(idPesanan : string) : list of string | public | Mengambil berkas atau tautan hasil pekerjaan akhir dari database |
+| selesaikanPesanan(idPesanan : string, idPenggunaJasa : string) : void | public | Menyetujui hasil akhir pesanan dan memperbarui status konfirmasi |
+| ajukanRevisi(idPesanan : string, deskripsiRevisi : string) : void | public | Menambahkan data pengajuan revisi pekerjaan pesanan ke database |
+| beriUlasan(idPesanan : integer) : void | public | Memvalidasi status pesanan sebelum mengarahkan ke formulir ulasan |
+| beriPenilaian(idPesanan : string, idPenyediaJasa : string, rating : integer, komentar : string) : void | public | Menyimpan penilaian bintang dan catatan evaluasi pekerjaan ke database |
+| pilihMetodePembayaran(idPesanan : string, idMetode : string) : void | public | Menetapkan metode pembayaran yang dipilih pengguna jasa pada pesanan |
+| getIdPenggunaJasa() : string | public | Mengambil identifier unik pengguna jasa |
+| getMinatKategoriJasa() : list of string | public | Mengambil daftar preferensi kategori jasa pengguna jasa |
+| getStatusKonfirmasi() : boolean | public | Mengambil status konfirmasi persetujuan pengguna jasa saat ini |
 
 Tabel 5.3.2. Atribut Kelas PenggunaJasa
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| idPenggunaJasa | private | string |
+| daftarJasa | private | list of string |
+| minatKategoriJasa | private | list of string |
+| statusKonfirmasi | private | boolean |
 
 ### 5.3.1 Algoritma/Query
-**Nama Kelas:** *[Nama kelas]*  
-**Nama Operasi:** *[Signature operasi]*  
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** cariJasa(keyword : string) : void  
+**ID Algoritma:** Algo-0301  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : keyword : string
+Output : void
+
+1. IF keyword == NULL OR len(keyword) < 3 THEN
+2.     THROW Exception "Kata kunci pencarian minimal 3 karakter"
+3. Jalankan Query [Q-0301] dengan parameter keyword
+4. Simpan hasil query ke dalam variabel daftarHasilJasa
+5. daftarJasa = daftarHasilJasa
+```
+
+Tabel 5.3.3. Query Operasi cariJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0301 | SELECT id_jasa <br> FROM jasa <br> WHERE status_aktif = true AND (nama_jasa ILIKE '%' \|\| %keyword% \|\| '%' OR deskripsi ILIKE '%' \|\| %keyword% \|\| '%') <br> LIMIT 20; | Mengambil daftar ID jasa aktif yang sesuai dengan kata kunci pencarian dari database |
+
+### 5.3.2 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** gunakanFilter(filter : string) : void  
+**ID Algoritma:** Algo-0302  
+
+```Pseudocode
+Input : filter : string
+Output : void
+
+1. Jalankan Query [Q-0302] dengan parameter filter
+2. Simpan hasil query ke dalam variabel daftarJasaTerfilter
+3. daftarJasa = daftarJasaTerfilter
+```
+
+Tabel 5.3.4. Query Operasi gunakanFilter
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0302 | SELECT id_jasa <br> FROM jasa <br> WHERE status_aktif = true AND (%filter% IS NULL OR %filter% = '' OR kategori = %filter%) <br> LIMIT 20; | Mengambil daftar ID jasa yang sesuai dengan kriteria filter kategori dari database |
+
+### 5.3.3 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** bukaDetailJasa(idJasa : string) : void  
+**ID Algoritma:** Algo-0303  
+
+```Pseudocode
+Input : idJasa : string
+Output : void
+
+1. IF idJasa == NULL THEN
+2.     THROW Exception "ID Jasa tidak valid"
+3. Jalankan Query [Q-0303] dengan parameter idJasa
+4. Simpan hasil query ke dalam variabel detailJasa
+5. IF detailJasa == NULL THEN
+6.     THROW Exception "Data jasa tidak ditemukan"
+7. HalamanDetailJasa.tampilkanDetailJasa(detailJasa)
+```
+
+Tabel 5.3.5. Query Operasi bukaDetailJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0303 | SELECT id_jasa, id_penyedia_jasa, nama_jasa, deskripsi, kategori, harga <br> FROM jasa <br> WHERE id_jasa = %idJasa% <br> LIMIT 1; | Mengambil rincian informasi penawaran jasa berdasarkan ID Jasa dari database |
+
+### 5.3.4 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** bukaDaftarBoomark(idPenggunaJasa : string) : void  
+**ID Algoritma:** Algo-0304  
+
+```Pseudocode
+Input : idPenggunaJasa : string
+Output : void
+
+1. IF idPenggunaJasa == NULL THEN
+2.     THROW Exception "ID Pengguna Jasa tidak valid"
+3. Jalankan Query [Q-0304] dengan parameter idPenggunaJasa
+4. Simpan hasil query ke dalam variabel daftarBookmarkJasa
+5. daftarJasa = daftarBookmarkJasa
+```
+
+Tabel 5.3.6. Query Operasi bukaDaftarBoomark
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0304 | SELECT id_jasa <br> FROM bookmark <br> WHERE id_pengguna_jasa = %idPenggunaJasa% <br> ORDER BY waktu_disimpan DESC; | Mengambil daftar ID jasa yang disimpan pada bookmark milik pengguna jasa dari database |
+
+### 5.3.5 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** pilihJasa(idJasa : string) : void  
+**ID Algoritma:** Algo-0305  
+
+```Pseudocode
+Input : idJasa : string
+Output : void
+
+1. IF idJasa == NULL THEN
+2.     THROW Exception "Jasa yang dipilih tidak valid"
+3. Jalankan Query [Q-0305] dengan parameter idJasa
+4. Simpan hasil query ke dalam variabel dataJasa
+5. IF dataJasa == NULL THEN
+6.     THROW Exception "Jasa tidak ditemukan atau sedang tidak aktif"
+7. HalamanPemesanan.tampilkanFormPemesanan(dataJasa)
+```
+
+Tabel 5.3.7. Query Operasi pilihJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0305 | SELECT id_jasa, harga, id_penyedia_jasa <br> FROM jasa <br> WHERE id_jasa = %idJasa% AND status_aktif = true <br> LIMIT 1; | Memvalidasi keberadaan dan status keaktifan jasa yang dipilih pengguna jasa di database |
+
+### 5.3.6 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** isiFormPemesanan(idPenggunaJasa : string, idJasa : string, brief : string) : void  
+**ID Algoritma:** Algo-0306  
+
+```Pseudocode
+Input : idPenggunaJasa : string, idJasa : string, brief : string
+Output : void
+
+1. IF idPenggunaJasa == NULL OR idJasa == NULL OR brief == NULL THEN
+2.     THROW Exception "Data pemesanan tidak lengkap"
+3. Jalankan Query [Q-0306] dengan parameter idPenggunaJasa, idJasa, brief
+4. Simpan status eksekusi query ke dalam variabel statusInsert
+5. IF statusInsert == false THEN
+6.     THROW Exception "Gagal menyimpan formulir pemesanan"
+```
+
+Tabel 5.3.8. Query Operasi isiFormPemesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0306 | INSERT INTO pesanan (id_pengguna_jasa, id_jasa, brief, status_pesanan) <br> VALUES (%idPenggunaJasa%, %idJasa%, %brief%, 'Menunggu Pembayaran'); | Menambahkan baris pesanan baru berdasarkan formulir pemesanan pengguna jasa ke database |
+
+### 5.3.7 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** getStatusPengerjaan(idPesanan : string) : string  
+**ID Algoritma:** Algo-0307  
+
+```Pseudocode
+Input : idPesanan : string
+Output : string
+
+1. IF idPesanan == NULL THEN
+2.     RETURN ""
+3. Jalankan Query [Q-0307] dengan parameter idPesanan
+4. Simpan hasil query ke dalam variabel dataPesanan
+5. IF dataPesanan == NULL THEN
+6.     RETURN "Tidak Ditemukan"
+7. RETURN dataPesanan.status_pesanan
+```
+
+Tabel 5.3.9. Query Operasi getStatusPengerjaan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0307 | SELECT status_pesanan <br> FROM pesanan <br> WHERE id_pesanan = %idPesanan% <br> LIMIT 1; | Mengambil status tahapan pengerjaan pesanan saat ini dari database |
+
+### 5.3.8 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** getDeliverables(idPesanan : string) : list of string  
+**ID Algoritma:** Algo-0308  
+
+```Pseudocode
+Input : idPesanan : string
+Output : list of string
+
+1. IF idPesanan == NULL THEN
+2.     RETURN NULL
+3. Jalankan Query [Q-0308] dengan parameter idPesanan
+4. Simpan hasil query ke dalam variabel daftarBerkas
+5. RETURN daftarBerkas
+```
+
+Tabel 5.3.10. Query Operasi getDeliverables
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0308 | SELECT file_url <br> FROM produk_akhir <br> WHERE id_pesanan = %idPesanan%; | Mengambil seluruh berkas deliverables hasil pekerjaan pesanan dari database |
+
+### 5.3.9 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** selesaikanPesanan(idPesanan : string, idPenggunaJasa : string) : void  
+**ID Algoritma:** Algo-0309  
+
+```Pseudocode
+Input : idPesanan : string, idPenggunaJasa : string
+Output : void
+
+1. IF idPesanan == NULL OR idPenggunaJasa == NULL THEN
+2.     THROW Exception "Parameter penyelesaian pesanan tidak valid"
+3. Jalankan Query [Q-0309] dengan parameter idPesanan, idPenggunaJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal menyelesaikan pesanan"
+7. statusKonfirmasi = true
+```
+
+Tabel 5.3.11. Query Operasi selesaikanPesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0309 | UPDATE pesanan <br> SET status_pesanan = 'Selesai' <br> WHERE id_pesanan = %idPesanan% AND id_pengguna_jasa = %idPenggunaJasa%; | Mengubah status pesanan menjadi selesai setelah disetujui pengguna jasa di database |
+
+### 5.3.10 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** ajukanRevisi(idPesanan : string, deskripsiRevisi : string) : void  
+**ID Algoritma:** Algo-0310  
+
+```Pseudocode
+Input : idPesanan : string, deskripsiRevisi : string
+Output : void
+
+1. IF idPesanan == NULL OR deskripsiRevisi == NULL THEN
+2.     THROW Exception "Data pengajuan revisi tidak lengkap"
+3. Jalankan Query [Q-0310] dengan parameter idPesanan, deskripsiRevisi
+4. Simpan status eksekusi query ke dalam variabel statusInsert
+5. IF statusInsert == false THEN
+6.     THROW Exception "Gagal mengajukan revisi"
+7. statusKonfirmasi = false
+```
+
+Tabel 5.3.12. Query Operasi ajukanRevisi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0310 | INSERT INTO pengajuan_revisi (id_pesanan, deskripsi_revisi, status_pengerjaan) <br> VALUES (%idPesanan%, %deskripsiRevisi%, 'Menunggu Revisi'); | Menyimpan rekaman pengajuan revisi baru untuk pesanan terkait ke database |
+
+### 5.3.11 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** beriUlasan(idPesanan : integer) : void  
+**ID Algoritma:** Algo-0311  
+
+```Pseudocode
+Input : idPesanan : integer
+Output : void
+
+1. IF idPesanan == NULL THEN
+2.     THROW Exception "ID Pesanan tidak valid"
+3. Jalankan Query [Q-0311] dengan parameter idPesanan
+4. Simpan hasil query ke dalam variabel dataPesanan
+5. IF dataPesanan == NULL OR dataPesanan.status_pesanan != 'Selesai' THEN
+6.     THROW Exception "Ulasan hanya dapat diberikan pada pesanan yang telah selesai"
+7. HalamanUlasan.tampilkanFormUlasan(idPesanan)
+```
+
+Tabel 5.3.13. Query Operasi beriUlasan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0311 | SELECT id_pesanan, status_pesanan <br> FROM pesanan <br> WHERE id_pesanan = %idPesanan% <br> LIMIT 1; | Memverifikasi kelayakan status pesanan sebelum formulir ulasan ditampilkan dari database |
+
+### 5.3.12 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** beriPenilaian(idPesanan : string, idPenyediaJasa : string, rating : integer, komentar : string) : void  
+**ID Algoritma:** Algo-0312  
+
+```Pseudocode
+Input : idPesanan : string, idPenyediaJasa : string, rating : integer, komentar : string
+Output : void
+
+1. IF idPesanan == NULL OR idPenyediaJasa == NULL OR rating == NULL THEN
+2.     THROW Exception "Data penilaian tidak lengkap"
+3. Jalankan Query [Q-0312] dengan parameter idPesanan, idPenyediaJasa, rating, komentar
+4. Simpan status eksekusi query ke dalam variabel statusInsert
+5. IF statusInsert == false THEN
+6.     THROW Exception "Gagal menyimpan ulasan dan penilaian"
+```
+
+Tabel 5.3.14. Query Operasi beriPenilaian
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0312 | INSERT INTO ulasan (id_pesanan, id_penyedia_jasa, rating, komentar) <br> VALUES (%idPesanan%, %idPenyediaJasa%, %rating%, %komentar%); | Menyimpan nilai rating bintang dan catatan evaluasi pekerjaan ke database |
+
+### 5.3.13 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** pilihMetodePembayaran(idPesanan : string, idMetode : string) : void  
+**ID Algoritma:** Algo-0313  
+
+```Pseudocode
+Input : idPesanan : string, idMetode : string
+Output : void
+
+1. IF idPesanan == NULL OR idMetode == NULL THEN
+2.     THROW Exception "Parameter pembayaran tidak valid"
+3. Jalankan Query [Q-0313] dengan parameter idMetode, idPesanan
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal memperbarui metode pembayaran"
+```
+
+Tabel 5.3.15. Query Operasi pilihMetodePembayaran
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0313 | UPDATE pesanan <br> SET id_metode_pembayaran = %idMetode% <br> WHERE id_pesanan = %idPesanan%; | Menetapkan ID metode pembayaran yang dipilih pengguna jasa pada pesanan di database |
+
+### 5.3.14 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** getIdPenggunaJasa() : string  
+**ID Algoritma:** Algo-0314  
+
+```Pseudocode
+Input : void
+Output : string
+
+1. RETURN idPenggunaJasa
+```
+
+### 5.3.15 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** getMinatKategoriJasa() : list of string  
+**ID Algoritma:** Algo-0315  
+
+```Pseudocode
+Input : void
+Output : list of string
+
+1. RETURN minatKategoriJasa
+```
+
+### 5.3.16 Algoritma/Query
+**Nama Kelas:** PenggunaJasa  
+**Nama Operasi:** getStatusKonfirmasi() : boolean  
+**ID Algoritma:** Algo-0316  
+
+```Pseudocode
+Input : void
+Output : boolean
+
+1. RETURN statusKonfirmasi
 ```
 
 ## 5.5 Kelas LayananRegistrasi
