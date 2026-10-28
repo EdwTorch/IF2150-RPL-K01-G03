@@ -942,13 +942,13 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C14 | JasaController | - | <br> + ambilDetailJasa(idJasa: string) : Jasa <br> + validasiDataJasa(dataJasa : string) : boolean <br> + simpanPenawaranJasa(dataJasa : string) : void |
 | C15 | HalamanPencarian | <br> - searchBar : void <br> - filterHarga : void <br> - filterDurasi : void <br> - filterRating : void <br> - tombolCari : void <br> - pesanError : string | <br> + inputKataKunci() : void <br> + klikCari() : void <br> + tampilkanPesanError(pesan : string) : void |
 | C16 | HasilPencarian | <br> - daftarListingJasa : list of jasa <br> - tombolBandingkan : void | <br> + tampilkanDaftarHasil() : void <br> + pilihJasaUntukDibandingkan() : void <br> + klikBandingkan() : void |
-| C17 | LayananPencarian | - | <br> + cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa <br> + terapkanFilterPencarian(filter : string, keyword : string) : list of Jasa |
+| C17 | LayananPencarian | - | <br> +cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa <br> + terapkanFilterPencarian(filter : string, keyword : string) : list of Jasa |
 | C18 | LayananPembandingJasa | - | <br> + bandingkanSpesifikasiJasa(idJasa1 : string, idJasa2 : string) : string |
 | C19 | HalamanDetailJasa | <br> - tampilanDeskripsi : string <br> - tampilanHarga : double <br> - infoProfilPenyedia : string <br> - tampilanRiwayatUlasan : list of string <br> - pesanError : string | <br> + tampilkanDetailJasa() : void <br> +  tampilkanPesanError() : void |
-| C20 | Bookmark | <br> - idBookmark : string <br> - idPenggunaJasa : string <br> - idJasa : string <br> - waktuDisimpan : Date <br> - daftarBookmark : list of bookmark | <br> + simpanBookmark() : boolean <br> + hapusBookmark() : boolean <br> + lihatBookmark() : list of String |
+| C20 | Bookmark | <br> - idBookmark : string <br> - idPenggunaJasa : string <br> - idJasa : string <br> - waktuDisimpan : Date <br> - daftarBookmark : list of bookmark | <br> + simpanBookmark(idPenggunaJasa : string, idJasa : string) <br> + hapusBookmark(idBookmark : string, idPenggunaJasa : string) : boolean <br> + lihatBookmark(idPenggunaJasa : string) : list of Bookmark |
 | C21 | HalamanBookmark | <br> - daftarJasaTersimpan : list of Jasa <br> - ikonBookmarkAktif : void <br> - ikonBookmarkNonaktif : void <br> - tombolHapusBookmark : void | <br> + tampilkanDaftarTersimpan() : void  <br> + klikIkonBookmark() : void <br> + klikIkonHapus() : void <br> + tampilkanNotifikasi() : void |
 | C22 | PengontrolBookmark | - | <br> + tambahDataBookmark() : boolean <br> + hapusDataBookmark() : boolean <br> + ambilDaftarBookmarkPengguna() : list of Bookmark |
-| C23 | ChatRoom | <br> - idChatRoom : string <br> - idAnggota : string <br> - riwayatPesan : list of string <br> - waktuDibuat : Date | <br> + getRiwayatPesan() : list of string <br> - simpanPesan() : void <br> + getidChatRoom() : string <br> + getidAnggota() : string |
+| C23 | ChatRoom | <br> - idChatRoom : string <br> - idAnggota : string <br> - riwayatPesan : list of string <br> - waktuDibuat : Date | <br> + getRiwayatPesan(idChatRoom : string) : list of string <br> + simpanPesan(pesan : string) : void <br> + getidChatRoom(idPenggunaJasa : string,idPenyediaJasa : string) : string <br> + getidAnggota(idChatRoom : string) : string |
 | C24 | HalamanChat | - idSesiChat : string <br> - inputPesan : string <br> - statusKoneksi : string | <br> + tampilkanMenuChat() : void <br> + tampilkanRiwayatPesan() : void <br> + inputPesan() : void <br> + tombolKirimTerklik() : void <br> + tampilkanPesanError() : void <br> + tampilkanStatusBelumTerkirim() : void |
 | C25 | LayananPesanInstan | - | <br> + buatSesiChat() : void <br> + validasiInputPesan() : boolean <br> + kirimPesan() : void <br> + simpanKeDatabase() : void <br> + updateStatusBaca() : void |
 | C26 | LayananNotifikasiChat | - | <br> + kirimNotifikasiPesan() : void <br> + tampilkanPopUpNotifikasi() : void |
@@ -1052,7 +1052,7 @@ Tabel 5.17.1. Operasi Kelas [LayananPencarian]
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa | public | mencari jasa berdasarkan keyword yang dimasukkan pengguna |
-| + terapkanFilterPencarian(filter : string) : list of Jasa | public | menerapkan pencarian sesuai dengan filter yang diterapkan |
+| terapkanFilterPencarian(filter : string) : list of Jasa | public | menerapkan pencarian sesuai dengan filter yang diterapkan |
  
 
 ### 5.17.1 Algoritma/Query
@@ -1091,8 +1091,10 @@ Tabel 5.17.1. Query Operasi [Nama Operasi]
 
 ### 5.17.2 Algoritma/Query
 
-**Nama Kelas:** Layanan Pencarian
+**Nama Kelas:** LayananPencarian
+
 **Nama Operasi:** terapkanFilterPencarian(filter : string,keyword : string) : list of Jasa
+
 **ID Algoritma:** Algo-1702
 
 ```Pseudocode
@@ -1116,9 +1118,9 @@ Tabel 5.17.2. Query Operasi terapkanFilterPencarian(filter : string, keyword : s
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
-| Q-1701 | SELECT * FROM jasa WHERE status_aktif = true AND (nama_jasa ILIKE %keyword% OR deskripsi ILIKE %keyword%) AND (%kategori% IS NULL OR kategori = %kategori%) AND (%hargaMin% IS NULL OR harga >= %hargaMin%) AND (%hargaMax% IS NULL OR harga <= %hargaMax%) AND (%rating% IS NULL OR rating >= %ratingMin%) AND (%ratingMax% IS NULL OR rating <= %ratingMax%) ORDER BY created_at DESC LIMIT 20 | Mencari 20 data jasa teratas berdasarkan relevansi filter yang diberikan |
+| Q-1701 | SELECT * FROM jasa WHERE status_aktif = true AND (nama_jasa ILIKE %keyword% OR deskripsi ILIKE %keyword%) AND (%kategori% IS NULL OR kategori = %kategori%) AND (%hargaMin% IS NULL OR harga >= %hargaMin%) AND (%hargaMax% IS NULL OR harga <= %hargaMax%) AND (%rating% IS NULL OR rating >= %ratingMin%) AND (%ratingMax% IS NULL OR rating <= %ratingMax%) ORDER BY waktuDibuat DESC LIMIT 20 | Mencari 20 data jasa teratas berdasarkan relevansi filter yang diberikan |
 
-## 5.18 Kelas LayananPembandingJasa
+## 5.18 Kelas LayananPembandingJasa (C18)
 
 **Nama Kelas:** LayananPembandingJasa
 **ID Kelas:** C18
@@ -1162,11 +1164,972 @@ Tabel 5.18.1. Query Operasi [Nama Operasi]
 
 
 
-### 5.3.2 Algoritma/Query
+## 5.20 Kelas Bookmark (C20)
 
-*[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+**Nama Kelas:** Bookmark
+**ID Kelas:** C20
+
+Tabel 5.20.1. Operasi Kelas Bookmark
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| simpanBookmark(idPenggunaJasa : string, idJasa : string) : boolean | public | menyimpan bookmark  |
+| hapusBookmark(idBookmark : string, idPenggunaJasa : string) : boolean | public | menghapus bookmark |
+| lihatBookmark(idPenggunaJasa : string) : list of Bookmark | public | melihat daftar bookmark yang dimiliki |
+
+Tabel 5.20.2. Atribut Kelas Bookmark
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idBookmark | private | string |
+| idPenggunaJasa  | private | string |
+| idJasa  | private | string |
+| waktuDisimpan  Date | private | Date |
+| daftarBookmark | private | list of Bookmark  |
+
+
+### 5.20.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Bookmark
+**Nama Operasi:** simpanBookmark(idPenggunaJasa : string, idJasa : string)
+**ID Algoritma:** Algo-2001
+
+```text
+Input : idPenggunaJasa : string dan idJasa : string
+Output : boolean
+1. Simpan Waktu bookmark dibuat dalam variabel sementara date
+2. Jalankan Query Q-2001 dengan parameter idJasa, idPenggunaJasa, dan date
+3. simpan hasil kembalian dari Query Q-2001 ke variabel idBookmarkBaru
+4. if idBookmarkBaru != kosong then
+5.   return true
+6. else then
+7.   return false
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.20.1. Query Operasi Bookmark
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2001 | INSERT INTO bookmark (idPenggunaJasa, idJasa, waktuDibuat) VALUES (%idPenggunaJasa%, %idJasa%,%date%) RETURN idBookmark | Membentuk bookmark dan menghasilkan idBookmark |
+
+### 5.20.2 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Bookmark
+**Nama Operasi:** hapusBookmark(idBookmark : string, idPenggunaJasa : string) : boolean
+**ID Algoritma:** Algo-2002
+
+```text
+Input : idPenggunaJasa : string dan idBookmark : string
+Output : boolean
+1. Jalankan Query Q-2002 dengan parameter idBookmark, idPenggunaJasa
+2. Simpan hasil kembalian query ke variabel idBookmarkDihapus
+3. if idBookmarkDihapus != kosong then
+4.   return false
+5. else then
+6.   return true
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.20.2. Query Operasi Bookmark
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2002 | DELETE From Bookmark WHERE idBookmark = %idBookmark% AND idPenggunaJasa = %idPenggunaJasa% RETURN idBookmarkTerhapus | Menghapus Bookmark |
+
+
+### 5.20.3 Algoritma/Query
+
+**Nama Kelas:** Bookmark
+**Nama Operasi:** lihatBookmark(idPenggunaJasa : string) : list of Bookmark
+**ID Algoritma:** Algo-2003
+
+```text
+Input : idPenggunaJasa : string 
+Output : list of Bookmark
+1. Jalankan Query Q-2003 dengan parameter idPenggunaJasa
+2. Simpan hasil kembalian query ke variabel daftarBookmarkJasa
+3. if daftarBookmarkJasa == kosong then
+4.   return null
+5. else then
+6.   return daftarBookmarkJasa
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.20.3. Query Operasi Bookmark
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2003 | SELECT * FROM Bookmark WHERE idPenggunaJasa = %idPenggunaJasa% ORDER BY waktuDibuat DESC; | Menampilkan Hasil Bookmark yang telah disimpan |
+
 <br>
 
+## 5.22 Kelas PengontrolBookmark (C22)
+
+**Nama Kelas:** PengontrolBookmark
+**ID Kelas:** C22
+
+Tabel 5.22.1. Operasi Kelas [PengontrolBookmark]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tambahDataBookmark() : boolean | public | menambahkan data bookmark |
+| hapusDataBookmark() : boolean | public | menghapus bookmark |
+|ambilDaftarBookmarkPengguna() : list of Bookmark | public | mengambil daftar bookmark |
+ 
+
+### 5.22.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolBookmark
+**Nama Operasi:** tambahDataBookmark  
+**ID Algoritma:** Algo-2201
+
+```Pseudocode
+INPUT: idPenggunaJasa (string), idJasa (string)
+OUTPUT: boolean
+
+1. if idPenggunaJasa KOSONG ATAU idJasa KOSONG THEN
+2.     THROW Exception "Parameter input tidak valid"
+3. statusSimpan = Bookmark.simpanBookmark(idPenggunaJasa, idJasa)
+4.
+5. if statusSimpan == true THEN
+6.     HalamanBookmark.tampilkanNotifikasi("Bookmark berhasil disimpan")
+7.    RETURN true
+8. ELSE
+9.    HalamanBookmark.tampilkanNotifikasi("Gagal menyimpan bookmark")
+10.    RETURN false
+```
+
+### 5.22.2 Algoritma/Query
+
+**Nama Kelas:** PengontrolBookmark
+**Nama Operasi:** hapusDataBookmark(idBookmark : string, idPenggunaJasa : string) : boolean
+**ID Algoritma:** Algo-2202
+
+```Pseudocode 
+Input : idBookmark : string, idPenggunaJasa : string
+Ouput : boolean
+1. IF idBookmark KOSONG ATAU idPenggunaJasa KOSONG THEN
+2.     THROW Exception "Parameter input tidak valid"
+3. statusDelete = Bookmark.hapusBookmark(idBookmark,idPenggunaJasa)
+4.
+5. IF statusSimpan == true THEN
+6.     HalamanBookmark.tampilkanNotifikasi("Bookmark berhasil dihapus")
+7.    RETURN true
+8. ELSE
+9.    HalamanBookmark.tampilkanNotifikasi("Gagal menghapus bookmark silahkan coba lagi")
+10.    RETURN false
+```
+
+
+
+### 5.22.3 Algoritma/Query
+
+**Nama Kelas:** PengontrolBookmark 
+**Nama Operasi:** ambilDaftarBookmarkPengguna(idPenggunaJasa : string) : list of Bookmark 
+**ID Algoritma:** Algo-2203
+
+```Pseudocode Belom
+Input : idPenggunaJasa(string)
+Ouput : list of Bookmark || pesanError
+1. IF idPenggunaJasa KOSONG THEN 
+2.    THROW Exception "Parameter input tidak valid"
+3. daftarBookmark = Bookmark.lihatBookmark(idPenggunaJasa)
+4. IF daftarBookmark == NULL THEN
+5.   HalamanBookmark.tampilkanNotifikasi("Bookmark Kosong")
+6.   return NULL
+7. ELSE THEN 
+8.   HalamanBookmark.tampilkanDaftarTersimpan()
+9.   return daftarBookmark 
+```
+
+## 5.23 Kelas Chatroom (C23)
+
+**Nama Kelas:** Chatroom
+**ID Kelas:** C23
+
+Tabel 5.23.1. Operasi Kelas Bookmark
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| getRiwayatPesan() : list of string | public | mendapatkan riwayat pesan |
+| simpanPesan() : void | public | menyimpan pesan |
+| getidChatRoom() : string| public | mendapatkan idChatroom |
+| getidAnggota() : string | public | mendapatkan idAnggota |
+
+Tabel 5.23.2. Atribut Kelas Bookmark
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idChatRoom | private | string |
+| idAnggota  | private | string |
+| riwayatPesan  | private | list of string |
+| waktuDibuat | private | Date |
+
+
+### 5.23.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Chatroom
+**Nama Operasi:** getRiwayatPesan(idChatroom : string) : list of pesan
+**ID Algoritma:** Algo-2301
+
+```text
+Input : idChatroom (string)
+Output : list of pesan
+1. Jalankan Query Q-2301 dengan parameter idChatroom
+2. simpan hasil kembalian dari Query Q-2301 ke variabel RiwayatPesan
+3. IF riwayatPesan TIDAK KOSONG THEN
+4.     RETURN riwayatPesan
+5. ELSE
+6.     RETURN null
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.23.1. Query Operasi Chatroom
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2301 | SELECT * FROM Pesan WHERE idChatroom = %idChatroom% ORDER BY waktuDibuat ASC | Mengambil seluruh baris riwayat pesan berdasarkan ID Chatroom yang diurutkan kronologis dari pesan tertua ke terbaru. |
+
+
+### 5.23.2 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Chatroom
+**Nama Operasi:** simpanPesan(pesan : string) : void
+**ID Algoritma:** Algo-2302
+
+```text
+Input : Pesan (string)
+Output : boolean
+1. Jalankan Query Q-2302 dengan parameter Pesan
+2. Simpan hasil kembalian query ke variabel Pesan
+3. IF PESAN == null THEN
+4.   HalamanChat.tampilkanPesanError("Pesan Tidak Berhasil Tersimpan")
+5.  return false
+6. else then
+7.   return true
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.23.2. Query Operasi Chatroom
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2302 | INSERT INTO RiwayatPesan (idPesan, idPengguna, waktuDibuat, Pesan) VALUES (%idPesan%, %idPenggunaJasa%,%date%, %pesan%) RETURN Pesan  | Menyimpan Pesan yang baru dikirim |
+
+
+### 5.23.3 Algoritma/Query
+
+**Nama Kelas:** Chatroom
+**Nama Operasi:** getidChatRoom(idPenggunaJasa : string, idPenyediaJasa : string) : string
+**ID Algoritma:** Algo-2303
+
+```text
+Input : idPenggunaJasa : string dan idPenyediaJasa : string
+Output : list of Bookmark
+1. Jalankan Query Q-2303 dengan parameter idPenggunaJasa dan idPenyediaJasa
+2. Simpan hasil kembalian query ke variabel idChatRoom
+3. IF idChatRoom == kosong THEN
+4.   Jalankan Query [Q-2303] dengan parameter idPenggunaJasa dan idPenyediaJasa
+5.     Simpan ID yang baru terbentuk ke variabel idChatroomBaru
+6.    RETURN idChatroomBaru
+7. else THEN
+8.   return idChatRoom
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.23.3. Query Operasi Chatroom
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2303 | SELECT id_chatroom FROM chatroom WHERE id_pengguna_jasa = %idPenggunaJasa% AND id_penyedia_jasa = %idPenyediaJasa% LIMIT 1; | Mengambil idChatRoom |
+| Q-2304 | INSERT INTO chatroom (id_pengguna_jasa, id_penyedia_jasa, created_at) VALUES (%idPenggunaJasa%, %idPenyediaJasa%, NOW()) RETURNING id_chatroom; | Membuat Entitas Chatroom yang baru |
+
+
+### 5.23.4 Algoritma/Query
+
+**Nama Kelas:** Chatroom
+**Nama Operasi:** getidAnggota(idChatRoom : string) : string
+**ID Algoritma:** Algo-2304
+
+```text
+Input : idChatRoom : string
+Output : list of Bookmark
+1. Jalankan Query Q-2305 dengan parameter idChatRoom
+2. Simpan hasil kembalian query ke variabel idAnggota
+3. if idAnggota == kosong then
+4.   return null
+5. else then
+6.   return idChatRoom
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.23.3. Query Operasi Bookmark
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2305 | SELECT idAnggota FROM ChatRoom WHERE idChatRoom = %idChatRoom% LIMIT 1; | Mengambil idAnggota yang ada di dalam ChatRoom |
+
+## 5.25 Kelas LayananPesanInstan (C25)
+
+**Nama Kelas:** LayananPesanInstan
+**ID Kelas:** C25
+
+Tabel 5.25.1. Operasi Kelas [LayananPesanInstan]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| buatSesiChat() : void | public | membuat sesiChat |
+| validasiInputPesan() : boolean | public | memvalidasi input pesan yang diberikan pengguna |
+| kirimPesan() : void | public | mengirim pesan (menyimpan ke riwayat pesan) |
+| simpanKeDatabase() : void | public | menyimpan chat ke database |
+| updateStatusBaca() : void | public | mengupdate statusBaca pengguna |
+ 
+
+### 5.25.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananPesanInstan
+**Nama Operasi:** buatSesiChat(idPenggunaJasa : string, idPenyediaJasa) : void  
+**ID Algoritma:** Algo-2501
+
+```Pseudocode
+INPUT: idPenggunaJasa (string), idPenyediaJasa (string)
+OUTPUT: void
+1. idPenggunaJasa = PenggunaJasa.getIdPenggunaJasa()
+2. idPenyediaJasa = PenyediaJasa.getIdPenyediaJasa()
+3. idChatRoom = ChatRoom.getIdChatRoom(idPenggunaJasa, idPenyediaJasa)
+4. HalamanChat.tampilkanMenuChat()
+```
+
+### 5.25.2 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananPesanInstan
+**Nama Operasi:** validasiInputPesan(pesan : string) : boolean
+**ID Algoritma:** Algo-2502
+
+```Pseudocode
+INPUT: pesan (string)
+OUTPUT: boolean
+
+1. pesanBersih = trim(pesan)
+2. IF len(pesanBersih) == 0 THEN
+3.     tampilkanPesanError("tidak dapat mengirim pesan kosong")
+4.     return false
+5. ELSE IF len(pesanBersih) > 1000 THEN
+6.     tampilkanPesanError("tidak dapat mengirim pesan lebih dari 1000 karakter")
+7.     return false
+8. ELSE 
+9.    return true
+```
+
+### 5.25.3 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananPesanInstan
+**Nama Operasi:** kirimPesan(pesan : string) : void  
+**ID Algoritma:** Algo-2503
+
+```Pseudocode
+INPUT: pesan (string)
+OUTPUT: void
+1. idPengguna = Pengguna.getIdPengguna()
+2. idChatRoom = ChatRoom.getIdChatroom()
+3. riwayatPesan = ChatRoom.getRiwayatPesan(idChatRoom)
+4. IF validasiInput(pesan) THEN
+5.   simpanKeDatabase(pesan)
+6.   newRiwayatPesan = ChatRoom.getRiwayatPesan(idChatRoom)
+7.   IF len(newRiwayatPesan)<= len(riwayatPesan) THEN
+8.       HalamanChat.tampilkanPesanError("Pesan Belum Terkirim Silahkan coba lagi")
+9. ELSE THEN
+10.   HalamanChat.tampilkanPesanError("Pesan Belum Terkirim Silahkan coba lagi")
+```
+
+### 5.25.4 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananPesanInstan
+**Nama Operasi:** simpanKeDatabase(idChatroom : string, idPengirim : string, pesan : string) : void
+**ID Algoritma:** Algo-2504
+
+```Pseudocode
+INPUT: idChatroom (string), idPengirim (string), isiPesan (string)
+OUTPUT: boolean
+
+
+1. idPesan = Pesan.simpanPesan(idChatroom, idPengirim, isiPesan)
+2.
+3. JIKA idPesan != NULL THEN
+4.    RETURN true
+5. ELSE
+6.    RETURN false
+END ALGORITHM
+```
+
+### 5.25.5 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananPesanInstan
+**Nama Operasi:** updateStatusBaca(idChatroom : string, idPengguna : string) : boolean
+**ID Algoritma:** Algo-2505
+
+```Pseudocode
+INPUT: idChatroom (string), idPengguna (string)
+OUTPUT: boolean
+
+1. JIKA idChatroom == NULL ATAU idPengguna == NULL THEN
+2.     THROW Exception "Parameter tidak valid"
+3. ENDIF
+4.
+5. statusUpdate = Pesan.perbaruiStatusDibaca(idChatroom, idPengguna)
+6.
+7. JIKA statusUpdate == true THEN
+8.    HalamanChat.tampilkanStatusDibaca()
+9.    RETURN true
+10. ELSE
+11.    RETURN false
+12. ENDIF
+
+```
+
+## 5.26 Kelas LayananPesanInstan (C25)
+
+**Nama Kelas:** LayananNotiifikasiChat
+**ID Kelas:** C26
+
+Tabel 5.26.1. Operasi Kelas [LayananNotiifikasiChat]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| kirimNotifikasiPesan() : void | public  | mengirim notifikasi pesan |
+| tampilkanPopUpNotifikasi() : void| public  | mengirimkan Pop Up Notifikasinya | 
+ 
+
+### 5.26.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananNotifikasiChat
+**Nama Operasi:** kirimNotifikasiPesan(idPesan : string, idPengirim : string, idPenerima : string) : void
+**ID Algoritma:** Algo-2601
+
+```Pseudocode
+INPUT: void
+OUTPUT: void
+1. IF idPesan == NULL OR idPengirim == NULL or idPenerima == NULL THEN
+2.    Throw Exception "Parameter tidak valid" 
+3. detailPesan = Pesan.getDetailPesan(idPesan)
+4. namaPengirim = Pesan.getNama(idPengirim)
+5. deviceToken = Pengguna.getDeviceToken(idPenerima)
+6. tampilkanPopUpNotifikasi(deviceToken, namaPengirim, detailPesan.isiPesan)
+```
+
+### 5.26.2 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** LayananNotiifikasiChat
+**Nama Operasi:** tampilkanPopUpNotifikasi(device : string, pengirim : string, pesan : string) : void
+**ID Algoritma:** Algo-2602
+
+```Pseudocode
+1. PushNotificationService.send(deviceToken, namaPengirim, detailPesan.isiPesan)
+```
+
+## 5.27 Kelas Pesanan (C27)
+
+**Nama Kelas:** Chatroom
+**ID Kelas:** C27
+
+Tabel 5.27.1. Operasi Kelas Pesanan
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| setStatusDiproses() : void | public | mengupdate status pengerjaan menjadi diproses|
+| setStatusSelesai() : void | public | mengupdate status pengerjaan menjadi selesai |
+
+Tabel 5.27.2. Atribut Kelas Pesanan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idPesanan | private | string |
+| idPenggunaJasa  | private | string |
+| idPenyediaJasa | private | string |
+| idJasa | private | string |
+| brief | private | string|
+| totalBiaya | private | double |
+| statusPesanan | private | string |
+
+
+
+### 5.27.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Pesanan
+**Nama Operasi:** setStatusDiproses(idPesanan : string) : void
+**ID Algoritma:** Algo-2701
+
+```text
+Input : idPesanan (string)
+Output : void
+1. Jalankan Query Q-2701 dengan parameter idPesanan
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.27.1. Query Operasi Pesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2701 | UPDATE Pesanan <br> SET statusPengerjaan = "Diproses" WHERE idPesanan = %idPesanan%| Mengupdate Status Pengerjaan |
+
+
+### 5.27.2 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Pesanan
+**Nama Operasi:** setStatusSelesai(idPesanan : string) : void
+**ID Algoritma:** Algo-2702
+
+```text
+Input : idPesanan
+Output : void
+1. Jalankan Query Q-2702 dengan parameter idPesanan
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.27.2. Query Operasi Pesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2702 | UPDATE Pesanan <br> SET statusPengerjaan = "Selesai" WHERE idPesanan = %idPesanan%| Mengupdate Status Pengerjaan |
+
+### 5.27.3 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** Pesanan
+**Nama Operasi:** setStatus(idPesanan : string, status : string) : void
+**ID Algoritma:** Algo-2702
+
+```text
+Input : idPesanan (string), status (string)
+Output : void
+1. Jalankan Query Q-2703 dengan parameter idPesanan dan status
+```
+
+Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
+
+Tabel 5.27.3. Query Operasi Pesanan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-2703 | UPDATE Pesanan <br> SET statusPengerjaan = %status% WHERE idPesanan = %idPesanan%| Mengupdate Status Pengerjaan |
+
+## 5.31 Kelas PengontrolPesanan (C31)
+
+**Nama Kelas:** PengontrolPesanan
+**ID Kelas:** C31
+
+Tabel 5.31.1. Operasi Kelas [PengontrolPesanan]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| buatPesananBaru() : void | public | Membuat Pesanan Baru |
+| hitungTotalBiaya() : double | public | menghitung biaya pesanan |
+| updateStatusPesanan(idPesanan: integer, status: STATUS) : void | public | mengubah status pesanan |
+|getDetailPesanan() : string | public | mendapatkan detail pesanan |
+ 
+
+### 5.31.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolPesanan
+**Nama Operasi:** buatPesananBaru(briefPesanan : string, idJasa : string, idPenggunaJasa : string) : Pesanan
+**ID Algoritma:** Algo-3101
+
+```Pseudocode
+INPUT: briefPesanan : string, idJasa : string, idPenggunaJasa : string
+OUTPUT: Pesanan
+1. IF briefPesanan == NULL  THEN
+2.   Throw Exception "Pesanan tidak Valid"
+3. idPesanan = Pesanan.getIdPesanan()
+4. totalBiaya = hitungTotalBiaya(idJasa)
+5. idPenyediaJasa = Jasa.dapatkanDetailJasa(idJasa).idPenyediaJasa
+6. Jalankan Query Q-3101 dengan parameter briefPesanan,idJasa, idPesanan, idPenyediaJasa dan totalBiaya
+7. RETURN Pesanan
+
+```
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3101 | INSERT INTO Pesanan (idPenggunaJasa, idJasa, totalBiaya, idPenyediaJasa, statusPesanan, waktuDibuat) VALUES (%idPenggunaJasa%, %idJasa%,totalBiaya%, %idPenyediaJasa%, "Menunggu Pembayaran", %NOW()) RETURN Pesanan | Mengupdate Status Pengerjaan |
+
+
+### 5.31.2 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolPesanan
+**Nama Operasi:** hitungTotalBiaya(idJasa) : double
+**ID Algoritma:** Algo-3102
+
+```Pseudocode
+INPUT: idJasa (string)
+OUTPUT : double
+1. IF (idJasa == NULL) THEN
+2.   Throw Exception "idJasa tidak valid"
+3. detailJasa = Jasa.dapatkanDetailJasa(idJasa)
+4. totalBiaya = detailJasa.harga
+5. return totalBiaya
+```
+
+### 5.31.3 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolPesanan
+**Nama Operasi:** updateStatusPesanan(idPesanan: string, status: string) : void 
+**ID Algoritma:** Algo-3103
+
+```Pseudocode
+INPUT: idPesanan : string, status : string
+OUTPUT: void
+1. IF status == "Selesai" THEN
+2.   Pesanan.setStatusSelesai(idPesanan)
+3. ELSE IF status == "Diproses"
+4.   Pesanan.setStatusDiproses(idPesanan)
+5. ELSE
+6.   Pesanan.setStatus(idPesanan, status)
+```
+
+### 5.31.4 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolPesanan
+**Nama Operasi:** getDetailPesanan(idPesanan : string) : string
+**ID Algoritma:** Algo-3104
+
+```Pseudocode
+INPUT: idPesanan (string)
+OUTPUT: string
+1. IF idPesanan == NULL THEN
+2.   Throw Exception "idPesanan tidak valid"
+3. Jalankan Query Q-3102 dengan parameter idPesanan
+4. simpan hasil query pada variabel detailPesanan
+5. return detailPesanan
+
+```
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3102 | SELECT * FROM Pesanan WHERE idPesanan = %idPesanan% | Mengupdate Status Pengerjaan |
+
+## 5.31 Kelas PengontrolPesanan (C31)
+
+**Nama Kelas:** PengontrolPesanan
+**ID Kelas:** C31
+
+Tabel 5.31.1. Operasi Kelas [PengontrolPesanan]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| buatPesananBaru() : void | public | Membuat Pesanan Baru |
+| hitungTotalBiaya() : double | public | menghitung biaya pesanan |
+| updateStatusPesanan(idPesanan: integer, status: STATUS) : void | public | mengubah status pesanan |
+|getDetailPesanan() : string | public | mendapatkan detail pesanan |
+ 
+
+### 5.31.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolPesanan
+**Nama Operasi:** buatPesananBaru(briefPesanan : string, idJasa : string, idPenggunaJasa : string) : Pesanan
+**ID Algoritma:** Algo-3101
+
+```Pseudocode
+INPUT: briefPesanan : string, idJasa : string, idPenggunaJasa : string
+OUTPUT: Pesanan
+1. IF briefPesanan == NULL  THEN
+2.   Throw Exception "Pesanan tidak Valid"
+3. idPesanan = Pesanan.getIdPesanan()
+4. totalBiaya = hitungTotalBiaya(idJasa)
+5. idPenyediaJasa = Jasa.dapatkanDetailJasa(idJasa).idPenyediaJasa
+6. Jalankan Query Q-3101 dengan parameter briefPesanan,idJasa, idPesanan, idPenyediaJasa dan totalBiaya
+7. RETURN Pesanan
+
+```
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3101 | INSERT INTO Pesanan (idPenggunaJasa, idJasa, totalBiaya, idPenyediaJasa, statusPesanan, waktuDibuat) VALUES (%idPenggunaJasa%, %idJasa%,totalBiaya%, %idPenyediaJasa%, "Menunggu Pembayaran", %NOW()) RETURN Pesanan | Mengupdate Status Pengerjaan |
+
+
+## 5.32 Kelas PengontrolTransaksi (C32)
+
+**Nama Kelas:** PengontrolTransaksi
+**ID Kelas:** C32
+
+Tabel 5.32.1. Operasi Kelas [PengontrolTransaksi]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| prosesPembayaran(idPesanan : string, idMetode : string) : boolean | public | Memproses Pembayaran |
+| validasiPembayaran(idPesanan : string) : boolean | public | memvalidasi apakah pembayaran berhasil dilakukan  |
+|  setPencairanDana(idPesanan : string, selesai : boolean) : boolean | public | melakukan pencairan dana |
+|updateStatusPembayaran(idPesanan : string, status : string) : boolean | public |mengupdate status pembayaran |
+|catatRiwayatTransaksi(idPesanan : string) : void | public | mencatat riwayat transaksi|
+ 
+
+### 5.32.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolTransaksi
+**Nama Operasi:** prosesPembayaran(idPesanan : string, idMetode : string) : boolean
+**ID Algoritma:** Algo-3201
+
+```Pseudocode
+INPUT: idPesanan (string), idMetode (string)
+OUTPUT: boolean
+
+1. IF idPesanan == NULL ATAU idMetode == NULL THEN
+2.     THROW Exception "Parameter pembayaran tidak valid"
+3. detailMetode = MetodePembayaran.getDetailMetode(idMetode)
+4.
+5. IF detailMetode != NULL THEN
+6.    isUpdated = updateStatusPembayaran(idPesanan, "MENUNGGU_PEMBAYARAN")
+7.    RETURN isUpdated
+8. ELSE
+9.    RETURN false
+
+```
+
+### 5.32.2 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolTransaksi
+**Nama Operasi:** validasiPembayaran(idPesanan : string) : boolean
+**ID Algoritma:** Algo-3202
+
+```Pseudocode
+
+INPUT: idPesanan (string)
+OUTPUT: boolean
+
+1. Jalankan Query [Q-3201] dengan parameter idPesanan
+2. Simpan hasil query ke dalam variabel statusBayar
+4.
+5. IF statusBayar == "LUNAS" ATAU statusBayar == "SUCCESS" THEN
+6.    catatRiwayatTransaksi(idPesanan)
+8.     RETURN true
+9. ELSE
+10.    RETURN false
+```
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3201 |SELECT status_pembayaran FROM pesanan WHERE idPesanan = %idPesanan% LIMIT 1; | Mengambil status pembayaran pesanan saat ini untuk proses validasi. |
+
+### 5.32.3 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolTransaksi
+**Nama Operasi:** setPencairanDana(idPesanan : string, selesai : boolean) : boolean
+**ID Algoritma:** Algo-3203
+
+```Pseudocode
+INPUT: idPesanan (string), selesai (boolean)
+OUTPUT: boolean
+
+1. IF selesai == true THEN
+2.     Jalankan Query [Q-3202] dengan parameter idPesanan
+3.     Simpan hasil kembalian query ke variabel idPencairan
+4.     
+5.     IF idPencairan !=NULL THEN
+6.         RETURN true
+7.     ELSE
+8.         RETURN false
+9. RETURN false
+
+```
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3202 | UPDATE pesanan SET statusPencairan = true, waktuPencairan = NOW() WHERE idPesanan = %idPesanan% RETURN idPesanan | Mengubah status pencairan dana ke penyedia jasa menjadi selesai |
+
+### 5.32.4 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolTransaksi
+**Nama Operasi:** updateStatusPembayaran(idPesanan : string, status : string) : boolean
+**ID Algoritma:** Algo-3204
+
+```Pseudocode
+INPUT: idPesanan (string), status (string)
+OUTPUT: boolean
+
+1. Jalankan Query [Q-3203] dengan parameter idPesanan dan status
+2. Simpan hasil query ke dalam variabel idUpdated
+3.
+4. JIKA idUpdated TIDAK KOSONG THEN
+5.     RETURN true
+6. ELSE
+7.     RETURN false
+
+```
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3202 | UPDATE pesanan SET statusPesanan = %status% WHERE idPesanan = %idPesanan% RETURN idPesanan | Memperbarui status pembayaran pada data pesanan di database |
+
+### 5.32.5 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** PengontrolTransaksi
+**Nama Operasi:** catatRiwayatTransaksi(idPesanan : string) : boolean
+**ID Algoritma:** Algo-3205
+
+```Pseudocode
+INPUT: idPesanan (string)
+OUTPUT: boolean
+
+1. // Memanggil method simpanTransaksi milik Entity RiwayatTransaksi (Algo-3401)
+2. VAR isSukses = RiwayatTransaksi.simpanTransaksi(idPesanan, true)
+3. RETURN isSukses
+```
+
+
+## 5.33 Kelas MetodePembayaran (C33)
+
+**Nama Kelas:** MetodePembayaran
+**ID Kelas:** C33
+
+Tabel 5.33.1. Operasi Kelas [MetodePembayaran]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| getDetailMetode(idMetode) : MetodePembayaran | public | Mendapatkan Detail Metode Pembayaran |
+
+ 
+Tabel 5.33.2. Atribut Kelas MetodePembayaran
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idMetode | private | string |
+| namaMetode | private | string |
+| nomorRekeningVA | private | string |
+
+
+### 5.33.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** MetodePembayaran
+**Nama Operasi:** getDetailMetode(idMetode)
+**ID Algoritma:** Algo-3301
+
+```Pseudocode
+INPUT: idMetode : string
+OUTPUT: detailMetode (MetodePembayaran) ATAU null
+
+1. JIKA idMetode == NULL THEN
+2.     THROW Exception "ID Metode Pembayaran tidak valid"
+3. Jalankan Query [Q-3301] dengan parameter idMetode
+4. Simpan hasil query ke dalam variabel detailMetode
+7.
+8. JIKA detailMetode != NULL THEN
+9.     RETURN detailMetode
+10. ELSE
+11.    RETURN null
+
+```
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3301 | SELECT id_metode, nama_metode, nomor_rekening_va FROM metode_pembayaran WHERE id_metode = %idMetode% LIMIT 1; | Mendapatkan DetailMetode sesuai dengan id yang diberikan |
+
+
+## 5.34 Kelas RiwayatTransaksi (C34)
+
+**Nama Kelas:** RiwayatTransaksi
+**ID Kelas:** C34
+
+Tabel 5.34.1. Operasi Kelas [RiwayatTransaksi]
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| simpanTransaksi(idPesanan : string, statusTransaksi : boolean) : boolean | public | Menyimpan data hasil transaksi baru ke dalam riwayat |
+
+ 
+Tabel 5.34.2. Atribut Kelas MetodePembayaran
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idRiwayat | private | string |
+| idPesanan | private | string |
+| tanggalTransaksi | private | DATE |
+| statusTransaksi | private | boolean |
+
+
+### 5.34.1 Algoritma/Query
+
+Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Algoritma dapat dituliskan sebagai *pseudocode*. Implementasi *skeleton code* juga dapat digunakan untuk kelas yang sudah terdefinisi pada bahasa pemrograman tertentu.
+
+**Nama Kelas:** RiwayatTransaksi
+**Nama Operasi:** simpanTransaksi() : void
+**ID Algoritma:** Algo-3401
+
+```Pseudocode
+INPUT: idPesanan (string), statusTransaksi (boolean)
+OUTPUT: boolean 
+
+1. IF idPesanan KOSONG THEN
+2.     THROW Exception "ID Pesanan tidak valid"
+3. 
+4.
+5. tanggalTransaksi = Waktu_Sekarang()
+6.
+7. Jalankan Query [Q-3401] dengan parameter idPesanan, tanggalTransaksi, dan statusTransaksi
+8. Simpan hasil query ke dalam variabel idRiwayatBaru
+9.
+10. JIKA idRiwayatBaru != NULL THEN
+11.     RETURN true
+12. ELSE
+13.     RETURN false
+14. 
+
+```
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3401 | INSERT INTO riwayat_transaksi (id_pesanan, tanggal_transaksi, status_transaksi) VALUES (%idPesanan%, NOW(), %statusTransaksi%) RETURNING id_riwayat; | Memasukkan baris data riwayat transaksi baru ke dalam database dan mengembalikan ID riwayat yang baru saja terbentuk. |
 ---
 
 # BAB 6: Perancangan Antarmuka
