@@ -985,17 +985,64 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 
 # BAB 5: Perancangan Rinci Kelas
 
-Bagian ini diisi dengan daftar seluruh kelas dalam tabel berikut:
-
 Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 
 | No | Nama Kelas Perancangan | Nama Kelas Analisis Terkait |
 | :--- | :--- | :--- |
-| 1 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL atau -]* |
-| 2 | *[Nama kelas perancangan]* | *[Nama kelas analisis pada SKPL atau -]* |
-| ... | *...* | *...* |
-
-Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta *visibility*-nya, serta atribut beserta *visibility* dan tipenya. Buat subbab tersendiri untuk setiap kelas.
+| 1 | Pengguna  | Pengguna |
+| 2 | PenyediaJasa  | PenyediaJasa |
+| 3 | PenggunaJasa  | PenggunaJasa |
+| 4 | HalamanRegistrasi  | HalamanRegistrasi |
+| 5 | LayananRegistrasi | LayananRegistrasi |
+| 6 | HalamanLogin  | HalamanLogin |
+| 7 | Autentikator  | Autentikator |
+| 8 | HalamanPortofolio  | HalamanPortofolio |
+| 9 | Portofolio  | Portofolio |
+| 10 | PengontrolPortofolio  | PengontrolPortofolio |
+| 11 | LayananUploadFile  | LayananUploadFile |
+| 12 | Jasa  | Jasa |
+| 13 | HalamanUploadJasa  | HalamanUploadJasa |
+| 14 | JasaController  | JasaController |
+| 15 | HalamanPencarian  | HalamanPencarian |
+| 16 | HasilPencarian  | HasilPencarian |
+| 17 | LayananPencarian  | LayananPencarian |
+| 18 | LayananPembandingJasa  | LayananPembandingJasa |
+| 19 | HalamanDetailJasa  | HalamanDetailJasa |
+| 20 | Bookmark  | Bookmark |
+| 21 | HalamanBookmark  | HalamanBookmark |
+| 22 | PengontrolBookmark  | PengontrolBookmark |
+| 23 | ChatRoom  | ChatRoom |
+| 24 | HalamanChat  | HalamanChat |
+| 25 | LayananPesanInstan  | LayananPesanInstan |
+| 26 | LayananNotifikasiChat  | LayananNotifikasiChat |
+| 27 | Pesanan  | Pesanan |
+| 28 | HalamanPemesanan  | HalamanPemesanan |
+| 29 | HalamanPembayaran  | HalamanPembayaran |
+| 30 | HalamanRiwayatTransaksi  | HalamanRiwayatTransaksi |
+| 31 | PengontrolPesanan  | PengontrolPesanan |
+| 32 | PengontrolTransaksi  | PengontrolTransaksi |
+| 33 | MetodePembayaran  | MetodePembayaran |
+| 34 | RiwayatTransaksi  | RiwayatTransaksi |
+| 35 | HalamanKonfirmasi  | HalamanKonfirmasi |
+| 36 | ProdukAkhir  | ProdukAkhir |
+| 37 | HalamanPengumpulan  | HalamanPengumpulan |
+| 38 | HalamanDeliverables  | HalamanDeliverables |
+| 39 | PengajuanRevisi  | PengajuanRevisi |
+| 40 | HalamanRequestRevisi  | HalamanRequestRevisi |
+| 41 | RevisiHandler  | RevisiHandler |
+| 42 | PencairanDana  | PencairanDana |
+| 43 | TiketLaporan  | TiketLaporan |
+| 44 | HalamanPelaporan | HalamanPelaporan |
+| 45 | LaporanHandler | LaporanHandler |
+| 46 | Ulasan | Ulasan |
+| 47 | HalamanUlasan  | HalamanUlasan |
+| 48 | UlasanHandler  | UlasanHandler |
+| 49 | TanggapanLaporan  | TanggapanLaporan |
+| 50 | HalamanPengajuanMediasi | HalamanPengajuanMediasi |
+| 51 | MediasiHandler | MediasiHandler |
+| 52 | Admin  | Admin |
+| 53 | HalamanDashboardAdmin | HalamanDashboardAdmin |
+| 54 | PengumpulanController | PengumpulanController |
 
 ## 5.1 Kelas Pengguna
 
