@@ -1040,19 +1040,72 @@ OUTPUT: void
 6. tanggalPengumpulan = GET_CURRENT_DATE()
 7. statusPemeriksaan = false
 8.
-9. statusQuery = EXECUTE Query Q-3601 WITH (idProdukAkhirBaru, idPesananAktif, filepath, deskripsi, tanggalSekarang, statusAwal, link)
+9. hasilQuery = EXECUTE Query Q-3601 WITH (idProdukAkhirBaru, idPesananAktif, filepath, deskripsi, tanggalSekarang, statusAwal, link)
 10.
-11. IF statusQuery = true THEN
+11. IF hasilQuery == true THEN
 12.      RETURN
 13.  ELSE
 14.      THROW Exception "Gagal menyimpan data produk akhir."
 ```
 
-Tabel 5.36.1.1. Query Operasi simpanProdukAkhir
+Tabel 5.36.3. Query Operasi simpanProdukAkhir
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-3601 | INSERT INTO produk_akhir (id_produk_akhir, id_pesanan, outputpath, deskripsi_produk, tanggal_pengumpulan, status_pemeriksaan, file_url) VALUES (?, ?, ?, ?, ?, ?, ?); | Menyimpan produk akhir ke dalam *database* terpusat. |
+
+### 5.36.2 Algoritma/Query
+
+**Nama Kelas:** ProdukAkhir     
+**Nama Operasi:** updateStatusPengerjaan    
+**ID Algoritma:** Algo-3602
+
+```pseudocode
+INPUT: void
+OUTPUT: void
+
+1. idProdukAkhir = Session.getCurrentProdukAkhirId()
+2. 
+3. hasilQuery = EXECUTE Q-3602 WITH (idProdukAkhir)
+4. 
+5. IF hasilQuery == true THEN
+6.      RETURN
+7. ELSE
+8.      THROW Exception "Gagal memperbarui status pengerjaan."
+```
+
+Tabel 5.36.4. Query Operasi simpanProdukAkhir
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3602 | UPDATE produk_akhir SET status_pemeriksaan = true WHERE id_produk_akhir = ?; | Memperbarui status produk akhir menjadi sudah diperiksa/selesai. |
+
+### 5.36.3 Algoritma/Query
+
+**Nama Kelas:** ProdukAkhir     
+**Nama Operasi:** getDetailProduk    
+**ID Algoritma:** Algo-3603
+
+```pseudocode
+INPUT: void
+OUTPUT: string
+
+1. idProdukAkhir = Session.getCurrentProdukAkhirId()
+2. 
+3. hasilQuery = EXECUTE Q-3603 WITH (idProdukAkhir)
+4.
+5. IF hasilQuery IS NOT EMPTY THEN
+6.      data = FORMAT_TO_JSON(hasilQuery.outputpath, hasilQuery.deskripsi_produk, hasilQuery.tanggal_pengumpulan, hasilQuery.status_pemeriksaan, hasilQuery.file_url)
+7.      RETURN data
+8. ELSE
+9.      RETURN ""
+```
+
+Tabel 5.36.5. Query Operasi simpanProdukAkhir
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-3603 | SELECT outputpath, deskripsi_produk, tanggal_pengumpulan, status_pemeriksaan, file_url FROM produk_akhir WHERE id_produk_akhir = ?; | Mengambil seluruh informasi mengenai produk akhir untuk dikembalikan dalam bentuk string. |
 
 ## 5.39 Kelas PengajuanRevisi
 
