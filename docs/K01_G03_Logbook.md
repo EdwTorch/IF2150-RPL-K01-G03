@@ -176,6 +176,7 @@
 | *25-10-2026* hingga *27-10-2026* | There | Mengerjakan UI | >5 jam | Done | - |
 | *28-10-2026* | There | Mengerjakan Bab 5 | 3 jam | Done | - |
 | *28-10-2026* | Necia | Mengerjakan Bab 6 | 3 jam | Done | - |
+| *27-10-2026* & *28-10-2026* | Revandra | Mengerjakan Bab 5 bagian C36, C39, C41, C42, C43, C45, C46, C48, C49, C51, C52, C54 | 8 jam | Done | - |
 
 **Catatan/Evaluasi Milestone 8:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
