@@ -2156,15 +2156,15 @@ Tabel 6.Y. Rancangan Antarmuka Keseluruhan
 | I-08 | <img src="./assets/UI/C24 - HalamanChat.png" alt="UI C24" width="400"> |
 | I-09 | <img src="./assets/UI/C28 - HalamanPemesanan.png" alt="UI C28" width="400"> |
 | I-10 | <img src="./assets/UI/C29 - HalamanPembayaran - pilih%20metode.png" alt="UI C29" width="400"> |
-| I-11 |  |
-| I-12 |  |
-| I-13 |  |
-| I-14 |  |
-| I-15 |  |
-| I-16 |  |
-| I-17 |  |
-| I-18 |  |
-| I-19 |  |
+| I-11 | <img src="./assets/UI/C30 - HalamanRiwayatTransaksi.png" alt="UI C28" width="400"> |
+| I-12 | <img src="./assets/UI/C35 - HalamanKonfirmasi.png" alt="UI C28" width="400"> |
+| I-13 | <img src="./assets/UI/C37 - HalamanPengumpulan.png" alt="UI C28" width="400"> |
+| I-14 | <img src="./assets/UI/C38 - HalamanDeliverables.png" alt="UI C28" width="400"> |
+| I-15 | <img src="./assets/UI/C40 - HalamanRequestRevisi.png" alt="UI C28" width="400"> |
+| I-16 | <img src="./assets/UI/C44 - HalamanPelaporan.png" alt="UI C28" width="400"> |
+| I-17 | <img src="./assets/UI/C47 - HalamanUlasan.png" alt="UI C28" width="400"> |
+| I-18 | <img src="./assets/UI/C50 - HalamanPengajuanMediasi.png" alt="UI C28" width="400"> |
+| I-19 | <img src="./assets/UI/C53 - HalamanDashboardAdmin.png" alt="UI C28" width="400"> |
 
 <br>
 
