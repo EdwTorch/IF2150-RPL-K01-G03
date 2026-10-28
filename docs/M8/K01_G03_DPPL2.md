@@ -2519,6 +2519,52 @@ Tabel 5.12.6. Query Operasi hapusJasa
 | :--- | :--- | :--- |
 | Q-1204 | UPDATE jasa <br> SET status_aktif = false <br> WHERE id_jasa = %idJasa%; | Menonaktifkan status keaktifan jasa (soft delete) di database |
 
+## 5.13 Kelas HalamanUploadJasa
+
+**Nama Kelas:** HalamanUploadJasa  
+**ID Kelas:** C13
+
+Tabel 5.13.1. Operasi Kelas HalamanUploadJasa
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| klikUnggah() : void | public | Menangani aksi tombol "Unggah" dan memproses penyimpanan penawaran jasa. |
+| tampilkanPesanError() : void | public | Menampilkan peringatan data tidak lengkap atau format berkas tidak didukung. |
+| tampilkanNotifikasiBerhasil() : void | public | Menampilkan notifikasi bahwa penawaran jasa berhasil diunggah. |
+
+Tabel 5.13.2. Atribut Kelas HalamanUploadJasa
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formNamaJasa | private | void |
+| formKategori | private | void |
+| formDeskripsi | private | void |
+| formHarga | private | void |
+| inputUploadBerkas | private | void |
+| tombolUnggah | private | void |
+| pesanError | private | string |
+
+### 5.13.1 Algoritma/Query
+
+**Nama Kelas:** HalamanUploadJasa  
+**Nama Operasi:** klikUnggah() : void  
+**ID Algoritma:** Algo-1301
+
+```text
+PROSEDUR klikUnggah()
+    statusValidasiData   <- JasaController.validasiDataJasa(dataJasa)
+    statusValidasiBerkas <- LayananUploadFile.validasiFormatUkuran(berkas)
+    JIKA data dan berkas valid MAKA
+        JasaController.simpanPenawaranJasa(dataJasa)
+        LayananUploadFile.uploadFile(berkas)
+        LayananUploadFile.getStatusUpload()
+        Jasa.simpanJasa()
+        PenyediaJasa.tambahPenawaranJasa()
+        tampilkanNotifikasiBerhasil()     
+    JIKA TIDAK MAKA                     
+        tampilkanPesanError()
+```
+
 ## 5.14 Kelas JasaController
 
 **Nama Kelas:** JasaController  
@@ -2589,6 +2635,48 @@ Output : void
 5. jasaBaru = new Jasa(dataJasa.idPenyediaJasa, dataJasa.namaJasa, dataJasa.deskripsi, dataJasa.kategori, dataJasa.harga, true)
 6. jasaBaru.simpanJasa()
 7. PenyediaJasa.tambahPenawaranJasa(dataJasa.idPenyediaJasa, jasaBaru.idJasa)
+```
+
+## 5.15 Kelas HalamanPencarian
+
+**Nama Kelas:** HalamanPencarian  
+**ID Kelas:** C15
+
+Tabel 5.15.1. Operasi Kelas HalamanPencarian
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| inputKataKunci() : void | public | Menerima kata kunci pencarian jasa. |
+| klikCari() : void | public | Menangani aksi tombol "Cari", termasuk penerapan filter harga, durasi, dan rating. |
+| tampilkanPesanError(pesan : string) : void | public | Menampilkan pesan saat jasa tidak ditemukan. |
+
+Tabel 5.15.2. Atribut Kelas HalamanPencarian
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| searchBar | private | void |
+| filterHarga | private | void |
+| filterDurasi | private | void |
+| filterRating | private | void |
+| tombolCari | private | void |
+| pesanError | private | string |
+
+### 5.15.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPencarian  
+**Nama Operasi:** klikCari() : void  
+**ID Algoritma:** Algo-1501
+
+```text
+PROSEDUR klikCari()
+    dataJasa <- LayananPencarian.cariJasaBerdasarkanKeyword(keyword)   
+    JIKA data jasa ditemukan MAKA
+        HasilPencarian.tampilkanDaftarHasil()
+        JIKA filter kriteria tambahan digunakan MAKA
+        LayananPencarian.terapkanFilterPencarian(filter)
+        HasilPencarian.tampilkanDaftarHasil()                         
+    JIKA TIDAK MAKA
+        tampilkanPesanError(pesan)                                     
 ```
 
 ## 5.16 Kelas HasilPencarian
@@ -2663,94 +2751,6 @@ Output : void
 5. idJasa2 = this.daftarTerpilih[1]
 6. matriksPerbandingan = LayananPembandingJasa.bandingkanSpesifikasiJasa(idJasa1, idJasa2)
 7. HalamanPerbandingan.tampilkanMatriks(matriksPerbandingan)
-```
-
-## 5.13 Kelas HalamanUploadJasa
-
-**Nama Kelas:** HalamanUploadJasa  
-**ID Kelas:** C13
-
-Tabel 5.13.1. Operasi Kelas HalamanUploadJasa
-
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| klikUnggah() : void | public | Menangani aksi tombol "Unggah" dan memproses penyimpanan penawaran jasa. |
-| tampilkanPesanError() : void | public | Menampilkan peringatan data tidak lengkap atau format berkas tidak didukung. |
-| tampilkanNotifikasiBerhasil() : void | public | Menampilkan notifikasi bahwa penawaran jasa berhasil diunggah. |
-
-Tabel 5.13.2. Atribut Kelas HalamanUploadJasa
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| formNamaJasa | private | void |
-| formKategori | private | void |
-| formDeskripsi | private | void |
-| formHarga | private | void |
-| inputUploadBerkas | private | void |
-| tombolUnggah | private | void |
-| pesanError | private | string |
-
-### 5.13.1 Algoritma/Query
-
-**Nama Kelas:** HalamanUploadJasa  
-**Nama Operasi:** klikUnggah() : void  
-**ID Algoritma:** Algo-1301
-
-```text
-PROSEDUR klikUnggah()
-    statusValidasiData   <- JasaController.validasiDataJasa(dataJasa)
-    statusValidasiBerkas <- LayananUploadFile.validasiFormatUkuran(berkas)
-    JIKA data dan berkas valid MAKA
-        JasaController.simpanPenawaranJasa(dataJasa)
-        LayananUploadFile.uploadFile(berkas)
-        LayananUploadFile.getStatusUpload()
-        Jasa.simpanJasa()
-        PenyediaJasa.tambahPenawaranJasa()
-        tampilkanNotifikasiBerhasil()     
-    JIKA TIDAK MAKA                     
-        tampilkanPesanError()
-```
-
-## 5.15 Kelas HalamanPencarian
-
-**Nama Kelas:** HalamanPencarian  
-**ID Kelas:** C15
-
-Tabel 5.15.1. Operasi Kelas HalamanPencarian
-
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| inputKataKunci() : void | public | Menerima kata kunci pencarian jasa. |
-| klikCari() : void | public | Menangani aksi tombol "Cari", termasuk penerapan filter harga, durasi, dan rating. |
-| tampilkanPesanError(pesan : string) : void | public | Menampilkan pesan saat jasa tidak ditemukan. |
-
-Tabel 5.15.2. Atribut Kelas HalamanPencarian
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| searchBar | private | void |
-| filterHarga | private | void |
-| filterDurasi | private | void |
-| filterRating | private | void |
-| tombolCari | private | void |
-| pesanError | private | string |
-
-### 5.15.1 Algoritma/Query
-
-**Nama Kelas:** HalamanPencarian  
-**Nama Operasi:** klikCari() : void  
-**ID Algoritma:** Algo-1501
-
-```text
-PROSEDUR klikCari()
-    dataJasa <- LayananPencarian.cariJasaBerdasarkanKeyword(keyword)   
-    JIKA data jasa ditemukan MAKA
-        HasilPencarian.tampilkanDaftarHasil()
-        JIKA filter kriteria tambahan digunakan MAKA
-        LayananPencarian.terapkanFilterPencarian(filter)
-        HasilPencarian.tampilkanDaftarHasil()                         
-    JIKA TIDAK MAKA
-        tampilkanPesanError(pesan)                                     
 ```
 
 ## 5.17 Kelas LayananPencarian (C17)
