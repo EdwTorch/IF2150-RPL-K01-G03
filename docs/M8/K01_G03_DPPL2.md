@@ -1443,6 +1443,353 @@ Tabel 5.43.7. Query Operasi saveStatusTindakan
 | :--- | :--- | :--- |
 | Q-4305 | INSERT INTO tanggapan_laporan (id_tanggapan, id_tiket, jenis_tindakan, catatan_tanggapan) VALUES (?, ?, ?, ?); | Mencatat bentuk sanksi yang diputuskan oleh Admin. |
 
+## 5.45 Kelas LaporanHandler
+
+**Nama Kelas:** LaporanHandler      
+**ID Kelas:** C45
+
+Tabel 5.45.1. Operasi Kelas C45
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| validasiFormatLaporan(deskripsi : string, urlBukti : string) : boolean |	public | Memvalidasi kelengkapan format deskripsi laporan dan tautan bukti dari pengguna. |
+| kirimNotifAdmin(idTiket : string) : void | public | Mengirimkan notifikasi tiket laporan baru kepada pihak Admin. |
+| simpanData(idTiket : string, deskripsi : string, urlBukti : string) : void | public | Menyimpan data tiket laporan baru ke dalam *database*. |
+| banPengguna(idPengguna : string) : void | public | Memblokir secara permanen akun pengguna yang terbukti melanggar aturan. |
+| skorsPengguna(idPengguna : string) : void | public | Memberikan sanksi pembekuan sementara akun pengguna. |
+| kirimTanggapan(idTiket : string, tanggapan : string) : void | public | Mengirimkan notifikasi dan teks tanggapan laporan kepada pelapor. |
+| saveTanggapan(idTiket : string, tanggapan : string) : void | public | Menyimpan teks tanggapan Admin terkait laporan ke *database*. |
+| saveLaporan(idTiket : string, deskripsi : string, urlBukti : string) : void | public | Memproses penambahan tiket laporan ke *database* terpusat. |
+| updateStatusTiket(idTiket : string, status : boolean) : void | public | Memperbarui status penanganan tiket laporan pada *database*. |
+| getDetailTiket(idTiket : string) : string | public | Mengambil detail informasi laporan dari tiket terkait. |
+
+### 5.45.1 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** validasiFormatLaporan         
+**ID Algoritma:** Algo-4501
+
+```pseudocode
+INPUT: deskripsi (string), urlBukti (string)
+OUTPUT: boolean
+
+1. IF deskripsi IS EMPTY OR LENGTH(deskripsi) < 10 THEN
+2.      RETURN false
+3.
+4. IF urlBukti IS NOT EMPTY AND IS_VALID_URL(urlBukti) THEN
+5.      RETURN false
+6. ELSE
+7.      RETURN true
+```
+
+### 5.45.2 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** kirimNotifAdmin         
+**ID Algoritma:** Algo-4502
+
+```pseudocode
+INPUT: idTiket (string)
+OUTPUT: void
+
+1. idNotifikasi = GENERATE_UUID()
+2. pesan = "Tiket laporan baru membutuhkan penanganan: " + idTiket
+3.
+4. hasilQuery = EXECUTE Q-4502 WITH (idNotifikasi, idTiket, pesan)
+5.
+6. IF hasilQuery == true THEN
+7.      RETURN
+8. ELSE
+9.      THROW Exception "Gagal mengirimkan notifikasi kepada admin."
+```
+
+Tabel 5.45.2. Query Operasi kirimNotifAdmin
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4502 | INSERT INTO notifikasi (id_notifikasi, id_referensi, pesan_notifikasi) VALUES (?, ?, ?); | Menyimpan notifikasi laporan baru untuk diproses oleh admin. |
+
+### 5.45.3 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** simpanData            
+**ID Algoritma:** Algo-4503
+
+```pseudocode
+INPUT: idTiket (string), deskripsi (string), urlBukti (string)
+OUTPUT: void
+
+1. statusAwal = false
+2. hasilQuery = EXECUTE Q-4503 WITH (idTiket, deskripsi, urlBukti, statusAwal)
+3.
+4. IF hasilQuery == true THEN
+5.      RETURN
+6. ELSE
+7.      THROW Exception "Gagal menyimpan data laporan."
+```
+
+Tabel 5.45.3. Query Operasi simpanData
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4503 | INSERT INTO tiket_laporan (id_tiket, deskripsi_laporan, url_bukti, status_tiket) VALUES (?, ?, ?, ?); | Menginput data aduan baru ke *database* terpusat. |
+
+### 5.45.4 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** banPengguna            
+**ID Algoritma:** Algo-4504
+
+```pseudocode
+INPUT: idPengguna (string)
+OUTPUT: void
+
+1. statusAkunBaru = false
+2. sanksiBaru = "Banned"
+3.
+4. hasilQuery = EXECUTE Q-4504 WITH (statusAkunBaru, sanksiBaru, idPengguna)
+5
+6. IF hasilQuery == true THEN
+7.      RETURN
+8. ELSE
+9.      THROW Exception "Gagal memblokir akun pengguna."
+```
+
+Tabel 5.45.4. Query Operasi banPengguna
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4504 | UPDATE pengguna SET status_akun = ?, sanksi = ? WHERE id_pengguna = ?; | Menonaktifkan akun pengguna dan mencatat status sanksi pemblokiran permanen. |
+
+### 5.45.5 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** skorsPengguna            
+**ID Algoritma:** Algo-4505
+
+```pseudocode
+INPUT: idPengguna (string)
+OUTPUT: void
+
+1. statusAkunBaru = false
+2. sanksiBaru = "Suspended Temporary"
+3. hasilQuery = EXECUTE Q-4505 WITH (statusAkunBaru, sanksiBaru, idPengguna)
+4.
+5. IF hasilQuery == true THEN
+6.      RETURN
+7. ELSE
+8.      THROW Exception "Gagal memberikan skorsing pengguna."
+```
+
+Tabel 5.45.5. Query Operasi skorsPengguna
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4505 | UPDATE pengguna SET status_akun = ?, sanksi = ? WHERE id_pengguna = ?; | Mengubah status akun menjadi dibekukan sementara. |
+
+### 5.45.6 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** kirimTanggapan            
+**ID Algoritma:** Algo-4506
+
+```pseudocode
+INPUT: idTiket (string), tanggapan (string)
+OUTPUT: void
+
+1. idNotifikasi = GENERATE_UUID()
+2. pesan = "Tanggapan laporan tiket " + idTiket + ": " + tanggapan
+3.
+4. hasilQuery = EXECUTE Q-4506 WITH (idNotifikasi, idTiket, pesan)
+5.
+6. IF hasilQuery == true THEN
+7.      RETURN
+8. ELSE
+9.      THROW Exception "Gagal mengirim notifikasi tanggapan laporan."
+```
+
+Tabel 5.45.6. Query Operasi kirimTanggapan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4506 | INSERT INTO notifikasi (id_notifikasi, id_referensi, pesan_notifikasi) VALUES (?, ?, ?); | Mengirim notifikasi pesan tanggapan Admin ke pelapor. |
+
+### 5.45.7 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** saveTanggapan             
+**ID Algoritma:** Algo-4507
+
+```pseudocode
+INPUT: idTiket (string), tanggapan (string)
+OUTPUT: void
+
+1. hasilQuery = EXECUTE Q-4507 WITH (tanggapan, idTiket)
+2.
+3. IF hasilQuery == true THEN
+4.      RETURN
+5. ELSE
+6.      THROW Exception "Gagal menyimpan tanggapan laporan."
+```
+
+Tabel 5.45.7. Query Operasi saveTanggapan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4507 | UPDATE tiket_laporan SET tanggapan_admin = ? WHERE id_tiket = ?; | Menyimpan pesan tanggapan Admin pada tiket terkait. |
+
+### 5.45.8 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** saveLaporan             
+**ID Algoritma:** Algo-4508
+
+```pseudocode
+INPUT: idTiket (string), deskripsi (string), urlBukti (string)
+OUTPUT: void
+
+1. statusAwal = false
+2. hasilQuery = EXECUTE Q-4508 WITH (idTiket, deskripsi, urlBukti, statusAwal)
+3.
+4. IF hasilQuery == true THEN
+5.      RETURN
+6. ELSE
+7.      THROW Exception "Gagal menyimpan tiket laporan."
+```
+
+Tabel 5.45.8. Query Operasi saveLaporan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4508 | INSERT INTO tiket_laporan (id_tiket, deskripsi_laporan, url_bukti, status_tiket) VALUES (?, ?, ?, ?); | Menambahkan laporan baru ke dalam tabel tiket_laporan. |
+
+### 5.45.9 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** updateStatusTiket             
+**ID Algoritma:** Algo-4509
+
+```pseudocode
+INPUT: idTiket (string), status (boolean)
+OUTPUT: void
+
+1. hasilQuery = EXECUTE Q-4509 WITH (status, idTiket)
+2.
+3. IF hasilQuery == true THEN
+4.      RETURN
+5. ELSE
+6.      THROW Exception "Gagal memperbarui status tiket."
+```
+
+Tabel 5.45.9. Query Operasi updateStatusTiket
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4509 | UPDATE tiket_laporan SET status_tiket = ? WHERE id_tiket = ?; | Memperbarui status penyelesaian tiket laporan. |
+
+### 5.45.10 Algoritma/Query
+
+**Nama Kelas:** LaporanHandler     
+**Nama Operasi:** getDetailTiket             
+**ID Algoritma:** Algo-4510
+
+```pseudocode
+INPUT: idTiket (string)
+OUTPUT: string
+
+1. hasilQuery = EXECUTE Q-4510 WITH (idTiket)
+2.
+3. IF hasilQuery IS NOT EMPTY THEN
+4.      data = FORMAT_TO_JSON(hasilQuery.id_tiket, hasilQuery.deskripsi_laporan, hasilQuery.url_bukti, hasilQuery.status_tiket, hasilQuery.tanggapan_admin)
+5.      RETURN data
+6. ELSE
+7.      RETURN ""
+```
+
+Tabel 5.45.10. Query Operasi getDetailTiket
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4510 | SELECT id_tiket, deskripsi_laporan, url_bukti, status_tiket, tanggapan_admin FROM tiket_laporan WHERE id_tiket = ?; | Mengambil informasi tiket laporan berdasarkan ID tiket. |
+
+## 5.46 Kelas Ulasan
+
+**Nama Kelas:** Ulasan      
+**ID Kelas:** C46
+
+Tabel 5.46.1. Operasi Kelas C46
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| simpanUlasan(idPesanan : string, idPenyediaJasa : string, rating : integer, komentar : string, fileDokumentasi : FILE) : void | public | Menyimpan data ulasan pesanan baru ke dalam *databse*. |
+| getDetailUlasan() : string | public | Mengembalikan informasi detail ulasan dalam format string. |
+
+Tabel 5.46.2. Atribut Kelas Ulasan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idUlasan | private | string |
+| idPesanan | private | string |
+| idPenyediaJasa | private | string |
+| rating | private | integer |
+| komentar | private | string |
+| dokumentasi | private | FILE |
+
+### 5.46.1 Algoritma/Query
+
+**Nama Kelas:** Ulasan     
+**Nama Operasi:** simpanUlasan         
+**ID Algoritma:** Algo-4601
+
+```pseudocode
+INPUT: idPesanan (string), idPenyediaJasa (string), rating (integer), komentar (string), fileDokumentasi (FILE)
+OUTPUT: void
+
+1. IF idPesanan EMPTY OR idPenyediaJasa EMPTY OR rating < 1 OR rating > 5 THEN
+2.      THROW Exception "Parameter input ulasan tidak valid."
+3. 
+4. idUlasan = GENERATE_UUID()
+5. filePath = SAVE_FILE_TO_STORAGE(fileDokumentasi)
+6. hasilQuery = EXECUTE Q-4601 WITH (idUlasan, idPesanan, idPenyediaJasa, rating, komentar, filePath)
+7.
+8. IF hasilQuery == true THEN
+9.      RETURN
+10. ELSE
+11.     THROW Exception "Gagal menyimpan ulasan ke basis data."
+```
+
+Tabel 5.46.3. Query Operasi simpanUlasan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4601 | INSERT INTO ulasan (id_ulasan, id_pesanan, id_penyedia_jasa, rating, komentar, dokumentasi_path) VALUES (?, ?, ?, ?, ?, ?); | Menginput baris data ulasan baru ke tabel ulasan. |
+
+### 5.46.1 Algoritma/Query
+
+**Nama Kelas:** Ulasan     
+**Nama Operasi:** getDetailUlasan         
+**ID Algoritma:** Algo-4602
+
+```pseudocode
+INPUT: void
+OUTPUT: string
+
+1. idUlasan = Session.getCurrentUlasanId()
+2. hasilQuery = EXECUTE Q-4602 WITH (idUlasan)
+3.
+4. IF hasilQuery IS NOT EMPTY THEN
+5.      data = FORMAT_TO_JSON(hasilQuery.id_ulasan, hasilQuery.id_pesanan, hasilQuery.id_penyedia_jasa, hasilQuery.rating, hasilQuery.komentar, hasilQuery.dokumentasi_path)
+6.      RETURN data
+7. ELSE
+8.      RETURN ""
+```
+
+Tabel 5.46.4. Query Operasi getDetailUlasan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4602 | SELECT id_ulasan, id_pesanan, id_penyedia_jasa, rating, komentar, dokumentasi_path FROM ulasan WHERE id_ulasan = ?; | Mengambil detail ulasan berdasarkan ID ulasan. |
+
 <br>
 
 ---
