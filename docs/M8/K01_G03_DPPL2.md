@@ -2475,31 +2475,77 @@ Output : void
 ```
 
 ## 5.16 Kelas HasilPencarian
-**Nama Kelas:** HasilPencarian
-**ID Kelas:** C16
+
+**Nama Kelas:** HasilPencarian  
+**ID Kelas:** C16  
 
 Tabel 5.16.1. Operasi Kelas HasilPencarian
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| tampilkanDaftarHasil(daftarJasa : list of Jasa) : void | public | Menampilkan daftar kartu penawaran jasa hasil pencarian pada antarmuka pengguna |
+| pilihJasaUntukDibandingkan(idJasa : string) : void | public | Memilih dan menandai penawaran jasa tertentu untuk dimasukkan ke dalam daftar perbandingan |
+| klikBandingkan() : void | public | Memvalidasi jumlah jasa terpilih dan memicu proses perbandingan spesifikasi jasa |
 
 Tabel 5.16.2. Atribut Kelas HasilPencarian
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| daftarListingJasa | private | list of Jasa |
+| tombolBandingkan | private | void |
 
 ### 5.16.1 Algoritma/Query
-**Nama Kelas:** HasilPencarian
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** HasilPencarian  
+**Nama Operasi:** tampilkanDaftarHasil(daftarJasa : list of Jasa) : void  
+**ID Algoritma:** Algo-1601  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : daftarJasa : list of Jasa
+Output : void
 
+1. IF daftarJasa == NULL OR len(daftarJasa) == 0 THEN
+2.     Tampilkan pesan antarmuka "Tidak ada penawaran jasa yang ditemukan"
+3.     RETURN
+4. this.daftarListingJasa = daftarJasa
+5. Render komponen kartu daftar jasa berdasarkan this.daftarListingJasa ke layar pengguna
+```
+
+### 5.16.2 Algoritma/Query
+**Nama Kelas:** HasilPencarian  
+**Nama Operasi:** pilihJasaUntukDibandingkan(idJasa : string) : void  
+**ID Algoritma:** Algo-1602  
+
+```Pseudocode
+Input : idJasa : string
+Output : void
+
+1. IF idJasa == NULL THEN
+2.     THROW Exception "ID Jasa tidak valid"
+3. IF idJasa IN this.daftarTerpilih THEN
+4.     Hapus idJasa dari this.daftarTerpilih
+5. ELSE
+6.     IF len(this.daftarTerpilih) >= 2 THEN
+7.         Tampilkan pesan antarmuka "Maksimal perbandingan hanya untuk 2 jasa"
+8.         RETURN
+9.     this.daftarTerpilih.append(idJasa)
+```
+
+### 5.16.3 Algoritma/Query
+**Nama Kelas:** HasilPencarian  
+**Nama Operasi:** klikBandingkan() : void  
+**ID Algoritma:** Algo-1603  
+
+```Pseudocode
+Input : void
+Output : void
+
+1. IF len(this.daftarTerpilih) != 2 THEN
+2.     Tampilkan pesan antarmuka "Pilih tepat 2 jasa untuk dapat dibandingkan"
+3.     RETURN
+4. idJasa1 = this.daftarTerpilih[0]
+5. idJasa2 = this.daftarTerpilih[1]
+6. matriksPerbandingan = LayananPembandingJasa.bandingkanSpesifikasiJasa(idJasa1, idJasa2)
+7. HalamanPerbandingan.tampilkanMatriks(matriksPerbandingan)
 ```
 
 ## 5.4 Kelas HalamanRegistrasi
