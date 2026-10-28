@@ -1006,15 +1006,27 @@ Tabel 5.1.1. Operasi Kelas Pengguna
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| + buatAkun() : void | public | |
+| - simpanProfil() : void | private | |
+| + login() : void | public | |
+| + setStatusAkun() : void | public | |
+| + setSanksi() : void | public | |
+| + getNama() : string | public | |
+| + getEmail() : string | public | |
+| + getStatusOnline() : string | public | |
+| + getStatusAkun() : boolean | public | |
 
 Tabel 5.1.2. Atribut Kelas Pengguna
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| nama | private | string |
+| email | private | string |
+| password | protected | string |
+| statusOnline | private | boolean |
+| statusAkun | private | boolean |
+| sanksi | private | string |
+| daftarProduk | private | list of string |
 
 ### 5.1.1 Algoritma/Query
 
