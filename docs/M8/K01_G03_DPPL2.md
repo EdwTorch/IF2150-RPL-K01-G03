@@ -997,19 +997,19 @@ Tabel 5.1. Daftar Kelas Perancangan dan Kelas Analisis Terkait
 
 Untuk **setiap kelas**, identifikasi operasi berdasarkan tanggung jawab kelas beserta *visibility*-nya, serta atribut beserta *visibility* dan tipenya. Buat subbab tersendiri untuk setiap kelas.
 
-## 5.1 Kelas [Nama Kelas 1]
+## 5.1 Kelas Pengguna
 
-**Nama Kelas:** *[Nama kelas]*  
-**ID Kelas:** *[ID kelas]*
+**Nama Kelas:** Pengguna  
+**ID Kelas:** C01
 
-Tabel 5.1.1. Operasi Kelas [Nama Kelas 1]
+Tabel 5.1.1. Operasi Kelas Pengguna
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
 | *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
 | *...* | *...* | *...* |
 
-Tabel 5.1.2. Atribut Kelas [Nama Kelas 1]
+Tabel 5.1.2. Atribut Kelas Pengguna
 
 | Nama Atribut | Visibility (private, public) | Tipe |
 | :--- | :--- | :--- |
@@ -1030,7 +1030,7 @@ Bagian ini diisi untuk kerangka algoritma proses yang dianggap cukup penting. Al
 
 Jika operasi mengacu pada query tertentu, lengkapi tabel berikut. 
 
-Tabel 5.1.1. Query Operasi [Nama Operasi]
+Tabel 5.1.3. Query Operasi [Nama Operasi]
 
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
@@ -1041,6 +1041,287 @@ Tabel 5.1.1. Query Operasi [Nama Operasi]
 ### 5.1.2 Algoritma/Query
 
 *[Ulangi pola 5.1.1 untuk operasi penting berikutnya pada kelas yang sama, jika ada.]*
+
+## 5.2 Kelas PenyediaJasa
+
+**Nama Kelas:** PenyediaJasa  
+**ID Kelas:** C02
+
+Tabel 5.2.1. Operasi Kelas PenyediaJasa
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.2.2. Atribut Kelas PenyediaJasa
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.2.1 Algoritma/Query
+**Nama Kelas:** *[Nama kelas]*  
+**Nama Operasi:** *[Signature operasi]*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+```
+
+## 5.3 Kelas PenggunaJasa
+
+**Nama Kelas:** PenggunaJasa
+**ID Kelas:** C03
+
+Tabel 5.3.1. Operasi Kelas PenggunaJasa
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.3.2. Atribut Kelas PenggunaJasa
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.3.1 Algoritma/Query
+**Nama Kelas:** *[Nama kelas]*  
+**Nama Operasi:** *[Signature operasi]*  
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+```
+
+## 5.5 Kelas LayananRegistrasi
+**Nama Kelas:** LayananRegistrasi
+**ID Kelas:** C05
+
+Tabel 5.5.1. Operasi Kelas LayananRegistrasi
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.5.2. Atribut Kelas LayananRegistrasi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.5.1 Algoritma/Query
+**Nama Kelas:** LayananRegistrasi
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+
+```
+
+
+## 5.7 Kelas Autentikator
+**Nama Kelas:** Autentikator
+**ID Kelas:** C07
+
+Tabel 5.7.1. Operasi Kelas Autentikator
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.7.2. Atribut Kelas Autentikator
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.7.1 Algoritma/Query
+**Nama Kelas:** Autentikator
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+```
+
+## 5.9 Kelas Portofolio
+**Nama Kelas:** Portofolio
+**ID Kelas:** C09
+
+Tabel 5.9.1. Operasi Kelas Portofolio
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.9.2. Atribut Kelas Portofolio
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.9.1 Algoritma/Query
+**Nama Kelas:** Portofolio
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+
+```
+
+## 5.10 Kelas PengontrolPortofolio
+**Nama Kelas:** PengontrolPortofolio
+**ID Kelas:** C10
+
+Tabel 5.10.1. Operasi Kelas PengontrolPortofolio
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.10.2. Atribut Kelas PengontrolPortofolio
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.10.1 Algoritma/Query
+**Nama Kelas:** PengontrolPortofolio
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+
+```
+
+
+## 5.11 Kelas LayananUploadFile
+**Nama Kelas:** LayananUploadFile
+**ID Kelas:** C11
+
+Tabel 5.11.1. Operasi Kelas LayananUploadFile
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.11.2. Atribut Kelas LayananUploadFile
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.11.1 Algoritma/Query
+**Nama Kelas:** LayananUploadFile
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+
+```
+
+## 5.12 Kelas Jasa
+**Nama Kelas:** Jasa
+**ID Kelas:** C12
+
+Tabel 5.12.1. Operasi Kelas Jasa
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.12.2. Atribut Kelas Jasa
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.12.1 Algoritma/Query
+**Nama Kelas:** Jasa
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+
+```
+
+## 5.14 Kelas JasaController
+**Nama Kelas:** JasaController
+**ID Kelas:** C14
+
+Tabel 5.14.1. Operasi Kelas JasaController
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.14.2. Atribut Kelas JasaController
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.14.1 Algoritma/Query
+**Nama Kelas:** JasaController
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+
+```
+
+## 5.16 Kelas HasilPencarian
+**Nama Kelas:** HasilPencarian
+**ID Kelas:** C16
+
+Tabel 5.16.1. Operasi Kelas HasilPencarian
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| --- | --- | --- |
+| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
+| *...* | *...* | *...* |
+
+Tabel 5.16.2. Atribut Kelas HasilPencarian
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| --- | --- | --- |
+| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
+| *...* | *...* | *...* |
+
+### 5.16.1 Algoritma/Query
+**Nama Kelas:** HasilPencarian
+**Nama Operasi:** *[Signature operasi]*
+**ID Algoritma:** *[Algo-001]*
+
+```text
+[Tuliskan pseudocode algoritma operasi di sini.]
+
+```
 
 ## 5.17 Kelas LayananPencarian (C17)
 
