@@ -88,6 +88,8 @@ Tabel 1.4. Aturan Penomoran
 | *Kebutuhan Non-Fungsional* | *KNFXX* | Nomor urut kebutuhan non-fungsional dengan format dua digit. | 
 | *Use Case* | *UCXX* | Nomor urut kasus penggunaan sistem dengan format dua digit. |
 | *Kelas* | *CXX* | Nomor identifikasi unik kelas analisis arsitektur BCE. |
+| *Algoritma* | *Algo-XXYY* | Nomor identifikasi unik algoritma dari sebuah kelas dengan XX adalah nomor kelas dan YY adalah nomor algoritma |
+| *Query* | *Q-XXYY* | Nomor identifikasi unik query dari sebuah kelas dengan XX adalah nomor kelas dan YY adalah nomor algoritma |
 
 ## 1.5 Referensi
 1. **SKPL:** [Spesifikasi Kebutuhan Perangkat Lunak](../M5/K01_G03_SKPL.md)
