@@ -1485,6 +1485,212 @@ Tabel 5.16.2. Atribut Kelas HasilPencarian
 
 ```
 
+## 5.4 Kelas HalamanRegistrasi
+
+**Nama Kelas:** HalamanRegistrasi  
+**ID Kelas:** C04
+
+Tabel 5.4.1. Operasi Kelas HalamanRegistrasi
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanForm() : void | public | Menampilkan halaman registrasi: nama, email, nomor telepon, dan kata sandi. |
+| kirimRegistrasi() : void | public | Menangani aksi tombol "Daftar" dan mengirim data registrasi untuk divalidasi. |
+| tampilkanError() : void | public | Menampilkan pesan kesalahan validasi atau data yang sudah terdaftar. |
+
+Tabel 5.4.2. Atribut Kelas HalamanRegistrasi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formRegistrasi | private | Form |
+| pesanError | private | String |
+
+### 5.4.1 Algoritma/Query
+
+**Nama Kelas:** HalamanRegistrasi  
+**Nama Operasi:** kirimRegistrasi() : void  
+**ID Algoritma:** Algo-0401
+
+```text
+PROSEDUR kirimRegistrasi()
+    JIKA tidak LayananRegistrasi.validasiData() MAKA
+        tampilkanError()                  
+        KELUAR
+    LayananRegistrasi.cekEmail()
+    LayananRegistrasi.cekNoTelepon()
+    JIKA email atau nomor telepon sudah terdaftar MAKA
+        tampilkanError()                 
+        KELUAR
+    LayananRegistrasi.registrasiPengguna()
+    tampilkan notifikasi registrasi berhasil, lalu arahkan ke halaman login
+```
+
+## 5.6 Kelas HalamanLogin
+
+**Nama Kelas:** HalamanLogin  
+**ID Kelas:** C06
+
+Tabel 5.6.1. Operasi Kelas HalamanLogin
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanForm() : void | public | Menampilkan halaman login: email dan kata sandi. |
+| kirimLogin(email : String) : void | public | Menangani aksi tombol "Login" dan mengirim kredensial untuk divalidasi. |
+| tampilkanError() : void | public | Menampilkan pesan kesalahan kredensial atau data login tidak lengkap. |
+
+Tabel 5.6.2. Atribut Kelas HalamanLogin
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| pesanError | private | string |
+| formLogin | private | string |
+
+### 5.6.1 Algoritma/Query
+
+**Nama Kelas:** HalamanLogin  
+**Nama Operasi:** kirimLogin(email : String) : void  
+**ID Algoritma:** Algo-0601
+
+```text
+PROSEDUR kirimLogin(email)
+    JIKA email atau kata sandi kosong MAKA
+        tampilkanError()                  // data login tidak lengkap
+        KELUAR
+    Autentikator.validasiKredensial(email, password)
+    JIKA email atau kata sandi tidak sesuai dengan akun terdaftar MAKA
+        tampilkanError()                  // email atau kata sandi salah
+        KELUAR
+    Autentikator.sesiLogin()
+    arahkan pengguna ke halaman utama CariJasa
+```
+
+## 5.8 Kelas HalamanPortofolio
+
+**Nama Kelas:** HalamanPortofolio  
+**ID Kelas:** C08
+
+Tabel 5.8.1. Operasi Kelas HalamanPortofolio
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanPortofolio() : void | public | Menampilkan portofolio Penyedia Jasa pada halaman profil. |
+| kirimPortofolio(data : Portofolio) : void | public | Menangani aksi tombol "Simpan" dan mengirim data portofolio untuk divalidasi dan disimpan. |
+| tampilkanError() : void | public | Menampilkan pesan kesalahan (data atau berkas tidak lengkap atau tidak sesuai). |
+
+Tabel 5.8.2. Atribut Kelas HalamanPortofolio
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formPortofolio | private | string |
+| pesanError | private | string |
+
+### 5.8.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPortofolio  
+**Nama Operasi:** kirimPortofolio(data : Portofolio) : void  
+**ID Algoritma:** Algo-0801
+
+```text
+PROSEDUR kirimPortofolio(data)
+    JIKA tidak PengontrolPortofolio.validasiInputBerkas(data) MAKA
+        tampilkanError()                   
+        sesuai
+        KELUAR
+    JIKA data memiliki berkas pendukung MAKA
+        LayananUploadFile.validasiFormatUkuran(file)
+        LayananUploadFile.uploadFile(file)
+    PengontrolPortofolio.simpanPortofolio()
+    tampilkanPortofolio()               
+```
+
+## 5.13 Kelas HalamanUploadJasa
+
+**Nama Kelas:** HalamanUploadJasa  
+**ID Kelas:** C13
+
+Tabel 5.13.1. Operasi Kelas HalamanUploadJasa
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| klikUnggah() : void | public | Menangani aksi tombol "Unggah" dan memproses penyimpanan penawaran jasa. |
+| tampilkanPesanError() : void | public | Menampilkan peringatan data tidak lengkap atau format berkas tidak didukung. |
+| tampilkanNotifikasiBerhasil() : void | public | Menampilkan notifikasi bahwa penawaran jasa berhasil diunggah. |
+
+Tabel 5.13.2. Atribut Kelas HalamanUploadJasa
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formNamaJasa | private | void |
+| formKategori | private | void |
+| formDeskripsi | private | void |
+| formHarga | private | void |
+| inputUploadBerkas | private | void |
+| tombolUnggah | private | void |
+| pesanError | private | string |
+
+### 5.13.1 Algoritma/Query
+
+**Nama Kelas:** HalamanUploadJasa  
+**Nama Operasi:** klikUnggah() : void  
+**ID Algoritma:** Algo-1301
+
+```text
+PROSEDUR klikUnggah()
+    statusValidasiData   <- JasaController.validasiDataJasa(dataJasa)
+    statusValidasiBerkas <- LayananUploadFile.validasiFormatUkuran(berkas)
+    JIKA data dan berkas valid MAKA
+        JasaController.simpanPenawaranJasa(dataJasa)
+        LayananUploadFile.uploadFile(berkas)
+        LayananUploadFile.getStatusUpload()
+        Jasa.simpanJasa()
+        PenyediaJasa.tambahPenawaranJasa()
+        tampilkanNotifikasiBerhasil()     
+    JIKA TIDAK MAKA                     
+        tampilkanPesanError()
+```
+
+## 5.15 Kelas HalamanPencarian
+
+**Nama Kelas:** HalamanPencarian  
+**ID Kelas:** C15
+
+Tabel 5.15.1. Operasi Kelas HalamanPencarian
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| inputKataKunci() : void | public | Menerima kata kunci pencarian jasa. |
+| klikCari() : void | public | Menangani aksi tombol "Cari", termasuk penerapan filter harga, durasi, dan rating. |
+| tampilkanPesanError(pesan : string) : void | public | Menampilkan pesan saat jasa tidak ditemukan. |
+
+Tabel 5.15.2. Atribut Kelas HalamanPencarian
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| searchBar | private | void |
+| filterHarga | private | void |
+| filterDurasi | private | void |
+| filterRating | private | void |
+| tombolCari | private | void |
+| pesanError | private | string |
+
+### 5.15.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPencarian  
+**Nama Operasi:** klikCari() : void  
+**ID Algoritma:** Algo-1501
+
+```text
+PROSEDUR klikCari()
+    dataJasa <- LayananPencarian.cariJasaBerdasarkanKeyword(keyword)   // memanggil Jasa.dapatkanDetailJasa()
+    JIKA data jasa ditemukan MAKA
+        HasilPencarian.tampilkanDaftarHasil()
+        JIKA filter kriteria tambahan digunakan MAKA
+        LayananPencarian.terapkanFilterPencarian(filter)
+        HasilPencarian.tampilkanDaftarHasil()                         
+    JIKA TIDAK MAKA
+        tampilkanPesanError(pesan)                                     
+```
+
 ## 5.17 Kelas LayananPencarian (C17)
 
 **Nama Kelas:** LayananPencarian 
@@ -1605,6 +1811,44 @@ Tabel 5.18.1. Query Operasi [Nama Operasi]
 | :--- | :--- | :--- |
 | Q-1801 | SELECT * FROM jasa WHERE id_jasa = %idJasa% AND status_aktif = true | Mengambil detail spesifikasi data jasa aktif berdasarkan ID Jasa yang dipilih untuk dibandingkan. |
 
+## 5.19 Kelas HalamanDetailJasa
+
+**Nama Kelas:** HalamanDetailJasa  
+**ID Kelas:** C19
+
+Tabel 5.19.1. Operasi Kelas HalamanDetailJasa
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanDetailJasa() : void | public | Menampilkan deskripsi, harga, profil penyedia, dan riwayat ulasan jasa. |
+| tampilkanPesanError() : void | public | Menampilkan pesan saat data jasa tidak ditemukan atau nonaktif. |
+
+Tabel 5.19.2. Atribut Kelas HalamanDetailJasa
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| tampilanDeskripsi | private | string |
+| tampilanHarga | private | double |
+| infoProfilPenyedia | private | string |
+| tampilanRiwayatUlasan | private | list of string |
+| pesanError | private | string |
+
+### 5.19.1 Algoritma/Query
+
+**Nama Kelas:** HalamanDetailJasa  
+**Nama Operasi:** tampilkanDetailJasa() : void  
+**ID Algoritma:** Algo-1901
+
+```text
+PROSEDUR tampilkanDetailJasa()
+    infoJasa <- JasaController.ambilDetailJasa(idJasa)       
+    JIKA data jasa ditemukan dan aktif MAKA
+        dataProfilPenyedia <- PenyediaJasa.getPengalamandanPrestasi()
+        riwayatUlasan      <- Ulasan.getDetailUlasan()
+        tampilkan informasi detail jasa (deskripsi, harga, profil penyedia, riwayat ulasan)
+    JIKA TIDAK MAKA                                           
+        tampilkanPesanError()
+```
 
 
 ## 5.20 Kelas Bookmark (C20)
@@ -1713,6 +1957,71 @@ Tabel 5.20.3. Query Operasi Bookmark
 | Q-2003 | SELECT * FROM Bookmark WHERE idPenggunaJasa = %idPenggunaJasa% ORDER BY waktuDibuat DESC; | Menampilkan Hasil Bookmark yang telah disimpan |
 
 <br>
+
+## 5.21 Kelas HalamanBookmark
+
+**Nama Kelas:** HalamanBookmark  
+**ID Kelas:** C21
+
+Tabel 5.21.1. Operasi Kelas HalamanBookmark
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanDaftarTersimpan() : void | public | Menampilkan daftar jasa yang disimpan pengguna ("Jasa Tersimpan"). |
+| klikIkonBookmark() : void | public | Menangani aksi menyimpan jasa melalui ikon bookmark. |
+| klikIkonHapus() : void | public | Menangani aksi menghapus jasa dari daftar tersimpan. |
+| tampilkanNotifikasi() : void | public | Menampilkan notifikasi berhasil disimpan, berhasil dihapus, atau permintaan login. |
+
+Tabel 5.21.2. Atribut Kelas HalamanBookmark
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| daftarJasaTersimpan | private | list of Jasa |
+| ikonBookmarkAktif | private | void |
+| ikonBookmarkNonaktif | private | void |
+| tombolHapusBookmark | private | void |
+
+### 5.21.1 Algoritma/Query
+
+**Nama Kelas:** HalamanBookmark  
+**Nama Operasi:** klikIkonBookmark() : void  
+**ID Algoritma:** Algo-2101
+
+```text
+PROSEDUR klikIkonBookmark()
+    PengontrolBookmark.tambahDataBookmark()
+    Bookmark.simpanBookmark()
+    tampilkanNotifikasi()               
+```
+
+### 5.21.2 Algoritma/Query
+
+**Nama Kelas:** HalamanBookmark  
+**Nama Operasi:** tampilkanDaftarTersimpan() : void  
+**ID Algoritma:** Algo-2102
+
+```text
+PROSEDUR tampilkanDaftarTersimpan()
+    PengontrolBookmark.ambilDaftarBookmarkPengguna()
+        daftarIdJasa <- Bookmark.lihatBookmark()
+        UNTUK SETIAP idJasa DALAM daftarIdJasa
+        detailJasaTersimpan <- Jasa.dapatkanDetailJasa(idJasa)
+    daftarJasaTersimpan <- daftar lengkap jasa
+    tampilkan daftarJasaTersimpan
+```
+
+### 5.21.3 Algoritma/Query
+
+**Nama Kelas:** HalamanBookmark  
+**Nama Operasi:** klikIkonHapus() : void  
+**ID Algoritma:** Algo-2103
+
+```text
+PROSEDUR klikIkonHapus()
+    PengontrolBookmark.hapusDataBookmark()
+        Bookmark.hapusBookmark()
+    tampilkanNotifikasi()               
+```
 
 ## 5.22 Kelas PengontrolBookmark (C22)
 
@@ -1929,6 +2238,52 @@ Tabel 5.23.3. Query Operasi Bookmark
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-2305 | SELECT idAnggota FROM ChatRoom WHERE idChatRoom = %idChatRoom% LIMIT 1; | Mengambil idAnggota yang ada di dalam ChatRoom |
+
+## 5.24 Kelas HalamanChat
+
+**Nama Kelas:** HalamanChat  
+**ID Kelas:** C24
+
+Tabel 5.24.1. Operasi Kelas HalamanChat
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanMenuChat() : void | public | Menampilkan menu chat beserta riwayat pesan jika ada. |
+| tampilkanRiwayatPesan() : void | public | Menampilkan riwayat pesan pada ruang obrolan. |
+| inputPesan() : void | public | Menerima pesan yang diketik pengguna. |
+| tombolKirimTerklik() : void | public | Menangani aksi tombol kirim pesan. |
+| tampilkanPesanError() : void | public | Menampilkan pesan kesalahan saat input pesan tidak valid. |
+| tampilkanStatusBelumTerkirim() : void | public | Menampilkan ikon atau notifikasi bahwa pesan belum terkirim. |
+
+Tabel 5.24.2. Atribut Kelas HalamanChat
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idSesiChat | private | string |
+| inputPesan | private | string |
+| statusKoneksi | private | string |
+
+### 5.24.1 Algoritma/Query
+
+**Nama Kelas:** HalamanChat  
+**Nama Operasi:** tombolKirimTerklik() : void  
+**ID Algoritma:** Algo-2401
+
+```text
+PROSEDUR tombolKirimTerklik()
+    inputPesanValid <- LayananPesanInstan.validasiInputPesan()
+    JIKA inputPesanValid MAKA
+        LayananPesanInstan.kirimPesan()
+        ChatRoom.getRiwayatPesan()
+        LayananPesanInstan.simpanKeDatabase()
+        LayananNotifikasiChat.kirimNotifikasiPesan()
+        LayananNotifikasiChat.tampilkanPopUpNotifikasi()
+        tampilkanRiwayatPesan()
+    JIKA TIDAK MAKA
+        tampilkanPesanError()
+    JIKA koneksi internet terputus saat mengirim MAKA          
+        tampilkanStatusBelumTerkirim()
+```
 
 ## 5.25 Kelas LayananPesanInstan (C25)
 
@@ -2195,6 +2550,99 @@ Tabel 5.27.3. Query Operasi Pesanan
 | No Query | Query | Keterangan |
 | :--- | :--- | :--- |
 | Q-2703 | UPDATE Pesanan <br> SET statusPengerjaan = %status% WHERE idPesanan = %idPesanan%| Mengupdate Status Pengerjaan |
+
+## 5.28 Kelas HalamanPemesanan
+
+**Nama Kelas:** HalamanPemesanan  
+**ID Kelas:** C28
+
+Tabel 5.28.1. Operasi Kelas HalamanPemesanan
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanFormPemesanan() : void | public | Menampilkan formulir pemesanan jasa. |
+| inputBriefPemesanan() : void | public | Menerima brief pemesanan dari Pengguna Jasa. |
+| tombolPesanTerklik() : void | public | Menangani aksi tombol pesan dan membuat pesanan baru. |
+
+Tabel 5.28.2. Atribut Kelas HalamanPemesanan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idJasaDipilih | private | string |
+| briefPemesanan | private | string |
+
+### 5.28.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPemesanan  
+**Nama Operasi:** tombolPesanTerklik() : void  
+**ID Algoritma:** Algo-2801
+
+```text
+PROSEDUR tombolPesanTerklik()
+    PengontrolPesanan.buatPesananBaru()
+    JIKA briefPemesanan kosong MAKA
+        tampilkanFormPemesanan()          
+        KELUAR
+    PengontrolPesanan.hitungTotalBiaya()
+    buat Pesanan
+    HalamanPembayaran.tampilkanPilihanPembayaran()
+```
+
+---
+
+## 5.29 Kelas HalamanPembayaran
+
+**Nama Kelas:** HalamanPembayaran  
+**ID Kelas:** C29
+
+Tabel 5.29.1. Operasi Kelas HalamanPembayaran
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanPilihanPembayaran() : void | public | Menampilkan metode pembayaran yang tersedia. |
+| tampilkanRincianPembayaran() : void | public | Menampilkan rincian pembayaran dan total harga. |
+| tombolBayarTerklik() : void | public | Menangani aksi tombol bayar. |
+| tampilkanNotifikasiBerhasil() : void | public | Menampilkan notifikasi bahwa pembayaran berhasil. |
+
+Tabel 5.29.2. Atribut Kelas HalamanPembayaran
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| totalHarga | private | Double |
+| idMetodePembayaran | private | string |
+
+### 5.29.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPembayaran  
+**Nama Operasi:** tampilkanPilihanPembayaran() : void  
+**ID Algoritma:** Algo-2901
+
+```text
+PROSEDUR tampilkanPilihanPembayaran()
+    PengontrolTransaksi.prosesPembayaran()
+        MetodePembayaran.getDetailMetode()
+    tampilkanRincianPembayaran()
+```
+
+### 5.29.2 Algoritma/Query
+
+**Nama Kelas:** HalamanPembayaran  
+**Nama Operasi:** tombolBayarTerklik() : void  
+**ID Algoritma:** Algo-2902
+
+```text
+PROSEDUR tombolBayarTerklik()
+    statusTransaksi <- PengontrolTransaksi.validasiPembayaran()
+    JIKA statusTransaksi berhasil MAKA
+        PengontrolTransaksi.updateStatusPembayaran()
+        PengontrolPesanan.updateStatusPesanan()
+        Pesanan.setStatusDiproses()
+        buat RiwayatTransaksi
+        tampilkanNotifikasiBerhasil()
+        HalamanRiwayatTransaksi.tampilkanRiwayatTransaksi()
+    JIKA gagal MAKA
+        tampilkanRincianPembayaran()      
+```
 
 ## 5.30 Kelas HalamanRiwayatTransaksi
 
