@@ -3057,32 +3057,400 @@ PROSEDUR mulaiMediasi()
 
 # BAB 6: Perancangan Antarmuka
 
-## 6.1 Rancangan Antarmuka [ID Layar 1]
+# BAB 6: Perancangan Antarmuka
 
-Masukkan versi awal prototipe antarmuka, dimana untuk setiap antarmuka/layar, tuliskan spesifikasi rinci objek yang ditampilkan dan reaksi sistem terhadap interaksi pengguna.
-
-**Antarmuka:** *[ID layar]*  
-**Nama Layar:** *[Nama layar]*
+## 6.1 Rancangan Antarmuka I-01
+**Antarmuka:** I-01  
+**Nama Layar:** Layar Registrasi
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/contoh-design.png" width="50%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C04 - HalamanRegistrasi.png" width="50%">
 </p>
 <p align="center">
-<i>Gambar 6.1. Rancangan Antarmuka [ID Layar] - [Nama Layar]</i>
+<i>Gambar 6.1. Rancangan Antarmuka I-01 - Layar Registrasi</i>
 </p>
 
-Tabel 6.1. Spesifikasi Objek Antarmuka [ID Layar]
+Tabel 6.1. Spesifikasi Objek Antarmuka I-01
 
 | Id_Objek | Jenis | Konten | Keterangan |
 | :--- | :--- | :--- | :--- |
-| *[ID objek]* | *[Jenis objek, misalnya Button, RTF Box, dll]* | *[String yang tampil pada layar]* | *[Reaksi sistem, layar tujuan, tautan, atau ID algoritma yang dijalankan]* |
-| *[ID objek]* | *[Jenis objek]* | *[Konten yang ditampilkan]* | *[Reaksi sistem atau nama file terkait beserta deskripsi ringkasnya]* |
-| *...* | *...* | *...* | *...* |
+| O-01 | Button (Navbar) | "Masuk" | Mengarahkan pengguna ke layar I-02 (Halaman Login). |
+| O-02 | Option Card | "Pengguna Jasa – Saya ingin mencari jasa", "Penyedia Jasa – Saya ingin menawarkan jasa" | Memilih peran akun yang akan dibuat. Pilihan ini menentukan objek yang dibuat oleh `registrasiPengguna()`, yaitu `PenggunaJasa` atau `PenyediaJasa`|
+| O-03 | Text Field, Password Field | "Nama", "Email", "Nomor telepon", "Kata sandi" | Menerima data diri pengguna sebagai bagian dari `formRegistrasi`. Isian kata sandi disamarkan dan memiliki teks bantuan "Gunakan minimal 8 karakter". |
+| O-04 | Button | "Daftar" | Menjalankan `kirimRegistrasi()`, yang memanggil `LayananRegistrasi.validasiData()`, `cekEmail()`, dan `cekNoTelepon()`. Jika data valid, sistem menjalankan `registrasiPengguna()` (membuat akun lewat `Pengguna.buatAkun()` dan `simpanProfil()`) lalu mengarahkan pengguna ke I-02. Jika data tidak valid atau email sudah terdaftar, sistem menjalankan `tampilkanError()` dan menampilkan `pesanError` pada form. |
+| O-05 | RTF | "Sudah punya akun? Masuk" | Mengarahkan pengguna ke layar I-02 (Halaman Login). |
+
+## 6.2 Rancangan Antarmuka I-02
+**Antarmuka:** I-02 
+**Nama Layar:** Layar Login
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C06 - HalamanLogin.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.2qqq. Rancangan Antarmuka I-02 - Layar Login</i>
+</p>
+
+Tabel 6.2. Spesifikasi Objek Antarmuka I-02
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Button (Navbar) | "Daftar" | Mengarahkan pengguna ke layar I-01 (Halaman Registrasi). |
+| O-02 | Text Field, Password Field | "Email", "Kata sandi" | Menerima kredensial pengguna sebagai bagian dari `formLogin`. Isian kata sandi disamarkan. |
+| O-03 | Button | "Masuk" | Menjalankan `kirimLogin(email, password)`, yang memanggil `Autentikator.validasiKredensial(email, password)`. Jika kredensial valid, sistem menjalankan `sesiLogin()` lalu mengarahkan Pengguna Jasa ke layar Pencarian (I-05) dan Penyedia Jasa ke layar Portofolio (I-03). Jika tidak valid, sistem menjalankan `tampilkanError()` dan menampilkan `pesanError` "Email atau kata sandi salah". |
+| O-04 | RTF | "Belum punya akun? Daftar" | Mengarahkan pengguna ke layar I-01 (Halaman Registrasi). |ar, sistem menjalankan `tampilkanError()` dan menampilkan `pesanError` pada form. |
+
+## 6.3 Rancangan Antarmuka I-03
+**Antarmuka:** I-03
+**Nama Layar:** Layar Portofolio
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C08 - HalamanPortofolio.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.3. Rancangan Antarmuka I-03 - Layar Portofolio </i>
+</p>
+
+Tabel 6.3. Spesifikasi Objek Antarmuka I-03
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-05 | Text Field | "Judul karya" | Menerima judul karya portofolio (atribut `judul` pada `Portofolio`) sebagai bagian dari `formPortofolio`. |
+| O-06 | RTF Box | "Deskripsi" | Menerima deskripsi karya portofolio (atribut `deskripsi` pada `Portofolio`). |
+| O-07 | RTF Box | "Pengalaman" | Menerima pengalaman kerja Penyedia Jasa (atribut `pengalaman` pada `PenyediaJasa`, diisi melalui `isiPortofolio()`). |
+| O-08 | RTF Box | "Prestasi" | Menerima prestasi Penyedia Jasa (atribut `prestasi` pada `PenyediaJasa`, diisi melalui `isiPortofolio()`). |
+| O-09 | Upload Box | "Tarik berkas ke sini atau pilih berkas" (JPG, PNG, atau PDF) | Membuka pemilih berkas untuk mengunggah berkas pendukung (atribut `berkasPendukung` pada `Portofolio`). Format dan ukuran berkas divalidasi oleh `LayananUploadFile.validasiFormatUkuran()`. |
+| O-10 | Button | "Simpan Portofolio" | Menjalankan `kirimPortofolio(data)`, yang memanggil `PengontrolPortofolio.validasiInputBerkas(data)`. Jika data valid, sistem mengunggah berkas lewat `LayananUploadFile.uploadFile(berkas)`, menyimpan data lewat `Portofolio.simpanPortofolio()`, lalu memperbarui daftar pengalaman, prestasi, dan karya lewat `tampilkanPortofolio()`. Jika data tidak valid, sistem menjalankan `tampilkanError()` dan menampilkan `pesanError` pada form. |
+
+## 6.4 Rancangan Antarmuka I-04
+**Antarmuka:** I-04
+**Nama Layar:** Layar Upload Jasa
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C13 - HalamanUploadJasa.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.4. Rancangan Antarmuka I-04 - Layar Upload Jasa</i>
+</p>
+
+Tabel 6.4. Spesifikasi Objek Antarmuka I-04
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-02 | Text Field | "Nama jasa", "Harga (Rp)" | Menerima nama dan harga jasa sebagai isian `formNamaJasa` dan `formHarga`. |
+| O-03 | Dropdown | "Kategori" (placeholder "Pilih kategori") | Menampilkan daftar kategori jasa yang tersedia, lalu menyimpan pilihan sebagai isian `formKategori`. |
+| O-04 | RTF Box | "Deskripsi" | Menerima deskripsi layanan sebagai isian `formDeskripsi`. |
+| O-05 | Upload Box | "Tarik berkas ke sini atau pilih berkas" (JPG, PNG, atau PDF) | Membuka pemilih berkas untuk foto atau contoh hasil jasa (`inputUploadBerkas`). Format dan ukuran berkas divalidasi oleh `LayananUploadFile.validasiFormatUkuran()`. |
+| O-06 | Button | "Unggah Jasa" | Menjalankan `klikUnggah()`, yang memanggil `JasaController.validasiDataJasa()` dan `LayananUploadFile.validasiFormatUkuran()`. Jika data dan berkas valid, sistem menjalankan `simpanPenawaranJasa()` (`uploadFile()`, `Jasa.simpanJasa()`, `PenyediaJasa.tambahPenawaranJasa()`) lalu `tampilkanNotifikasiBerhasil()`. Jika data tidak lengkap atau format berkas tidak didukung, sistem menjalankan `tampilkanPesanError()`. |
+
+## 6.5 Rancangan Antarmuka I-05
+**Antarmuka:** I-05
+**Nama Layar:** Layar Pencarian
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C15 - HalamanPencarian.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.5. Rancangan Antarmuka I-05 - Layar Pencarian</i>
+</p>
+
+Tabel 6.5. Spesifikasi Objek Antarmuka I-05
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Search Field | Kata kunci pencarian | Menerima kata kunci melalui `inputKataKunci()` (`searchBar`). |
+| O-02 | Button | "Cari" | Menjalankan `klikCari()`, yang memanggil `LayananPencarian.cariJasaBerdasarkanKeyword(keyword)` lalu `Jasa.dapatkanDetailJasa()`. Jika filter terisi, sistem juga menjalankan `terapkanFilterPencarian(filter)`. Jika jasa ditemukan, hasilnya ditampilkan lewat `HasilPencarian.tampilkanDaftarHasil()`. Jika tidak ditemukan, sistem menjalankan `tampilkanPesanError(pesan)`. |
+| O-03 | Text Field | "Rp minimum", "Rp maksimum" | Menerima rentang harga sebagai isian `filterHarga`. |
+| O-04 | Chip | "≤ 1 hari", "≤ 3 hari", "≤ 7 hari", "Lebih lama" | Memilih rentang durasi pengerjaan sebagai isian `filterDurasi`. Chip yang dipilih ditandai dengan warna ungu. |
+| O-05 | Chip | "★ 3+", "★ 4+", "★ 4.5+" | Memilih rating minimum sebagai isian `filterRating`. |
+| O-06 | RTF | "Reset" | Mengosongkan seluruh filter, lalu menampilkan kembali hasil pencarian tanpa filter. |
+| O-07| Card | Kategori, nama jasa, nama penyedia, rating, harga | Menampilkan satu listing jasa dari `daftarListingJasa`. Mengeklik kartu mengarahkan pengguna ke layar I-06 (Halaman Detail Jasa) untuk jasa tersebut. |
+| O-08 | Icon Button | Ikon bookmark pada kartu | Menjalankan `klikIkonBookmark()`, yang memanggil `PengontrolBookmark.tambahDataBookmark()` lalu `tampilkanNotifikasi()`. |
+
+## 6.6 Rancangan Antarmuka I-06
+**Antarmuka:** I-06
+**Nama Layar:** Layar Detail Jasa
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C19 - HalamanDetailJasa.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.6. Rancangan Antarmuka I-06 - Layar Detail Jasa</i>
+</p>
+
+Tabel 6.6. Spesifikasi Objek Antarmuka I-06
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Image Button | Thumbnail gambar 1–4 | Mengganti gambar utama galeri dengan gambar yang dipilih. |
+| O-02 | RTF | "Lihat semua" | Menampilkan seluruh riwayat ulasan jasa (`tampilanRiwayatUlasan`) yang diambil melalui `Ulasan.getDetailUlasan()`. |
+| O-03 | Button | "Pesan Jasa" | Mengarahkan Pengguna Jasa ke layar I-09 (Halaman Pemesanan) dengan jasa ini sebagai `idJasaDipilih`. |
+| O-04 | Button | "Chat Penyedia" | Membuka ruang chat dengan penyedia jasa di layar I-08 (Halaman Chat). |
+| O-05 | Icon Button | Ikon bookmark | Menjalankan `klikIkonBookmark()`, yang memanggil `PengontrolBookmark.tambahDataBookmark()` lalu `tampilkanNotifikasi()`. Jika pengguna belum login, sistem menampilkan notifikasi agar pengguna masuk atau mendaftar terlebih dahulu. |
+
+## 6.7 Rancangan Antarmuka I-07
+**Antarmuka:** I-07
+**Nama Layar:** Layar Bookmark
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C21 - HalamanBookmark.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.7. Rancangan Antarmuka I-07 - Layar Bookmark</i>
+</p>
+
+Tabel 6.7. Spesifikasi Objek Antarmuka I-07
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Card | Kategori, nama jasa, nama penyedia, rating, harga | Menampilkan satu jasa dari `daftarJasaTersimpan` (diambil melalui `tampilkanDaftarTersimpan()` dan `PengontrolBookmark.ambilDaftarBookmarkPengguna()`). Mengeklik kartu mengarahkan pengguna ke layar I-06 (Halaman Detail Jasa). |
+| O-02 | Icon Button | Ikon bookmark terisi (`ikonBookmarkAktif`) | Menjalankan `klikIkonBookmark()` untuk membatalkan simpanan jasa tersebut, lalu menampilkan notifikasi lewat `tampilkanNotifikasi()`. |
+| O-03 | Button | "Hapus dari bookmark" (`tombolHapusBookmark`) | Menjalankan `klikIkonHapus()`, yang memanggil `PengontrolBookmark.hapusDataBookmark()` dan `Bookmark.hapusBookmark()`. Jasa dihapus dari daftar, lalu sistem menampilkan notifikasi berhasil lewat `tampilkanNotifikasi()`. |
 
 
-## 6.X Rancangan Antarmuka [ID Layar X]
+## 6.8 Rancangan Antarmuka I-08
+**Antarmuka:** I-08
+**Nama Layar:** Layar Chat
 
-*[Ulangi pola 6.1 untuk layar berikutnya sampai semua layar teridentifikasi]*
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C24 - HalamanChat.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.8. Rancangan Antarmuka I-08 - Layar Chat</i>
+</p>
+
+Tabel 6.8. Spesifikasi Objek Antarmuka I-08
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Search Field | "Cari percakapan" | Menyaring daftar ruang chat yang ditampilkan oleh `tampilkanMenuChat()` berdasarkan nama. |
+| O-02 | List Item | Nama ruang chat, pesan terakhir, waktu, badge pesan belum dibaca | Membuka ruang chat yang dipilih (`idSesiChat`). Sistem menampilkan pesan lewat `tampilkanRiwayatPesan()` dari `ChatRoom.getRiwayatPesan()`, lalu memperbarui status baca lewat `LayananPesanInstan.updateStatusBaca()`. |
+| O-03 | Icon Button | Ikon lampirkan dokumen | Membuka pemilih berkas untuk mengirim dokumen di dalam chat. |
+| O-04 | Icon Button | Ikon lampirkan foto | Membuka pemilih berkas untuk mengirim foto di dalam chat. |
+| O-05 | Text Field | "Tulis pesan…" | Menerima isi pesan melalui `inputPesan()`. |
+| O-06 | Icon Button | Ikon kirim (`tombolKirim`) | Menjalankan `tombolKirimTerklik()`, yang memanggil `LayananPesanInstan.validasiInputPesan()`. Jika valid, sistem menjalankan `kirimPesan()`, `simpanKeDatabase()`, dan `LayananNotifikasiChat.kirimNotifikasiPesan()`, lalu menampilkan pesan baru lewat `tampilkanRiwayatPesan()`. Jika pesan kosong, sistem menjalankan `tampilkanPesanError()`. Jika koneksi terputus, sistem menjalankan `tampilkanStatusBelumTerkirim()`. |
+
+## 6.9 Rancangan Antarmuka I-09
+**Antarmuka:** I-09
+**Nama Layar:** Layar Pemesanan
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C28 - HalamanPemesanan.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.9. Rancangan Antarmuka I-09 - Layar Pemesanan</i>
+</p>
+
+Tabel 6.9. Spesifikasi Objek Antarmuka I-09
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | RTF Box | "Brief pemesanan" | Menerima kebutuhan pemesanan melalui `inputBriefPemesanan()` (`briefPemesanan`). |
+| O-02 | Button | "Pesan & lanjut bayar" | Menjalankan `tombolPesanTerklik()`, yang memanggil `PengontrolPesanan.buatPesananBaru()`. Jika brief kosong, sistem menampilkan kembali form lewat `tampilkanFormPemesanan()` beserta pesan bahwa brief wajib diisi. Jika brief terisi, sistem menjalankan `hitungTotalBiaya()`, membuat objek `Pesanan`, lalu mengarahkan Pengguna Jasa ke layar I-10 (Halaman Pembayaran). |
+
+## 6.10 Rancangan Antarmuka I-10
+**Antarmuka:** I-10
+**Nama Layar:** Layar Pembayaran
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C29 - HalamanPembayaran - pilih%20metode.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.10. Rancangan Antarmuka I-10 - Layar Pembayaran</i>
+</p>
+
+Tabel 6.10. Spesifikasi Objek Antarmuka I-10
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Option Card | "Virtual Account [Bank A]", "Virtual Account [Bank B]", "[Dompet digital]" | Memilih metode pembayaran melalui `PenggunaJasa.pilihMetodePembayaran()` (`idMetodePembayaran`). Sistem mengambil detail metode lewat `MetodePembayaran.getDetailMetode()`, lalu menampilkan rincian pembayaran lewat `tampilkanRincianPembayaran()`. |
+| O-02 | Button | "Salin" | Menyalin nomor virtual account (`nomorRekeningVA`) ke clipboard. |
+| O-03 | Button | "Bayar sekarang" | Menjalankan `tombolBayarTerklik()`, yang memanggil `PengontrolTransaksi.validasiPembayaran()`. Jika berhasil, sistem menjalankan `updateStatusPembayaran()`, `PengontrolPesanan.updateStatusPesanan()` (`Pesanan.setStatusDiproses()`), dan membuat `RiwayatTransaksi`, lalu menampilkan `tampilkanNotifikasiBerhasil()` dan mengarahkan ke layar Riwayat Transaksi (C30). Jika gagal, sistem menampilkan kembali rincian pembayaran lewat `tampilkanRincianPembayaran()` beserta pesan bahwa pembayaran tidak berhasil. |
+
+
+## 6.11 Rancangan Antarmuka I-11
+**Antarmuka:** I-11
+**Nama Layar:** Layar Riwayat Transaksi
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C30 - HalamanRiwayatTransaksi.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.11. Rancangan Antarmuka I-11 - Layar Riwayat Transaksi</i>
+</p>
+
+Tabel 6.11. Spesifikasi Objek Antarmuka I-11
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Status | "Semua", "Berjalan", "Selesai", "Dikembalikan" | Menyaring daftar transaksi yang ditampilkan oleh `tampilkanRiwayatTransaksi()` berdasarkan `statusTransaksi`. |
+| O-02 | Button | "Cek hasil" (pada pesanan berstatus menunggu konfirmasi) | Mengarahkan Pengguna Jasa ke layar I-14 (Halaman Deliverables) untuk pesanan tersebut. |
+| O-03 | Button | "Lihat pesanan" (pada pesanan berstatus diproses atau dikembalikan) | Menampilkan detail transaksi berdasarkan `idTransaksi`, beserta status pesanan terbaru. |
+| O-04 | Button | "Pesan lagi" (pada pesanan berstatus selesai) | Mengarahkan Pengguna Jasa ke layar I-09 (Halaman Pemesanan) dengan jasa yang sama sebagai `idJasaDipilih`. |
+| O-05 | Rating Bintang | "Ditunggu ratingnya!" dengan 5 bintang (pada pesanan selesai yang belum dinilai) | Menjalankan `beriUlasan(idPesanan)` lalu mengarahkan Pengguna Jasa ke layar I-17 (Halaman Ulasan) untuk pesanan tersebut. |
+| O-06 | RTF | "Lihat ulasan" (pada pesanan yang sudah dinilai) | Menampilkan ulasan yang sudah diberikan Pengguna Jasa untuk pesanan tersebut. |
+
+## 6.12 Rancangan Antarmuka I-12
+**Antarmuka:** I-12
+**Nama Layar:** Layar Konfirmasi
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C35 - HalamanKonfirmasi.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.12. Rancangan Antarmuka I-12 - Layar Konfirmasi</i>
+</p>
+
+Tabel 6.12. Spesifikasi Objek Antarmuka I-12
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Button | "Chat pemesan" | Membuka ruang chat dengan Pengguna Jasa pemesan di layar I-08 (Halaman Chat). |
+| O-02 | Button | "Tolak" | Menjalankan `tombolTolakTerklik()` (`PenyediaJasa.tolakPesanan()`), yang memanggil `PengontrolPesanan.updateStatusPesanan()` dan `PengontrolTransaksi.updateStatusPembayaran()`, lalu membuat catatan `RiwayatTransaksi`. Status "Ditolak" ditampilkan lewat `tampilkanStatusPesanan()`. |
+| O-03 | Button | "Terima Pesanan" | Menjalankan `tombolTerimaTerklik()` (`PenyediaJasa.terimaPesanan()`), yang memanggil `PengontrolPesanan.updateStatusPesanan()` (`Pesanan.setStatusDiproses()`) dan `PengontrolTransaksi.updateStatusPembayaran()` (`MetodePembayaran.getDetailMetode()`), lalu membuat catatan `RiwayatTransaksi`. Status "Diproses" ditampilkan lewat `tampilkanStatusPesanan()`. |
+
+## 6.13 Rancangan Antarmuka I-13
+**Antarmuka:** I-13
+**Nama Layar:** Layar Pengumpulan
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C37 - HalamanPengumpulan.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.13. Rancangan Antarmuka I-13 - Layar pengumpulan</i>
+</p>
+
+Tabel 6.13. Spesifikasi Objek Antarmuka I-13
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | RTF Box | "Deskripsi Hasil" | Menerima deskripsi hasil pekerjaan melalui `inputDeskripsiHasil()` (`deskripsiHasil`), lalu divalidasi oleh `PengumpulanController.validasiDeskripsi()`. Jika melewati batasan, sistem menjalankan `tampilkanPesanError("Deskripsi Melewati Batasan")`. |
+| O-02| Upload Box | "Tarik berkas ke sini atau pilih berkas" | Membuka pemilih berkas untuk mengunggah hasil pekerjaan melalui `unggahDeliverables()`. Format dan ukuran berkas divalidasi oleh `LayananUploadFile.validasiFormatUkuran(file)`. |
+| O-03 | Text Field | "Atau Lampirkan Tautan" (placeholder "https://") | Menerima tautan hasil pekerjaan melalui `inputLink()` (`fileURL`). |
+| O-04 | Button | "Kirim Hasil Pekerjaan" | Menjalankan `klikKirimHasil()`, yang memanggil `PengumpulanController.validasiPengumpulan()`. Jika file dan tautan sama-sama kosong, sistem menjalankan `tampilkanPesanError("Wajib Mengunggah File/Link")`. Jika file terlalu besar, sistem menjalankan `tampilkanPesanError("Size File Terlalu Besar")`. Jika valid, berkas disimpan lewat `LayananUploadFile.saveDeliverables(file)` dan data disimpan lewat `ProdukAkhir.simpanProdukAkhir(deskripsi, pathFile, link)`, `updateStatusPengerjaan(true)`, serta `PenyediaJasa.saveProdukAkhir()`. Setelah itu sistem menjalankan `tampilkanStatusPengiriman(true)`. |
+
+
+## 6.14 Rancangan Antarmuka I-14
+**Antarmuka:** I-14
+**Nama Layar:** Layar Deliverables
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C38 - HalamanDeliverables.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.14. Rancangan Antarmuka I-14 - Layar Deliverables</i>
+</p>
+
+Tabel 6.14. Spesifikasi Objek Antarmuka I-14
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Icon Button | Ikon lihat (tombol lime) pada setiap berkas atau tautan hasil | Membuka berkas (`lampiranDeliverables`) atau tautan (`fileURL`) hasil pekerjaan untuk diperiksa. |
+| O-02 | Icon Button | Ikon unduh pada setiap berkas hasil | Mengunduh berkas hasil pekerjaan ke perangkat pengguna. |
+| O-03 | Button | "Konfirmasi selesai" (`tombolKonfirmasi`) | Menjalankan `konfirmasiPesanan()`, yang memanggil `PengontrolTransaksi.prosesPembayaran(idPesanan)` dan `validasiPembayaran()`, `PengontrolPesanan.updateStatusPesanan(true)`, `setPencairanDana(true)`, serta `updateStatusPembayaran(true)`. Pesanan menjadi selesai dan dana diteruskan ke Penyedia Jasa. Jika server tidak merespons, sistem menjalankan `tampilkanError(msg)`. |
+| O-04 | Button | "Ajukan revisi" (`tombolRevisi`) | Menjalankan `ajukanRevisi()` lalu mengarahkan Pengguna Jasa ke layar I-15 (Halaman Request Revisi). Sisa kuota revisi (`jumlahRevisi`) ditampilkan di atas tombol. Jika batas waktu pengajuan revisi sudah habis, tombol dinonaktifkan dan sistem menampilkan pesan. |
+| O-05 | Link | "Ada masalah? Laporkan ke admin" (`tombolBantuan`) | Mengarahkan Pengguna Jasa ke layar I-16 (Halaman Pelaporan). |
+
+## 6.15 Rancangan Antarmuka I-15
+**Antarmuka:** I-15
+**Nama Layar:** Layar Request Revisi
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C40 - HalamanRequestRevisi.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.15. Rancangan Antarmuka I-15 - Layar Request Revisi</i>
+</p>
+
+Tabel 6.15. Spesifikasi Objek Antarmuka I-15
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | RTF Box | "Detail revisi" | Menerima rincian bagian yang perlu diperbaiki melalui `tampilkanFieldPengisianRevisi()` (`detailRevisi`), yang disimpan sebagai `deskripsiRevisi` pada `PengajuanRevisi`. |
+| O-02 | RTF Box | "Pesan untuk penyedia (opsional)" | Menerima pesan tambahan untuk Penyedia Jasa (`pesanUntukPenyedia`). |
+| O-03| Upload Box | "Tambahkan referensi atau tangkapan layar" | Membuka pemilih berkas untuk lampiran revisi (`lampiranRevisi`). |
+| O-04 | Button | "Batal" | Membatalkan pengajuan revisi dan mengarahkan Pengguna Jasa kembali ke layar I-14. |
+| O-05 | Button | "Kirim revisi" (`tombolRevisi`) | Menjalankan `kirimRevisi()`, yang memanggil `RevisiHandler.isRevisiRequestValid()`. Jika kuota revisi habis, sistem menjalankan `tampilkanPesan("Kuota revisi yang diajukan sudah habis…")`. Jika valid, sistem membuat `PengajuanRevisi`, lalu menjalankan `updateStatusPengerjaan()`, `sendRevisi(deskripsi, lampiran)`, dan `sendNotifikasiRevisi()`, kemudian `tampilkanPesan()` bahwa revisi terkirim. Jika server tidak merespons, sistem menampilkan pesan "Revisi gagal terkirim". |
+
+## 6.16 Rancangan Antarmuka I-16
+**Antarmuka:** I-16
+**Nama Layar:** Layar Pelaporan
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C44 - HalamanPelaporan.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.16. Rancangan Antarmuka I-16 - Layar Pelaporan</i>
+</p>
+
+Tabel 6.16. Spesifikasi Objek Antarmuka I-16
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Text Field | "Penyedia Jasa" (placeholder "Nama Penyedia Jasa") | Menerima nama Penyedia Jasa yang dilaporkan. Sistem mengambil `idPenyediaJasa` lewat `PenyediaJasa.getIdPenyediaJasa()`. |
+| O-02 | Dropdown | "Kategori Pelanggaran" (placeholder "Pilih Kategori Pelanggaran") | Memilih kategori pelanggaran sebagai isian `kategoriPelanggaran`. |
+| O-03 | RTF Box | "Deskripsi Masalah" | Menerima uraian masalah sebagai isian `deskripsiPelanggaran`. |
+| O-04 | Upload Box | "Bukti" – "Tarik berkas ke sini atau pilih berkas" | Membuka pemilih berkas untuk bukti laporan (`kolomBukti`). |
+| O-05 | Button | "Kirim Laporan" | Memanggil `LaporanHandler.validasiFormatLaporan()`. Jika bukti, deskripsi, atau kategori tidak lengkap, sistem menjalankan `tampilkanPesanError("Bukti/Deskripsi/Kategori Tidak Lengkap")`. Jika valid, sistem mengambil `idPenggunaJasa` dan `idPenyediaJasa`, lalu menjalankan `TiketLaporan.createTiket(idPenggunaJasa, idPenyediaJasa, URLbukti, kategori, deskripsi)` dan `kirimNotifAdmin()`. Jika berhasil, nomor tiket dan status laporan ditampilkan lewat `tampilkanTiketdanTanggapan()`. Jika server gagal, sistem menjalankan `tampilkanPesanError("Tiket gagal dibuat")`. |
+
+## 6.17 Rancangan Antarmuka I-17
+**Antarmuka:** I-17
+**Nama Layar:** Layar Ulasan
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C47 - HalamanUlasan.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.17. Rancangan Antarmuka I-17 - Layar Ulasan</i>
+</p>
+
+Tabel 6.17. Spesifikasi Objek Antarmuka I-17
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Rating | 5 ikon bintang pada "Penilaian" | Memberi nilai 1–5 melalui `inputRatingBintang(rating)`. Bintang terisi sesuai nilai yang dipilih. |
+| O-02| RTF Box | "Komentar (opsional)" | Menerima komentar ulasan melalui `inputKomentar(teksKomentar)`. |
+| O-03 | Upload Box | "Dokumentasi (opsional)" – "Tarik berkas ke sini atau pilih berkas" | Membuka pemilih berkas untuk dokumentasi hasil jasa melalui `unggahDokumentasi(fileDokumentasi)`. |
+| O-04 | Button | "Kirim Ulasan" | Menjalankan `submitUlasan()`, yang memanggil `UlasanHandler.prosesUlasan(idPesanan, rating, teksKomentar, fileDokumentasi)` beserta `validasiKelengkapanRating()`, `validasiPanjangKomentar()`, dan `validasiFormatBerkas()`. Jika valid, sistem menjalankan `Ulasan.simpanUlasan()`, `perbaruiRating(idPenyediaJasa, rating)`, `PengontrolPesanan.updateStatusPesanan(idPesanan, "Selesai")`, dan `catatRiwayatTransaksi(idPesanan)`, lalu `tampilkanNotifikasiBerhasil()`. Jika validasi gagal, sistem menjalankan `tampilkanPesanError()`. |
+
+## 6.18 Rancangan Antarmuka I-18
+**Antarmuka:** I-18
+**Nama Layar:** Layar Pengajuan Mediasi
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C50 - HalamanPengajuanMediasi.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.18. Rancangan Antarmuka I-18 - Layar Pengajuan Mediasi</i>
+</p>
+
+Tabel 6.18. Spesifikasi Objek Antarmuka I-18
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-01 | Icon Button | Ikon lihat bukti (tombol lime) pada lampiran bukti | Membuka berkas bukti laporan (`lampiranBukti` atau `urlBukti` pada `TiketLaporan`) yang ditampilkan sebagai bagian dari `detailPelaporan`. |
+| O-02 | Icon Button | Ikon unduh pada lampiran bukti | Mengunduh berkas bukti laporan ke perangkat Admin. |
+| O-03 | RTF Box | "Tanggapan Admin" | Menerima tanggapan Admin terhadap laporan, yang disimpan lewat `LaporanHandler.saveTanggapan()`. |
+| O-04 | Dropdown | "Jenis Sanksi" (placeholder "Pilih Sanksi") | Menampilkan pilihan tindakan (`opsiTindakan`) melalui `pilihJenisTindakan()`. |
+| O-05 | Button | "Mediasi" | Menjalankan `mulaiMediasi()`. Sistem mengambil detail tiket lewat `LaporanHandler.getDetailTiket()`, lalu membuka ruang mediasi beserta riwayat pesan (`riwayatPesan`) melalui `tampilkanHalamanMediasi()`. Komunikasi di ruang mediasi mengikuti alur Halaman Chat (I-08). |
+| O-06 | Button | "Kirim" | Menjalankan `inputTindakan()` dan `selesaikanLaporan()`. Sistem menyimpan keputusan lewat `TanggapanLaporan.catatKeputusanTindakan()` dan memperbarui status lewat `UpdateStatusTiket()`. Jika tindakan berupa ban atau skors, sistem menjalankan `banPengguna()` atau `skorsPengguna()`, lalu mengirim tanggapan ke pelapor lewat `kirimTanggapan()`. Jika gagal, sistem menjalankan `tampilkanPesanError()`. |
+
+## 6.19 Rancangan Antarmuka I-19
+**Antarmuka:** I-19
+**Nama Layar:** Layar Dashboard Admin
+
+<p align="center">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/UI/C53 - HalamanDashboardAdmin.png" width="50%">
+</p>
+<p align="center">
+<i>Gambar 6.19. Rancangan Antarmuka I-19 - Layar Dashboard Admin</i>
+</p>
+
+Tabel 6.19. Spesifikasi Objek Antarmuka I-19
+
+| Id_Objek | Jenis | Konten | Keterangan |
+| :--- | :--- | :--- | :--- |
+| O-19-01 | Button | "Detail" (pada setiap baris tiket laporan) | Menjalankan `Admin.bukaTiketLaporan()`, yang memanggil `LaporanHandler.getDetailTiket()` untuk tiket tersebut (`detailTiket`). Detail tiket ditampilkan lewat `tampilkanDetailTiket()` dan Admin diarahkan ke layar I-18. Jika data tiket gagal dimuat, sistem menjalankan `tampilkanPesanError()`. |
 
 ## 6.Y Rancangan Antarmuka Keseluruhan
 
