@@ -1945,6 +1945,46 @@ Output : boolean
 1. RETURN statusKonfirmasi
 ```
 
+## 5.4 Kelas HalamanRegistrasi
+
+**Nama Kelas:** HalamanRegistrasi  
+**ID Kelas:** C04
+
+Tabel 5.4.1. Operasi Kelas HalamanRegistrasi
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanForm() : void | public | Menampilkan halaman registrasi: nama, email, nomor telepon, dan kata sandi. |
+| kirimRegistrasi() : void | public | Menangani aksi tombol "Daftar" dan mengirim data registrasi untuk divalidasi. |
+| tampilkanError() : void | public | Menampilkan pesan kesalahan validasi atau data yang sudah terdaftar. |
+
+Tabel 5.4.2. Atribut Kelas HalamanRegistrasi
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formRegistrasi | private | Form |
+| pesanError | private | String |
+
+### 5.4.1 Algoritma/Query
+
+**Nama Kelas:** HalamanRegistrasi  
+**Nama Operasi:** kirimRegistrasi() : void  
+**ID Algoritma:** Algo-0401
+
+```text
+PROSEDUR kirimRegistrasi()
+    JIKA tidak LayananRegistrasi.validasiData() MAKA
+        tampilkanError()                  
+        KELUAR
+    LayananRegistrasi.cekEmail()
+    LayananRegistrasi.cekNoTelepon()
+    JIKA email atau nomor telepon sudah terdaftar MAKA
+        tampilkanError()                 
+        KELUAR
+    LayananRegistrasi.registrasiPengguna()
+    tampilkan notifikasi registrasi berhasil, lalu arahkan ke halaman login
+```
+
 ## 5.5 Kelas LayananRegistrasi
 
 **Nama Kelas:** LayananRegistrasi  
@@ -2050,6 +2090,45 @@ Output : void
 6. Panggil Pengguna.buatAkun(nama, email, noTelepon, hashPassword)
 ```
 
+## 5.6 Kelas HalamanLogin
+
+**Nama Kelas:** HalamanLogin  
+**ID Kelas:** C06
+
+Tabel 5.6.1. Operasi Kelas HalamanLogin
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanForm() : void | public | Menampilkan halaman login: email dan kata sandi. |
+| kirimLogin(email : String) : void | public | Menangani aksi tombol "Login" dan mengirim kredensial untuk divalidasi. |
+| tampilkanError() : void | public | Menampilkan pesan kesalahan kredensial atau data login tidak lengkap. |
+
+Tabel 5.6.2. Atribut Kelas HalamanLogin
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| pesanError | private | string |
+| formLogin | private | string |
+
+### 5.6.1 Algoritma/Query
+
+**Nama Kelas:** HalamanLogin  
+**Nama Operasi:** kirimLogin(email : String) : void  
+**ID Algoritma:** Algo-0601
+
+```text
+PROSEDUR kirimLogin(email)
+    JIKA email atau kata sandi kosong MAKA
+        tampilkanError()                  
+        KELUAR
+    Autentikator.validasiKredensial(email, password)
+    JIKA email atau kata sandi tidak sesuai dengan akun terdaftar MAKA
+        tampilkanError()                  
+        KELUAR
+    Autentikator.sesiLogin()
+    arahkan pengguna ke halaman utama CariJasa
+```
+
 ## 5.7 Kelas Autentikator
 **Nama Kelas:** Autentikator  
 **ID Kelas:** C07  
@@ -2098,6 +2177,44 @@ Output : void
 1. Inisialisasi token autentikasi sesi pengguna
 2. Simpan data sesi ke dalam session storage sistem
 3. Tetapkan status sesi pengguna menjadi aktif
+```
+## 5.8 Kelas HalamanPortofolio
+
+**Nama Kelas:** HalamanPortofolio  
+**ID Kelas:** C08
+
+Tabel 5.8.1. Operasi Kelas HalamanPortofolio
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| tampilkanPortofolio() : void | public | Menampilkan portofolio Penyedia Jasa pada halaman profil. |
+| kirimPortofolio(data : Portofolio) : void | public | Menangani aksi tombol "Simpan" dan mengirim data portofolio untuk divalidasi dan disimpan. |
+| tampilkanError() : void | public | Menampilkan pesan kesalahan (data atau berkas tidak lengkap atau tidak sesuai). |
+
+Tabel 5.8.2. Atribut Kelas HalamanPortofolio
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| formPortofolio | private | string |
+| pesanError | private | string |
+
+### 5.8.1 Algoritma/Query
+
+**Nama Kelas:** HalamanPortofolio  
+**Nama Operasi:** kirimPortofolio(data : Portofolio) : void  
+**ID Algoritma:** Algo-0801
+
+```text
+PROSEDUR kirimPortofolio(data)
+    JIKA tidak PengontrolPortofolio.validasiInputBerkas(data) MAKA
+        tampilkanError()                   
+        sesuai
+        KELUAR
+    JIKA data memiliki berkas pendukung MAKA
+        LayananUploadFile.validasiFormatUkuran(file)
+        LayananUploadFile.uploadFile(file)
+    PengontrolPortofolio.simpanPortofolio()
+    tampilkanPortofolio()               
 ```
 
 ## 5.9 Kelas Portofolio
@@ -2546,124 +2663,6 @@ Output : void
 5. idJasa2 = this.daftarTerpilih[1]
 6. matriksPerbandingan = LayananPembandingJasa.bandingkanSpesifikasiJasa(idJasa1, idJasa2)
 7. HalamanPerbandingan.tampilkanMatriks(matriksPerbandingan)
-```
-
-## 5.4 Kelas HalamanRegistrasi
-
-**Nama Kelas:** HalamanRegistrasi  
-**ID Kelas:** C04
-
-Tabel 5.4.1. Operasi Kelas HalamanRegistrasi
-
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| tampilkanForm() : void | public | Menampilkan halaman registrasi: nama, email, nomor telepon, dan kata sandi. |
-| kirimRegistrasi() : void | public | Menangani aksi tombol "Daftar" dan mengirim data registrasi untuk divalidasi. |
-| tampilkanError() : void | public | Menampilkan pesan kesalahan validasi atau data yang sudah terdaftar. |
-
-Tabel 5.4.2. Atribut Kelas HalamanRegistrasi
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| formRegistrasi | private | Form |
-| pesanError | private | String |
-
-### 5.4.1 Algoritma/Query
-
-**Nama Kelas:** HalamanRegistrasi  
-**Nama Operasi:** kirimRegistrasi() : void  
-**ID Algoritma:** Algo-0401
-
-```text
-PROSEDUR kirimRegistrasi()
-    JIKA tidak LayananRegistrasi.validasiData() MAKA
-        tampilkanError()                  
-        KELUAR
-    LayananRegistrasi.cekEmail()
-    LayananRegistrasi.cekNoTelepon()
-    JIKA email atau nomor telepon sudah terdaftar MAKA
-        tampilkanError()                 
-        KELUAR
-    LayananRegistrasi.registrasiPengguna()
-    tampilkan notifikasi registrasi berhasil, lalu arahkan ke halaman login
-```
-
-## 5.6 Kelas HalamanLogin
-
-**Nama Kelas:** HalamanLogin  
-**ID Kelas:** C06
-
-Tabel 5.6.1. Operasi Kelas HalamanLogin
-
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| tampilkanForm() : void | public | Menampilkan halaman login: email dan kata sandi. |
-| kirimLogin(email : String) : void | public | Menangani aksi tombol "Login" dan mengirim kredensial untuk divalidasi. |
-| tampilkanError() : void | public | Menampilkan pesan kesalahan kredensial atau data login tidak lengkap. |
-
-Tabel 5.6.2. Atribut Kelas HalamanLogin
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| pesanError | private | string |
-| formLogin | private | string |
-
-### 5.6.1 Algoritma/Query
-
-**Nama Kelas:** HalamanLogin  
-**Nama Operasi:** kirimLogin(email : String) : void  
-**ID Algoritma:** Algo-0601
-
-```text
-PROSEDUR kirimLogin(email)
-    JIKA email atau kata sandi kosong MAKA
-        tampilkanError()                  
-        KELUAR
-    Autentikator.validasiKredensial(email, password)
-    JIKA email atau kata sandi tidak sesuai dengan akun terdaftar MAKA
-        tampilkanError()                  
-        KELUAR
-    Autentikator.sesiLogin()
-    arahkan pengguna ke halaman utama CariJasa
-```
-
-## 5.8 Kelas HalamanPortofolio
-
-**Nama Kelas:** HalamanPortofolio  
-**ID Kelas:** C08
-
-Tabel 5.8.1. Operasi Kelas HalamanPortofolio
-
-| Nama Operasi | Visibility (private, public) | Keterangan |
-| :--- | :--- | :--- |
-| tampilkanPortofolio() : void | public | Menampilkan portofolio Penyedia Jasa pada halaman profil. |
-| kirimPortofolio(data : Portofolio) : void | public | Menangani aksi tombol "Simpan" dan mengirim data portofolio untuk divalidasi dan disimpan. |
-| tampilkanError() : void | public | Menampilkan pesan kesalahan (data atau berkas tidak lengkap atau tidak sesuai). |
-
-Tabel 5.8.2. Atribut Kelas HalamanPortofolio
-
-| Nama Atribut | Visibility (private, public) | Tipe |
-| :--- | :--- | :--- |
-| formPortofolio | private | string |
-| pesanError | private | string |
-
-### 5.8.1 Algoritma/Query
-
-**Nama Kelas:** HalamanPortofolio  
-**Nama Operasi:** kirimPortofolio(data : Portofolio) : void  
-**ID Algoritma:** Algo-0801
-
-```text
-PROSEDUR kirimPortofolio(data)
-    JIKA tidak PengontrolPortofolio.validasiInputBerkas(data) MAKA
-        tampilkanError()                   
-        sesuai
-        KELUAR
-    JIKA data memiliki berkas pendukung MAKA
-        LayananUploadFile.validasiFormatUkuran(file)
-        LayananUploadFile.uploadFile(file)
-    PengontrolPortofolio.simpanPortofolio()
-    tampilkanPortofolio()               
 ```
 
 ## 5.13 Kelas HalamanUploadJasa
