@@ -282,7 +282,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC01]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="diagram sequence registrasi" src="./assets/diagram/seqregis.png" width="50%">
+<img alt="diagram sequence registrasi" src="../M7/assets/diagram/seqregis.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.1.2 Sequence Diagram [UC01]</i>
@@ -292,7 +292,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC01]
 ### 3.1.3 Diagram Kelas
 
 <p align="center">
-<img alt="diagram class uc01" src="./assets/diagram/cdregis.png" width="35%">
+<img alt="diagram class uc01" src="../M7/assets/diagram/cdregis.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 3.1.3. Diagram Kelas Melakukan Registrasi Akun</i>
@@ -321,7 +321,7 @@ Tabel 3.2.1 Identifikasi Kelas Use Case [UC01]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="diagram sequence login" src="./assets/diagram/seqlogin.png" width="50%">
+<img alt="diagram sequence login" src="../M7/assets/diagram/seqlogin.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.2.2 Sequence Diagram [UC02]</i>
@@ -331,7 +331,7 @@ Tabel 3.2.1 Identifikasi Kelas Use Case [UC01]
 ### 3.2.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas Melakukan Login" src="./assets/diagram/cdlogin.png" width="35%">
+<img alt="Diagram Kelas Melakukan Login" src="../M7/assets/diagram/cdlogin.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 3.2.3. Diagram Kelas Melakukan Login</i>
@@ -362,7 +362,7 @@ Tabel 3.3.1 Identifikasi Kelas Use Case [UC01]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="diagram sequence portofolio" src="./assets/diagram/seqporto.png" width="50%">
+<img alt="diagram sequence portofolio" src="../M7/assets/diagram/seqporto.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.3.2 Sequence Diagram [UC03]</i>
@@ -372,7 +372,7 @@ Tabel 3.3.1 Identifikasi Kelas Use Case [UC01]
 ### 3.3.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas Mengisi Portofolio" src="./assets/diagram/cdporto.png" width="35%">
+<img alt="Diagram Kelas Mengisi Portofolio" src="../M7/assets/diagram/cdporto.png" width="35%">
 </p>
 <p align="center">
 <i>Gambar 3.3.3. Diagram Kelas Mengisi Portofolio</i>
@@ -401,7 +401,7 @@ Tabel 3.4 Identifikasi Kelas Use Case [UC04]
 - **Skenario Normal dan Alternatif**
 
 <p align="center">
-<img alt="Sequence Diagram UC04" src="./assets/diagram/diagram-uc4.svg" width="80%">
+<img alt="Sequence Diagram UC04" src="../M7/assets/diagram/diagram-uc4.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.4.1 Sequence Diagram Mengunggah Penawaran Jasa [UC04]</i>
@@ -409,7 +409,7 @@ Tabel 3.4 Identifikasi Kelas Use Case [UC04]
 
 ### 3.4.3 Diagram Kelas
 <p align="center">
-<img alt="Diagram Kelas UC04" src="./assets/diagram/kelas-uc4-h.svg" width="90%">
+<img alt="Diagram Kelas UC04" src="../M7/assets/diagram/kelas-uc4-h.svg" width="90%">
 </p>
 <p align="center">
 <i>Gambar 3.4.2 Diagram Kelas Mengunggah Penawaran Jasa [UC04]</i>
@@ -439,7 +439,7 @@ Tabel 3.5 Identifikasi Kelas Use Case [UC05]
 - **Skenario Normal dan Alternatif**
 
 <p align="center">
-<img alt="Sequence Diagram UC05" src="./assets/diagram/diagram-uc5.svg" width="80%">
+<img alt="Sequence Diagram UC05" src="../M7/assets/diagram/diagram-uc5.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.5.1 Sequence Diagram Mencari Penawaran Jasa [UC05]</i>
@@ -448,7 +448,7 @@ Tabel 3.5 Identifikasi Kelas Use Case [UC05]
 ### 3.5.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC05" src="./assets/diagram/kelas-uc5-h.svg" width="90%">
+<img alt="Diagram Kelas UC05" src="../M7/assets/diagram/kelas-uc5-h.svg" width="90%">
 </p>
 <p align="center">
 <i>Gambar 3.5.2 Diagram Kelas Mencari Penawaran Jasa [UC05]</i>
@@ -478,7 +478,7 @@ Tabel 3.6 Identifikasi Kelas Use Case [UC06]
 - **Skenario Normal dan Alternatif**
 
 <p align="center">
-<img alt="Sequence Diagram UC06" src="./assets/diagram/diagram-uc6.svg" width="80%">
+<img alt="Sequence Diagram UC06" src="../M7/assets/diagram/diagram-uc6.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.6.1 Sequence Diagram Melihat Informasi Jasa [UC06]</i>
@@ -487,7 +487,7 @@ Tabel 3.6 Identifikasi Kelas Use Case [UC06]
 ### 3.6.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC06" src="./assets/diagram/kelas-uc6-h.svg" width="90%">
+<img alt="Diagram Kelas UC06" src="../M7/assets/diagram/kelas-uc6-h.svg" width="90%">
 </p>
 <p align="center">
 <i>Gambar 3.6.2 Diagram Kelas Melihat Informasi Jasa [UC06]</i>
@@ -516,7 +516,7 @@ Tabel 3.7 Identifikasi Kelas Use Case [UC07]
 - **Skenario Normal dan Alternatif**
 
 <p align="center">
-<img alt="Sequence Diagram UC07" src="./assets/diagram/diagram-uc7.svg" width="80%">
+<img alt="Sequence Diagram UC07" src="../M7/assets/diagram/diagram-uc7.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.7.1 Sequence Diagram Menggunakan Bookmark [UC07]</i>
@@ -525,7 +525,7 @@ Tabel 3.7 Identifikasi Kelas Use Case [UC07]
 ### 3.7.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC07" src="./assets/diagram/kelas-uc7-h.svg" width="90%">
+<img alt="Diagram Kelas UC07" src="../M7/assets/diagram/kelas-uc7-h.svg" width="90%">
 </p>
 <p align="center">
 <i>Gambar 3.7.2 Diagram Kelas Menggunakan Bookmark [UC07]</i>
@@ -553,7 +553,7 @@ Tabel 3.8. Identifikasi Kelas Use Case [UC08]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC08" src="./assets/diagram/SequenceDiagramUC08.png" width="70%">
+<img alt="Sequence Diagram UC08" src="../M7/assets/diagram/SequenceDiagramUC08.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.8.2 Sequence Diagram [UC08]</i>
@@ -563,7 +563,7 @@ Tabel 3.8. Identifikasi Kelas Use Case [UC08]
 ### 3.8.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC08" src="./assets/diagram/ClassDiagramUC08.png" width="50%">
+<img alt="Diagram Kelas UC08" src="../M7/assets/diagram/ClassDiagramUC08.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.8.3 Diagram Kelas Melakukan Komunikasi</i>
@@ -596,7 +596,7 @@ Tabel 3.9. Identifikasi Kelas Use Case [UC09]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC09" src="./assets/diagram/SequenceDiagramUC09.png" width="70%">
+<img alt="Sequence Diagram UC09" src="../M7/assets/diagram/SequenceDiagramUC09.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.9.2 Sequence Diagram [UC09]</i>
@@ -605,7 +605,7 @@ Tabel 3.9. Identifikasi Kelas Use Case [UC09]
 ### 3.9.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC09" src="./assets/diagram/ClassDiagramUC09.png" width="50%">
+<img alt="Diagram Kelas UC09" src="../M7/assets/diagram/ClassDiagramUC09.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.9.3 Diagram Kelas Melakukan Pemesanan Jasa</i>
@@ -636,7 +636,7 @@ Tabel 3.10. Identifikasi Kelas Use Case [UC10]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Sequence Diagram UC10" src="./assets/diagram/SequenceDiagramUC10.png" width="70%">
+<img alt="Sequence Diagram UC10" src="../M7/assets/diagram/SequenceDiagramUC10.png" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.10.2 Sequence Diagram [UC10]</i>
@@ -646,7 +646,7 @@ Tabel 3.10. Identifikasi Kelas Use Case [UC10]
 ### 3.10.3 Diagram Kelas
 
 <p align="center">
-<img alt="Diagram Kelas UC10" src="./assets/diagram/ClassDiagramUC10.png" width="50%">
+<img alt="Diagram Kelas UC10" src="../M7/assets/diagram/ClassDiagramUC10.png" width="50%">
 </p>
 <p align="center">
 <i>Gambar 3.10.3 Diagram Kelas Melakukan Konfirmasi Pesanan</i>
@@ -676,7 +676,7 @@ Tabel 3.11. Identifikasi Kelas Use Case [UC11]
 - **Skenario Keseluruhan**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramSekuens.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC11_DiagramSekuens.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.11.1 Sequence Diagram [UC11]</i>
@@ -687,7 +687,7 @@ Tabel 3.11. Identifikasi Kelas Use Case [UC11]
 ### 3.11.3 Diagram Kelas
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC11_DiagramKelas.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC11_DiagramKelas.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.11.2 Diagram Kelas Menyerahkan Hasil pekerjaan</i>
@@ -723,7 +723,7 @@ Tabel 3.12. Identifikasi Kelas Use Case [UC12]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC12_DPPL_Normal.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC12_DPPL_Normal.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.12.1 Sequence Diagram UC12 </i>
@@ -732,7 +732,7 @@ Tabel 3.12. Identifikasi Kelas Use Case [UC12]
 - **Skenario Alternatif : Mengajukan Revisi**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC12_DPPL_Alt.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC12_DPPL_Alt.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.12.2 Sequence Diagram UC12 - Mengajukan Revisi</i>
@@ -741,7 +741,7 @@ Tabel 3.12. Identifikasi Kelas Use Case [UC12]
 ### 3.12.3 Diagram Kelas
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DiagramKelas.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC12_DPPL-DiagramClass.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.12.3 Diagram Kelas Mengonfirmasi Hasil Pekerjaan</i>
@@ -769,7 +769,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC13]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DPPL.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC13_DPPL.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.13.1 Sequence Diagram [UC13]</i>
@@ -778,7 +778,7 @@ Tabel 3.1. Identifikasi Kelas Use Case [UC13]
 ### 3.13.3 Diagram Kelas
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC13_DPPL-DiagramKelas.svg" width="70%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC13_DPPL-DiagramKelas.svg" width="70%">
 </p>
 <p align="center">
 <i>Gambar 3.13.2 Diagram Kelas [Nama Uce Case]</i>
@@ -810,7 +810,7 @@ Tabel 3.14. Identifikasi Kelas Use Case [UC014]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramSekuens.svg" width="80%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC14_DiagramSekuens.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.14.1 Sequence Diagram [UC014]</i>
@@ -821,7 +821,7 @@ Tabel 3.14. Identifikasi Kelas Use Case [UC014]
 
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC14_DiagramKelas.svg" width="80%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC14_DiagramKelas.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.14.2 Diagram Kelas [UC14]</i>
@@ -851,7 +851,7 @@ Tabel 3.15. Identifikasi Kelas Use Case [UC015]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramSekuens.svg" width="80%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC15_DiagramSekuens.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.15.1 Sequence Diagram [UC015]</i>
@@ -861,7 +861,7 @@ Tabel 3.15. Identifikasi Kelas Use Case [UC015]
 ### 3.15.3 Diagram Kelas
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC15_DiagramKelas.svg" width="80%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC15_DiagramKelas.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.15.2 Diagram Kelas [UC15]</i>
@@ -892,7 +892,7 @@ Tabel 3.16. Identifikasi Kelas Use Case [UC016]
 - **Skenario Normal**
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramSekuens.svg" width="80%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC16_DiagramSekuens.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.16.1 Sequence Diagram [UC016]</i>
@@ -902,7 +902,7 @@ Tabel 3.16. Identifikasi Kelas Use Case [UC016]
 ### 3.16.3 Diagram Kelas
 
 <p align="center">
-<img alt="Contoh Logical View pada P/L E-Commerce" src="./assets/diagram/UC16_DiagramKelas.svg" width="80%">
+<img alt="Contoh Logical View pada P/L E-Commerce" src="../M7/assets/diagram/UC16_DiagramKelas.svg" width="80%">
 </p>
 <p align="center">
 <i>Gambar 3.16.2 Diagram Kelas [UC16]</i>
