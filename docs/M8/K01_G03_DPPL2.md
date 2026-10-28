@@ -2399,31 +2399,75 @@ Tabel 5.12.6. Query Operasi hapusJasa
 | Q-1204 | UPDATE jasa <br> SET status_aktif = false <br> WHERE id_jasa = %idJasa%; | Menonaktifkan status keaktifan jasa (soft delete) di database |
 
 ## 5.14 Kelas JasaController
-**Nama Kelas:** JasaController
-**ID Kelas:** C14
+
+**Nama Kelas:** JasaController  
+**ID Kelas:** C14  
 
 Tabel 5.14.1. Operasi Kelas JasaController
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| ambilDetailJasa(idJasa : string) : Jasa | public | Mengambil informasi detail suatu jasa dengan mendelegasikan ke entitas Jasa |
+| validasiDataJasa(dataJasa : object) : boolean | public | Memvalidasi kelengkapan atribut dan kelayakan nilai harga pada penawaran jasa |
+| simpanPenawaranJasa(dataJasa : object) : void | public | Mengatur validasi, penyimpanan data jasa baru, dan pembaruan relasi penawaran pada penyedia jasa |
 
 Tabel 5.14.2. Atribut Kelas JasaController
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| - | - | - |
 
 ### 5.14.1 Algoritma/Query
-**Nama Kelas:** JasaController
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** JasaController  
+**Nama Operasi:** ambilDetailJasa(idJasa : string) : Jasa  
+**ID Algoritma:** Algo-1401  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : idJasa : string
+Output : Jasa
 
+1. IF idJasa == NULL THEN
+2.     THROW Exception "ID Jasa tidak valid"
+3. detailJasa = Jasa.dapatkanDetailJasa(idJasa)
+4. IF detailJasa == NULL THEN
+5.     THROW Exception "Data jasa tidak ditemukan"
+6. RETURN detailJasa
+```
+
+### 5.14.2 Algoritma/Query
+**Nama Kelas:** JasaController  
+**Nama Operasi:** validasiDataJasa(dataJasa : object) : boolean  
+**ID Algoritma:** Algo-1402  
+
+```Pseudocode
+Input : dataJasa : object
+Output : boolean
+
+1. IF dataJasa == NULL THEN
+2.     RETURN false
+3. IF dataJasa.namaJasa == NULL OR dataJasa.kategori == NULL OR dataJasa.harga == NULL THEN
+4.     RETURN false
+5. IF dataJasa.harga <= 0 THEN
+6.     RETURN false
+7. RETURN true
+```
+
+### 5.14.3 Algoritma/Query
+**Nama Kelas:** JasaController  
+**Nama Operasi:** simpanPenawaranJasa(dataJasa : object) : void  
+**ID Algoritma:** Algo-1403  
+
+```Pseudocode
+Input : dataJasa : object
+Output : void
+
+1. IF validasiDataJasa(dataJasa) == false THEN
+2.     THROW Exception "Data penawaran jasa tidak valid atau tidak lengkap"
+3. IF dataJasa.berkasPendukung != NULL THEN
+4.     LayananUploadFile.uploadFile(dataJasa.berkasPendukung)
+5. jasaBaru = new Jasa(dataJasa.idPenyediaJasa, dataJasa.namaJasa, dataJasa.deskripsi, dataJasa.kategori, dataJasa.harga, true)
+6. jasaBaru.simpanJasa()
+7. PenyediaJasa.tambahPenawaranJasa(dataJasa.idPenyediaJasa, jasaBaru.idJasa)
 ```
 
 ## 5.16 Kelas HasilPencarian
