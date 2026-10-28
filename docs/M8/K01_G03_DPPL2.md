@@ -937,7 +937,7 @@ Tabel 4.1. Daftar Kelas Perancangan Keseluruhan
 | C09      | Portofolio               | <br> - judul : string <br> - deskripsi : string <br> - berkasPendukung : FILE  | <br> + simpanPortofolio() : void <br> |
 | C10      | PengontrolPortofolio     | -                                 | <br> + validasiInputBerkas(data : Portofolio) : boolean <br> + simpanPortofolio() : void <br>|
 | C11      | LayananUploadFile        | -                                 | <br> + getStatusUpload() : String <br> + validasiFormatUkuran(file : FILE) : boolean <br> + saveDeliverables(file :FILE) : string  <br> + uploadFile(berkas: FILE) : void |
-| C12 | Jasa | - idJasa : string <br> - idPenyediaJasa : string <br> -  namaJasa : string <br> -  deskripsi : string <br> -  kategori : string <br> - harga : double <br> - statusAktif : boolean | <br> + simpanJasa() : void <br> + dapatkanDetailJasa(dataJasa : string) : Jasa <br> + perbaruiJasa(dataJasa : string) : void <br> + hapusJasa(dataJasa : string) : void <br> |
+| C12 | Jasa | - idJasa : string <br> - idPenyediaJasa : string <br> -  namaJasa : string <br> -  deskripsi : string <br> -  kategori : string <br> - harga : double <br> - statusAktif : boolean | <br> + simpanJasa() : void <br> + dapatkanDetailJasa(idJasa : string) : Jasa <br> + perbaruiJasa(idJasa : string) : void <br> + hapusJasa(idJasa : string) : void <br> |
 | C13 | HalamanUploadJasa | - formNamaJasa : void <br> - formKategori : void <br> - formDeskripsi : void <br> - formHarga : void <br> - inputUploadBerkas : void <br> - tombolUnggah : void <br> - pesanError : string |  <br> + klikUnggah() : void <br> +  tampilkanPesanError() : void <br> + tampilkanNotifikasiBerhasil() : void <br> |
 | C14 | JasaController | - | <br> + ambilDetailJasa(idJasa: string) : Jasa <br> + validasiDataJasa(dataJasa : string) : boolean <br> + simpanPenawaranJasa(dataJasa : string) : void |
 | C15 | HalamanPencarian | <br> - searchBar : void <br> - filterHarga : void <br> - filterDurasi : void <br> - filterRating : void <br> - tombolCari : void <br> - pesanError : string | <br> + inputKataKunci() : void <br> + klikCari() : void <br> + tampilkanPesanError(pesan : string) : void |
@@ -2280,32 +2280,123 @@ Output : void
 ```
 
 ## 5.12 Kelas Jasa
-**Nama Kelas:** Jasa
-**ID Kelas:** C12
+
+**Nama Kelas:** Jasa  
+**ID Kelas:** C12  
 
 Tabel 5.12.1. Operasi Kelas Jasa
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| simpanJasa() : void | public | Menyimpan data penawaran jasa baru ke dalam database |
+| dapatkanDetailJasa(idJasa : string) : Jasa | public | Mengambil informasi detail penawaran jasa berdasarkan ID jasa dari database |
+| perbaruiJasa(idJasa : string) : void | public | Memperbarui rincian informasi penawaran jasa yang tersimpan di database berdasarkan ID jasa |
+| hapusJasa(idJasa : string) : void | public | Menonaktifkan status penawaran jasa secara lunak (soft delete) di database |
 
 Tabel 5.12.2. Atribut Kelas Jasa
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| idJasa | private | string |
+| idPenyediaJasa | private | string |
+| namaJasa | private | string |
+| deskripsi | private | string |
+| kategori | private | string |
+| harga | private | double |
+| statusAktif | private | boolean |
 
 ### 5.12.1 Algoritma/Query
-**Nama Kelas:** Jasa
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** Jasa  
+**Nama Operasi:** simpanJasa() : void  
+**ID Algoritma:** Algo-1201  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : void
+Output : void
 
+1. IF this.namaJasa == NULL OR this.harga == NULL THEN
+2.     THROW Exception "Data jasa tidak lengkap"
+3. Jalankan Query [Q-1201] dengan parameter this.idPenyediaJasa, this.namaJasa, this.deskripsi, this.kategori, this.harga, this.statusAktif
+4. Simpan status eksekusi query ke dalam variabel statusInsert
+5. IF statusInsert == false THEN
+6.     THROW Exception "Gagal menyimpan jasa ke database"
 ```
+
+Tabel 5.12.3. Query Operasi simpanJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-1201 | INSERT INTO jasa (id_penyedia_jasa, nama_jasa, deskripsi, kategori, harga, status_aktif) <br> VALUES (%idPenyediaJasa%, %namaJasa%, %deskripsi%, %kategori%, %harga%, %statusAktif%); | Menyimpan data penawaran jasa baru ke dalam database |
+
+### 5.12.2 Algoritma/Query
+**Nama Kelas:** Jasa  
+**Nama Operasi:** dapatkanDetailJasa(idJasa : string) : Jasa  
+**ID Algoritma:** Algo-1202  
+
+```Pseudocode
+Input : idJasa : string
+Output : Jasa
+
+1. IF idJasa == NULL THEN
+2.     THROW Exception "ID Jasa tidak valid"
+3. Jalankan Query [Q-1202] dengan parameter idJasa
+4. Simpan hasil query ke dalam variabel detailJasa
+5. IF detailJasa == NULL THEN
+6.     THROW Exception "Data jasa tidak ditemukan"
+7. RETURN detailJasa
+```
+
+Tabel 5.12.4. Query Operasi dapatkanDetailJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-1202 | SELECT id_jasa, id_penyedia_jasa, nama_jasa, deskripsi, kategori, harga, status_aktif <br> FROM jasa <br> WHERE id_jasa = %idJasa% <br> LIMIT 1; | Mengambil rincian informasi penawaran jasa berdasarkan ID jasa dari database |
+
+### 5.12.3 Algoritma/Query
+**Nama Kelas:** Jasa  
+**Nama Operasi:** perbaruiJasa(idJasa : string) : void  
+**ID Algoritma:** Algo-1203  
+
+```Pseudocode
+Input : idJasa : string
+Output : void
+
+1. IF idJasa == NULL THEN
+2.     THROW Exception "ID Jasa tidak valid"
+3. Jalankan Query [Q-1203] dengan parameter this.namaJasa, this.deskripsi, this.kategori, this.harga, this.statusAktif, idJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal memperbarui data jasa"
+```
+
+Tabel 5.12.5. Query Operasi perbaruiJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-1203 | UPDATE jasa <br> SET nama_jasa = %namaJasa%, deskripsi = %deskripsi%, kategori = %kategori%, harga = %harga%, status_aktif = %statusAktif% <br> WHERE id_jasa = %idJasa%; | Memperbarui data penawaran jasa pada database berdasarkan ID jasa |
+
+### 5.12.4 Algoritma/Query
+**Nama Kelas:** Jasa  
+**Nama Operasi:** hapusJasa(idJasa : string) : void  
+**ID Algoritma:** Algo-1204  
+
+```Pseudocode
+Input : idJasa : string
+Output : void
+
+1. IF idJasa == NULL THEN
+2.     THROW Exception "ID Jasa tidak valid"
+3. Jalankan Query [Q-1204] dengan parameter idJasa
+4. Simpan status eksekusi query ke dalam variabel statusUpdate
+5. IF statusUpdate == false THEN
+6.     THROW Exception "Gagal menonaktifkan penawaran jasa"
+```
+
+Tabel 5.12.6. Query Operasi hapusJasa
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-1204 | UPDATE jasa <br> SET status_aktif = false <br> WHERE id_jasa = %idJasa%; | Menonaktifkan status keaktifan jasa (soft delete) di database |
 
 ## 5.14 Kelas JasaController
 **Nama Kelas:** JasaController
