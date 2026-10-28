@@ -1086,13 +1086,12 @@ Output : void
 
 1. IF nama == NULL OR email == NULL OR password == NULL THEN
 2.     THROW Exception "Data akun tidak lengkap"
-3. hashedPassword = hashPassword(password)
-4. Jalankan Query [Q-0101] dengan parameter nama, email, noTelepon, hashedPassword
-5. Simpan status eksekusi query ke dalam variabel statusInsert
-6. IF statusInsert == false THEN
-7.     THROW Exception "Gagal membuat akun pengguna"
-8. statusOnline = false
-9. statusAkun = true
+3. Jalankan Query [Q-0101] dengan parameter nama, email, noTelepon, hashedPassword
+4. Simpan status eksekusi query ke dalam variabel statusInsert
+5. IF statusInsert == false THEN
+6.     THROW Exception "Gagal membuat akun pengguna"
+7. statusOnline = false
+8. statusAkun = true
 ```
 Tabel 5.1.3. Query Operasi buatAkun
 
@@ -1943,32 +1942,110 @@ Output : boolean
 ```
 
 ## 5.5 Kelas LayananRegistrasi
-**Nama Kelas:** LayananRegistrasi
-**ID Kelas:** C05
+
+**Nama Kelas:** LayananRegistrasi  
+**ID Kelas:** C05  
 
 Tabel 5.5.1. Operasi Kelas LayananRegistrasi
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| validasiData(data : object) : boolean | public | Memvalidasi kelengkapan dan format seluruh data masukan formulir registrasi |
+| cekEmail(email : string) : boolean | public | Memeriksa apakah alamat email pengguna sudah terdaftar pada database |
+| cekNoTelepon(noTelepon : string) : boolean | public | Memeriksa apakah nomor telepon pengguna sudah terdaftar pada database |
+| registrasiPengguna(nama : string, email : string, noTelepon : string, pass : string) : void | public | Mengatur validasi duplikasi data dan mendelegasikan pembuatan akun ke kelas Pengguna |
 
 Tabel 5.5.2. Atribut Kelas LayananRegistrasi
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| - | - | - |
 
 ### 5.5.1 Algoritma/Query
-**Nama Kelas:** LayananRegistrasi
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** LayananRegistrasi  
+**Nama Operasi:** validasiData(data : object) : boolean  
+**ID Algoritma:** Algo-0501  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : data : object
+Output : boolean
 
+1. IF data == NULL THEN
+2.     RETURN false
+3. IF data.nama == NULL OR data.email == NULL OR data.noTelepon == NULL OR data.pass == NULL THEN
+4.     RETURN false
+5. IF len(data.pass) < 8 THEN
+6.     RETURN false
+7. RETURN true
 ```
+
+### 5.5.2 Algoritma/Query
+**Nama Kelas:** LayananRegistrasi  
+**Nama Operasi:** cekEmail(email : string) : boolean  
+**ID Algoritma:** Algo-0502  
+
+```Pseudocode
+Input : email : string
+Output : boolean
+
+1. IF email == NULL THEN
+2.     RETURN false
+3. Jalankan Query [Q-0501] dengan parameter email
+4. Simpan hasil query ke dalam variabel dataPengguna
+5. IF dataPengguna != NULL THEN
+6.     RETURN true
+7. ELSE
+8.     RETURN false
+```
+
+Tabel 5.5.3. Query Operasi cekEmail
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0501 | SELECT email <br> FROM pengguna <br> WHERE email = %email% <br> LIMIT 1; | Memeriksa keberadaan alamat email pada tabel pengguna di database |
+
+### 5.5.3 Algoritma/Query
+**Nama Kelas:** LayananRegistrasi  
+**Nama Operasi:** cekNoTelepon(noTelepon : string) : boolean  
+**ID Algoritma:** Algo-0503  
+
+```Pseudocode
+Input : noTelepon : string
+Output : boolean
+
+1. IF noTelepon == NULL THEN
+2.     RETURN false
+3. Jalankan Query [Q-0502] dengan parameter noTelepon
+4. Simpan hasil query ke dalam variabel dataPengguna
+5. IF dataPengguna != NULL THEN
+6.     RETURN true
+7. ELSE
+8.     RETURN false
+```
+
+Tabel 5.5.4. Query Operasi cekNoTelepon
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-0502 | SELECT no_telepon <br> FROM pengguna <br> WHERE no_telepon = %noTelepon% <br> LIMIT 1; | Memeriksa keberadaan nomor telepon pada tabel pengguna di database |
+
+### 5.5.4 Algoritma/Query
+**Nama Kelas:** LayananRegistrasi  
+**Nama Operasi:** registrasiPengguna(nama : string, email : string, noTelepon : string, pass : string) : void  
+**ID Algoritma:** Algo-0504  
+
+```Pseudocode
+Input : nama : string, email : string, noTelepon : string, pass : string
+Output : void
+
+1. IF cekEmail(email) == true THEN
+2.     THROW Exception "Email sudah terdaftar"
+3. IF cekNoTelepon(noTelepon) == true THEN
+4.     THROW Exception "Nomor telepon sudah terdaftar"
+5. hashPassword = enkripsiPassword(pass)
+6. Panggil Pengguna.buatAkun(nama, email, noTelepon, hashPassword)
+```
+
 
 
 ## 5.7 Kelas Autentikator
