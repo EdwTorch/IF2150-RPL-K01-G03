@@ -8,7 +8,9 @@ DESKRIPSI PERANCANGAN PERANGKAT LUNAK (DPPL)
 <br>
 
 ## CariJasa
-### *[Logo Perangkat Lunak]*
+<p align="left">
+<img alt="logo carijasa" src="./assets//diagram/logo_carijasa.png" width="50%">
+</p>
 
 ### Untuk: Mikhael Andrian Yonatan
 
@@ -33,7 +35,7 @@ Dipersiapkan oleh:
 | :--- | :--- |
 | Logo CariJasa | Mengganti Logo CariJasa |
 | Tambah Parameter Method di C17 | Tambah Parameter Keyword String C17   |
-| *C* |  |
+| Menambah Parameter kebanyakan method di setiap class | -  |
 | ... |  |
 
 ---
