@@ -90,6 +90,13 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Mendapatkan pemahaman terhadap pembuatan sequence diagram | Bagaimana penerapan alt dan opt sekaligus cara penggunaan setiap komponen diagram sekuens | AI memberikan penjelasan dan contoh terkait pembuatan diagram sekuens. saya (Edward) memeriksa dan memahami jawabannya lalu menerapkannya dalam pembuatan diagram sekuens |
 | Gemini | Mendapatkan penjelasan mengenai penggunaan PlantUML untuk mengimplementasikan diagram sekuens | Beri tahu saya notasi-notasi PlantUML yang relevan untuk pembuatan diagram sekuens | Saya (Revandra) mendapatkan penjelasan mengenai notasi-notasi PlantUML yang mungkin relevan untuk pembuatan diagram sekuens. |
 
+### Milestone 8
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Mendapatkan Penjelasan dan Contoh Query, Beserta Algoritma Class yang dibutuhkan  | Tolong bantu saya, memahami dan berikan contoh algoritma untuk entity maupun controller dengan contoh juga untuk setiap sintaks querynya | AI memberikan penjelasan secara detail dan memberikan contoh algoritma maupun query. Saya (Edward) memeriksa kembali jawaban AI tersebut lalu membandingkannya dengan pemahaman yang saya pahami dan memodifikasi algoritma maupun query yang sudah saya buat |
+| Gemini | Mendapatkan perbaikan dari algoritma maupun query yang saya buat | Tolong perbaiki algoritma saya dengan konteks class diagram sebagai berikut | AI memberikan perbaikan untuk  algoritma maupun query. Saya (Edward) memeriksa kembali jawaban AI tersebut lalu memahami dan memperbaiki algoritma maupun query yang sudah saya buat |
+
+
 
 ### Pernyataan Integritas dan Persetujuan
 
