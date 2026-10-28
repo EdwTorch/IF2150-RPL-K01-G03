@@ -99,6 +99,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Claude | Membantu dalam pembuatan UI  | Tolong buatkan design system UI untuk C... | AI membuatkan design system dan UI pada figma, kami (There & Neci) memperbaiki atau menyesuaikan UI tersebut agar sesuai preferensi kami. |
 | Claude | Membantu dalam pembuatan algoritma  | Tolong jelaskan dan berikan contoh pembuatan algoritma untuk kelas ... | AI menjelaskan dan memberikan contoh algoritma, saya (There) menjadikan algoritma tersebut sebagai referensi dan menyesuaikannya sesuai skpl dan dppl sebelumnya (use case, sequence diagram, dll.). |
 | Claude | Membantu dalam mengerjakan Bab 6  | Buatkan spesifikasi objek antarmuka | AI membuatkan spesifikasi objek antarmuka, saya (Neci) menjadikannya sebagai referensi untuk mengerjakan bab 6 |
+| Gemini | Membantu dalam menentukan notasi pseudocode | Tolong beri contoh pseudocode yang cocok untuk file berikut | AI memberikan contoh pseudocode yang cocok untuk pengerjaan milestone 8, lalu saya (Revandra) menyesuaikan penulisan pseudocode dengan itu. |
 
 
 

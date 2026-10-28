@@ -3790,7 +3790,7 @@ Tabel 5.36.1. Operasi Kelas C36
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
 | :--- | :--- | :--- |
-| simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void | public | Menyimpan rincian hasil pekerjaan (produk akhir) beserta URL atau path file ke dalam basis data. |
+| simpanProdukAkhir(deskripsi : string, filepath : string, link : string) : void | public | Menyimpan rincian hasil pekerjaan (produk akhir) beserta URL atau path file ke dalam *database*. |
 | updateStatusPengerjaan() : void | public | Memperbarui status pemeriksaan produk akhir. |
 | getDetailProduk() : string | public | Mengembalikan data dan informasi lengkap dari produk akhir yang dikumpulkan. |
 
@@ -4775,7 +4775,7 @@ OUTPUT: void
 8. IF hasilQuery == true THEN
 9.      RETURN
 10. ELSE
-11.     THROW Exception "Gagal menyimpan ulasan ke basis data."
+11.     THROW Exception "Gagal menyimpan ulasan ke database."
 ```
 
 Tabel 5.46.3. Query Operasi simpanUlasan
@@ -4872,7 +4872,7 @@ Tabel 5.48.1. Operasi Kelas C48
 | validasiFormatBerkas(fileDokumentasi : FILE) : boolean | public | Memvalidasi tipe dan ukuran berkas dokumentasi ulasan yang diunggah. |
 | validasiPanjangKomentar(teksKomentar : string) : boolean | public | Memvalidasi bahwa isi komentar ulasan memenuhi batas minimal dan maksimal karakter. |
 | prosesUlasan(idPesanan : string, rating : integer, teksKomentar : string, fileDokumentasi : FILE) : void | public | Mengoordinasikan alur validasi, penyimpanan ulasan, serta pembaruan rating penyedia jasa. |
-| perbaruiRating(idPenyediaJasa : string, ratingBaru : integer) : void | public | Mengalkulasi rata-rata skor bintang penyedia jasa lalu memperbaruinya pada basis data. |
+| perbaruiRating(idPenyediaJasa : string, ratingBaru : integer) : void | public | Mengalkulasi rata-rata skor bintang penyedia jasa lalu memperbaruinya pada *basis data*. |
 
 ### 5.48.1 Algoritma/Query
 
@@ -5173,6 +5173,390 @@ PROSEDUR mulaiMediasi()
     getDetailTiket()
     tampilkanHalamanMediasi()                                
 ```
+
+## 5.51 Kelas MediasiHandler
+
+**Nama Kelas:** MediasiHandler  
+**ID Kelas:** C51
+
+Tabel 5.51.1. Operasi Kelas C51
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| inputTindakan(idTiket : string, jenisTindakan : string, catatan : string) : void | private | Menerima keputusan tindakan Admin pada sesi mediasi, mencatatnya sebagai tanggapan laporan, dan menjalankan sanksi (ban/skors) bila diperlukan. |
+| akhiriMediasi() : void | private | Mengakhiri sesi mediasi yang sedang berlangsung dan mencatat waktu selesai sesi. |
+| tampilkanPesanError(pesanError : string) : void | private | Menampilkan pesan kesalahan pada halaman mediasi ketika proses mediasi gagal. |
+| tampilkanNotifikasiSelesai() : void | private | Mengirim notifikasi kepada pihak terkait bahwa proses mediasi telah selesai. |
+| UpdateStatusTiket(idTiket : string, statusBaru : boolean) : void | public | Memperbarui status tiket laporan setelah mediasi selesai ditangani. |
+
+Tabel 5.51.2. Atribut Kelas MediasiHandler
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idSesiMediasi | private | string |
+
+### 5.51.1 Algoritma/Query
+
+**Nama Kelas:** MediasiHandler     
+**Nama Operasi:** inputTindakan         
+**ID Algoritma:** Algo-5101
+
+```pseudocode
+INPUT: idTiket (string), jenisTindakan (string), catatan (string)
+OUTPUT: void
+
+1. IF idTiket IS EMPTY OR jenisTindakan IS EMPTY THEN
+2.      THROW Exception "Input tindakan mediasi tidak valid."
+3.
+4. TanggapanLaporan.catatKeputusanTindakan(idTiket, jenisTindakan, catatan)
+5. idPengguna = EXECUTE Q-5101 WITH (idTiket)
+6.
+7. IF jenisTindakan == "BAN" THEN
+8.      LaporanHandler.banPengguna(idPengguna)
+9. ELSE IF jenisTindakan == "SKORS" THEN
+10.     LaporanHandler.skorsPengguna(idPengguna)
+11.
+12. LaporanHandler.saveTanggapan(idTiket, catatan)
+```
+
+Tabel 5.51.3. Query Operasi inputTindakan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5101 | SELECT id_terlapor FROM tiket_laporan WHERE id_tiket = ?; | Mengambil ID pengguna terlapor dari tiket laporan untuk dikenai tindakan sanksi. |
+
+### 5.51.2 Algoritma/Query
+
+**Nama Kelas:** MediasiHandler     
+**Nama Operasi:** akhiriMediasi         
+**ID Algoritma:** Algo-5102
+
+```pseudocode
+INPUT: void
+OUTPUT: void
+
+1. idSesiMediasi = Session.getCurrentSesiMediasiId()
+2. waktuSelesai = GET_CURRENT_DATE()
+3. statusSesi = "Selesai"
+4.
+5. hasilQuery = EXECUTE Q-5102 WITH (statusSesi, waktuSelesai, idSesiMediasi)
+6.
+7. IF hasilQuery == true THEN
+8.      tampilkanNotifikasiSelesai()
+9.      RETURN
+10. ELSE
+11.     THROW Exception "Gagal mengakhiri sesi mediasi."
+```
+
+Tabel 5.51.4. Query Operasi akhiriMediasi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5102 | UPDATE sesi_mediasi SET status_sesi = ?, waktu_selesai = ? WHERE id_sesi_mediasi = ?; | Mengubah status sesi mediasi menjadi selesai dan mencatat waktu berakhirnya sesi. |
+
+### 5.51.3 Algoritma/Query
+
+**Nama Kelas:** MediasiHandler     
+**Nama Operasi:** tampilkanPesanError         
+**ID Algoritma:** Algo-5103
+
+```pseudocode
+INPUT: pesanError (string)
+OUTPUT: void
+
+1. IF pesanError IS EMPTY THEN
+2.      pesanError = "Terjadi kesalahan pada proses mediasi."
+3.
+4. HalamanPengajuanMediasi.pesanError = pesanError
+5. HalamanPengajuanMediasi.render()
+```
+
+### 5.51.4 Algoritma/Query
+
+**Nama Kelas:** MediasiHandler     
+**Nama Operasi:** tampilkanNotifikasiSelesai         
+**ID Algoritma:** Algo-5104
+
+```pseudocode
+INPUT: void
+OUTPUT: void
+
+1. idNotifikasi = GENERATE_UUID()
+2. idSesiMediasi = Session.getCurrentSesiMediasiId()
+3. pesan = "Proses mediasi telah selesai. Silakan periksa tanggapan laporan Anda."
+4.
+5. hasilQuery = EXECUTE Q-5104 WITH (idNotifikasi, idSesiMediasi, pesan)
+6.
+7. IF hasilQuery == true THEN
+8.      RETURN
+9. ELSE
+10.     THROW Exception "Gagal mengirimkan notifikasi mediasi selesai."
+```
+
+Tabel 5.51.5. Query Operasi tampilkanNotifikasiSelesai
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5104 | INSERT INTO notifikasi (id_notifikasi, id_referensi, pesan_notifikasi) VALUES (?, ?, ?); | Mencatat notifikasi bahwa mediasi telah selesai agar ditampilkan kepada pihak terkait. |
+
+### 5.51.5 Algoritma/Query
+
+**Nama Kelas:** MediasiHandler     
+**Nama Operasi:** UpdateStatusTiket         
+**ID Algoritma:** Algo-5105
+
+```pseudocode
+INPUT: idTiket (string), statusBaru (boolean)
+OUTPUT: void
+
+1. hasilQuery = EXECUTE Q-5105 WITH (statusBaru, idTiket)
+2.
+3. IF hasilQuery == true THEN
+4.      RETURN
+5. ELSE
+6.      THROW Exception "Gagal memperbarui status tiket."
+```
+
+Tabel 5.51.6. Query Operasi UpdateStatusTiket
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5105 | UPDATE tiket_laporan SET status_tiket = ? WHERE id_tiket = ?; | Memperbarui status penyelesaian tiket laporan setelah mediasi selesai. |
+
+## 5.52 Kelas Admin
+
+**Nama Kelas:** Admin  
+**ID Kelas:** C52
+
+Tabel 5.52.1. Operasi Kelas C52
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| mulaiMediasi(idTiket : string) : void | public | Memulai sesi mediasi antara pihak pelapor dan terlapor berdasarkan tiket laporan. |
+| bukaTiketLaporan(idTiket : string) : string | public | Membuka dan mengambil detail tiket laporan yang akan ditangani Admin. |
+| selesaikanLaporan(idTiket : string) : void | public | Menandai tiket laporan sebagai selesai ditangani. |
+| kirimPesanMediasi(idSesiMediasi : string, pesan : string) : void | public | Mengirim pesan Admin kepada pihak yang terlibat dalam sesi mediasi. |
+| pilihJenisTindakan(jenisTindakan : string) : void | public | Memilih jenis tindakan (peringatan, skors, ban, atau tidak ada tindakan) atas laporan yang dimediasi. |
+| akhiriMediasi() : void | public | Mengakhiri sesi mediasi yang sedang berlangsung. |
+
+Tabel 5.52.2. Atribut Kelas Admin
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idAdmin | private | string |
+
+### 5.52.1 Algoritma/Query
+
+**Nama Kelas:** Admin     
+**Nama Operasi:** mulaiMediasi         
+**ID Algoritma:** Algo-5201
+
+```pseudocode
+INPUT: idTiket (string)
+OUTPUT: void
+
+1. IF idTiket EMPTY THEN
+2.      THROW Exception "ID tiket tidak valid."
+3.
+4. idSesiMediasi = GENERATE_UUID()
+5. waktuMulai = GET_CURRENT_DATE()
+6. statusSesi = "Berlangsung"
+7.
+8. hasilQuery = EXECUTE Q-5201 WITH (idSesiMediasi, idTiket, idAdmin, statusSesi, waktuMulai)
+9.
+10. IF hasilQuery == true THEN
+11.     Session.setCurrentSesiMediasiId(idSesiMediasi)
+12.     RETURN
+13. ELSE
+14.     THROW Exception "Gagal memulai sesi mediasi."
+```
+
+Tabel 5.52.3. Query Operasi mulaiMediasi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5201 | INSERT INTO sesi_mediasi (id_sesi_mediasi, id_tiket, id_admin, status_sesi, waktu_mulai) VALUES (?, ?, ?, ?, ?); | Membuat sesi mediasi baru yang terhubung dengan tiket laporan dan Admin yang menangani. |
+
+### 5.52.2 Algoritma/Query
+
+**Nama Kelas:** Admin     
+**Nama Operasi:** bukaTiketLaporan         
+**ID Algoritma:** Algo-5202
+
+```pseudocode
+INPUT: idTiket (string)
+OUTPUT: string
+
+1. hasilQuery = EXECUTE Q-5202 WITH (idTiket)
+2.
+3. IF hasilQuery IS NOT EMPTY THEN
+4.      data = FORMAT_TO_JSON(hasilQuery.id_tiket, hasilQuery.deskripsi_laporan, hasilQuery.url_bukti, hasilQuery.lampiran_bukti, hasilQuery.status_tiket)
+5.      RETURN data
+6. ELSE
+7.      RETURN ""
+```
+
+Tabel 5.52.4. Query Operasi bukaTiketLaporan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5202 | SELECT id_tiket, deskripsi_laporan, url_bukti, lampiran_bukti, status_tiket FROM tiket_laporan WHERE id_tiket = ?; | Mengambil rincian tiket laporan untuk ditampilkan pada *dashboard* Admin. |
+
+### 5.52.3 Algoritma/Query
+
+**Nama Kelas:** Admin     
+**Nama Operasi:** selesaikanLaporan         
+**ID Algoritma:** Algo-5203
+
+```pseudocode
+INPUT: idTiket (string)
+OUTPUT: void
+
+1. statusSelesai = true
+2. hasilQuery = EXECUTE Q-5203 WITH (statusSelesai, idTiket)
+3.
+4. IF hasilQuery == true THEN
+5.      RETURN
+6. ELSE
+7.      THROW Exception "Gagal menyelesaikan laporan."
+```
+
+Tabel 5.52.5. Query Operasi selesaikanLaporan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5203 | UPDATE tiket_laporan SET status_tiket = ? WHERE id_tiket = ?; | Mengubah status tiket laporan menjadi selesai ditangani. |
+
+### 5.52.4 Algoritma/Query
+
+**Nama Kelas:** Admin     
+**Nama Operasi:** kirimPesanMediasi         
+**ID Algoritma:** Algo-5204
+
+```pseudocode
+INPUT: idSesiMediasi (string), pesan (string)
+OUTPUT: void
+
+1. IF pesan EMPTY THEN
+2.      THROW Exception "Pesan mediasi tidak boleh kosong."
+3.
+4. idPesan = GENERATE_UUID()
+5. waktuKirim = GET_CURRENT_DATE()
+6.
+7. hasilQuery = EXECUTE Q-5204 WITH (idPesan, idSesiMediasi, idAdmin, pesan, waktuKirim)
+8.
+9. IF hasilQuery == true THEN
+10.     RETURN
+11. ELSE
+12.     THROW Exception "Gagal mengirim pesan mediasi."
+```
+
+Tabel 5.52.6. Query Operasi kirimPesanMediasi
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5204 | INSERT INTO pesan_mediasi (id_pesan, id_sesi_mediasi, id_pengirim, isi_pesan, waktu_kirim) VALUES (?, ?, ?, ?, ?); | Menyimpan pesan Admin pada riwayat percakapan sesi mediasi. |
+
+### 5.52.5 Algoritma/Query
+
+**Nama Kelas:** Admin     
+**Nama Operasi:** pilihJenisTindakan         
+**ID Algoritma:** Algo-5205
+
+```pseudocode
+INPUT: jenisTindakan (string)
+OUTPUT: void
+
+1. daftarTindakan = ["PERINGATAN", "SKORS", "BAN", "TIDAK_ADA_TINDAKAN"]
+2.
+3. IF jenisTindakan NOT IN daftarTindakan THEN
+4.      THROW Exception "Jenis tindakan tidak valid."
+5.
+6. HalamanDashboardAdmin.opsiTindakan = jenisTindakan
+```
+
+### 5.52.6 Algoritma/Query
+
+**Nama Kelas:** Admin     
+**Nama Operasi:** akhiriMediasi         
+**ID Algoritma:** Algo-5206
+
+```pseudocode
+INPUT: void
+OUTPUT: void
+
+1. idSesiMediasi = Session.getCurrentSesiMediasiId()
+2.
+3. IF idSesiMediasi IS NULL THEN
+4.      THROW Exception "Tidak ada sesi mediasi yang sedang berlangsung."
+5.
+6. MediasiHandler.akhiriMediasi()
+```
+
+## 5.54 Kelas PengumpulanController
+
+**Nama Kelas:** PengumpulanController  
+**ID Kelas:** C54
+
+Tabel 5.54.1. Operasi Kelas C54
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| validasiDeskripsi(deskripsi : string) : boolean | public | Memvalidasi bahwa deskripsi hasil pekerjaan telah diisi dan tidak melebihi batas karakter. |
+| validasiPengumpulan(deskripsi : string, berkas : FILE, link : string) : boolean | public | Memvalidasi kelengkapan data pengumpulan hasil pekerjaan (deskripsi, berkas atau tautan) serta status pesanan yang masih dapat diserahkan. |
+
+### 5.54.1 Algoritma/Query
+
+**Nama Kelas:** PengumpulanController     
+**Nama Operasi:** validasiDeskripsi         
+**ID Algoritma:** Algo-5401
+
+```pseudocode
+INPUT: deskripsi (string)
+OUTPUT: boolean
+
+1. IF deskripsi IS NULL OR deskripsi EMPTY THEN
+2.      RETURN false
+3.
+4. IF LENGTH(deskripsi) > 1000 THEN
+5.      RETURN false
+6. ELSE
+7.      RETURN true
+```
+
+### 5.54.2 Algoritma/Query
+
+**Nama Kelas:** PengumpulanController     
+**Nama Operasi:** validasiPengumpulan         
+**ID Algoritma:** Algo-5402
+
+```pseudocode
+INPUT: deskripsi (string), berkas (FILE), link (string)
+OUTPUT: boolean
+
+1. IF NOT validasiDeskripsi(deskripsi) THEN
+2.      RETURN false
+3.
+4. IF berkas IS NULL AND link EMPTY THEN
+5.      RETURN false
+6.
+7. IF berkas IS NOT NULL AND NOT LayananUploadFile.validasiFormatUkuran(berkas) THEN
+8.      RETURN false
+9.
+10. idPesanan = Session.getCurrentPesananId()
+11. hasilQuery = EXECUTE Q-5402 WITH (idPesanan)
+12.
+13. IF hasilQuery IS NOT EMPTY AND hasilQuery.status_pesanan == "Diproses" THEN
+14.     RETURN true
+15. ELSE
+16.     RETURN false
+```
+
+Tabel 5.54.2. Query Operasi validasiPengumpulan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-5402 | SELECT status_pesanan FROM pesanan WHERE id_pesanan = ?; | Memastikan pesanan masih berstatus diproses sehingga hasil pekerjaan dapat diserahkan. |
 
 ---
 
