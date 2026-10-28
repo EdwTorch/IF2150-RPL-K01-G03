@@ -2139,33 +2139,52 @@ Tabel 5.9.3. Query Operasi simpanPortofolio
 | Q-0901 | INSERT INTO portofolio (judul, deskripsi, berkas_pendukung) <br> VALUES (%judul%, %deskripsi%, %berkasPendukung%); | Menyimpan data karya portofolio baru ke dalam database |
 
 ## 5.10 Kelas PengontrolPortofolio
-**Nama Kelas:** PengontrolPortofolio
-**ID Kelas:** C10
+
+**Nama Kelas:** PengontrolPortofolio  
+**ID Kelas:** C10  
 
 Tabel 5.10.1. Operasi Kelas PengontrolPortofolio
 
 | Nama Operasi | Visibility (private, public) | Keterangan |
-| --- | --- | --- |
-| *[Signature operasi, termasuk parameter dan tipe kembalian]* | *[Visibility]* | *[Tanggung jawab operasi]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| validasiInputBerkas(data : Portofolio) : boolean | public | Memvalidasi kesesuaian format dan batasan ukuran berkas pendukung pada data portofolio |
+| simpanPortofolio(data : Portofolio) : void | public | Mengorkestrasi validasi, pengunggahan berkas fisik, dan pendelegasian penyimpanan portofolio ke database |
 
 Tabel 5.10.2. Atribut Kelas PengontrolPortofolio
 
 | Nama Atribut | Visibility (private, public) | Tipe |
-| --- | --- | --- |
-| *[Nama atribut]* | *[Visibility]* | *[Tipe sesuai bahasa pemrograman yang digunakan]* |
-| *...* | *...* | *...* |
+| :--- | :--- | :--- |
+| - | - | - |
 
 ### 5.10.1 Algoritma/Query
-**Nama Kelas:** PengontrolPortofolio
-**Nama Operasi:** *[Signature operasi]*
-**ID Algoritma:** *[Algo-001]*
+**Nama Kelas:** PengontrolPortofolio  
+**Nama Operasi:** validasiInputBerkas(data : Portofolio) : boolean  
+**ID Algoritma:** Algo-1001  
 
-```text
-[Tuliskan pseudocode algoritma operasi di sini.]
+```Pseudocode
+Input : data : Portofolio
+Output : boolean
 
+1. IF data == NULL OR data.berkasPendukung == NULL THEN
+2.     RETURN false
+3. statusValid = LayananUploadFile.validasiFormatUkuran(data.berkasPendukung)
+4. RETURN statusValid
 ```
 
+### 5.10.2 Algoritma/Query
+**Nama Kelas:** PengontrolPortofolio  
+**Nama Operasi:** simpanPortofolio(data : Portofolio) : void  
+**ID Algoritma:** Algo-1002  
+
+```Pseudocode
+Input : data : Portofolio
+Output : void
+
+1. IF validasiInputBerkas(data) == false THEN
+2.     THROW Exception "Format atau ukuran berkas portofolio tidak valid"
+3. LayananUploadFile.uploadFile(data.berkasPendukung)
+4. Panggil data.simpanPortofolio()
+```
 
 ## 5.11 Kelas LayananUploadFile
 **Nama Kelas:** LayananUploadFile
