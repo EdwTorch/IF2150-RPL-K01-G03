@@ -1790,6 +1790,204 @@ Tabel 5.46.4. Query Operasi getDetailUlasan
 | :--- | :--- | :--- |
 | Q-4602 | SELECT id_ulasan, id_pesanan, id_penyedia_jasa, rating, komentar, dokumentasi_path FROM ulasan WHERE id_ulasan = ?; | Mengambil detail ulasan berdasarkan ID ulasan. |
 
+## 5.48 Kelas UlasanHandler
+
+**Nama Kelas:** UlasanHandler      
+**ID Kelas:** C48
+
+Tabel 5.48.1. Operasi Kelas C48
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| validasiKelengkapanRating(rating : integer) : boolean | public | Memvalidasi bahwa rating telah diberikan dan berada pada skala 1 hingga 5. |
+| validasiFormatBerkas(fileDokumentasi : FILE) : boolean | public | Memvalidasi tipe dan ukuran berkas dokumentasi ulasan yang diunggah. |
+| validasiPanjangKomentar(teksKomentar : string) : boolean | public | Memvalidasi bahwa isi komentar ulasan memenuhi batas minimal dan maksimal karakter. |
+| prosesUlasan(idPesanan : string, rating : integer, teksKomentar : string, fileDokumentasi : FILE) : void | public | Mengoordinasikan alur validasi, penyimpanan ulasan, serta pembaruan rating penyedia jasa. |
+| perbaruiRating(idPenyediaJasa : string, ratingBaru : integer) : void | public | Mengalkulasi rata-rata skor bintang penyedia jasa lalu memperbaruinya pada basis data. |
+
+### 5.48.1 Algoritma/Query
+
+**Nama Kelas:** UlasanHandler     
+**Nama Operasi:** validasiKelengkapanRating         
+**ID Algoritma:** Algo-4801
+
+```pseudocode
+INPUT: rating (integer)
+OUTPUT: boolean
+
+1. IF rating >= 1 AND rating <= 5 THEN
+2.      RETURN true
+3. ELSE
+4.      RETURN false
+```
+
+### 5.48.2 Algoritma/Query
+
+**Nama Kelas:** UlasanHandler     
+**Nama Operasi:** validasiFormatBerkas         
+**ID Algoritma:** Algo-4802
+
+```pseudocode
+INPUT: fileDokumentasi (FILE)
+OUTPUT: boolean
+
+1. IF fileDokumentasi IS NULL THEN
+2.      RETURN true
+3.
+4. allowedTypes = ["image/jpeg", "image/png", "image/jpg", "video/mp4"]
+5. maxSize = 10 * 1024 * 1024
+6.
+7. IF fileDokumentasi.type IN allowedTypes AND fileDokumentasi.size <= maxSize THEN
+8.      RETURN true
+9. ELSE
+10.      RETURN false
+```
+
+### 5.48.3 Algoritma/Query
+
+**Nama Kelas:** UlasanHandler     
+**Nama Operasi:** validasiPanjangKomentar         
+**ID Algoritma:** Algo-4803
+
+```pseudocode
+INPUT: teksKomentar (string)
+OUTPUT: boolean
+
+1. IF teksKomentar IS NOT NULL AND LENGTH(teksKomentar) <= 500 THEN
+2.      RETURN true
+3. ELSE
+4.      RETURN false
+```
+
+### 5.48.4 Algoritma/Query
+
+**Nama Kelas:** UlasanHandler     
+**Nama Operasi:** prosesUlasan         
+**ID Algoritma:** Algo-4804
+
+```pseudocode
+INPUT: idPesanan (string), rating (integer), teksKomentar (string), fileDokumentasi (FILE)
+OUTPUT: void
+
+1. IF NOT validasiKelengkapanRating(rating) THEN
+2.      THROW Exception "Rating tidak valid."
+3.
+4. IF NOT validasiPanjangKomentar(teksKomentar) THEN
+5.      THROW Exception "Panjang komentar melebihi batas."
+6.
+7. IF NOT validasiFormatBerkas(fileDokumentasi) THEN
+8.      THROW Exception "Format berkas dokumentasi tidak sesuai."
+9.
+10. idPenyediaJasa = EXECUTE Q-4804 WITH (idPesanan)
+11. Ulasan.simpanUlasan(idPesanan, idPenyediaJasa, rating, teksKomentar, fileDokumentasi)
+12. perbaruiRating(idPenyediaJasa, rating)
+```
+
+Tabel 5.48.2. Query Operasi prosesUlasan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4804 | SELECT id_penyedia_jasa FROM pesanan WHERE id_pesanan = ?; | Mengambil ID penyedia jasa berdasarkan pesanan. |
+
+### 5.48.5 Algoritma/Query
+
+**Nama Kelas:** UlasanHandler     
+**Nama Operasi:** perbaruiRating         
+**ID Algoritma:** Algo-4805
+
+```pseudocode
+INPUT: idPenyediaJasa (string), ratingBaru (integer)
+OUTPUT: void
+
+1. rerataRating = EXECUTE Q-4805 WITH (idPenyediaJasa)
+2. hasilQuery = EXECUTE Q-4806 WITH (rerataRating, idPenyediaJasa)
+4.
+5. IF hasilQuery == true THEN
+6.      RETURN
+7. ELSE
+8.      THROW Exception "Gagal memperbarui rata-rata rating penyedia jasa."
+```
+
+Tabel 5.48.3. Query Operasi perbaruiRating
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4805 | SELECT AVG(rating) FROM ulasan WHERE id_penyedia_jasa = ?; | Menghitung rata-rata nilai rating penyedia jasa dari seluruh ulasan. |
+| Q-4806 | UPDATE penyedia_jasa SET rating_rata_rata = ? WHERE id_penyedia_jasa = ?; | Memperbarui atribut rating rata-rata pada profil penyedia jasa. |
+
+## 5.49 Kelas TanggapanLaporan
+
+**Nama Kelas:** TanggapanLaporan      
+**ID Kelas:** C49
+
+Tabel 5.49.1. Operasi Kelas C49
+
+| Nama Operasi | Visibility (private, public) | Keterangan |
+| :--- | :--- | :--- |
+| catatKeputusanTindakan(idTiket : string, jenisTindakan : string, catatan : string) : void | private | Menyimpan catatan keputusan tindakan sanksi Admin atas laporan pengguna. |
+| getDetailTanggapan(idTanggapan : string) : string | private | Mengembalikan data tanggapan laporan dalam bentuk string. |
+
+Tabel 5.49.2. Atribut Kelas TanggapanLaporan
+
+| Nama Atribut | Visibility (private, public) | Tipe |
+| :--- | :--- | :--- |
+| idTanggapan | private | string |
+| idTiket | private | string |
+| jenisTindakan | private | string |
+| catatanTanggapan | private | string |
+
+### 5.49.1 Algoritma/Query
+
+**Nama Kelas:** TanggapanLaporan     
+**Nama Operasi:** catatKeputusanTindakan         
+**ID Algoritma:** Algo-4901
+
+```pseudocode
+INPUT: idTiket (string), jenisTindakan (string), catatan (string)
+OUTPUT: void
+
+1. IF idTiket IS EMPTY OR jenisTindakan IS EMPTY THEN
+2.      THROW Exception "Input keputusan tindakan tidak valid."
+3. 
+4. idTanggapan = GENERATE_UUID()
+5. hasilQuery = EXECUTE Q-4901 WITH (idTanggapan, idTiket, jenisTindakan, catatan)
+6.
+7. IF hasilQuery == true THEN
+8.      RETURN
+9. ELSE
+10.     THROW Exception "Gagal mencatat keputusan tindakan laporan."
+```
+
+Tabel 5.49.3. Query Operasi catatKeputusanTindakan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4901 | INSERT INTO tanggapan_laporan (id_tanggapan, id_tiket, jenis_tindakan, catatan_tanggapan) VALUES (?, ?, ?, ?); | Mencatat bentuk sanksi yang diputuskan oleh Admin ke dalam tabel tanggapan_laporan. |
+
+### 5.49.2 Algoritma/Query
+
+**Nama Kelas:** TanggapanLaporan     
+**Nama Operasi:** getDetailTanggapan         
+**ID Algoritma:** Algo-4902
+
+```pseudocode
+INPUT: idTanggapan (string)
+OUTPUT: string
+
+1. hasilQuery = EXECUTE Q-4902 WITH (idTanggapan)
+2. IF hasilQuery IS NOT EMPTY THEN
+3.      data = FORMAT_TO_JSON(hasilQuery.id_tanggapan, hasilQuery.id_tiket, hasilQuery.jenis_tindakan, hasilQuery.catatan_tanggapan)
+4.      RETURN data
+5. ELSE
+6.      RETURN ""
+```
+
+Tabel 5.49.4. Query Operasi getDetailTanggapan
+
+| No Query | Query | Keterangan |
+| :--- | :--- | :--- |
+| Q-4902 | SELECT id_tanggapan, id_tiket, jenis_tindakan, catatan_tanggapan FROM tanggapan_laporan WHERE id_tanggapan = ?; | Mengambil rincian tanggapan keputusan laporan berdasarkan ID tanggapan. |
+
 <br>
 
 ---
