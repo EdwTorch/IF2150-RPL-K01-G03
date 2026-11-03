@@ -7,22 +7,22 @@ import { createClient } from "@/lib/supabase/server";
  * Helper internal untuk menerjemahkan error teknis menjadi pesan ramah pengguna.
  */
 function handleCustomError(err: any): string {
-  const rawMessage = err.message || "";
+  const raw_message = err.message || "";
 
   // 1. Error dari validasi manual buatan sendiri (throw new Error(...))
   if (
-    rawMessage.includes("tidak boleh kosong") ||
-    rawMessage.includes("Unggah berkas") ||
-    rawMessage.includes("belum dikumpulkan")
+    raw_message.includes("tidak boleh kosong") ||
+    raw_message.includes("Unggah berkas") ||
+    raw_message.includes("belum dikumpulkan")
   ) {
-    return rawMessage;
+    return raw_message;
   }
 
   // 2. Error bawaan Supabase / PostgreSQL
-  if (rawMessage.includes("violates foreign key constraint")) {
+  if (raw_message.includes("violates foreign key constraint")) {
     return "Data pesanan tidak ditemukan di sistem.";
   }
-  if (rawMessage.includes("violates not-null constraint")) {
+  if (raw_message.includes("violates not-null constraint")) {
     return "Data yang dikirimkan kurang lengkap.";
   }
 
@@ -37,27 +37,27 @@ export async function GET(request: Request) {
     try{
         const supabase = await createClient()
         
-        const{data : {user},error : authError,} = await supabase.auth.getUser();
-        if (!user || authError){
+        const{data : {user},error : auth_error,} = await supabase.auth.getUser();
+        if (!user || auth_error){
             return NextResponse.json({success : false, error : "Anda belum login"}, {status : 401});
         }
-        const userId = user.id;
+        const user_id = user.id;
         const { searchParams } = new URL(request.url);
-        const idPesanan = searchParams.get("id_pesanan");
+        const id_pesanan = searchParams.get("id_pesanan");
 
-        if (!idPesanan) {
+        if (!id_pesanan) {
         return NextResponse.json(
             { success: false, error: "Parameter id_pesanan wajib diisi." },
             { status: 400 }
         );
         }
 
-        const data = await DeliverablesService.getDeliverableByPesanan(idPesanan, userId);
+        const data = await DeliverablesService.getDeliverableByPesanan(id_pesanan, user_id);
         return NextResponse.json({ success: true, data }, { status: 200 });
     } catch (err: any) {
-        const cleanError = handleCustomError(err);
+        const clean_error = handleCustomError(err);
         return NextResponse.json(
-        { success: false, error: cleanError },
+        { success: false, error: clean_error },
         { status: 400 }
         );
     }
@@ -70,7 +70,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { id_pesanan, deskripsi_produk, file_url, outputpath } = body;
+    const { id_pesanan, deskripsi_produk, file_url, output_path } = body;
 
     if (!id_pesanan) {
       return NextResponse.json(
@@ -83,7 +83,7 @@ export async function POST(request: Request) {
       id_pesanan,
       deskripsi_produk,
       file_url,
-      outputpath,
+      output_path,
     });
 
     return NextResponse.json(
@@ -95,9 +95,9 @@ export async function POST(request: Request) {
       { status: 201 }
     );
   } catch (err: any) {
-    const cleanError = handleCustomError(err);
+    const clean_error = handleCustomError(err);
     return NextResponse.json(
-      { success: false, error: cleanError },
+      { success: false, error: clean_error },
       { status: 400 }
     );
   }
@@ -119,12 +119,12 @@ export async function PATCH(request: Request) {
     }
     const supabase = await createClient()
         
-        const{data : {user},error : authError,} = await supabase.auth.getUser();
-        if (!user || authError){
+        const{data : {user},error : auth_error,} = await supabase.auth.getUser();
+        if (!user || auth_error){
             return NextResponse.json({success : false, error : "Anda belum login"}, {status : 401});
         }
-    const userId = user.id;
-    await DeliverablesService.confirmOrderComplete(id_pesanan,userId);
+    const user_id = user.id;
+    await DeliverablesService.confirmOrderComplete(id_pesanan,user_id);
 
     return NextResponse.json(
       {
@@ -134,9 +134,9 @@ export async function PATCH(request: Request) {
       { status: 200 }
     );
   } catch (err: any) {
-    const cleanError = handleCustomError(err);
+    const clean_error = handleCustomError(err);
     return NextResponse.json(
-      { success: false, error: cleanError },
+      { success: false, error: clean_error },
       { status: 400 }
     );
   }

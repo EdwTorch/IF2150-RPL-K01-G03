@@ -9,14 +9,14 @@ export class DeliverablesService {
     id_pesanan: string;
     deskripsi_produk: string;
     file_url?: string;
-    outputpath?: string;
+    output_path?: string;
   }): Promise<ProdukAkhir> {
     const supabase = await createClient();
 
     if (!data.deskripsi_produk || data.deskripsi_produk.trim() === "") {
       throw new Error("Deskripsi hasil pekerjaan tidak boleh kosong.");
     }
-    if (!data.file_url && !data.outputpath) {
+    if (!data.file_url && !data.output_path) {
       throw new Error("Unggah berkas atau sertakan tautan hasil pekerjaan.");
     }
 
@@ -27,7 +27,7 @@ export class DeliverablesService {
           id_pesanan: data.id_pesanan,
           deskripsi_produk: data.deskripsi_produk,
           file_url: data.file_url || null,
-          outputpath: data.outputpath || null,
+          output_path: data.output_path || null,
           status_pemeriksaan: false,
         },
       ])
@@ -46,15 +46,15 @@ export class DeliverablesService {
   }
 
   // 2. Ambil detail hasil pekerjaan untuk diperiksa oleh Pengguna Jasa (C36)
-  static async getDeliverableByPesanan(idPesanan: string, userId : string): Promise<ProdukAkhir> {
+  static async getDeliverableByPesanan(id_pesanan: string, user_id : string): Promise<ProdukAkhir> {
     
-    await this.validasiOwnerPesanan(idPesanan,userId);
+    await this.validasiOwnerPesanan(id_pesanan,user_id);
     const supabase = await createClient();
 
     const { data, error } = await supabase
       .from("produk_akhir")
       .select("*")
-      .eq("id_pesanan", idPesanan)
+      .eq("id_pesanan", id_pesanan)
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
@@ -75,9 +75,9 @@ export class DeliverablesService {
     id_pesanan: string;
     deskripsi_revisi: string;
     lampiran_revisi?: string;
-    userId : string
+    user_id : string
   }): Promise<PengajuanRevisi> {
-    await this.validasiOwnerPesanan(data.id_pesanan,data.userId);
+    await this.validasiOwnerPesanan(data.id_pesanan,data.user_id);
     const supabase = await createClient();
 
     if (!data.deskripsi_revisi || data.deskripsi_revisi.trim() === "") {
@@ -93,13 +93,13 @@ export class DeliverablesService {
       .limit(1)
       .maybeSingle();
 
-    let currentKuota = existingRevisi ? existingRevisi.jml_revisi_tersedia : 2;
+    let current_kuota = existingRevisi ? existingRevisi.jml_revisi_tersedia : 2;
 
-    if (currentKuota <= 0) {
+    if (current_kuota <= 0) {
       throw new Error("Kuota revisi untuk pesanan ini sudah habis.");
     }
 
-    const sisaKuota = currentKuota - 1;
+    const sisa_kuota = current_kuota - 1;
 
     const { data: result, error } = await supabase
       .from("pengajuan_revisi")
@@ -108,7 +108,7 @@ export class DeliverablesService {
           id_pesanan: data.id_pesanan,
           deskripsi_revisi: data.deskripsi_revisi,
           lampiran_revisi: data.lampiran_revisi || null,
-          jml_revisi_tersedia: sisaKuota,
+          jml_revisi_tersedia: sisa_kuota,
           status_pengerjaan: "Sedang Direvisi",
         },
       ])
@@ -127,52 +127,52 @@ export class DeliverablesService {
   }
 
   // 4. Penyedia Jasa mengumpulkan hasil perbaikan revisi (C02 - Algo-0209)
-  static async submitRevisionFix(idPesanan: string, userId :string): Promise<void> {
-    await this.validasiOwnerPesanan(idPesanan,userId);
+  static async submitRevisionFix(id_pesanan: string, user_id :string): Promise<void> {
+    await this.validasiOwnerPesanan(id_pesanan,user_id);
     const supabase = await createClient();
 
     await supabase
       .from("pengajuan_revisi")
       .update({ status_pengerjaan: "Revisi Dikumpulkan" })
-      .eq("id_pesanan", idPesanan);
+      .eq("id_pesanan", id_pesanan);
 
     await supabase
       .from("pesanan")
       .update({ status_pesanan: "Menunggu Konfirmasi" })
-      .eq("id_pesanan", idPesanan);
+      .eq("id_pesanan", id_pesanan);
   }
 
   // 5. Pengguna Jasa menyetujui / konfirmasi selesai hasil kerja (C38 - Algo-3801)
-  static async confirmOrderComplete(idPesanan: string,userId : string): Promise<void> {
-    await this.validasiOwnerPesanan(idPesanan,userId);
+  static async confirmOrderComplete(id_pesanan: string,user_id : string): Promise<void> {
+    await this.validasiOwnerPesanan(id_pesanan,user_id);
     const supabase = await createClient();
 
     // Ubah status pesanan di database menjadi 'Selesai'
     const { error } = await supabase
       .from("pesanan")
       .update({ status_pesanan: "Selesai" })
-      .eq("id_pesanan", idPesanan);
+      .eq("id_pesanan", id_pesanan);
 
     if (error) throw new Error(error.message);
 
     // Tandai pencairan dana selesai
     await supabase
       .from("pencairan_dana")
-      .insert([{ id_pesanan: idPesanan, state_pencairan_dana: true }]);
+      .insert([{ id_pesanan: id_pesanan, state_pencairan_dana: true }]);
   }
-  static async validasiOwnerPesanan(idPesanan : string, userId : string) : Promise<boolean>{
+  static async validasiOwnerPesanan(id_pesanan : string, user_id : string) : Promise<boolean>{
     const supabase = await createClient();
     const {data : pesanan} = await supabase
         .from("pesanan")
         .select("id_pengguna_jasa, id_penyedia_jasa")
-        .eq("id_pesanan",idPesanan)
+        .eq("id_pesanan",id_pesanan)
         .single()
 
     if(!pesanan){
         throw new Error("Pesanan tidak ditemukan");
     }
-    const isOwner = pesanan.id_pengguna_jasa == userId || pesanan.id_penyedia_jasa == userId;
-    if (!isOwner){
+    const is_owner = pesanan.id_pengguna_jasa == user_id || pesanan.id_penyedia_jasa == user_id;
+    if (!is_owner){
         throw new Error("Akses ditolak, pesanan ini bukan milik anda");
     }
     return true;
