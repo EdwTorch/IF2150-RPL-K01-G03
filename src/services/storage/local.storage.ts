@@ -1,45 +1,44 @@
-import { error } from "console";
 import { StorageService } from "./storage.interface";
 import fs from "fs/promises";
 import path from "path";
 
 export class LocalStorageService implements StorageService {
-    private baseDir = path.join(process.cwd(), "public", "uploads");
+    private base_dir = path.join(process.cwd(), "public", "uploads");
 
     async upload(file: File, folder: string): Promise<{ url: string; error?: string }> {
         try {
             // Memastikan direktori tujuan sudah dibuat
-            const targetDir = path.join(this.baseDir, folder);
-            await fs.mkdir(targetDir, { recursive: true });
+            const target_dir = path.join(this.base_dir, folder);
+            await fs.mkdir(target_dir, { recursive: true });
 
             // Generate penamaan file agar tidak terjadi naming collision dan aman dari karakter khusus
-            const uniqueSuffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
-            const sanitizedName = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
-            const fileName = `${uniqueSuffix}-${sanitizedName}`;
-            const filePath = path.join(targetDir, fileName);
+            const unique_suffix = `${Date.now()}-${Math.round(Math.random() * 1e9)}`;
+            const sanitized_name = file.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+            const file_name = `${unique_suffix}-${sanitized_name}`;
+            const file_path = path.join(target_dir, file_name);
 
             // Konversi data ke buffer lalu ditulis ke disk
-            const arrayBuffer = await file.arrayBuffer();
-            const buffer = Buffer.from(arrayBuffer);
-            await fs.writeFile(filePath, buffer);
+            const array_buffer = await file.arrayBuffer();
+            const buffer = Buffer.from(array_buffer);
+            await fs.writeFile(file_path, buffer);
 
-            const cleanFolder = folder.replace(/^\/+|\/+$/g, "");
-            const publicUrl = `/uploads/${cleanFolder ? cleanFolder + "/" : ""}${fileName}`;
+            const clean_folder = folder.replace(/^\/+|\/+$/g, "");
+            const public_url = `/uploads/${clean_folder ? clean_folder + "/" : ""}${file_name}`;
 
-            return { url: publicUrl };
+            return { url: public_url };
         } catch (err: any) {
             return { url: "", error: err.message || "Gagal menyimpan berkas ke disk lokal." };
         }
     }
 
-    async delete(filePath: string): Promise<boolean> {
+    async delete(file_path: string): Promise<boolean> {
         try {
             // Menyusun path yang sudah dinormalisasi
-            const normalizedPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
-            const fullPath = path.join(process.cwd(), "public", normalizedPath);
+            const normalized_path = file_path.startsWith("/") ? file_path.slice(1) : file_path;
+            const full_path = path.join(process.cwd(), "public", normalized_path);
 
             // Hapus berkas dari disk
-            await fs.unlink(fullPath);
+            await fs.unlink(full_path);
 
             return true;
         } catch {
