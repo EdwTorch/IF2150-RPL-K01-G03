@@ -5,7 +5,7 @@
 export interface ProdukAkhir {
   id_produk_akhir?: string; 
   id_pesanan: string;
-  outputpath?: string; 
+  output_path?: string; 
   deskripsi_produk: string;
   file_url?: string; //
   status_pemeriksaan?: boolean;
