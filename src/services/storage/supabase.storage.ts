@@ -45,4 +45,28 @@ export class SupabaseStorageService implements StorageService {
             return { url: "", error: err.message || "Gagal mengunggah berkas ke Supabase Storage." };
         }
     }
+
+    async delete(file_path: string): Promise<boolean> {
+        try {
+            const bucket_name = process.env.SUPABASE_STORAGE_BUCKET || "public";
+
+            let relative_path = file_path;
+
+            if (file_path.includes(`/storage/v1/object/public/${bucket_name}/`)) {
+                relative_path = file_path.split(`/storage/v1/object/public/${bucket_name}/`)[1];
+            } else if (file_path.startsWith("/")) {
+                relative_path = file_path.slice(1);
+            }
+
+            if (!relative_path) return false;
+
+            const { error } = await this.supabase.storage
+                .from(bucket_name)
+                .remove([relative_path]);
+
+            return !error;
+        } catch {
+            return false;
+        }
+    }
 }
