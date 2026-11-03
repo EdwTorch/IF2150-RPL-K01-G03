@@ -31,4 +31,19 @@ export class LocalStorageService implements StorageService {
             return { url: "", error: err.message || "Gagal menyimpan berkas ke disk lokal." };
         }
     }
+
+    async delete(filePath: string): Promise<boolean> {
+        try {
+            // Menyusun path yang sudah dinormalisasi
+            const normalizedPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
+            const fullPath = path.join(process.cwd(), "public", normalizedPath);
+
+            // Hapus berkas dari disk
+            await fs.unlink(fullPath);
+
+            return true;
+        } catch {
+            return false;
+        }
+    }
 }
