@@ -3,7 +3,7 @@ import { Ulasan } from "@/models/types";
 
 export class UlasanService{
     
-    static async getStatistikUlasan(id_jasa : string){
+    static async getStatistikUlasanJasa(id_jasa : string){
         const supabase = await createClient();
 
         const { data: rawData, error, count } = await supabase
@@ -29,6 +29,31 @@ export class UlasanService{
         };
         
     }
+    static async getUlasanJasa(id_jasa : string){
+        const supabase = await createClient();
 
+        const {data,error,count} = await supabase
+        .from("ulasan")
+        .select(`
+            id_ulasan,
+            rating,
+            komentar,
+            created_at,
+            id_pengguna_jasa
+            `, {count : "exact"}) 
+        .eq("id_jasa",id_jasa)
+        .order("created_at", {ascending : false});
+
+
+        if (error){
+            console.error("Gagal mengambil ulasan :", error.message);
+            throw new Error("Terjadi kesalahan saat mengambil data ulasan.");
+        }
+
+    return {
+        ulasan: data || [],
+        total: count || 0
+    };
+    }
 
 }
