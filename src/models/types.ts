@@ -22,3 +22,14 @@ export interface PengajuanRevisi {
   lampiran_revisi?: string;
   created_at?: string;
 }
+
+
+export interface Pesanan {
+  id_pesanan : string;
+  id_pengguna_jasa : string;
+  id_penyedia_jasa : string;
+  id_jasa : string;
+  brief : string;
+  total_biaya : number;
+  status_pesanan : string;
+}
