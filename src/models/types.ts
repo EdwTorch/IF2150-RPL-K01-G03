@@ -26,8 +26,10 @@ export interface PengajuanRevisi {
 export interface Ulasan {
   id_ulasan : string;
   id_pesanan : string;
+  id_pengguna_jasa : string;
   id_penyedia_jasa : string;
   rating : number;
-  komentar : string;
-  created_at? : string;
+  komentar? : string;
+  dokumentasi_path? : string;
+  created_at : string;
 }
