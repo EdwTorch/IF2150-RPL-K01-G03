@@ -44,8 +44,9 @@ export class LocalStorageService implements StorageService {
             const public_url = `/${relative_folder}/${file_name}`;
 
             return { url: public_url };
-        } catch (err: any) {
-            return { url: "", error: err.message || "Gagal menyimpan berkas ke disk lokal." };
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message: "Gagal menyimpan berkas ke disk lokal.";
+            return { url: "", error: message };
         }
     }
 
