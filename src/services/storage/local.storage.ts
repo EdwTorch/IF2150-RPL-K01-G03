@@ -52,9 +52,16 @@ export class LocalStorageService implements StorageService {
 
     async delete(file_path: string): Promise<boolean> {
         try {
-            // Menyusun path yang sudah dinormalisasi
-            const normalized_path = file_path.startsWith("/") ? file_path.slice(1) : file_path;
-            const full_path = path.join(process.cwd(), "public", normalized_path);
+            if (!file_path) return false;
+
+            // Menghapus slash di awal
+            const clean_path = file_path.replace(/^[/\\]+/, "");
+            const full_path = path.resolve(this.public_dir, clean_path);
+
+            // Mengecek file di dalam public/uploads dan bukan uplaods itu sendiri
+            if (full_path === this.base_dir || !this.isInsideBaseDir(full_path)) {
+                return false;
+            }
 
             // Hapus berkas dari disk
             await fs.unlink(full_path);
