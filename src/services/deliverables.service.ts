@@ -147,6 +147,15 @@ export class DeliverablesService {
     await this.validasiOwnerPesanan(id_pesanan,user_id);
     const supabase = await createClient();
 
+    const { data: pesanan, error: errFetch } = await supabase
+    .from("pesanan")
+    .select("id_penyedia_jasa, total_harga, status_pesanan")
+    .eq("id_pesanan", id_pesanan)
+    .single();
+
+    if (errFetch || !pesanan) throw new Error("Pesanan tidak ditemukan.");
+    if (pesanan.status_pesanan === "Selesai") throw new Error("Pesanan ini sudah diselesaikan sebelumnya.");
+
     // Ubah status pesanan di database menjadi 'Selesai'
     const { error } = await supabase
       .from("pesanan")
@@ -156,9 +165,41 @@ export class DeliverablesService {
     if (error) throw new Error(error.message);
 
     // Tandai pencairan dana selesai
-    await supabase
-      .from("pencairan_dana")
-      .insert([{ id_pesanan: id_pesanan, state_pencairan_dana: true }]);
+    const id_pencairan = crypto.randomUUID();
+    const { error: errPencairan } = await supabase
+    .from("pencairan_dana")
+    .insert([
+      {
+        id_pencairan,
+        id_pesanan: id_pesanan,
+        id_penyedia_jasa: pesanan.id_penyedia_jasa,
+        jumlah_pencairan: pesanan.total_harga,
+        state_pencairan_dana: true, 
+      },
+    ]);
+
+    if (errPencairan) throw new Error(errPencairan.message);
+    
+    const { data: penyedia } = await supabase
+      .from("pengguna") // ganti dengan nama tabel user Anda (misal: 'users' / 'profiles')
+      .select("saldo")
+      .eq("id_pengguna", pesanan.id_penyedia_jasa)
+      .single();
+
+    const saldoSekarang = penyedia?.saldo || 0;
+    const saldoBaru = saldoSekarang + pesanan.total_harga;
+
+    // Update saldo baru ke database
+    const { error: errSaldo } = await supabase
+      .from("pengguna")
+      .update({ saldo: saldoBaru })
+      .eq("id_pengguna", pesanan.id_penyedia_jasa);
+
+    if (errSaldo) {
+      throw new Error("Gagal menambahkan saldo ke dompet penjual: " + errSaldo.message);
+    }
+
+
   }
   static async validasiOwnerPesanan(id_pesanan : string, user_id : string) : Promise<boolean>{
     const supabase = await createClient();
