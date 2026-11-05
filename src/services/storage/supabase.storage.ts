@@ -51,19 +51,29 @@ export class SupabaseStorageService implements StorageService {
         try {
             let relative_path = file_path;
 
-            if (file_path.includes(`/storage/v1/object/public/${this.bucket_name}/`)) {
-                relative_path = file_path.split(`/storage/v1/object/public/${this.bucket_name}/`)[1];
-            } else if (file_path.startsWith("/")) {
-                relative_path = file_path.slice(1);
+            // Jika input berupa URL, ekstrak path relatifnya
+            if (/^https?:\/\//i.test(file_path)) {
+                const parsed_url = new URL(file_path);
+                const path_prefix = `/storage/v1/object/public/${this.bucket_name}/`;
+
+                const idx = parsed_url.pathname.indexOf(path_prefix);
+                if (idx === -1) return false;
+
+                // decodeURIComponent karena path di dalam URL bisa ter-encode
+                relative_path = decodeURIComponent(
+                    parsed_url.pathname.slice(idx + path_prefix.length)
+                );
             }
 
+            // Rapikan slash di awal
+            relative_path = relative_path.replace(/^\/+/, "");
             if (!relative_path) return false;
 
-            const { error } = await this.supabase.storage
+            const { data, error } = await this.supabase.storage
                 .from(this.bucket_name)
                 .remove([relative_path]);
 
-            return !error;
+            return !error && (data?.length ?? 0) > 0;
         } catch {
             return false;
         }
