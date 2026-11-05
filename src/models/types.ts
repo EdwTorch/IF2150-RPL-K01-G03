@@ -33,3 +33,12 @@ export interface Pesanan {
   total_biaya : number;
   status_pesanan : string;
 }
+
+export interface PencairanDana {
+  id_pencairan : string;
+  id_pesanan : string;
+  id_penyedia_jasa : string;
+  jumlah_pencairan : number;
+  state_pencairan_dana : boolean;
+  
+}
