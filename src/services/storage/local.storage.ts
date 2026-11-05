@@ -17,8 +17,14 @@ export class LocalStorageService implements StorageService {
 
     async upload(file: File, folder: string): Promise<{ url: string; error?: string }> {
         try {
-            // Memastikan direktori tujuan sudah dibuat
-            const target_dir = path.join(this.base_dir, folder);
+            // Membuang slash awal/akhir dulu, lalu resolve dan verifikasi masih di dalam uploads
+            const clean_folder = folder.replace(/^[/\\]+|[/\\]+$/g, "");
+            const target_dir = path.resolve(this.base_dir, clean_folder);
+
+             if (!this.isInsideBaseDir(target_dir)) {
+                return { url: "", error: "Akses folder tidak valid." };
+            }
+
             await fs.mkdir(target_dir, { recursive: true });
 
             // Generate penamaan file agar tidak terjadi naming collision dan aman dari karakter khusus
@@ -29,11 +35,13 @@ export class LocalStorageService implements StorageService {
 
             // Konversi data ke buffer lalu ditulis ke disk
             const array_buffer = await file.arrayBuffer();
-            const buffer = Buffer.from(array_buffer);
-            await fs.writeFile(file_path, buffer);
+            await fs.writeFile(file_path, Buffer.from(array_buffer));
 
-            const clean_folder = folder.replace(/^\/+|\/+$/g, "");
-            const public_url = `/uploads/${clean_folder ? clean_folder + "/" : ""}${file_name}`;
+            const relative_folder = path
+                .relative(this.public_dir, target_dir)
+                .split(path.sep)
+                .join("/");
+            const public_url = `/${relative_folder}/${file_name}`;
 
             return { url: public_url };
         } catch (err: any) {
