@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
-import { NextResponse, type NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import path from "path";
 
 export async function updateSession(request: NextRequest) {
     let supabase_response = NextResponse.next({
@@ -27,9 +28,33 @@ export async function updateSession(request: NextRequest) {
                 }
             }
         }
-    )
+    );
 
-    await supabase.auth.getUser();
+    const { data: user } = await supabase.auth.getUser();
+
+    // Agar cookie sesi terbaru ikut terbawa ke response redirect
+    const redirect_with_cookies = (path_name: string) => {
+        const url = request.nextUrl.clone();
+        url.pathname = path_name;
+
+        const redirect_response = NextResponse.redirect(url);
+        supabase_response.cookies.getAll().forEach((cookie) => {
+            redirect_response.cookies.set(cookie)
+        });
+        return redirect_response;
+    };
+
+    const path_name = request.nextUrl.pathname;
+
+    // Menolak akses ke dashboard jika belum login
+    if (!user && path_name.startsWith("/dashboard")) {
+        return redirect_with_cookies("/login");
+    }
+
+    // Menolak akses ke halaman login dan register jika sudah login
+    if (user && (path_name.startsWith("/login") || path_name.startsWith("/register"))) {
+        return redirect_with_cookies("/dashboard");
+    }
 
     return supabase_response;
 }
