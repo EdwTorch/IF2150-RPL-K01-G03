@@ -3,7 +3,17 @@ import fs from "fs/promises";
 import path from "path";
 
 export class LocalStorageService implements StorageService {
-    private base_dir = path.join(process.cwd(), "public", "uploads");
+    private public_dir = path.resolve(process.cwd(), "public");
+    private base_dir = path.join(this.public_dir, "uploads");
+
+    private isInsideBaseDir(target: string): boolean {
+        const relative = path.relative(this.base_dir, target);
+
+        return (
+            relative === "" ||
+            (relative !== ".." && !relative.startsWith(".." + path.sep) && !path.isAbsolute(relative))
+        );
+    }
 
     async upload(file: File, folder: string): Promise<{ url: string; error?: string }> {
         try {
