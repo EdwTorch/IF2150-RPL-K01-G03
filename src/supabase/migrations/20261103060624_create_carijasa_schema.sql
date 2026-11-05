@@ -80,7 +80,6 @@ CREATE TABLE IF NOT EXISTS public.pesanan (
     status_pesanan VARCHAR(50) DEFAULT 'MENUNGGU_PEMBAYARAN',
     status_pencairan BOOLEAN DEFAULT false,
     waktu_pencairan TIMESTAMPTZ,
-    waktu_dibuat TIMESTAMPTZ DEFAULT NOW(),
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
