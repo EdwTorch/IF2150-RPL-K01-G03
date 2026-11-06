@@ -57,6 +57,8 @@ export async function login(email: string, password: string) {
         throw new AuthError("ACCOUNT_SUSPENDED", "Akun Anda ditangguhkan");
     }
 
+    await supabase.from("pengguna").update({ status_online: true }).eq("id", data.user.id);
+
     return {
         user: {
             id: data.user.id,
