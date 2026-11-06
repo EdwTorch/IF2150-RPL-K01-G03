@@ -35,17 +35,17 @@ export interface Ulasan {
 }
 
 export interface TiketLaporan {
-  idTiket : string;
-  deskripsiLaporan : string;
-  urlBukti : string;
+  id_tiket : string;
+  deskripsi_laporan : string;
+  url_bukti : string;
   path_bukti? : string;
-  statusTiket : string;
-  TanggapanAdmin : string;
+  status_tiket : string;
+  tanggapan_admin : string;
 }
 
 export interface TanggapanLaporan{
-  idTanggapan : string;
-  idTiket : string;
-  jenisTindakan : string;
-  catatanTanggapan : string	;
+  id_tanggapan : string;
+  id_tiket : string;
+  jenis_tindakan : string;
+  catatan_tanggapan : string;
 }
