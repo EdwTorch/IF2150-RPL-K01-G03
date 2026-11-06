@@ -152,8 +152,8 @@ CREATE TABLE IF NOT EXISTS public.tiket_laporan (
     id_pelapor UUID NOT NULL REFERENCES public.pengguna(id),
     id_terlapor UUID REFERENCES public.pengguna(id),
     deskripsi_laporan TEXT NOT NULL,
-    url_bukti VARCHAR(500),
-    lampiran_bukti VARCHAR(500),
+    url_bukti TEXT[] NOT NULL DEFAULT '{}'::text[],
+    kategori TEXT[] NOT NULL DEFAULT '{}'::text[],
     status_tiket VARCHAR(50) DEFAULT 'MENUNGGU',
     tanggapan_admin TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
