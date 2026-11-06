@@ -12,7 +12,7 @@ export class DeliverablesService {
     output_path?: string;
   }): Promise<ProdukAkhir> {
     const supabase = await createClient();
-
+    
     if (!data.deskripsi_produk || data.deskripsi_produk.trim() === "") {
       throw new Error("Deskripsi hasil pekerjaan tidak boleh kosong.");
     }
@@ -20,10 +20,13 @@ export class DeliverablesService {
       throw new Error("Unggah berkas atau sertakan tautan hasil pekerjaan.");
     }
 
+    const id_produk_akhir = crypto.randomUUID();
+
     const { data: result, error } = await supabase
       .from("produk_akhir")
       .insert([
         {
+          id_produk_akhir,
           id_pesanan: data.id_pesanan,
           deskripsi_produk: data.deskripsi_produk,
           file_url: data.file_url || null,
@@ -69,12 +72,57 @@ export class DeliverablesService {
 
     return data as ProdukAkhir;
   }
+  
+  static async getDeliverableByProdukAkhir(id_produk_akhir : string, user_id : string){
+    
+    const supabase = await createClient();
+    
+    const {data, error} = await supabase
+    .from("produk_akhir")
+    .select("*")
+    .eq("id_produk_akhir",id_produk_akhir)
+    .single()
+
+    if(error || !data){
+      throw new Error("Hasil Pekerjaan tidak ditemukan");
+    }
+    
+    await this.validasiOwnerPesanan(data.id_pesanan,user_id);
+    
+    return data as ProdukAkhir;
+
+  }
+
+  static async getRevisionHistory(id_pesanan: string, user_id: string): Promise<any[]> {
+    await this.validasiOwnerPesanan(id_pesanan, user_id);
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("pengajuan_revisi")
+      .select(`
+        *,
+        produk_akhir (
+          id_produk_akhir,
+          deskripsi_produk,
+          file_url,
+          output_path,
+          created_at
+        )
+      `)
+      .eq("id_pesanan", id_pesanan)
+      .order("created_at", { ascending: false });
+
+    if (error) throw new Error(`Gagal mengambil riwayat revisi: ${error.message}`);
+
+    return data || [];
+  }
 
   // 3. Pengguna Jasa mengajukan revisi (C39 & C41)
   static async requestRevision(data: {
     id_pesanan: string;
     deskripsi_revisi: string;
     lampiran_revisi?: string;
+    id_produk_akhir : string;
     user_id : string
   }): Promise<PengajuanRevisi> {
     await this.validasiOwnerPesanan(data.id_pesanan,data.user_id);
@@ -82,6 +130,16 @@ export class DeliverablesService {
 
     if (!data.deskripsi_revisi || data.deskripsi_revisi.trim() === "") {
       throw new Error("Deskripsi revisi wajib diisi.");
+    }
+
+    const { data: pesanan } = await supabase
+      .from("pesanan")
+      .select("id_pengguna_jasa")
+      .eq("id_pesanan", data.id_pesanan)
+      .single();
+
+    if (!pesanan || pesanan.id_pengguna_jasa !== data.user_id) {
+      throw new Error("Akses ditolak. Hanya pengguna jasa yang dapat mengajukan revisi.");
     }
 
     // Cek kuota revisi
@@ -99,16 +157,18 @@ export class DeliverablesService {
       throw new Error("Kuota revisi untuk pesanan ini sudah habis.");
     }
 
-    const sisa_kuota = current_kuota - 1;
+    const id_revisi = crypto.randomUUID();
 
     const { data: result, error } = await supabase
       .from("pengajuan_revisi")
       .insert([
         {
+          id_revisi,
+          id_produk_akhir: data.id_produk_akhir,
           id_pesanan: data.id_pesanan,
           deskripsi_revisi: data.deskripsi_revisi,
           lampiran_revisi: data.lampiran_revisi || null,
-          jml_revisi_tersedia: sisa_kuota,
+          jml_revisi_tersedia: current_kuota-1,
           status_pengerjaan: "Sedang Direvisi",
         },
       ])
@@ -127,19 +187,62 @@ export class DeliverablesService {
   }
 
   // 4. Penyedia Jasa mengumpulkan hasil perbaikan revisi (C02 - Algo-0209)
-  static async submitRevisionFix(id_pesanan: string, user_id :string): Promise<void> {
-    await this.validasiOwnerPesanan(id_pesanan,user_id);
+    static async submitRevisionFix(data: {
+    id_pesanan: string;
+    deskripsi_produk: string;
+    file_url?: string;
+    output_path?: string;
+    user_id: string;
+  }): Promise<ProdukAkhir> {
+    await this.validasiOwnerPesanan(data.id_pesanan, data.user_id);
     const supabase = await createClient();
 
-    await supabase
-      .from("pengajuan_revisi")
-      .update({ status_pengerjaan: "Revisi Dikumpulkan" })
-      .eq("id_pesanan", id_pesanan);
+    // A. Buat record produk_akhir versi baru di database
+    const id_produk_akhir = crypto.randomUUID();
+    const { data: result, error: errProduk } = await supabase
+      .from("produk_akhir")
+      .insert([
+        {
+          id_produk_akhir,
+          id_pesanan: data.id_pesanan,
+          deskripsi_produk: data.deskripsi_produk,
+          file_url: data.file_url || null,
+          output_path: data.output_path || null,
+          status_pemeriksaan: false,
+        },
+      ])
+      .select()
+      .single();
 
+    if (errProduk) throw new Error(errProduk.message);
+
+    // B. Cari pengajuan revisi paling baru yang statusnya "Sedang Direvisi"
+    const { data: latestRevisi } = await supabase
+      .from("pengajuan_revisi")
+      .select("id_revisi")
+      .eq("id_pesanan", data.id_pesanan)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    // C. Update status revisi tersebut menjadi "Revisi Dikumpulkan" & tautkan ID produk perbaikannya
+    if (latestRevisi) {
+      await supabase
+        .from("pengajuan_revisi")
+        .update({
+          status_pengerjaan: "Revisi Dikumpulkan",
+          id_produk_akhir: id_produk_akhir,
+        })
+        .eq("id_revisi", latestRevisi.id_revisi);
+    }
+
+    // D. Kembalikan status pesanan utama menjadi 'Menunggu Konfirmasi'
     await supabase
       .from("pesanan")
       .update({ status_pesanan: "Menunggu Konfirmasi" })
-      .eq("id_pesanan", id_pesanan);
+      .eq("id_pesanan", data.id_pesanan);
+
+    return result as ProdukAkhir;
   }
 
   // 5. Pengguna Jasa menyetujui / konfirmasi selesai hasil kerja (C38 - Algo-3801)
