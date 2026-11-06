@@ -84,3 +84,27 @@ export async function logout() {
         throw new AuthError("LOGOUT_FAILED", "Gagal keluar dari akun");
     }
 }
+
+export async function getSessionUser() {
+    const supabase = await createClient();
+
+    const { data: { user }, error } = await supabase.auth.getUser();
+    if (error || !user) return null;
+
+    const { data: profil, error: profil_error } = await supabase
+        .from("pengguna")
+        .select("id, nama, email, role, status_akun, sanksi")
+        .eq("id", user.id)
+        .single();
+
+    if (profil_error || !profil) return null;
+    if (profil.status_akun === false || profil.sanksi === "SUSPENDED") return null;
+
+    return {
+        id: profil.id,
+        email: profil.email!,
+        nama: profil.nama,
+        role: profil.role,
+        status_akun: profil.status_akun,
+    };
+}
