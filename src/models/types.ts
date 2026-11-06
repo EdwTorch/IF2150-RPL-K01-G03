@@ -22,3 +22,12 @@ export interface PengajuanRevisi {
   lampiran_revisi?: string;
   created_at?: string;
 }
+
+// Tipe data pengguna yang sedang login (dari sesi)
+export interface SessionUser {
+  id: string;
+  email: string;
+  nama: string;
+  role: "USER" | "ADMIN" | "PENYEDIA_JASA" | string;
+  status_akun: boolean;
+}
