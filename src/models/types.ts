@@ -3,11 +3,11 @@
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
-  id_produk_akhir?: string; 
+  id_produk_akhir: string; 
   id_pesanan: string;
   output_path?: string; 
   deskripsi_produk: string;
-  file_url?: string; //
+  file_url?: string; //bra
   status_pemeriksaan?: boolean;
   created_at?: string;
 }
@@ -21,6 +21,17 @@ export interface PengajuanRevisi {
   status_pengerjaan: string;
   lampiran_revisi?: string;
   created_at?: string;
+}
+
+export interface Ulasan {
+  id_ulasan : string;
+  id_pesanan : string;
+  id_pengguna_jasa : string;
+  id_penyedia_jasa : string;
+  rating : number;
+  komentar? : string;
+  dokumentasi_path? : string;
+  created_at : string;
 }
 
 // Tipe data pengguna yang sedang login (dari sesi)
