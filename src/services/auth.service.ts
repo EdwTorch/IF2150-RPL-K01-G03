@@ -2,7 +2,12 @@ import { createClient } from "@/lib/supabase/server";
 
 export class AuthError extends Error {
     constructor(
-        public code: "EMPTY_INPUT" | "INVALID_CREDENTIALS" | "ACCOUNT_SUSPENDED" | "PROFILE_NOT_FOUND",
+        public code: 
+            | "EMPTY_INPUT"
+            | "INVALID_CREDENTIALS"
+            | "ACCOUNT_SUSPENDED"
+            | "PROFILE_NOT_FOUND"
+            | "LOGOUT_FAILED",
         message: string
     ) {
         super(message);
@@ -62,4 +67,18 @@ export async function login(email: string, password: string) {
             isPenggunaJasa: !!profil.pengguna_jasa
         }
     };
+}
+
+export async function logout() {
+    const supabase = await createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+        await supabase.from("pengguna").update({ status_online: false }).eq("id", user.id);
+    }
+
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+        throw new AuthError("LOGOUT_FAILED", "Gagal keluar dari akun");
+    }
 }
