@@ -33,3 +33,19 @@ export interface Ulasan {
   dokumentasi_path? : string;
   created_at : string;
 }
+
+export interface TiketLaporan {
+  idTiket : string;
+  deskripsiLaporan : string;
+  urlBukti : string;
+  path_bukti? : string;
+  statusTiket : string;
+  TanggapanAdmin : string;
+}
+
+export interface TanggapanLaporan{
+  idTanggapan : string;
+  idTiket : string;
+  jenisTindakan : string;
+  catatanTanggapan : string	;
+}
