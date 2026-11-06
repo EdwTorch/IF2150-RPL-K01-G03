@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
 import { AuthError, login, logout, getSessionUser } from "@/services/auth.service";
-import { error } from "console";
 
 const STATUS_BY_CODE: Partial<Record<AuthError["code"], number>> = {
     EMPTY_INPUT: 400,
@@ -21,6 +20,16 @@ function handleError(err: unknown) {
         { error: "Terjadi kesalahan pada server." },
         { status: 500 }
     );
+}
+
+async function me() {
+    const user = await getSessionUser();
+
+    if (!user) {
+        return NextResponse.json({ error: "Tidak terautentikasi" }, { status: 401 });
+    }
+
+    return NextResponse.json({ user }, { status: 200 });
 }
 
 export async function POST(request: NextRequest) {
@@ -69,11 +78,21 @@ export async function POST(request: NextRequest) {
         case "logout": {
             try {
                 await logout();
-                
+
                 return NextResponse.json({ message: "Logout berhasil" }, { status: 200 });
             } catch (err) {
                 return handleError(err);
             }
         }
+
+        case "me":
+            return me();
+
+        default:
+            return NextResponse.json({ error: "Action tidak dikenal" }, { status: 400 });
     }
+}
+
+export async function GET() {
+    return me();
 }
