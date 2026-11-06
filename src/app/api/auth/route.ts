@@ -41,4 +41,39 @@ export async function POST(request: NextRequest) {
             { status: 400 }
         );
     }
+
+    const { action, email, password } = body as {
+        action?: unknown;
+        email?: unknown;
+        password?: unknown;
+    };
+
+    switch (action) {
+        case "login": {
+            if (typeof email !== "string" || typeof password !== "string") {
+                return NextResponse.json(
+                    { error: "Email dan password harus berupa teks" },
+                    { status: 400 }
+                );
+            }
+
+            try {
+                const result = await login(email, password);
+
+                return NextResponse.json(result, { status: 200 });
+            } catch (err) {
+                return handleError(err);
+            }
+        }
+
+        case "logout": {
+            try {
+                await logout();
+                
+                return NextResponse.json({ message: "Logout berhasil" }, { status: 200 });
+            } catch (err) {
+                return handleError(err);
+            }
+        }
+    }
 }
