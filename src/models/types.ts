@@ -1,5 +1,18 @@
 // src/models/types.ts
 
+// Tipe data untuk Jasa (C12)
+export interface Jasa {
+  id_jasa: string;
+  id_penyedia_jasa: string;
+  nama_jasa: string;
+  deskripsi: string;
+  kategori: string;
+  harga: number;
+  rating_rata_rata?: number; // default 0.0, rentang 0-5
+  status_aktif?: boolean; // default true
+  created_at?: string;
+}
+
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
