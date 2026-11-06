@@ -35,11 +35,14 @@ export interface Ulasan {
 }
 
 export interface TiketLaporan {
-  id_tiket : string;
+  id_tiket?: string;
+  id_pesanan : string;
+  id_pelapor : string;
+  id_terlapor : string;
   deskripsi_laporan : string;
   url_bukti : string;
-  path_bukti? : string;
-  status_tiket : string;
+  kategori : string[];
+  status_tiket : "MENUNGGU" | "Selesai" | "Ditolak";
   tanggapan_admin : string;
 }
 
