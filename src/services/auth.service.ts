@@ -65,7 +65,7 @@ export async function login(email: string, password: string) {
             email: data.user.email,
             nama: profil.nama,
             role: profil.role,
-            isPenyedia: !!profil.penyedia_jasa,
+            isPenyediaJasa: !!profil.penyedia_jasa,
             isPenggunaJasa: !!profil.pengguna_jasa
         }
     };
