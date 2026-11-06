@@ -154,7 +154,7 @@ CREATE TABLE IF NOT EXISTS public.tiket_laporan (
     deskripsi_laporan TEXT NOT NULL,
     url_bukti TEXT[] NOT NULL DEFAULT '{}'::text[],
     kategori TEXT[] NOT NULL DEFAULT '{}'::text[],
-    status_tiket VARCHAR(50) DEFAULT 'MENUNGGU',
+    status_tiket VARCHAR(50) DEFAULT 'Diproses',
     tanggapan_admin TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -182,7 +182,6 @@ CREATE TABLE IF NOT EXISTS public.pesan_mediasi (
 CREATE TABLE IF NOT EXISTS public.ulasan (
     id_ulasan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
-    id_penyedia_jasa UUID NOT NULL REFERENCES public.penyedia_jasa(id),
     id_pengguna_jasa UUID NOT NULL REFERENCES public.pengguna_jasa(id),
     rating INT NOT NULL CHECK (rating >= 1 AND rating <= 5),
     komentar TEXT,
