@@ -27,7 +27,6 @@ export interface Ulasan {
   id_ulasan : string;
   id_pesanan : string;
   id_pengguna_jasa : string;
-  id_penyedia_jasa : string;
   rating : number;
   komentar? : string;
   dokumentasi_path? : string;
@@ -42,7 +41,7 @@ export interface TiketLaporan {
   deskripsi_laporan : string;
   url_bukti : string;
   kategori : string[];
-  status_tiket : "MENUNGGU" | "Selesai" | "Ditolak";
+  status_tiket : "Diproses" | "Selesai";
   tanggapan_admin : string;
 }
 
