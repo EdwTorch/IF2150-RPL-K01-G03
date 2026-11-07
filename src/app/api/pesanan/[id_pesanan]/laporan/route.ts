@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PelaporanService } from "@/services/pelaporan.service";
 import { createClient } from "@/lib/supabase/server";
+import { getSessionUser } from "@/services/auth.service";
 
 /* Ngecreate tiket laporan */
 export async function POST(
@@ -9,14 +10,19 @@ export async function POST(
 ) {
   try {
     const supabase = await createClient();
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser();
+    const user = await getSessionUser();
 
-    if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
+      if (!user) {
+          return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      // Validasi aturan bisnis: hanya pengguna jasa yang bisa melapor
+      if (!user.isPenggunaJasa) {
+          return NextResponse.json(
+              { error: "Hanya pengguna jasa yang dapat membuat laporan." },
+              { status: 403 }
+          );
+      }
 
     const body = await req.json();
 
