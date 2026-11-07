@@ -1,6 +1,5 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
-import path from "path";
 
 export async function updateSession(request: NextRequest) {
     let supabase_response = NextResponse.next({
@@ -30,7 +29,7 @@ export async function updateSession(request: NextRequest) {
         }
     );
 
-    const { data: user } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
 
     // Agar cookie sesi terbaru ikut terbawa ke response redirect
     const redirect_with_cookies = (path_name: string) => {
@@ -54,6 +53,11 @@ export async function updateSession(request: NextRequest) {
     // Menolak akses ke halaman login dan register jika sudah login
     if (user && (path_name.startsWith("/login") || path_name.startsWith("/register"))) {
         return redirect_with_cookies("/dashboard");
+    }
+
+    // Menolak akses api jika belum terautentikasi
+    if (!user && path_name.startsWith("/api/") && !path_name.startsWith("/api/auth")) {
+        return NextResponse.json({ error: "Tidak terautentikasi" }, { status: 401 });
     }
 
     return supabase_response;
