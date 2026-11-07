@@ -20,7 +20,6 @@ import {
   type Hasil,
 } from "@/services/layanan";
 
-import Navbar from "@/components/ui/navbar";
 
 type Props = {
   peran: "pengguna" | "penyedia";
@@ -101,14 +100,7 @@ export default function HalamanDeliverables({ peran }: Props) {
         : "neutral";
 
   return (
-    <>
-      <Navbar
-        peran={
-          isPengguna ? "PENGGUNA_JASA" : "PENYEDIA_JASA"
-        }
-      />
-
-      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
+        <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
         {/* Tampilan loading dan error */}
         {!hasil ? (
           error ? (
@@ -360,6 +352,5 @@ export default function HalamanDeliverables({ peran }: Props) {
           </>
         )}
       </div>
-    </>
   );
 }

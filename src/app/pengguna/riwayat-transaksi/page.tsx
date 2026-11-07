@@ -12,7 +12,6 @@ import {
 import { cn } from "@/lib/cn";
 import { formatRupiah } from "@/lib/format";
 import { Transaksi, getTransaksi } from "@/services/layanan";
-import Navbar from "@/components/ui/navbar";
 
 const TAB = ["Semua", "Berjalan", "Selesai", "Dikembalikan"] as const;
 
@@ -91,9 +90,6 @@ export default function HalamanRiwayatTransaksi() {
   ];
 
   return (
-    <>
-    <Navbar peran="PENGGUNA_JASA" />
-    
     <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
       {pembayaranBerhasil && (
         <Alert tipe="success">
@@ -218,6 +214,5 @@ export default function HalamanRiwayatTransaksi() {
         );
       })}
     </div>
-    </>
   );
 }

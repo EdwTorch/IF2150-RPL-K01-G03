@@ -12,7 +12,6 @@ import {
   Textarea,
   UploadBox,
 } from "@/components/elemen";
-import Navbar from "@/components/ui/navbar";
 
 import {
   FORMAT_BERKAS,
@@ -88,9 +87,6 @@ export default function HalamanPengumpulan() {
   }
 
   return (
-    <>
-      <Navbar peran="PENYEDIA_JASA" />
-
       <div className="mx-auto flex w-full max-w-[880px] flex-col gap-6 px-6 py-8 md:px-20">
         <PageHero
           judul="Pengumpulan Jasa"
@@ -150,6 +146,5 @@ export default function HalamanPengumpulan() {
           </form>
         </section>
       </div>
-    </>
   );
 }

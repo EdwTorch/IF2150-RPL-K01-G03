@@ -17,7 +17,6 @@ import {
   terimaPesanan,
   tolakPesanan,
 } from "@/services/layanan";
-import Navbar from "@/components/ui/navbar";
 
 // C35: menunggu -> diproses | ditolak
 type Status = "menunggu" | "diproses" | "ditolak";
@@ -57,9 +56,6 @@ export default function HalamanKonfirmasi() {
   const [varianStatus, labelStatus] = PILL[status];
 
   return (
-    <>
-      <Navbar peran="PENYEDIA_JASA" />
-
       <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
         <PageHero
           judul={
@@ -220,6 +216,5 @@ export default function HalamanKonfirmasi() {
           </section>
         </div>
       </div>
-    </>
   );
 }
