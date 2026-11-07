@@ -1,19 +1,9 @@
 
 // Endpoint backend yang sudah ada di app/api (isi fungsi di bawah nanti memanggil ini; cek kontraknya dengan teman backend):
-// getTransaksi/getPesananStatus/terima/tolakPesanan -> /api/pesanan
-// getHasil/kirimHasil/konfirmasiSelesai/ajukanRevisi -> /api/deliverables
-// validasi & unggah berkas -> /api/upload
-// tiket/mediasi admin -> /api/mediasi
-// loginAdmin -> /api/auth
-
-// KONTRAK FRONTEND <-> BACKEND.
-// Sekarang masih menggunakan MOCK.
-// Backend tinggal mengganti isi fungsi dengan pemanggilan API (tanda tangan tetap).
-
-// ID mock:
-// hasil id "1" = revisi diminta
-// hasil id "3" = kuota revisi habis
-// lainnya = menunggu pemeriksaan.
+//  getTransaksi/getPesananStatus/terima/tolakPesanan -> /api/pesanan | getHasil/kirimHasil/konfirmasiSelesai/ajukanRevisi -> /api/deliverables
+//  validasi & unggah berkas -> /api/upload | tiket/mediasi admin -> /api/mediasi | loginAdmin -> /api/auth
+// KONTRAK FRONTEND <-> BACKEND. Sekarang berisi MOCK; backend tinggal mengganti isi fungsi (tanda tangan tetap).
+// ID mock: hasil id "1" = revisi diminta, id "3" = kuota revisi habis, lainnya = menunggu pemeriksaan.
 
 export type Transaksi = {
   id: string;
@@ -34,50 +24,46 @@ export type Tiket = {
   status: "Belum" | "Mediasi" | "Selesai";
 };
 
+export type TipeLampiran = "berkas" | "gambar" | "tautan";
+
 export type Hasil = {
   id: string;
   judul: string;
   catatan: string;
   kuota: number;
-  status: "menunggu" | "revisi";
+  status: "menunggu" | "revisi" | "selesai";
   revisi?: string;
   berkas: {
     nama: string;
     info: string;
+    tipe: TipeLampiran;
+    url: string;
   }[];
 };
 
-// Ketentuan berkas untuk form pengumpulan C37.
+export const MAX_MB = 10; // TODO: isi sesuai ketentuan (desain masih "[UKURAN MAKS]")
 export const FORMAT_BERKAS: string[] = ["jpg", "jpeg", "png", "pdf"];
-export const MAX_MB = 10;
 
-// true = tampilkan empty state dashboard admin.
-export const MOCK = {
-  tiketKosong: false,
-};
+export const MOCK = { tiketKosong: false }; // true = tampilkan empty state dashboard admin
 
-export const rp = (n: number) =>
-  "Rp " + n.toLocaleString("id-ID");
+export const rp = (n: number) => "Rp " + n.toLocaleString("id-ID");
 
-const wait = <T,>(value: T) =>
-  new Promise<T>((resolve) => setTimeout(() => resolve(value), 300));
+const wait = <T,>(v: T) =>
+  new Promise<T>((r) => setTimeout(() => r(v), 300));
 
-// Validasi berkas.
-export function validasiBerkas(files: File[]) {
-  for (const file of files) {
-    if (!/\.(jpe?g|png|pdf)$/i.test(file.name)) {
-      return `${file.name} · format tidak didukung`;
-    }
+export function validasiBerkas(f: File[]) {
+  for (const x of f) {
+    if (!/\.(jpe?g|png|pdf)$/i.test(x.name))
+      return `${x.name} · format tidak didukung`;
 
-    if (file.size > MAX_MB * 1048576) {
-      return `${file.name} · melebihi ${MAX_MB} MB`;
-    }
+    if (x.size > MAX_MB * 1048576)
+      return `${x.name} · melebihi ${MAX_MB} MB`;
   }
 
   return null;
 }
 
-const STATUS_TIKET = ["Belum", "Mediasi", "Selesai"] as const;
+const S = ["Belum", "Mediasi", "Selesai"] as const;
 
 const T: Tiket[] = [1, 2, 3].map((i) => ({
   id: `TKT00${i}`,
@@ -86,10 +72,69 @@ const T: Tiket[] = [1, 2, 3].map((i) => ({
   kategori: "Pekerjaan tidak sesuai kesepakatan",
   deskripsi: "Desainnya jelek",
   tanggal: "6/6/26",
-  status: STATUS_TIKET[i - 1],
+  status: S[i - 1],
 }));
 
-// Mengambil daftar transaksi.
+// Penyimpanan sementara hasil pekerjaan berdasarkan idPesanan.
+// Data ini hanya bertahan selama aplikasi tidak di-refresh.
+const penyimpananHasil = new Map<string, Hasil>();
+
+// Membuat data mock awal untuk hasil pekerjaan.
+function buatMockHasil(idPesanan: string): Hasil {
+  return {
+    id: idPesanan,
+    judul: "Desain logo & identitas brand",
+    catatan: "Logo final 3 versi (warna, hitam-putih, ikon) beserta panduan.",
+    kuota: idPesanan === "3" ? 0 : 3,
+    status: idPesanan === "1" ? "revisi" : "menunggu",
+    revisi: "Warna logo dibuat lebih hangat dan ikon diperbesar sedikit.",
+    berkas: [
+      {
+        nama: "logo-final.zip",
+        info: "Arsip ZIP · 8,4 MB",
+        tipe: "berkas",
+        url: "#",
+      },
+      {
+        nama: "preview-logo.png",
+        info: "Gambar · 1,2 MB",
+        tipe: "gambar",
+        url: "#",
+      },
+      {
+        nama: "https://tautan-hasil",
+        info: "Tautan eksternal",
+        tipe: "tautan",
+        url: "https://tautan-hasil",
+      },
+    ],
+  };
+}
+
+// Mengubah ukuran file menjadi format yang mudah dibaca.
+function formatUkuran(size: number) {
+  if (size < 1024 * 1024) {
+    return `${(size / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(size / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+// Mengubah file hasil upload menjadi data lampiran.
+function ubahKeLampiran(files: File[]): Hasil["berkas"] {
+  return files.map((file) => {
+    const gambar = file.type.startsWith("image/");
+
+    return {
+      nama: file.name,
+      info: `${gambar ? "Gambar" : "Berkas"} · ${formatUkuran(file.size)}`,
+      tipe: gambar ? "gambar" : "berkas",
+      url: URL.createObjectURL(file),
+    };
+  });
+}
+
+// Data transaksi
 export const getTransaksi = () =>
   wait<Transaksi[]>([
     {
@@ -130,127 +175,113 @@ export const getTransaksi = () =>
     },
   ]);
 
-// Mengambil detail hasil pekerjaan.
-export const getHasil = (id: string) =>
-  wait<Hasil>({
-    id,
-    judul: "Desain logo & identitas brand",
-    catatan:
-      "Logo final 3 versi (warna, hitam-putih, ikon) beserta panduan.",
-    kuota: id === "3" ? 0 : 3,
-    status: id === "1" ? "revisi" : "menunggu",
-    revisi:
-      "Warna logo dibuat lebih hangat dan ikon diperbesar sedikit.",
-    berkas: [
-      {
-        nama: "logo-final.zip",
-        info: "Arsip ZIP · 8,4 MB",
-      },
-      {
-        nama: "preview-logo.png",
-        info: "Gambar · 1,2 MB",
-      },
-      {
-        nama: "https://tautan-hasil",
-        info: "Tautan eksternal",
-      },
-    ],
-  });
+// Mengambil hasil pekerjaan berdasarkan idPesanan.
+export const getHasil = async (idPesanan: string) => {
+  const data =
+    penyimpananHasil.get(idPesanan) ?? buatMockHasil(idPesanan);
 
-// Konfirmasi pesanan.
+  penyimpananHasil.set(idPesanan, data);
+
+  return wait<Hasil>(data);
+};
+
+// Menerima data hasil pekerjaan dari halaman Pengumpulan.
+export const kirimHasil = async (
+  idPesanan: string,
+  d: { deskripsi: string; tautan: string; files: File[] }
+) => {
+  const hasilSebelumnya =
+    penyimpananHasil.get(idPesanan) ?? buatMockHasil(idPesanan);
+
+  // Mengubah file yang diunggah menjadi lampiran.
+  const lampiranFile = ubahKeLampiran(d.files);
+
+  // Menambahkan tautan jika pengguna mengisi tautan hasil.
+  const lampiranTautan = d.tautan.trim()
+    ? [
+        {
+          nama: d.tautan.trim(),
+          info: "Tautan eksternal",
+          tipe: "tautan" as const,
+          url: d.tautan.trim(),
+        },
+      ]
+    : [];
+
+  // Menyimpan hasil pekerjaan sementara.
+  const hasilBaru: Hasil = {
+    ...hasilSebelumnya,
+    id: idPesanan,
+    catatan: d.deskripsi,
+    status: "menunggu",
+    revisi: undefined,
+    berkas: [...lampiranFile, ...lampiranTautan],
+  };
+
+  penyimpananHasil.set(idPesanan, hasilBaru);
+
+  return wait(true);
+};
+
 export const terimaPesanan = (id: string) => wait(true);
-
 export const tolakPesanan = (id: string) => wait(true);
 
-// Mengirim hasil pekerjaan.
-export const kirimHasil = (
-  id: string,
-  data: {
-    deskripsi: string;
-    tautan: string;
-    files: File[];
-  },
-) => wait(true);
+// Mengonfirmasi penyelesaian pekerjaan oleh pengguna.
+export const konfirmasiSelesai = async (idPesanan: string) => {
+  const hasil = penyimpananHasil.get(idPesanan);
 
-// Konfirmasi pekerjaan selesai.
-export const konfirmasiSelesai = (id: string) =>
-  wait(true);
+  if (!hasil) {
+    throw new Error("Data hasil pekerjaan tidak ditemukan.");
+  }
 
-// Mengajukan revisi.
+  // Mengubah status hasil pekerjaan menjadi selesai.
+  penyimpananHasil.set(idPesanan, {
+    ...hasil,
+    status: "selesai",
+  });
+
+  return wait(true);
+};
+
 export const ajukanRevisi = (
   id: string,
-  data: {
-    detail: string;
-    pesan: string;
-    files: File[];
-  },
+  d: { detail: string; pesan: string; files: File[] }
 ) => wait(true);
 
-// Mengirim ulasan.
 export const kirimUlasan = (
   id: string,
-  data: {
-    rating: number;
-    komentar: string;
-    files: File[];
-  },
+  d: { rating: number; komentar: string; files: File[] }
 ) => wait(true);
 
-// Mengirim laporan.
 export const kirimLaporan = (
-  data: {
-    penyedia: string;
-    kategori: string;
-    deskripsi: string;
-    files: File[];
-  },
+  d: { penyedia: string; kategori: string; deskripsi: string; files: File[] }
 ) =>
   wait<Tiket>({
     id: "TKT001",
     pelapor: "Saya",
-    terlapor: data.penyedia,
-    kategori: data.kategori,
-    deskripsi: data.deskripsi,
+    terlapor: d.penyedia,
+    kategori: d.kategori,
+    deskripsi: d.deskripsi,
     tanggal: "hari ini",
     status: "Belum",
   });
 
-// Login admin.
-export const loginAdmin = async (
-  email: string,
-  pass: string,
-) => {
+export const loginAdmin = async (email: string, pass: string) => {
   await wait(0);
 
-  if (
-    email !== "admin@carijasa.id" ||
-    pass !== "admin123"
-  ) {
-    throw new Error(
-      "Email atau kata sandi salah. Silakan coba lagi.",
-    );
-  }
+  if (email !== "admin@carijasa.id" || pass !== "admin123")
+    throw new Error("Email atau kata sandi salah. Silakan coba lagi.");
 };
 
-// Mengambil daftar tiket.
 export const getTiketList = () =>
   wait<Tiket[]>(MOCK.tiketKosong ? [] : T);
 
-// Mengambil detail tiket.
 export const getTiket = (id: string) =>
-  wait<Tiket | null>(
-    T.find((tiket) => tiket.id === id) ?? null,
-  );
+  wait<Tiket | null>(T.find((t) => t.id === id) ?? null);
 
-// Mengirim tanggapan admin.
 export const kirimTanggapan = (
   id: string,
-  data: {
-    tanggapan: string;
-    sanksi: string;
-  },
+  d: { tanggapan: string; sanksi: string }
 ) => wait(true);
 
-// Mengajukan mediasi.
-export const ajukanMediasi = (id: string) =>
-  wait(true);
+export const ajukanMediasi = (id: string) => wait(true);

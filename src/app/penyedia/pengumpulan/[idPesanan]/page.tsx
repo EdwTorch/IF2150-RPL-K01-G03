@@ -74,7 +74,7 @@ export default function HalamanPengumpulan() {
         files,
       });
 
-      router.push(`/pengumpulan/${idPesanan}/hasil`);
+      router.push(`/penyedia/pengumpulan/${idPesanan}/hasil`);
     } catch (err) {
       setError({
         umum:

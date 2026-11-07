@@ -1,2 +1,2 @@
-// import D from "@/components/HalamanDeliverables";
-// export default function Page(){return <D peran="penyedia"/>}
+import D from "@/components/ui/HalamanDeliverables";
+export default function Page(){return <D peran="penyedia"/>}
