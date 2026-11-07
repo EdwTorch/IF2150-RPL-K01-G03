@@ -203,7 +203,7 @@ export default function HalamanKonfirmasi() {
             )}
 
             {status === "diproses" && (
-              <Button fullWidth href={`/pengumpulan/${idPesanan}`}>
+              <Button fullWidth href={`/penyedia/pengumpulan/${idPesanan}`}>
                 Kirim hasil pekerjaan
               </Button>
             )}
