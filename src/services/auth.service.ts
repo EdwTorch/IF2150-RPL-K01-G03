@@ -65,8 +65,8 @@ export async function login(email: string, password: string) {
             email: data.user.email,
             nama: profil.nama,
             role: profil.role,
-            isPenyediaJasa: !!profil.penyedia_jasa,
-            isPenggunaJasa: !!profil.pengguna_jasa
+            isPenyediaJasa: Boolean(profil.penyedia_jasa),
+            isPenggunaJasa: Boolean(profil.pengguna_jasa)
         }
     };
 }
@@ -93,12 +93,18 @@ export async function getSessionUser() {
 
     const { data: profil, error: profil_error } = await supabase
         .from("pengguna")
-        .select("id, nama, email, role, status_akun, sanksi")
+        .select("id, nama, email, role, status_akun, sanksi, penyedia_jasa (id), pengguna_jasa(id)")
         .eq("id", user.id)
         .single();
 
-    if (profil_error || !profil) return null;
-    if (profil.status_akun === false || profil.sanksi === "SUSPENDED") return null;
+    if (profil_error || !profil) {
+        await supabase.auth.signOut();
+        return null;
+    }
+    if (profil.status_akun === false || profil.sanksi === "SUSPENDED"){
+      await supabase.auth.signOut();
+        return null;  
+    } 
 
     return {
         id: profil.id,
@@ -106,5 +112,7 @@ export async function getSessionUser() {
         nama: profil.nama,
         role: profil.role,
         status_akun: profil.status_akun,
+        isPenyediaJasa: Boolean(profil.penyedia_jasa),
+        isPenggunaJasa: Boolean(profil.pengguna_jasa),
     };
 }
