@@ -70,3 +70,39 @@ export interface Notifikasi{
     pesan_notifikasi : string,
     is_read : boolean,
 }
+
+export interface ChatroomRow {
+  id_chatroom: string;
+  id_pengguna_jasa: string;
+  id_penyedia_jasa: string;
+  created_at: string;
+}
+
+export interface PesanChatRow {
+  id_pesan: string;
+  id_chatroom: string;
+  id_pengirim: string;
+  isi_pesan: string;
+  lampiran: string | null;
+  waktu_dibuat: string;
+  created_at: string;
+}
+
+// 2. Extend dari tabel mentah untuk kebutuhan response API (dengan data JOIN)
+export interface ChatroomDetail extends ChatroomRow {
+  pengguna_jasa?: {
+    id: string;
+    nama: string;
+  };
+  penyedia_jasa?: {
+    id: string;
+    nama: string;
+  };
+}
+
+export interface PesanChatDetail extends PesanChatRow {
+  pengirim?: {
+    id: string;
+    nama: string;
+  };
+}
