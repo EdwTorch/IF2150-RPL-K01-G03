@@ -282,7 +282,7 @@ export class TanggapanLaporanService {
       throw new Error("Data pesanan terkait tiket ini tidak ditemukan.");
     }
 
-    // 2. Eksekusi Side Effects berdasarkan 4 pilihan tindakan
+    // 2. Eksekusi Side Effects berdasarkan pilihan tindakan
     switch (data.jenis_tindakan) {
       case "SUSPEND_AKUN": {
         if (!tiket.id_terlapor) {
@@ -290,9 +290,12 @@ export class TanggapanLaporanService {
         }
 
         const { error: errSuspend } = await supabase
-          .from("penyedia_jasa")
-          .update({ status_akun: "SUSPENDED" })
-          .eq("id_penyedia_jasa", tiket.id_terlapor); 
+          .from("pengguna")
+          .update({
+            status_akun: false,
+            sanksi: "SUSPENDED",
+          })
+          .eq("id", tiket.id_terlapor);
 
         if (errSuspend) {
           throw new Error(`Gagal menangguhkan akun terlapor: ${errSuspend.message}`);
@@ -300,8 +303,26 @@ export class TanggapanLaporanService {
         break;
       }
 
-      case "PERINGATAN":
+      case "PERINGATAN": {
+        if (!tiket.id_terlapor) {
+          throw new Error("ID terlapor tidak tercatat pada tiket ini.");
+        }
+
+        const { error: errPeringatan } = await supabase
+          .from("pengguna")
+          .update({
+            sanksi: "PERINGATAN",
+          })
+          .eq("id", tiket.id_terlapor);
+
+        if (errPeringatan) {
+          throw new Error(`Gagal mencatat sanksi peringatan: ${errPeringatan.message}`);
+        }
+        break;
+      }
+
       case "LAPORAN_DITOLAK":
+        // Tidak ada perubahan status pesanan maupun sanksi akun
         break;
 
       default:
