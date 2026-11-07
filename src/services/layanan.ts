@@ -41,6 +41,15 @@ export type Hasil = {
   }[];
 };
 
+// Data mock pengajuan revisi.
+export type PengajuanRevisiMock = {
+  idPesanan: string;
+  detail: string;
+  pesan: string;
+  berkas: Hasil["berkas"];
+  kuotaTersisa: number;
+};
+
 export const MAX_MB = 10; // TODO: isi sesuai ketentuan (desain masih "[UKURAN MAKS]")
 export const FORMAT_BERKAS: string[] = ["jpg", "jpeg", "png", "pdf"];
 
@@ -78,6 +87,10 @@ const T: Tiket[] = [1, 2, 3].map((i) => ({
 // Penyimpanan sementara hasil pekerjaan berdasarkan idPesanan.
 // Data ini hanya bertahan selama aplikasi tidak di-refresh.
 const penyimpananHasil = new Map<string, Hasil>();
+
+// Penyimpanan sementara pengajuan revisi berdasarkan idPesanan.
+// Data ini hanya bertahan selama aplikasi tidak di-refresh.
+const penyimpananRevisi = new Map<string, PengajuanRevisiMock>();
 
 // Membuat data mock awal untuk hasil pekerjaan.
 function buatMockHasil(idPesanan: string): Hasil {
@@ -243,10 +256,67 @@ export const konfirmasiSelesai = async (idPesanan: string) => {
   return wait(true);
 };
 
-export const ajukanRevisi = (
-  id: string,
+// Mengajukan revisi dari halaman Request Revisi.
+export const ajukanRevisi = async (
+  idPesanan: string,
   d: { detail: string; pesan: string; files: File[] }
-) => wait(true);
+) => {
+  const hasilSebelumnya =
+    penyimpananHasil.get(idPesanan) ?? buatMockHasil(idPesanan);
+
+  // Validasi detail revisi.
+  if (!d.detail.trim()) {
+    throw new Error("Detail revisi wajib diisi.");
+  }
+
+  // Memastikan kuota revisi masih tersedia.
+  if (hasilSebelumnya.kuota <= 0) {
+    throw new Error("Kuota revisi untuk pesanan ini sudah habis.");
+  }
+
+  // Validasi format dan ukuran lampiran.
+  const errorBerkas = validasiBerkas(d.files);
+
+  if (errorBerkas) {
+    throw new Error(errorBerkas);
+  }
+
+  // Mengurangi kuota revisi sebanyak satu.
+  const kuotaTersisa = hasilSebelumnya.kuota - 1;
+
+  // Mengubah file lampiran menjadi data lampiran mock.
+  const lampiran = ubahKeLampiran(d.files);
+
+  // Menyimpan data pengajuan revisi sementara.
+  const revisiBaru: PengajuanRevisiMock = {
+    idPesanan,
+    detail: d.detail.trim(),
+    pesan: d.pesan.trim(),
+    berkas: lampiran,
+    kuotaTersisa,
+  };
+
+  penyimpananRevisi.set(idPesanan, revisiBaru);
+
+  // Memperbarui status dan kuota pada hasil pekerjaan.
+  const hasilBaru: Hasil = {
+    ...hasilSebelumnya,
+    kuota: kuotaTersisa,
+    status: "revisi",
+    revisi: d.detail.trim(),
+  };
+
+  penyimpananHasil.set(idPesanan, hasilBaru);
+
+  return wait(true);
+};
+
+// Mengambil data pengajuan revisi berdasarkan idPesanan.
+export const getPengajuanRevisi = async (idPesanan: string) => {
+  const data = penyimpananRevisi.get(idPesanan) ?? null;
+
+  return wait<PengajuanRevisiMock | null>(data);
+};
 
 export const kirimUlasan = (
   id: string,
