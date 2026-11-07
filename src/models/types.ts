@@ -51,3 +51,13 @@ export interface TanggapanLaporan{
   jenis_tindakan : string;
   catatan_tanggapan : string;
 }
+// Tipe data pengguna yang sedang login (dari sesi)
+export interface SessionUser {
+  id: string;
+  email: string;
+  nama: string;
+  role: "USER" | "ADMIN";
+  status_akun: boolean;
+  isPenyediaJasa: boolean;
+  isPenggunaJasa: boolean;
+}
