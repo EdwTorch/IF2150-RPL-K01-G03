@@ -61,3 +61,12 @@ export interface SessionUser {
   isPenyediaJasa: boolean;
   isPenggunaJasa: boolean;
 }
+
+export interface Notifikasi{
+    id_notifikasi : string;
+    id_pengguna : string;
+    id_pesanan : string;
+    id_referensi : string,
+    pesan_notifikasi : string,
+    is_read : boolean,
+}
