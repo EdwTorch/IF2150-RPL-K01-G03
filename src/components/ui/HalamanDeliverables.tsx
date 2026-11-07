@@ -227,7 +227,7 @@ export default function HalamanDeliverables({ peran }: Props) {
                         <Button
                           fullWidth
                           variant="secondary"
-                          href={`/revisi/${idPesanan}`}
+                          href={`/pengguna/revisi/${idPesanan}`}
                         >
                           Ajukan revisi
                         </Button>
