@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { AuthError } from "@supabase/supabase-js";
 export async function verifyAdmin() {
     const supabase = await createClient();
     const {
@@ -7,7 +8,7 @@ export async function verifyAdmin() {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-        throw new Error("UNAUTHORIZED");
+        throw new AuthError("UNAUTHORIZED");
     }
 
     // Sesuaikan nama kolom 'id' dan 'role' dengan struktur tabel pengguna Anda
