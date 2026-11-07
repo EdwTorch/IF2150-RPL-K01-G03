@@ -1,13 +1,19 @@
-// src/app/api/ulasan/route.ts
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server";
 import { UlasanService } from "@/services/ulasan.service";
 
 // POST: Kirim Ulasan (Hanya butuh id_pesanan)
 export async function POST(request: Request) {
   try {
-    // ID dummy sementara untuk testing backend
-    const userId = "bd24e3b0-f7cd-4e2d-844b-a3d3d45170ba";
-
+    const supabase = await createClient();
+    const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+    if (error || !user) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+    const userId = user.id; 
     const body = await request.json();
     const { id_pesanan, rating, komentar, dokumentasi_url } = body;
 
@@ -32,7 +38,6 @@ export async function POST(request: Request) {
       rating,
       komentar: komentar || null,
       dokumentasi : dokumentasi_url || null,
-      id_penyedia_jasa : "",
     });
 
     return NextResponse.json(
