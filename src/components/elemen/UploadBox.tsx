@@ -63,23 +63,37 @@ export function UploadBox({
 
   function tambah(daftar: FileList | null) {
     if (!daftar || daftar.length === 0) return;
+
     setErrorLokal("");
+
     const baru: File[] = [];
+
     for (const f of Array.from(daftar)) {
       const ext = f.name.split(".").pop()?.toLowerCase() ?? "";
+
       if (!format.includes(ext)) {
         setErrorLokal(`Format "${f.name}" tidak didukung. Gunakan ${teksFormat(format)}.`);
         continue;
       }
+
       if (f.size > maksMB * 1024 * 1024) {
         setErrorLokal(`"${f.name}" terlalu besar. Maksimal ${maksMB} MB.`);
         continue;
       }
+
       baru.push(f);
     }
+
     const gabung = maksBerkas === 1 ? baru.slice(0, 1) : [...berkas, ...baru];
-    if (gabung.length > maksBerkas) setErrorLokal(`Maksimal ${maksBerkas} berkas.`);
-    if (baru.length > 0) onUbah(gabung.slice(0, maksBerkas));
+
+    if (gabung.length > maksBerkas) {
+      setErrorLokal(`Maksimal ${maksBerkas} berkas.`);
+      if (inputRef.current) inputRef.current.value = "";
+      return;
+    }
+
+    onUbah(gabung);
+
     if (inputRef.current) inputRef.current.value = "";
   }
 
