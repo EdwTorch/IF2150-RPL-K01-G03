@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS public.pengguna (
 CREATE TABLE IF NOT EXISTS public.penyedia_jasa (
     id UUID PRIMARY KEY REFERENCES public.pengguna(id) ON DELETE CASCADE,
     pengalaman TEXT[] DEFAULT '{}',
+    saldo INT,
     prestasi TEXT[] DEFAULT '{}',
     daftar_produk TEXT[] DEFAULT '{}',
     rating_rata_rata NUMERIC(3, 2) DEFAULT 0.0 CHECK (rating_rata_rata >= 0 AND rating_rata_rata <= 5),
