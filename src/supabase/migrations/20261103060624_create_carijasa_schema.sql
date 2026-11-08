@@ -26,7 +26,21 @@ CREATE TABLE IF NOT EXISTS public.penyedia_jasa (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 3. TABEL PORTOFOLIO (C09)
+-- 3. TABEL PENGGUNA JASA (C03)
+CREATE TABLE IF NOT EXISTS public.pengguna_jasa (
+    id UUID PRIMARY KEY REFERENCES public.pengguna(id) ON DELETE CASCADE,
+    minat_kategori_jasa TEXT[] DEFAULT '{}',
+    status_konfirmasi BOOLEAN DEFAULT false,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 4. TABEL ADMIN (C52)
+CREATE TABLE IF NOT EXISTS public.admin (
+    id UUID PRIMARY KEY REFERENCES public.pengguna(id) ON DELETE CASCADE,
+    created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- 5. TABEL PORTOFOLIO (C09)
 CREATE TABLE IF NOT EXISTS public.portofolio (
     id_portofolio UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_penyedia_jasa UUID NOT NULL REFERENCES public.penyedia_jasa(id) ON DELETE CASCADE,
@@ -36,7 +50,7 @@ CREATE TABLE IF NOT EXISTS public.portofolio (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. TABEL JASA (C12)
+-- 6. TABEL JASA (C12)
 CREATE TABLE IF NOT EXISTS public.jasa (
     id_jasa UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_penyedia_jasa UUID NOT NULL REFERENCES public.penyedia_jasa(id) ON DELETE CASCADE,
@@ -49,7 +63,7 @@ CREATE TABLE IF NOT EXISTS public.jasa (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 5. TABEL BOOKMARK (C20)
+-- 7. TABEL BOOKMARK (C20)
 CREATE TABLE IF NOT EXISTS public.bookmark (
     id_bookmark UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pengguna_jasa UUID NOT NULL REFERENCES public.pengguna_jasa(id) ON DELETE CASCADE,
@@ -59,7 +73,7 @@ CREATE TABLE IF NOT EXISTS public.bookmark (
     UNIQUE(id_pengguna_jasa, id_jasa)
 );
 
--- 6. TABEL METODE PEMBAYARAN (C33)
+-- 8. TABEL METODE PEMBAYARAN (C33)
 CREATE TABLE IF NOT EXISTS public.metode_pembayaran (
     id_metode VARCHAR(50) PRIMARY KEY,
     nama_metode VARCHAR(100) NOT NULL,
@@ -67,7 +81,7 @@ CREATE TABLE IF NOT EXISTS public.metode_pembayaran (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 7. TABEL PESANAN (C27)
+-- 9. TABEL PESANAN (C27)
 CREATE TABLE IF NOT EXISTS public.pesanan (
     id_pesanan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pengguna_jasa UUID NOT NULL REFERENCES public.pengguna_jasa(id),
@@ -84,7 +98,7 @@ CREATE TABLE IF NOT EXISTS public.pesanan (
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 8. TABEL RIWAYAT TRANSAKSI (C34)
+-- 10. TABEL RIWAYAT TRANSAKSI (C34)
 CREATE TABLE IF NOT EXISTS public.riwayat_transaksi (
     id_riwayat UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
@@ -94,7 +108,7 @@ CREATE TABLE IF NOT EXISTS public.riwayat_transaksi (
     status_transaksi VARCHAR(50) DEFAULT 'BERHASIL'
 );
 
--- 9. TABEL CHATROOM (C23)
+-- 11. TABEL CHATROOM (C23)
 CREATE TABLE IF NOT EXISTS public.chatroom (
     id_chatroom UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pengguna_jasa UUID NOT NULL REFERENCES public.pengguna_jasa(id) ON DELETE CASCADE,
@@ -103,7 +117,7 @@ CREATE TABLE IF NOT EXISTS public.chatroom (
     UNIQUE(id_pengguna_jasa, id_penyedia_jasa)
 );
 
--- 10. TABEL PESAN CHAT (C23, Realtime UC08)
+-- 12. TABEL PESAN CHAT (C23, Realtime UC08)
 CREATE TABLE IF NOT EXISTS public.pesan_chat (
     id_pesan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_chatroom UUID NOT NULL REFERENCES public.chatroom(id_chatroom) ON DELETE CASCADE,
@@ -115,7 +129,7 @@ CREATE TABLE IF NOT EXISTS public.pesan_chat (
 );
 ALTER PUBLICATION supabase_realtime ADD TABLE public.pesan_chat;
 
--- 11. TABEL PRODUK AKHIR / DELIVERABLES (C36)
+-- 13. TABEL PRODUK AKHIR / DELIVERABLES (C36)
 CREATE TABLE IF NOT EXISTS public.produk_akhir (
     id_produk_akhir UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
@@ -126,7 +140,7 @@ CREATE TABLE IF NOT EXISTS public.produk_akhir (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 12. TABEL PENGAJUAN REVISI (C39)
+-- 14. TABEL PENGAJUAN REVISI (C39)
 CREATE TABLE IF NOT EXISTS public.pengajuan_revisi (
     id_revisi UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
@@ -137,7 +151,7 @@ CREATE TABLE IF NOT EXISTS public.pengajuan_revisi (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 13. TABEL PENCAIRAN DANA (C42)
+-- 15. TABEL PENCAIRAN DANA (C42)
 CREATE TABLE IF NOT EXISTS public.pencairan_dana (
     id_pencairan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
@@ -145,7 +159,7 @@ CREATE TABLE IF NOT EXISTS public.pencairan_dana (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 14. TABEL TIKET LAPORAN / MEDIASI (C43)
+-- 16. TABEL TIKET LAPORAN / MEDIASI (C43)
 CREATE TABLE IF NOT EXISTS public.tiket_laporan (
     id_tiket UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
@@ -159,7 +173,7 @@ CREATE TABLE IF NOT EXISTS public.tiket_laporan (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 15. TABEL SESI MEDIASI (C51, C52)
+-- 17. TABEL SESI MEDIASI (C51, C52)
 CREATE TABLE IF NOT EXISTS public.sesi_mediasi (
     id_sesi_mediasi UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_tiket UUID NOT NULL REFERENCES public.tiket_laporan(id_tiket) ON DELETE CASCADE,
@@ -169,7 +183,7 @@ CREATE TABLE IF NOT EXISTS public.sesi_mediasi (
     waktu_selesai TIMESTAMPTZ
 );
 
--- 16. TABEL PESAN MEDIASI (C52)
+-- 18. TABEL PESAN MEDIASI (C52)
 CREATE TABLE IF NOT EXISTS public.pesan_mediasi (
     id_pesan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_sesi_mediasi UUID NOT NULL REFERENCES public.sesi_mediasi(id_sesi_mediasi) ON DELETE CASCADE,
@@ -178,7 +192,7 @@ CREATE TABLE IF NOT EXISTS public.pesan_mediasi (
     waktu_kirim TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 17. TABEL ULASAN (C46)
+-- 19. TABEL ULASAN (C46)
 CREATE TABLE IF NOT EXISTS public.ulasan (
     id_ulasan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
@@ -190,7 +204,7 @@ CREATE TABLE IF NOT EXISTS public.ulasan (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 18. TABEL NOTIFIKASI (C41, C45, C51)
+-- 20. TABEL NOTIFIKASI (C41, C45, C51)
 CREATE TABLE IF NOT EXISTS public.notifikasi (
     id_notifikasi UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pengguna UUID REFERENCES public.pengguna(id) ON DELETE CASCADE,
@@ -201,25 +215,11 @@ CREATE TABLE IF NOT EXISTS public.notifikasi (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 19. TABEL TANGGAPAN LAPORAN (C49)
+-- 21. TABEL TANGGAPAN LAPORAN (C49)
 CREATE TABLE IF NOT EXISTS public.tanggapan_laporan (
     id_tanggapan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_tiket UUID NOT NULL REFERENCES public.tiket_laporan(id_tiket) ON DELETE CASCADE,
     jenis_tindakan VARCHAR(50) NOT NULL,
     catatan_tanggapan TEXT,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 20. TABEL PENGGUNA JASA (C03)
-CREATE TABLE IF NOT EXISTS public.pengguna_jasa (
-    id UUID PRIMARY KEY REFERENCES public.pengguna(id) ON DELETE CASCADE,
-    minat_kategori_jasa TEXT[] DEFAULT '{}',
-    status_konfirmasi BOOLEAN DEFAULT false,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 21. TABEL ADMIN (C52)
-CREATE TABLE IF NOT EXISTS public.admin (
-    id UUID PRIMARY KEY REFERENCES public.pengguna(id) ON DELETE CASCADE,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
