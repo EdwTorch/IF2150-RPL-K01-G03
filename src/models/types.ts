@@ -23,6 +23,24 @@ export interface PengajuanRevisi {
   created_at?: string;
 }
 
+
+export interface Pesanan {
+  id_pesanan : string;
+  id_pengguna_jasa : string;
+  id_penyedia_jasa : string;
+  id_jasa : string;
+  brief : string;
+  total_biaya : number;
+  status_pesanan : string;
+}
+
+export interface PencairanDana {
+  id_pencairan : string;
+  id_pesanan : string;
+  id_penyedia_jasa : string;
+  jumlah_pencairan : number;
+  state_pencairan_dana : boolean;
+  
 export interface Ulasan {
   id_ulasan : string;
   id_pesanan : string;
