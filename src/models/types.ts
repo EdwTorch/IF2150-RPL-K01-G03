@@ -39,7 +39,7 @@ export interface TiketLaporan {
   id_pelapor : string;
   id_terlapor : string;
   deskripsi_laporan : string;
-  url_bukti : string;
+  url_bukti : string[];
   kategori : string[];
   status_tiket : "Diproses" | "Selesai";
   tanggapan_admin : string;
