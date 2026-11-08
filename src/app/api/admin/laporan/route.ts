@@ -12,15 +12,16 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
+      message : "Berhasil memuat list tiket pengaduan",
       data: semuaTiket,
     });
   } catch (error: any) {
     if (error.message === "UNAUTHORIZED") {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message : "Unauthorized" }, { status: 401 });
     }
     if (error.message === "FORBIDDEN") {
-      return NextResponse.json({ error: "Akses khusus Admin" }, { status: 403 });
+      return NextResponse.json({ success : false, message : "Akses khusus Admin" }, { status: 403 });
     }
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ success : false, message : error.message }, { status: 400 });
   }
 }
