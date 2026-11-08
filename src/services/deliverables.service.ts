@@ -284,9 +284,9 @@ export class DeliverablesService {
     if (errPencairan) throw new Error(errPencairan.message);
     
     const { data: penyedia } = await supabase
-      .from("pengguna") // ganti dengan nama tabel user Anda (misal: 'users' / 'profiles')
+      .from("penyedia_jasa") // ganti dengan nama tabel user Anda (misal: 'users' / 'profiles')
       .select("saldo")
-      .eq("id_pengguna", pesanan.id_penyedia_jasa)
+      .eq("id", pesanan.id_penyedia_jasa)
       .single();
 
     const saldoSekarang = penyedia?.saldo || 0;
@@ -294,10 +294,18 @@ export class DeliverablesService {
 
     // Update saldo baru ke database
     const { error: errSaldo } = await supabase
-      .from("pengguna")
+      .from("penyedia_jasa")
       .update({ saldo: saldoBaru })
-      .eq("id_pengguna", pesanan.id_penyedia_jasa);
+      .eq("id", pesanan.id_penyedia_jasa);
 
+    const {error: errUpdate} = await supabase
+      .from("pesanan")
+      .update({status_pencairan : true})
+      .eq("id_pesanan",id_pesanan)
+
+    if (errUpdate){
+      throw new Error("Gagal mengupdate state pencairan di tabel pesanan");
+    }
     if (errSaldo) {
       throw new Error("Gagal menambahkan saldo ke dompet penjual: " + errSaldo.message);
     }
