@@ -3,11 +3,11 @@
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
-  id_produk_akhir?: string; 
+  id_produk_akhir: string; 
   id_pesanan: string;
   output_path?: string; 
   deskripsi_produk: string;
-  file_url?: string; //
+  file_url?: string; //bra
   status_pemeriksaan?: boolean;
   created_at?: string;
 }
@@ -41,4 +41,41 @@ export interface PencairanDana {
   jumlah_pencairan : number;
   state_pencairan_dana : boolean;
   
+export interface Ulasan {
+  id_ulasan : string;
+  id_pesanan : string;
+  id_pengguna_jasa : string;
+  rating : number;
+  komentar? : string;
+  dokumentasi_path? : string;
+  created_at : string;
+}
+
+export interface TiketLaporan {
+  id_tiket?: string;
+  id_pesanan : string;
+  id_pelapor : string;
+  id_terlapor : string;
+  deskripsi_laporan : string;
+  url_bukti : string[];
+  kategori : string[];
+  status_tiket : "Diproses" | "Selesai";
+  tanggapan_admin : string;
+}
+
+export interface TanggapanLaporan{
+  id_tanggapan : string;
+  id_tiket : string;
+  jenis_tindakan : string;
+  catatan_tanggapan : string;
+}
+// Tipe data pengguna yang sedang login (dari sesi)
+export interface SessionUser {
+  id: string;
+  email: string;
+  nama: string;
+  role: "USER" | "ADMIN";
+  status_akun: boolean;
+  isPenyediaJasa: boolean;
+  isPenggunaJasa: boolean;
 }
