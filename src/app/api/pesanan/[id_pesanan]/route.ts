@@ -12,7 +12,7 @@ export async function PATCH(
     // Ambil session user yang sedang login
     const { data: { user }, error: authError } = await supabase.auth.getUser();
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
     }
 
     const body = await req.json();
@@ -21,7 +21,7 @@ export async function PATCH(
     // Validasi input action
     if (!action || !["Diterima", "Ditolak"].includes(action)) {
       return NextResponse.json(
-        { error: "Aksi tidak valid. Gunakan Tombol 'Terima' atau 'Tolak'." },
+        { success : false, message: "Aksi tidak valid. Gunakan Tombol 'Terima' atau 'Tolak'." },
         { status: 400 }
       );
     }
@@ -38,6 +38,6 @@ export async function PATCH(
       message: action === "Diterima" ? "Pesanan berhasil diterima." : "Pesanan ditolak.",
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success : false, message: error.message }, { status: 500 });
   }
 }

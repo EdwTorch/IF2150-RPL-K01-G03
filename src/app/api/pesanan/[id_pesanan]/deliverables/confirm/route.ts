@@ -17,7 +17,7 @@ export async function POST(
 
     if (authError || !user) {
       return NextResponse.json(
-        { error: "Anda harus login terlebih dahulu." },
+        { success : false, message: "Anda harus login terlebih dahulu." },
         { status: 401 }
       );
     }
@@ -33,7 +33,7 @@ export async function POST(
   } catch (error: any) {
     // Tangkap error jika validasi owner gagal atau ada masalah di Supabase
     return NextResponse.json(
-      { error: error.message || "Gagal menyelesaikan pesanan." },
+      { success : false, message: error.message || "Gagal menyelesaikan pesanan." },
       { status: 400 }
     );
   }
