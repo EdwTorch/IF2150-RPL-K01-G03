@@ -33,26 +33,38 @@ export class NotifikasiService {
   /**
    * 2. Ambil daftar notifikasi milik user yang sedang login + jumlah belum dibaca
    */
-  static async getNotifikasiUser(user_id: string) {
+    static async getNotifikasiUser(user_id: string) {
     const supabase = await createClient();
 
-    const { data, error } = await supabase
-      .from("notifikasi")
-      .select("*")
-      .eq("id_pengguna", user_id)
-      .order("created_at", { ascending: false })
-      .limit(20);
+    // Jalankan 2 query secara paralel agar lebih cepat
+    const [notifResult, unreadResult] = await Promise.all([
+      // 1. Ambil 20 notifikasi terbaru untuk ditampilkan di list
+      supabase
+        .from("notifikasi")
+        .select("*")
+        .eq("id_pengguna", user_id)
+        .order("created_at", { ascending: false })
+        .limit(20),
 
-    if (error) {
-      throw new Error(`Gagal memuat notifikasi: ${error.message}`);
+      // 2. Hitung total semua notifikasi yang belum dibaca (tanpa terpotong limit 20)
+      supabase
+        .from("notifikasi")
+        .select("*", { count: "exact", head: true })
+        .eq("id_pengguna", user_id)
+        .eq("is_read", false),
+    ]);
+
+    if (notifResult.error) {
+      throw new Error(`Gagal memuat notifikasi: ${notifResult.error.message}`);
     }
 
-    const daftar = data || [];
-    const unread_count = daftar.filter((item) => !item.is_read).length;
+    if (unreadResult.error) {
+      throw new Error(`Gagal menghitung notifikasi belum dibaca: ${unreadResult.error.message}`);
+    }
 
     return {
-      notifikasi: daftar,
-      unread_count,
+      notifikasi: notifResult.data || [],
+      unread_count: unreadResult.count ?? 0,
     };
   }
 
