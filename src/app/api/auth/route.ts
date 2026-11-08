@@ -11,13 +11,13 @@ const STATUS_BY_CODE: Partial<Record<AuthError["code"], number>> = {
 function handleError(err: unknown) {
     if (err instanceof AuthError) {
         return NextResponse.json(
-            { error: err.message, code: err.code },
+            { success : false, message: err.message, code: err.code },
             { status: STATUS_BY_CODE[err.code] ?? 400 }
         );
     }
 
     return NextResponse.json(
-        { error: "Terjadi kesalahan pada server." },
+        { success : false, message: "Terjadi kesalahan pada server." },
         { status: 500 }
     );
 }
@@ -26,10 +26,10 @@ async function me() {
     const user = await getSessionUser();
 
     if (!user) {
-        return NextResponse.json({ error: "Tidak terautentikasi" }, { status: 401 });
+        return NextResponse.json({ success : false, message: "Tidak terautentikasi" }, { status: 401 });
     }
 
-    return NextResponse.json({ user }, { status: 200 });
+    return NextResponse.json({ success : true, message :"get session user berhasil",  user }, { status: 200 });
 }
 
 export async function POST(request: NextRequest) {
@@ -39,14 +39,14 @@ export async function POST(request: NextRequest) {
         body = await request.json();
     } catch {
         return NextResponse.json(
-        { error: "Body tidak valid (harus JSON)" },
+        { success : false, message: "Body tidak valid (harus JSON)" },
         { status: 400 }
         );
     }
 
     if (typeof body !== "object" || body === null || Array.isArray(body)) {
         return NextResponse.json(
-            { error: "Body harus berupa objek JSON" },
+            { success : false, message: "Body harus berupa objek JSON" },
             { status: 400 }
         );
     }
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
         case "login": {
             if (typeof email !== "string" || typeof password !== "string") {
                 return NextResponse.json(
-                    { error: "Email dan password harus berupa teks" },
+                    { success : false, message: "Email dan password harus berupa teks" },
                     { status: 400 }
                 );
             }
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
             try {
                 const result = await login(email, password);
 
-                return NextResponse.json(result, { status: 200 });
+                return NextResponse.json({success : true, message :"login berhasil", result}, { status: 200 });
             } catch (err) {
                 return handleError(err);
             }
@@ -79,7 +79,7 @@ export async function POST(request: NextRequest) {
             try {
                 await logout();
 
-                return NextResponse.json({ message: "Logout berhasil" }, { status: 200 });
+                return NextResponse.json({ success : true, message: "Logout berhasil" }, { status: 200 });
             } catch (err) {
                 return handleError(err);
             }
@@ -89,7 +89,7 @@ export async function POST(request: NextRequest) {
             return me();
 
         default:
-            return NextResponse.json({ error: "Action tidak dikenal" }, { status: 400 });
+            return NextResponse.json({ success : false, message: "Action tidak dikenal" }, { status: 400 });
     }
 }
 

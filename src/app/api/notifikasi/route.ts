@@ -16,7 +16,7 @@ export async function GET() {
     }
 
     const hasil = await NotifikasiService.getNotifikasiUser(user.id);
-    return NextResponse.json({ success: true, data: hasil });
+    return NextResponse.json({ success: true,  message: "Berhasil Menampilkan Notifikasi",data: hasil });
   } catch (err: any) {
     return NextResponse.json({ success : false, message: err.message }, { status: 500 });
   }
