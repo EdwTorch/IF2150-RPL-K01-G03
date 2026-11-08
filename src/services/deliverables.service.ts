@@ -252,7 +252,7 @@ export class DeliverablesService {
 
     const { data: pesanan, error: errFetch } = await supabase
     .from("pesanan")
-    .select("id_penyedia_jasa, total_harga, status_pesanan")
+    .select("id_penyedia_jasa, total_biaya, status_pesanan")
     .eq("id_pesanan", id_pesanan)
     .single();
 
@@ -276,7 +276,7 @@ export class DeliverablesService {
         id_pencairan,
         id_pesanan: id_pesanan,
         id_penyedia_jasa: pesanan.id_penyedia_jasa,
-        jumlah_pencairan: pesanan.total_harga,
+        jumlah_pencairan: pesanan.total_biaya,
         state_pencairan_dana: true, 
       },
     ]);
@@ -290,7 +290,7 @@ export class DeliverablesService {
       .single();
 
     const saldoSekarang = penyedia?.saldo || 0;
-    const saldoBaru = saldoSekarang + pesanan.total_harga;
+    const saldoBaru = saldoSekarang + pesanan.total_biaya;
 
     // Update saldo baru ke database
     const { error: errSaldo } = await supabase
