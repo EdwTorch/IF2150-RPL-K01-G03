@@ -7,25 +7,26 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id_pesanan: string } }
+  { params }: { params: Promise<{ id_pesanan: string }> }
 ) {
   try {
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
     }
 
     // Ambil riwayat revisi
+    const {id_pesanan} = await params;
     const listRevisi = await DeliverablesService.getRevisionHistory(
-      params.id_pesanan,
+      id_pesanan,
       user.id
     );
 
     // Ambil berkas deliverables paling baru (atau semua berkas)
     const deliverableTerbaru = await DeliverablesService.getDeliverableByPesanan(
-      params.id_pesanan,
+      id_pesanan,
       user.id
     );
 
@@ -37,29 +38,29 @@ export async function GET(
       },
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ success : false, message: error.message }, { status: 400 });
   }
 }
 
 // POST: Ajukan revisi baru (Pembeli) ATAU Kirim perbaikan revisi (Penjual)
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id_pesanan: string } }
+  { params }: { params: Promise<{ id_pesanan: string }> }
 ) {
   try {
     const supabase = await createClient();
     const { data: { user }, error: authError } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
     }
 
     const body = await req.json();
-
+    const {id_pesanan}  = await params;
     // Skenario A: Penjual mengirim perbaikan revisi (di Halaman Form Revisi)
     if (body.action === "submit_revision") {
       const result = await DeliverablesService.submitRevisionFix({
-        id_pesanan: params.id_pesanan,
+        id_pesanan: id_pesanan,
         deskripsi_produk: body.deskripsi_produk,
         file_url: body.file_url,
         output_path: body.output_path,
@@ -75,7 +76,7 @@ export async function POST(
 
     // Skenario B: Pembeli mengajukan komplain revisi baru
     const result = await DeliverablesService.requestRevision({
-      id_pesanan: params.id_pesanan,
+      id_pesanan: id_pesanan,
       deskripsi_revisi: body.deskripsi_revisi,
       lampiran_revisi: body.lampiran_revisi,
       id_produk_akhir: body.id_produk_akhir,
@@ -88,6 +89,6 @@ export async function POST(
       data: result,
     });
   } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    return NextResponse.json({ success : false, message: error.message }, { status: 400 });
   }
 }

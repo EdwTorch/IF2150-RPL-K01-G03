@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id_pesanan: string } }
+  { params }: { params: Promise<{ id_pesanan: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -21,9 +21,9 @@ export async function POST(
         { status: 401 }
       );
     }
-
+    const {id_pesanan} = await params;
     // 2. Panggil fungsi service confirmOrderComplete yang sudah Anda buat
-    await DeliverablesService.confirmOrderComplete(params.id_pesanan, user.id);
+    await DeliverablesService.confirmOrderComplete(id_pesanan, user.id);
 
     // 3. Kembalikan respon sukses ke Frontend
     return NextResponse.json({

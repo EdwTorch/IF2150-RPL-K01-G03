@@ -5,12 +5,13 @@ import { verifyAdmin } from "@/lib/auth-admin";
 /* Detail Tiket di Atmint */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id_tiket: string } }
+  { params }: { params: Promise<{ id_tiket: string }> }
 ) {
   try {
     await verifyAdmin();
+    const {id_tiket} = await params;
     const detailTiket = await TanggapanLaporanService.getDetailTiketAdmin(
-      params.id_tiket
+      id_tiket
     );
 
     return NextResponse.json({

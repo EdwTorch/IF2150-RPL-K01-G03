@@ -4,7 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { id_pesanan: string } }
+  { params }: { params: Promise<{ id_pesanan: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -26,9 +26,10 @@ export async function PATCH(
       );
     }
 
+    const {id_pesanan} = await params;
     // Panggil fungsi service
     await PesananService.respondOrder({
-      id_pesanan: params.id_pesanan,
+      id_pesanan: id_pesanan,
       user_id: user.id,
       action,
     });
