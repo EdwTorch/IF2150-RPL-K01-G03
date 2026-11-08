@@ -1,0 +1,136 @@
+import { createClient } from '@/lib/supabase/server';
+import { getStorageService } from '@/services/storage';
+import type { Jasa } from '@/models/types';
+
+// Input pembuatan jasa: kolom yang diisi DB otomatis tidak ikut
+export type DataJasaBaru = Pick<Jasa, 'id_penyedia_jasa' | 'nama_jasa' | 'deskripsi' | 'kategori' | 'harga' | 'berkas_pendukung'>;
+// Kolom yang boleh diubah (Q-1203 + berkas_pendukung)
+export type DataJasaUpdate = Partial<Pick<Jasa, 'nama_jasa' | 'deskripsi' | 'kategori' | 'harga' | 'status_aktif' | 'berkas_pendukung'>>;
+
+const KOLOM_UPDATE = ['nama_jasa', 'deskripsi', 'kategori', 'harga', 'status_aktif', 'berkas_pendukung'] as const;
+
+export const MAKS_UKURAN_BERKAS = 10 * 1024 * 1024; // 10 MB
+const TIPE_BERKAS_DIIZINKAN = /^(image\/(png|jpe?g|webp|gif)|video\/mp4|application\/pdf)$/;
+
+// C14 JasaController (sekaligus operasi entitas C12 Jasa)
+export class JasaController {
+  // Katalog: semua jasa aktif, terbaru dulu
+  static async ambilSemuaJasa(): Promise<Jasa[]> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('jasa')
+      .select('*')
+      .eq('status_aktif', true)
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error(error.message);
+    return (data ?? []) as Jasa[];
+  }
+
+  // Algo-1401 / Algo-1202 (Q-1202)
+  static async ambilDetailJasa(id_jasa: string): Promise<Jasa> {
+    if (!id_jasa) throw new Error('ID Jasa tidak valid');
+
+    const supabase = await createClient();
+    const { data, error } = await supabase.from('jasa').select('*').eq('id_jasa', id_jasa).maybeSingle();
+
+    if (error) throw new Error(error.message);
+    if (!data) throw new Error('Data jasa tidak ditemukan');
+    return data as Jasa;
+  }
+
+  // Algo-1402 (+ deskripsi: kolom NOT NULL di DDL)
+  static validasiDataJasa(data?: Partial<DataJasaBaru>): boolean {
+    if (!data) return false;
+    if (!data.nama_jasa || !data.deskripsi || !data.kategori || data.harga == null) return false;
+    return typeof data.harga === 'number' && data.harga > 0;
+  }
+
+  // Validasi format & ukuran berkas sebelum diunggah (padanan validasiFormatUkuran C11)
+  static validasiBerkas(berkas: File[]): string | null {
+    for (const file of berkas) {
+      if (!TIPE_BERKAS_DIIZINKAN.test(file.type)) return `Format berkas ${file.name} tidak didukung`;
+      if (file.size > MAKS_UKURAN_BERKAS) return `Ukuran berkas ${file.name} melebihi 10 MB`;
+    }
+    return null;
+  }
+
+  // Unggah berkas via C11 LayananUploadFile, kembalikan daftar URL
+  static async unggahBerkas(berkas: File[]): Promise<string[]> {
+    const pesan_error = this.validasiBerkas(berkas);
+    if (pesan_error) throw new Error(pesan_error);
+
+    const storage = getStorageService();
+    const hasil = await Promise.all(berkas.map((file) => storage.upload(file, 'jasa')));
+    const gagal = hasil.find((h) => h.error);
+    if (gagal) throw new Error(gagal.error);
+    return hasil.map((h) => h.url);
+  }
+
+  // Algo-1403. Relasi ke penyedia cukup lewat FK id_penyedia_jasa
+  static async simpanPenawaranJasa(data: DataJasaBaru, berkas: File[] = []): Promise<Jasa> {
+    if (!this.validasiDataJasa(data)) throw new Error('Data penawaran jasa tidak valid atau tidak lengkap');
+
+    const url_berkas = berkas.length ? await this.unggahBerkas(berkas) : [];
+    const { id_penyedia_jasa, nama_jasa, deskripsi, kategori, harga } = data;
+
+    const supabase = await createClient();
+    const { data: jasa, error } = await supabase
+      .from('jasa')
+      .insert({
+        id_penyedia_jasa, nama_jasa, deskripsi, kategori, harga,
+        berkas_pendukung: [...(data.berkas_pendukung ?? []), ...url_berkas],
+        status_aktif: true,
+      })
+      .select()
+      .single();
+
+    if (error) throw new Error(error.message);
+    return jasa as Jasa;
+  }
+
+  // Algo-1203 (Q-1203). Berkas baru ditambahkan ke daftar yang sudah ada
+  static async perbaruiJasa(id_jasa: string, data: DataJasaUpdate, berkas: File[] = []): Promise<Jasa> {
+    if (!id_jasa) throw new Error('ID Jasa tidak valid');
+    if (data.harga !== undefined && !(typeof data.harga === 'number' && data.harga > 0)) {
+      throw new Error('Harga harus lebih dari 0');
+    }
+
+    // Hanya kolom yang boleh diubah; field lain (mis. id_penyedia_jasa) diabaikan
+    const payload = Object.fromEntries(
+      KOLOM_UPDATE.filter((k) => data[k] !== undefined).map((k) => [k, data[k]]),
+    ) as DataJasaUpdate;
+    if (berkas.length) {
+      const lama = data.berkas_pendukung ?? (await this.ambilDetailJasa(id_jasa)).berkas_pendukung ?? [];
+      payload.berkas_pendukung = [...lama, ...(await this.unggahBerkas(berkas))];
+    }
+
+    const supabase = await createClient();
+    const { data: jasa, error } = await supabase
+      .from('jasa')
+      .update(payload)
+      .eq('id_jasa', id_jasa)
+      .select()
+      .maybeSingle();
+
+    if (error) throw new Error('Gagal memperbarui data jasa');
+    if (!jasa) throw new Error('Data jasa tidak ditemukan');
+    return jasa as Jasa;
+  }
+
+  // Algo-1204 (Q-1204): soft delete
+  static async hapusJasa(id_jasa: string): Promise<void> {
+    if (!id_jasa) throw new Error('ID Jasa tidak valid');
+
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from('jasa')
+      .update({ status_aktif: false })
+      .eq('id_jasa', id_jasa)
+      .select('id_jasa')
+      .maybeSingle();
+
+    if (error) throw new Error('Gagal menonaktifkan penawaran jasa');
+    if (!data) throw new Error('Data jasa tidak ditemukan');
+  }
+}
