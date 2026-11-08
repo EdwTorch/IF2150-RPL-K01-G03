@@ -8,13 +8,23 @@ export async function POST(request: NextRequest) {
 
         if (typeof email !== "string" || typeof password !== "string") {
             return NextResponse.json(
-                { error: "Email dan password harus berupa teks" },
+                { 
+                    success : false,
+                    message : "Email dan password harus berupa teks",
+                },
                 { status: 400 }
             );
         }
 
         const result = await loginAdmin(email, password);
-        return NextResponse.json(result, { status: 200 });
+        return NextResponse.json(
+            {
+                success : true,
+                message : "login Admin berhasil",
+                result
+            }, 
+            { status: 200 });
+
     } catch (err) {
         if (err instanceof AuthError) {
             const statusMap: Record<AuthError["code"], number> = {
@@ -26,13 +36,20 @@ export async function POST(request: NextRequest) {
                 LOGOUT_FAILED: 500,
             };
             return NextResponse.json(
-                { error: err.message, code: err.code },
-                { status: statusMap[err.code] ?? 400 }
-            );
-        }
+        { 
+            success: false, 
+            message: err.message, 
+            code: err.code 
+        },
+        { status: statusMap[err.code] ?? 400 }
+        );
+    }
 
         return NextResponse.json(
-            { error: "Terjadi kesalahan pada server." },
+            { 
+                success : false,
+                message : "Terjadi kesalahan pada server."
+            },
             { status: 500 }
         );
     }

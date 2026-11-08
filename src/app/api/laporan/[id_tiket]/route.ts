@@ -17,7 +17,7 @@ export async function GET(
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message : "Unauthorized" }, { status: 401 });
     }
 
     const detailTiket = await PelaporanService.getDetailTiket(
@@ -27,11 +27,12 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
+      message : "Detail Tiket Berhasil Dimuat",
       data: detailTiket,
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Gagal mengambil detail tiket." },
+      { success : false, message: error.message || "Gagal mengambil detail tiket." },
       { status: 400 }
     );
   }
