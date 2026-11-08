@@ -12,13 +12,13 @@ export async function GET() {
     } = await supabase.auth.getUser();
 
     if (error || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
     }
 
     const hasil = await NotifikasiService.getNotifikasiUser(user.id);
     return NextResponse.json({ success: true, data: hasil });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ success : false, message: err.message }, { status: 500 });
   }
 }
 
@@ -32,7 +32,7 @@ export async function PATCH(req: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (error || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
     }
 
     const body = await req.json().catch(() => ({}));
@@ -43,6 +43,6 @@ export async function PATCH(req: NextRequest) {
       message: "Notifikasi ditandai sudah dibaca.",
     });
   } catch (err: any) {
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json({ success : false, message: err.message }, { status: 500 });
   }
 }

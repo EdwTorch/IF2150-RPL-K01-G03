@@ -57,7 +57,7 @@ export async function updateSession(request: NextRequest) {
 
     // Menolak akses api jika belum terautentikasi
     if (!user && path_name.startsWith("/api/") && !path_name.startsWith("/api/auth")) {
-        return NextResponse.json({ error: "Tidak terautentikasi" }, { status: 401 });
+        return NextResponse.json({ success : false, message: "Tidak terautentikasi" }, { status: 401 });
     }
 
     return supabase_response;
