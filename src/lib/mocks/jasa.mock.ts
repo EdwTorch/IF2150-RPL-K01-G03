@@ -13,6 +13,7 @@ export const mockJasaList: Jasa[] = [
     harga: 250000,
     rating_rata_rata: 4.8,
     status_aktif: true,
+    berkas_pendukung: ['/uploads/jasa/logo-1.png', '/uploads/jasa/logo-2.png'],
     created_at: '2026-11-01T08:00:00+07:00',
   },
   {
@@ -24,6 +25,7 @@ export const mockJasaList: Jasa[] = [
     harga: 150000,
     rating_rata_rata: 4.5,
     status_aktif: true,
+    berkas_pendukung: ['/uploads/jasa/reels-sample.mp4'],
     created_at: '2026-11-02T08:00:00+07:00',
   },
   {
@@ -35,6 +37,7 @@ export const mockJasaList: Jasa[] = [
     harga: 1200000,
     rating_rata_rata: 4.9,
     status_aktif: true,
+    berkas_pendukung: ['/uploads/jasa/landing-page.png'],
     created_at: '2026-11-03T08:00:00+07:00',
   },
   {
@@ -46,6 +49,7 @@ export const mockJasaList: Jasa[] = [
     harga: 100000,
     rating_rata_rata: 0,
     status_aktif: false,
+    berkas_pendukung: [],
     created_at: '2026-11-04T08:00:00+07:00',
   },
 ];

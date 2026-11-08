@@ -10,6 +10,7 @@ export interface Jasa {
   harga: number;
   rating_rata_rata?: number; // default 0.0, rentang 0-5
   status_aktif?: boolean; // default true
+  berkas_pendukung?: string[]; // URL berkas, default []
   created_at?: string;
 }
 
