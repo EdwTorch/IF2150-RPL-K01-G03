@@ -40,7 +40,7 @@ export interface PencairanDana {
   id_penyedia_jasa : string;
   jumlah_pencairan : number;
   state_pencairan_dana : boolean;
-  
+}
 export interface Ulasan {
   id_ulasan : string;
   id_pesanan : string;

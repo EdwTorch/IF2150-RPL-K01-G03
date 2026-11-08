@@ -155,6 +155,8 @@ CREATE TABLE IF NOT EXISTS public.pengajuan_revisi (
 CREATE TABLE IF NOT EXISTS public.pencairan_dana (
     id_pencairan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
+    jumlah_pencairan INT,
+    id_penyedia_jasa UUID NOT NULL REFERENCES public.penyedia_jasa(id) ON DELETE CASCADE,
     state_pencairan_dana BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
