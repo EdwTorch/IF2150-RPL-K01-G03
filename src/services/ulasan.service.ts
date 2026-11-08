@@ -56,7 +56,7 @@ export class UlasanService{
     };
     }
     
-    static async simpanUlasan(data : {id_pesanan : string; id_pengguna_jasa : string; rating : number; komentar?: string; dokumentasi?: string; id_penyedia_jasa : string}) : Promise<Ulasan>{
+    static async simpanUlasan(data : {id_pesanan : string; id_pengguna_jasa : string; rating : number; komentar?: string; dokumentasi?: string}) : Promise<Ulasan>{
         const supabase = await createClient();
 
         if(data.rating <1 || data.rating>5){
@@ -71,7 +71,6 @@ export class UlasanService{
                 id_ulasan,
                 id_pesanan : data.id_pesanan,
                 id_pengguna_jasa : data.id_pengguna_jasa,
-                id_penyedia_jasa : data.id_penyedia_jasa,
                 rating : data.rating,
                 komentar : data.komentar || null,
                 dokumentasi_path : data.dokumentasi || null,

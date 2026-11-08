@@ -27,13 +27,30 @@ export interface Ulasan {
   id_ulasan : string;
   id_pesanan : string;
   id_pengguna_jasa : string;
-  id_penyedia_jasa : string;
   rating : number;
   komentar? : string;
   dokumentasi_path? : string;
   created_at : string;
 }
 
+export interface TiketLaporan {
+  id_tiket?: string;
+  id_pesanan : string;
+  id_pelapor : string;
+  id_terlapor : string;
+  deskripsi_laporan : string;
+  url_bukti : string[];
+  kategori : string[];
+  status_tiket : "Diproses" | "Selesai";
+  tanggapan_admin : string;
+}
+
+export interface TanggapanLaporan{
+  id_tanggapan : string;
+  id_tiket : string;
+  jenis_tindakan : string;
+  catatan_tanggapan : string;
+}
 // Tipe data pengguna yang sedang login (dari sesi)
 export interface SessionUser {
   id: string;
