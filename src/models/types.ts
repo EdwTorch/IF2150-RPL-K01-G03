@@ -14,6 +14,16 @@ export interface Jasa {
   created_at?: string;
 }
 
+// Tipe data untuk Bookmark (C20)
+export interface Bookmark {
+  id_bookmark: string;
+  id_pengguna_jasa: string;
+  id_jasa: string;
+  waktu_disimpan?: string;
+  created_at?: string;
+  jasa?: Jasa;
+}
+
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
