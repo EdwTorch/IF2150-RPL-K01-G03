@@ -1,6 +1,15 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { NextRequest } from 'next/server';
+
+vi.mock('@/lib/supabase/server', () => ({ createClient: vi.fn() }));
+vi.mock('@/lib/mocks/pesanan.mock', () => import('../lib/mocks/pesanan.mock'));
+vi.mock('@/services/pesanan.service', () => import('../services/pesanan.service'));
+
 import type { Jasa, Pesanan } from '../models/types';
+import { PENGGUNA_JASA_1, PENGGUNA_JASA_2, mockJasaPesananList } from '../lib/mocks/pesanan.mock';
 import { PengontrolPesanan } from '../services/pesanan.service';
+import { GET as getDaftarPesanan, POST as postPesananBaru } from '../app/api/pesanan/route';
+import { GET as getDetailPesanan } from '../app/api/pesanan/[id_pesanan]/route';
 
 const daftarJasa: Jasa[] = [
   {
@@ -288,5 +297,91 @@ describe('PengontrolPesanan Order State Machine (Algo-3103)', () => {
     expect(() =>
       PengontrolPesanan.validasiTransisiStatus('DITOLAK', 'DIPROSES'),
     ).toThrow('tidak valid');
+  });
+});
+
+describe('HTTP Route Handlers /api/pesanan & /api/pesanan/[id_pesanan]', () => {
+  const prevMock = process.env.NEXT_PUBLIC_USE_MOCK;
+  beforeEach(() => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'true';
+  });
+  afterEach(() => {
+    process.env.NEXT_PUBLIC_USE_MOCK = prevMock;
+  });
+
+  it('GET /api/pesanan mengembalikan daftar pesanan pengguna (HTTP 200) atau 400 jika tanpa id_pengguna', async () => {
+    const resOk = await getDaftarPesanan(
+      new Request(`http://localhost/api/pesanan?id_pengguna_jasa=${PENGGUNA_JASA_1}&status=berjalan`),
+    );
+    const jsonOk = await resOk.json();
+    expect(resOk.status).toBe(200);
+    expect(jsonOk.success).toBe(true);
+    expect(jsonOk.data).toHaveLength(1);
+    expect(jsonOk.data[0].id_pesanan).toBe('c0000000-0000-4000-8000-000000000001');
+
+    const resBad = await getDaftarPesanan(new Request('http://localhost/api/pesanan'));
+    expect(resBad.status).toBe(400);
+  });
+
+  it('POST /api/pesanan membuat pesanan baru (HTTP 201) dan menolak input salah (400 / 404)', async () => {
+    const resCreated = await postPesananBaru(
+      new Request('http://localhost/api/pesanan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_pengguna_jasa: PENGGUNA_JASA_2,
+          id_jasa: mockJasaPesananList[0].id_jasa,
+          brief: 'Desain logo warung kopi modern',
+        }),
+      }),
+    );
+    const jsonCreated = await resCreated.json();
+    expect(resCreated.status).toBe(201);
+    expect(jsonCreated.success).toBe(true);
+    expect(jsonCreated.data.total_biaya).toBe(250000);
+    expect(jsonCreated.data.status_pesanan).toBe('MENUNGGU_PEMBAYARAN');
+
+    const resEmptyBrief = await postPesananBaru(
+      new Request('http://localhost/api/pesanan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_pengguna_jasa: PENGGUNA_JASA_2,
+          id_jasa: mockJasaPesananList[0].id_jasa,
+          brief: '   ',
+        }),
+      }),
+    );
+    expect(resEmptyBrief.status).toBe(400);
+
+    const resNotFound = await postPesananBaru(
+      new Request('http://localhost/api/pesanan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_pengguna_jasa: PENGGUNA_JASA_2,
+          id_jasa: 'jasa-tidak-ada',
+          brief: 'Brief valid',
+        }),
+      }),
+    );
+    expect(resNotFound.status).toBe(404);
+  });
+
+  it('GET /api/pesanan/[id_pesanan] mengembalikan detail pesanan (HTTP 200) atau 404 jika tidak ada', async () => {
+    const resDetail = await getDetailPesanan(
+      new NextRequest('http://localhost/api/pesanan/c0000000-0000-4000-8000-000000000001'),
+      { params: { id_pesanan: 'c0000000-0000-4000-8000-000000000001' } },
+    );
+    const jsonDetail = await resDetail.json();
+    expect(resDetail.status).toBe(200);
+    expect(jsonDetail.success).toBe(true);
+    expect(jsonDetail.data.id_pesanan).toBe('c0000000-0000-4000-8000-000000000001');
+
+    const res404 = await getDetailPesanan(
+      new NextRequest('http://localhost/api/pesanan/tidak-ada'),
+      { params: { id_pesanan: 'tidak-ada' } },
+    );
+    expect(res404.status).toBe(404);
   });
 });
