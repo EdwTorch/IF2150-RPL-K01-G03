@@ -129,14 +129,14 @@ export default function HalamanRegistrasi() {
             </div>
           </fieldset>
 
-          <Input
-            label="Nama"
-            placeholder="Masukkan nama"
-            autoComplete="name"
-            value={form_registrasi.nama}
-            onChange={(e) => ubahIsian("nama", e.target.value)}
-            error={field_error.nama}
-          />
+            <Input
+                label={role === "penyedia_jasa" ? "Nama penyedia" : "Nama"}
+                placeholder={role === "penyedia_jasa" ? "Masukkan nama penyedia" : "Masukkan nama"}
+                autoComplete="name"
+                value={form_registrasi.nama}
+                onChange={(e) => ubahIsian("nama", e.target.value)}
+                error={field_error.nama}
+            />
           <Input
             label="Email"
             type="email"
