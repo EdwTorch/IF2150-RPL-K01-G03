@@ -37,7 +37,7 @@ export interface PengajuanRevisi {
   created_at?: string;
 }
 
-
+// Tipe data untuk Pesanan (C27)
 export interface Pesanan {
   id_pesanan : string;
   id_pengguna_jasa : string;
@@ -45,7 +45,14 @@ export interface Pesanan {
   id_jasa : string;
   brief : string;
   total_biaya : number;
+  id_metode_pembayaran? : string;
+  status_pembayaran? : string;
   status_pesanan : string;
+  status_pencairan? : boolean;
+  waktu_pencairan? : string;
+  created_at? : string;
+  updated_at? : string;
+  jasa? : Jasa;
 }
 
 export interface PencairanDana {
