@@ -19,7 +19,7 @@ import {
   MAX_MB,
   ajukanRevisi,
   getHasil,
-} from "@/services/layanan";
+} from "@/lib/layanan";
 
 const KUOTA_AWAL = 3;
 

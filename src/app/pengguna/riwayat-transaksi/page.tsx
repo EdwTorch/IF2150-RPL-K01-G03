@@ -11,7 +11,7 @@ import {
 } from "@/components/elemen";
 import { cn } from "@/lib/cn";
 import { formatRupiah } from "@/lib/format";
-import { Transaksi, getTransaksi } from "@/services/layanan";
+import { Transaksi, getTransaksi } from "@/lib/layanan";
 
 const TAB = ["Semua", "Berjalan", "Selesai", "Dikembalikan"] as const;
 
@@ -99,7 +99,7 @@ export default function HalamanRiwayatTransaksi() {
 
       {error && <Alert>{error}</Alert>}
 
-      <PageHero judul="Riwayat Transaksi" />
+      <PageHero judul="Riwayat Transaksi" penuh />
 
       {/* Statistik transaksi */}
       <div className="grid gap-4 md:grid-cols-3">
@@ -177,7 +177,7 @@ export default function HalamanRiwayatTransaksi() {
                   href={
                     item.status === "selesai"
                       ? "/jasa"
-                      : `/hasil/${item.id}`
+                      : `/pengguna/hasil/${item.id}`
                   }
                 >
                   {labelTombol}
@@ -202,7 +202,7 @@ export default function HalamanRiwayatTransaksi() {
                 ) : (
                   <Button
                     variant="accent"
-                    href={`/ulasan/${item.id}`}
+                    href={`/pengguna/ulasan/${item.id}`}
                     className="h-9 px-4"
                   >
                     Beri ulasan

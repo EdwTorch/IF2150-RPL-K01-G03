@@ -1,4 +1,3 @@
-
 // Endpoint backend yang sudah ada di app/api (isi fungsi di bawah nanti memanggil ini; cek kontraknya dengan teman backend):
 //  getTransaksi/getPesananStatus/terima/tolakPesanan -> /api/pesanan | getHasil/kirimHasil/konfirmasiSelesai/ajukanRevisi -> /api/deliverables
 //  validasi & unggah berkas -> /api/upload | tiket/mediasi admin -> /api/mediasi | loginAdmin -> /api/auth
@@ -74,7 +73,9 @@ export function validasiBerkas(f: File[]) {
 
 const S = ["Belum", "Mediasi", "Selesai"] as const;
 
-const T: Tiket[] = [1, 2, 3].map((i) => ({
+// Data mock tiket laporan admin.
+// Menggunakan let agar data tiket dapat diperbarui selama aplikasi berjalan.
+let T: Tiket[] = [1, 2, 3].map((i) => ({
   id: `TKT00${i}`,
   pelapor: "Budi",
   terlapor: "Sari",
@@ -323,18 +324,29 @@ export const kirimUlasan = (
   d: { rating: number; komentar: string; files: File[] }
 ) => wait(true);
 
-export const kirimLaporan = (
+// Mengirim laporan pengguna dan menambahkan tiket baru ke mock admin.
+export const kirimLaporan = async (
   d: { penyedia: string; kategori: string; deskripsi: string; files: File[] }
-) =>
-  wait<Tiket>({
-    id: "TKT001",
+) => {
+  const nomor = T.reduce((max, tiket) => {
+    const angka = Number(tiket.id.replace("TKT", ""));
+    return Math.max(max, angka);
+  }, 0) + 1;
+
+  const tiketBaru: Tiket = {
+    id: `TKT${String(nomor).padStart(3, "0")}`,
     pelapor: "Saya",
     terlapor: d.penyedia,
     kategori: d.kategori,
     deskripsi: d.deskripsi,
     tanggal: "hari ini",
     status: "Belum",
-  });
+  };
+
+  T = [...T, tiketBaru];
+
+  return wait<Tiket>({ ...tiketBaru });
+};
 
 export const loginAdmin = async (email: string, pass: string) => {
   await wait(0);
@@ -343,15 +355,52 @@ export const loginAdmin = async (email: string, pass: string) => {
     throw new Error("Email atau kata sandi salah. Silakan coba lagi.");
 };
 
+// Mengambil seluruh tiket laporan untuk Dashboard Admin.
 export const getTiketList = () =>
-  wait<Tiket[]>(MOCK.tiketKosong ? [] : T);
+  wait<Tiket[]>(MOCK.tiketKosong ? [] : T.map((t) => ({ ...t })));
 
-export const getTiket = (id: string) =>
-  wait<Tiket | null>(T.find((t) => t.id === id) ?? null);
+// Mengambil detail tiket berdasarkan idTiket.
+export const getTiket = (idTiket: string) => {
+  const tiket = T.find((t) => t.id === idTiket);
 
-export const kirimTanggapan = (
-  id: string,
+  return wait<Tiket | null>(tiket ? { ...tiket } : null);
+};
+
+// Mengirim tanggapan admin dan mengubah status tiket menjadi Selesai.
+export const kirimTanggapan = async (
+  idTiket: string,
   d: { tanggapan: string; sanksi: string }
-) => wait(true);
+) => {
+  const index = T.findIndex((t) => t.id === idTiket);
 
-export const ajukanMediasi = (id: string) => wait(true);
+  if (index === -1) {
+    throw new Error("Tiket tidak ditemukan.");
+  }
+
+  T[index] = {
+    ...T[index],
+    status: "Selesai",
+  };
+
+  return wait(true);
+};
+
+// Mengajukan mediasi dan mengubah status tiket menjadi Mediasi.
+export const ajukanMediasi = async (idTiket: string) => {
+  const index = T.findIndex((t) => t.id === idTiket);
+
+  if (index === -1) {
+    throw new Error("Tiket tidak ditemukan.");
+  }
+
+  if (T[index].status === "Selesai") {
+    throw new Error("Tiket sudah selesai.");
+  }
+
+  T[index] = {
+    ...T[index],
+    status: "Mediasi",
+  };
+
+  return wait(true);
+};
