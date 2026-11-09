@@ -11,16 +11,16 @@ export async function GET(
     const { data: { user }, error } = await supabase.auth.getUser();
 
     if (error || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false , message: "Unauthorized" }, { status: 401 });
     }
 
     const params = await context.params;
     const messages = await ChatService.getRiwayatPesan(params.id_chatroom, user.id);
 
-    return NextResponse.json({ success: true, data: messages });
+    return NextResponse.json({ success: true,  data: messages });
   } catch (err: any) {
     const status = err.message.includes("Akses ditolak") ? 403 : 400;
-    return NextResponse.json({ error: err.message }, { status });
+    return NextResponse.json({ success : false , message: err.message }, { status });
   }
 }
 
@@ -33,22 +33,28 @@ export async function POST(
     const { data: { user }, error } = await supabase.auth.getUser();
 
     if (error || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false , message: "Unauthorized" }, { status: 401 });
     }
 
     const params = await context.params;
-    const body = await req.json();
+    const body = await req.json().catch(() => null);
+    if (!body) {
+      return NextResponse.json(
+        { success: false, status: false, message: "Body request tidak valid." },
+        { status: 400 }
+      );
+    }
 
     const pesanBaru = await ChatService.kirimPesan(
       params.id_chatroom,
       user.id,
-      body.isi_pesan,
-      body.lampiran
+      body.isi_pesan || "",
+      body.lampiran || null
     );
 
-    return NextResponse.json({ success: true, data: pesanBaru }, { status: 201 });
+    return NextResponse.json({ success: true, message : "kirim pesan berhasil", data: pesanBaru }, { status: 201 });
   } catch (err: any) {
     const status = err.message.includes("Akses ditolak") ? 403 : 400;
-    return NextResponse.json({ error: err.message }, { status });
+    return NextResponse.json({ success : false , message: err.message }, { status });
   }
 }
