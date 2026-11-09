@@ -21,50 +21,20 @@ const waktu = (p: Pesanan) => Date.parse(p.created_at ?? "") || 0;
 
 export class PesananService {
   /**
-   * Penyedia Jasa menerima atau menolak pesanan masuk
+   * Penyedia Jasa menerima atau menolak pesanan masuk (UC10)
+   * Terunifikasi menggunakan konfirmasiPesanan & konfirmasiPesananDiMemori
    */
   static async respondOrder(data: {
     id_pesanan: string;
     user_id: string;
-    action: "Diterima" | "Ditolak";
-  }): Promise<void> {
-    const supabase = await createClient();
-
-    // 1. Ambil data pesanan untuk pengecekan validasi
-    const { data: pesanan, error: fetchError } = await supabase
-      .from("pesanan")
-      .select("id_penyedia_jasa, status_pesanan")
-      .eq("id_pesanan", data.id_pesanan)
-      .single();
-
-    if (fetchError || !pesanan) {
-      throw new Error("Pesanan tidak ditemukan.");
+    action: "Diterima" | "Ditolak" | string;
+  }): Promise<Pesanan> {
+    const act = data.action?.toLowerCase();
+    if (act !== "diterima" && act !== "terima" && act !== "ditolak" && act !== "tolak") {
+      throw new Error("Tindakan konfirmasi tidak valid");
     }
-
-    // 2. Validasi Hak Akses: Hanya Penyedia Jasa yang boleh menanggapi
-    if (pesanan.id_penyedia_jasa !== data.user_id) {
-      throw new Error("Akses ditolak. Hanya penyedia jasa yang dapat memproses pesanan ini.");
-    }
-
-    // 3. Validasi Status: Hanya pesanan berstatus 'Menunggu Konfirmasi' yang bisa ditanggapi
-    if (pesanan.status_pesanan !== "Menunggu Konfirmasi") {
-      throw new Error("Pesanan ini sudah diproses sebelumnya.");
-    }
-
-    // 4. Tentukan status baru berdasarkan aksi
-    const newStatus = data.action === "Diterima" ? "Diproses" : "Ditolak";
-
-    // 5. Update status pesanan di database
-    const { error: updateError } = await supabase
-      .from("pesanan")
-      .update({
-        status_pesanan: newStatus,
-      })
-      .eq("id_pesanan", data.id_pesanan);
-
-    if (updateError) {
-      throw new Error(updateError.message);
-    }
+    const tindakan: "terima" | "tolak" = act === "diterima" || act === "terima" ? "terima" : "tolak";
+    return this.konfirmasiPesanan(data.id_pesanan, data.user_id, tindakan);
   }
 
   static normalisasiStatus(status?: string): string {
@@ -125,15 +95,17 @@ export class PesananService {
     };
   }
 
-  // Inti murni UC10 (Algo-0205 & Algo-0206)
+  // Inti murni UC10 (Algo-0205 & Algo-0206): menerima status MENUNGGU_KONFIRMASI dan MENUNGGU_PEMBAYARAN
   static konfirmasiPesananDiMemori(
     daftar_pesanan: Pesanan[],
     id_pesanan: string,
     id_penyedia_jasa: string,
-    tindakan: "terima" | "tolak",
+    tindakan: "terima" | "tolak" | string,
   ): Pesanan {
     if (!id_pesanan?.trim() || !id_penyedia_jasa?.trim()) throw new Error("Identitas pesanan tidak valid");
-    if (tindakan !== "terima" && tindakan !== "tolak") throw new Error("Tindakan konfirmasi tidak valid");
+    const t = tindakan?.toLowerCase();
+    const act = t === "diterima" || t === "terima" ? "terima" : t === "ditolak" || t === "tolak" ? "tolak" : null;
+    if (!act) throw new Error("Tindakan konfirmasi tidak valid");
 
     const pesanan = daftar_pesanan.find((p) => p.id_pesanan === id_pesanan);
     if (!pesanan) throw new Error("Pesanan tidak ditemukan");
@@ -148,9 +120,9 @@ export class PesananService {
 
     return {
       ...pesanan,
-      status_pesanan: tindakan === "terima" ? "DIPROSES" : "DITOLAK",
+      status_pesanan: act === "terima" ? "DIPROSES" : "DITOLAK",
       status_pembayaran:
-        tindakan === "tolak" && this.normalisasiStatus(pesanan.status_pembayaran) === "LUNAS"
+        act === "tolak" && this.normalisasiStatus(pesanan.status_pembayaran) === "LUNAS"
           ? "DIKEMBALIKAN"
           : pesanan.status_pembayaran,
       updated_at: new Date().toISOString(),
@@ -238,10 +210,12 @@ export class PesananService {
   static async konfirmasiPesanan(
     id_pesanan: string,
     id_penyedia_jasa: string,
-    tindakan: "terima" | "tolak",
+    tindakan: "terima" | "tolak" | string,
   ): Promise<Pesanan> {
     if (!id_pesanan?.trim() || !id_penyedia_jasa?.trim()) throw new Error("Identitas pesanan tidak valid");
-    if (tindakan !== "terima" && tindakan !== "tolak") throw new Error("Tindakan konfirmasi tidak valid");
+    const t = tindakan?.toLowerCase();
+    const act = t === "diterima" || t === "terima" ? "terima" : t === "ditolak" || t === "tolak" ? "tolak" : null;
+    if (!act) throw new Error("Tindakan konfirmasi tidak valid");
 
     const supabase = await createClient();
     const { data: pesanan, error: errFetch } = await supabase
@@ -252,7 +226,7 @@ export class PesananService {
     if (errFetch) throw new Error(errFetch.message);
     if (!pesanan) throw new Error("Pesanan tidak ditemukan");
 
-    const diperbarui = this.konfirmasiPesananDiMemori([pesanan as Pesanan], id_pesanan, id_penyedia_jasa, tindakan);
+    const diperbarui = this.konfirmasiPesananDiMemori([pesanan as Pesanan], id_pesanan, id_penyedia_jasa, act);
     const { data, error } = await supabase
       .from("pesanan")
       .update({

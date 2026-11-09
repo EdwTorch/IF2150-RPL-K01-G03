@@ -22,7 +22,7 @@ export function responsGagal(err: unknown) {
   const message = err instanceof Error ? err.message : 'Terjadi kegagalan server internal';
   const [status, error_code] = /tidak ditemukan/i.test(message)
     ? [404, 'NOT_FOUND']
-    : /tidak valid|tidak lengkap|harus|tidak didukung|melebihi|minimal|rentang/i.test(message)
+    : /tidak valid|tidak lengkap|harus|tidak didukung|melebihi|minimal|maksimal|rentang|batas/i.test(message)
       ? [400, 'VALIDATION_ERROR']
       : [500, 'DATABASE_ERROR'];
   return NextResponse.json({ success: false, message, error_code }, { status });
