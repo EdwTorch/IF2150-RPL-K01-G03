@@ -22,7 +22,7 @@ import {
   type Tiket,
   getTransaksi,
   kirimLaporan,
-} from "@/services/layanan";
+} from "@/lib/layanan";
 
 const KAT = [
   "Penipuan",

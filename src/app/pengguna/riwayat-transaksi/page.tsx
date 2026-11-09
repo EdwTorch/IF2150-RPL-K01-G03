@@ -11,7 +11,7 @@ import {
 } from "@/components/elemen";
 import { cn } from "@/lib/cn";
 import { formatRupiah } from "@/lib/format";
-import { Transaksi, getTransaksi } from "@/services/layanan";
+import { Transaksi, getTransaksi } from "@/lib/layanan";
 
 const TAB = ["Semua", "Berjalan", "Selesai", "Dikembalikan"] as const;
 
