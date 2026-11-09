@@ -55,6 +55,61 @@ export function validasiInputRegistrasi(input: InputRegistrasi): void {
     }
 }
 
+// Daftarkan akun baru: buat auth user, simpan profil & tabel turunan sesuai role
+export async function registrasi(
+    input: InputRegistrasi
+): Promise<{ id: string; email: string; nama: string; role: string }> {
+    validasiInputRegistrasi(input);
+
+    const email = input.email.trim().toLowerCase();
+    const supabase = await createClient();
+
+    // Buat akun di Supabase Auth (admin API agar bisa langsung confirm email)
+    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+        email,
+        password: input.password,
+        email_confirm: true,
+    });
+
+    if (authError) {
+        if (
+            authError.message?.toLowerCase().includes("already registered") ||
+            authError.message?.toLowerCase().includes("already been registered")
+        ) {
+            throw new AuthError("EMAIL_TAKEN", "Email sudah terdaftar");
+        }
+        throw new Error(authError.message);
+    }
+
+    const userId = authData.user.id;
+    const role = input.role === "penyedia_jasa" ? "PENYEDIA_JASA" : "USER";
+
+    // Simpan ke tabel pengguna
+    const { error: profilError } = await supabase.from("pengguna").insert({
+        id: userId,
+        nama: input.nama.trim(),
+        email,
+        role,
+    });
+
+    if (profilError) {
+        // Rollback: hapus auth user agar tidak orphan
+        await supabase.auth.admin.deleteUser(userId);
+        throw new Error(profilError.message);
+    }
+
+    // Simpan ke tabel turunan sesuai role
+    const tabelTurunan = input.role === "penyedia_jasa" ? "penyedia_jasa" : "pengguna_jasa";
+    const { error: turunanError } = await supabase.from(tabelTurunan).insert({ id: userId });
+
+    if (turunanError) {
+        await supabase.auth.admin.deleteUser(userId);
+        throw new Error(turunanError.message);
+    }
+
+    return { id: userId, email, nama: input.nama.trim(), role };
+}
+
 export async function login(email: string, password: string) {
     const clean_email = email?.trim().toLowerCase();
 
