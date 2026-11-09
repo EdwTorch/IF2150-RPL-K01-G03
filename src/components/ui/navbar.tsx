@@ -44,7 +44,7 @@ const MENU: Record<Exclude<Peran, "TAMU">, MenuItem[]> = {
     { label: "Bantuan", href: "/bantuan" },
   ],
   ADMIN: [
-    { label: "Tiket Laporan", href: "/admin" },
+    { label: "Tiket Laporan", href: "/admin/tiket" },
     { label: "Ruang Mediasi", href: "/admin" }
   ],
 };
