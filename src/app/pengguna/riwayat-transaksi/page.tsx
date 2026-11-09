@@ -202,7 +202,7 @@ export default function HalamanRiwayatTransaksi() {
                 ) : (
                   <Button
                     variant="accent"
-                    href={`/ulasan/${item.id}`}
+                    href={`/pengguna/ulasan/${item.id}`}
                     className="h-9 px-4"
                   >
                     Beri ulasan
