@@ -7,7 +7,7 @@ Lihat Detail Tiket dan Tanggapan Atmint
 */
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id_tiket: string } }
+  { params }: { params: Promise<{ id_tiket: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -17,21 +17,22 @@ export async function GET(
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message : "Unauthorized" }, { status: 401 });
     }
-
+    const {id_tiket} = await params;
     const detailTiket = await PelaporanService.getDetailTiket(
-      params.id_tiket,
+      id_tiket,
       user.id
     );
 
     return NextResponse.json({
       success: true,
+      message : "Detail Tiket Berhasil Dimuat",
       data: detailTiket,
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Gagal mengambil detail tiket." },
+      { success : false, message: error.message || "Gagal mengambil detail tiket." },
       { status: 400 }
     );
   }

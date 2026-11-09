@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS public.pengguna (
 CREATE TABLE IF NOT EXISTS public.penyedia_jasa (
     id UUID PRIMARY KEY REFERENCES public.pengguna(id) ON DELETE CASCADE,
     pengalaman TEXT[] DEFAULT '{}',
+    saldo INT,
     prestasi TEXT[] DEFAULT '{}',
     daftar_produk TEXT[] DEFAULT '{}',
     rating_rata_rata NUMERIC(3, 2) DEFAULT 0.0 CHECK (rating_rata_rata >= 0 AND rating_rata_rata <= 5),
@@ -155,6 +156,8 @@ CREATE TABLE IF NOT EXISTS public.pengajuan_revisi (
 CREATE TABLE IF NOT EXISTS public.pencairan_dana (
     id_pencairan UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
+    jumlah_pencairan INT,
+    id_penyedia_jasa UUID NOT NULL REFERENCES public.penyedia_jasa(id) ON DELETE CASCADE,
     state_pencairan_dana BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -208,11 +211,19 @@ CREATE TABLE IF NOT EXISTS public.notifikasi (
     id_notifikasi UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pengguna UUID REFERENCES public.pengguna(id) ON DELETE CASCADE,
     id_pesanan UUID REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
-    id_referensi UUID,
+    id_referensi UUID, --Bisa Menyimpan id_mediasi / id_room_chat
+    judul TEXT NOT NULL,
     pesan_notifikasi TEXT NOT NULL,
     is_read BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+CREATE INDEX IF NOT EXISTS idx_notifikasi_list 
+ON public.notifikasi(id_pengguna, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_notifikasi_unread 
+ON public.notifikasi(id_pengguna, is_read);
+
+ALTER PUBLICATION supabase_realtime ADD TABLE public.notifikasi;
 
 -- TABEL TANGGAPAN LAPORAN (C49)
 CREATE TABLE IF NOT EXISTS public.tanggapan_laporan (

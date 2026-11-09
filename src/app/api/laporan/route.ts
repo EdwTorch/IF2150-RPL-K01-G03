@@ -12,18 +12,19 @@ export async function GET(req: NextRequest) {
     } = await supabase.auth.getUser();
 
     if (authError || !user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
     }
 
     const daftarTiket = await PelaporanService.getTicketsByUser(user.id);
 
     return NextResponse.json({
       success: true,
+      message : "Daftar Tiket Berhasil dimuat",
       data: daftarTiket,
     });
   } catch (error: any) {
     return NextResponse.json(
-      { error: error.message || "Gagal mengambil daftar tiket." },
+      { success : false, message: error.message || "Gagal mengambil daftar tiket." },
       { status: 400 }
     );
   }
