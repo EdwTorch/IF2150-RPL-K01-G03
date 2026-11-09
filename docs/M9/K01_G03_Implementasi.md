@@ -201,10 +201,10 @@ Tabel B.2. Bukti Best Practices
 
 | Praktik | Bukti | Keterangan |
 | :--- | :--- | :--- |
-| Branching | *[Tautan ke daftar branch / graph commit]* | *[Skema yang dipakai]* |
-| Semantic commit | *[Tautan ke riwayat commit]* | *[Ringkasan]* |
-| Track tasks | *[Tautan ke Issues/Projects]* | *[Jumlah issue, pembagian]* |
-| Pull request dan review | *[Tautan ke 2-3 PR representatif]* | *[Siapa me-review siapa]* |
+| Branching | Graph Commit : [https://github.com/EdwTorch/IF2150-RPL-K01-G03/network](https://github.com/EdwTorch/IF2150-RPL-K01-G03/network) <br> All Branches : [https://github.com/EdwTorch/IF2150-RPL-K01-G03/branches/all](https://github.com/EdwTorch/IF2150-RPL-K01-G03/branches/all) | Menggunakan skema Git Flow : dengan development sebagai branch utama untuk merge setelah suatu fitur telah selesai dalam suatu branch, untuk fitur akan dipisah dalam branch, misal feat/backend-chat, feat/fe-layar-konfirmasi |
+| Semantic commit | [https://github.com/EdwTorch/IF2150-RPL-K01-G03/commits/development/](https://github.com/EdwTorch/IF2150-RPL-K01-G03/commits/development/) | Menggunakan Konvensi Semantic Commit, dengan menggunakan feat, fix, docs, style, refactor, test, dan chore |
+| Track tasks | [https://github.com/EdwTorch/IF2150-RPL-K01-G03/issues?q=is%3Aissue](https://github.com/EdwTorch/IF2150-RPL-K01-G03/issues?q=is%3Aissue) | 40 Issue, <br> Pembagian : Danesh : 5 Issue Backend <br> Revandra : 7 Issue Backend <br> Theresia : 15 Issue Frontend <br> Edward : 5 Issue Backend <br> Necia : 8 Issue Frontend  |
+| Pull request dan review | 1. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/49](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/49) <br> 2. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/38](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/38) <br> 3. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/57](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/57) 4. []() 5. []() | 1. Danesh Review Edward <br> 2. Edward Review Revandra <br> 3. Revandra Review Danesh <br> 4. Theresia Review Necia <br> 5. Necia Review Theresia |
 | Pengujian | *[Tautan ke `src/tests/` dan hasil test]* | *[Apa yang diuji, cara menjalankan]* |
 
 ### B.2.1 Profiling dan Optimasi
@@ -231,8 +231,13 @@ Tabel B.4. Kontribusi Anggota
 
 | NIM | Nama | Modul / Fitur yang Dikerjakan | Persentase Kontribusi |
 | :--- | :--- | :--- | :--- |
-| *[NIM 1]* | *[Nama]* | *[Modul/fitur]* | *[%]* |
-| *...* | *...* | *...* | *...* |
+| NIM | Nama |
+|---|---|
+| 13525031 | Revandra Zacky Maharta | | 20% |
+| 13525079 | Danesh Rasyad Damotino | | 20% |
+| 13525088 | Theresia Estelina Ratu Udju | | 20%|
+| 13525127 | Edward Terrance Lie | 1. Setup ENV dan npm install awal <br> 2. Modul deliverables dan Pengumpulan Revisi <br> 3. Modul Chat <br> 4. Modul Notifikasi <br> 5. Modul Pelaporan <br> 6. Modul Mediasi <br> 7. Modul Ulasan <br> 8. Bikin testing | 20% |
+| 13525130 | Necia Aurely Greva Dedevi | | 20% |
 
 ## B.5 Traceability Kelas Perancangan ke Implementasi
 
