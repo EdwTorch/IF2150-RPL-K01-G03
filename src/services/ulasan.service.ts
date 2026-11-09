@@ -49,6 +49,51 @@ export class UlasanService {
         };
     }
 
+    // Hitung ulang dan simpan rating agregat penyedia jasa
+    static async perbaruiRatingPenyedia(id_penyedia_jasa: string): Promise<RatingAgregat> {
+        if (!id_penyedia_jasa?.trim()) {
+            throw new Error("ID penyedia jasa tidak valid");
+        }
+        const supabase = await createClient();
+
+        // Ambil seluruh pesanan milik penyedia jasa
+        const { data: pesananList, error: errPesanan } = await supabase
+            .from("pesanan")
+            .select("id_pesanan")
+            .eq("id_penyedia_jasa", id_penyedia_jasa);
+
+        if (errPesanan) throw new Error(errPesanan.message);
+
+        const idsPesanan = (pesananList || []).map((p) => p.id_pesanan);
+
+        let daftarUlasan: { rating: number }[] = [];
+        if (idsPesanan.length > 0) {
+            const { data: ulasanData, error: errUlasan } = await supabase
+                .from("ulasan")
+                .select("rating")
+                .in("id_pesanan", idsPesanan);
+
+            if (errUlasan) throw new Error(errUlasan.message);
+            daftarUlasan = ulasanData || [];
+        }
+
+        // Hitung agregat rating
+        const agregat = this.hitungRatingAgregat(daftarUlasan);
+
+        // Perbarui rating_rata_rata profil penyedia jasa 
+        const { error: errUpdate } = await supabase
+            .from("penyedia_jasa")
+            .update({ rating_rata_rata: agregat.rating_rata_rata })
+            .eq("id", id_penyedia_jasa);
+
+        if (errUpdate) {
+            console.error("Gagal memperbarui rating penyedia jasa:", errUpdate.message);
+            throw new Error("Gagal memperbarui rata-rata rating penyedia jasa.");
+        }
+
+        return agregat;
+    }
+
     // Ambil profil rating agregat dan total ulasan penyedia jasa untuk tampilan profil (I-03)
     static async getRatingDanUlasanPenyedia(id_penyedia_jasa: string): Promise<{
         id_penyedia_jasa: string;
