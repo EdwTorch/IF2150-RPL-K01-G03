@@ -250,8 +250,61 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | *[C01]* | *[Nama kelas pada DPPL]* | *[mis. Kelas / Fungsi / Komponen / Route / Tabel]* | *[mis. `src/models/user.py` - `User`]* | *[Cara atribut dan operasi kelas diwujudkan; "-" jika tidak ada penjelasan tambahan]* |
 | *[C02]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/components/LoginForm.tsx` - `LoginForm`]* | *[mis. atribut menjadi *state*, operasi menjadi *handler*]* |
 | *[C03]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/routes/auth.js` - `POST /login`]* | *[Keterangan]* |
-| *...* | *...* | *...* | *...* | *...* |
 
+| C01 | Pengguna  |  | | |
+| C02 | PenyediaJasa  | | | |
+| C03 | PenggunaJasa  | | | |
+| C04 | HalamanRegistrasi  | | | |
+| C05 | LayananRegistrasi | | | |
+| C06 | HalamanLogin  | | | |
+| C07 | Autentikator  | | | |
+| C08 | HalamanPortofolio  | | | |
+| C09 | Portofolio  | | | |
+| C10 | PengontrolPortofolio | | | |
+| C11 | LayananUploadFile  | | | |
+| C12 | Jasa  | | | |
+| C13 | HalamanUploadJasa  | | | |
+| C14 | JasaController  | | | |
+| C15 | HalamanPencarian  | | | |
+| C16 | HasilPencarian  | | | |
+| C17 | LayananPencarian  | | | |
+| C18 | LayananPembandingJasa  | | | |
+| C19 | HalamanDetailJasa  | | | |
+| C20 | Bookmark  | | | |
+| C21 | HalamanBookmark  | | | |
+| C22 | PengontrolBookmark  | | | |
+| C23 | ChatRoom  | | | |
+| C24 | HalamanChat  | | | |
+| C25 | LayananPesanInstan  | | | |
+| C26 | LayananNotifikasiChat  | | | |
+| C27 | Pesanan  | | | |
+| C28 | HalamanPemesanan  | | | |
+| C29 | HalamanPembayaran  | | | |
+| C30 | HalamanRiwayatTransaksi  | | | |
+| C31 | PengontrolPesanan  | | | |
+| C32 | PengontrolTransaksi  | | | |
+| C33 | MetodePembayaran  | | | |
+| C34 | RiwayatTransaksi  | | | |
+| C35 | HalamanKonfirmasi  | | | |
+| C36 | ProdukAkhir  | | | |
+| C37 | HalamanPengumpulan  | | | |
+| C38 | HalamanDeliverables  | | | |
+| C39 | PengajuanRevisi  | | | |
+| C40 | HalamanRequestRevisi  | | | |
+| C41 | RevisiHandler  | | | |
+| C42 | PencairanDana  | | | |
+| C43 | TiketLaporan  | | | |
+| C44 | HalamanPelaporan | | | |
+| C45 | LaporanHandler | | | |
+| C46 | Ulasan | | | |
+| C47 | HalamanUlasan  | | | |
+| C48 | UlasanHandler  | | | |
+| C49 | TanggapanLaporan  | | | |
+| C50 | HalamanPengajuanMediasi | | | |
+| C51 | MediasiHandler | | | |
+| C52 | Admin  | | | |
+| C53 | HalamanDashboardAdmin | | | |
+| C54 | PengumpulanController | | | |
 Catatan:
 - Satu kelas perancangan boleh diwujudkan oleh beberapa file/unit, dan satu file/unit boleh mewujudkan beberapa kelas perancangan. Tuliskan semuanya.
 - Kelas perancangan yang **tidak diimplementasikan** atau **digabung/dipecah** tetap dicantumkan, dan alasannya dicatat di Bagian B.1.
