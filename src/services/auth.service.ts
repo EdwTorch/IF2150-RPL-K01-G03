@@ -1,4 +1,5 @@
 import { createClient } from "@/lib/supabase/server";
+import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export class AuthError extends Error {
     constructor(
@@ -12,7 +13,8 @@ export class AuthError extends Error {
             | "ACCOUNT_SUSPENDED"
             | "PROFILE_NOT_FOUND"
             | "FORBIDDEN"
-            | "LOGOUT_FAILED",
+            | "LOGOUT_FAILED"
+            | "INTERNAL_ERROR";
         message: string
     ) {
         super(message);
@@ -38,6 +40,25 @@ export function hasRelation(rel: unknown): boolean {
     if (Array.isArray(rel)) return rel.length > 0;
     if (typeof rel === "object") return Object.keys(rel).length > 0;
     return false;
+}
+
+// Admin client khusus untuk operasi auth.admin (createUser, deleteUser) dengan SERVICE_ROLE_KEY
+let adminClientInstance: ReturnType<typeof createAdminClient> | null = null;
+
+function getAdminClient() {
+    if (adminClientInstance) return adminClientInstance;
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!supabaseUrl || !serviceRoleKey) {
+        throw new AuthError("INTERNAL_ERROR", "Konfigurasi Supabase tidak lengkap");
+    }
+    adminClientInstance = createAdminClient(supabaseUrl, serviceRoleKey, {
+        auth: {
+            autoRefreshToken: false,
+            persistSession: false,
+        },
+    });
+    return adminClientInstance;
 }
 
 // Validasi input registrasi — murni (dapat diuji unit tanpa DB)
@@ -70,31 +91,29 @@ export async function registrasi(
     validasiInputRegistrasi(input);
 
     const email = input.email.trim().toLowerCase();
-    const supabase = await createClient();
+    const adminClient = getAdminClient();
 
-    // Buat akun di Supabase Auth (admin API agar bisa langsung confirm email)
-    const { data: authData, error: authError } = await supabase.auth.admin.createUser({
+    // Buat akun di Supabase Auth menggunakan admin client (SERVICE_ROLE_KEY)
+    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
         email,
         password: input.password,
         email_confirm: true,
     });
-
-    if (authError) {
+    if (authError || !authData?.user) {
         if (
-            authError.message?.toLowerCase().includes("already registered") ||
-            authError.message?.toLowerCase().includes("already been registered")
+            authError?.message?.toLowerCase().includes("already registered") ||
+            authError?.message?.toLowerCase().includes("already been registered")
         ) {
             throw new AuthError("EMAIL_TAKEN", "Email sudah terdaftar");
         }
-        throw new Error(authError.message);
+        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat pendaftaran akun");
     }
-
-    const userId = authData.user.id;
+    const user_id = authData.user.id;
     const role = input.role === "penyedia_jasa" ? "PENYEDIA_JASA" : "USER";
 
     // Simpan ke tabel pengguna
-    const { error: profilError } = await supabase.from("pengguna").insert({
-        id: userId,
+    const { error: profilError } = await adminClient.from("pengguna").insert({
+        id: user_id,
         nama: input.nama.trim(),
         email,
         role,
@@ -102,20 +121,22 @@ export async function registrasi(
 
     if (profilError) {
         // Rollback: hapus auth user agar tidak orphan
-        await supabase.auth.admin.deleteUser(userId);
-        throw new Error(profilError.message);
+        await adminClient.auth.admin.deleteUser(user_id);
+        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat menyimpan profil pengguna");
     }
 
     // Simpan ke tabel turunan sesuai role
     const tabelTurunan = input.role === "penyedia_jasa" ? "penyedia_jasa" : "pengguna_jasa";
-    const { error: turunanError } = await supabase.from(tabelTurunan).insert({ id: userId });
+    const { error: turunanError } = await adminClient.from(tabelTurunan).insert({ id: user_id });
 
     if (turunanError) {
-        await supabase.auth.admin.deleteUser(userId);
-        throw new Error(turunanError.message);
+        // Rollback: bersihkan data pengguna dan auth user agar tidak meninggalkan orphan data
+        await adminClient.from("pengguna").delete().eq("id", user_id);
+        await adminClient.auth.admin.deleteUser(user_id);
+        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat menyimpan data peran pengguna");
     }
 
-    return { id: userId, email, nama: input.nama.trim(), role };
+    return { id: user_id, email, nama: input.nama.trim(), role };
 }
 
 export async function login(email: string, password: string) {
