@@ -99,7 +99,7 @@ export default function HalamanRiwayatTransaksi() {
 
       {error && <Alert>{error}</Alert>}
 
-      <PageHero judul="Riwayat Transaksi" />
+      <PageHero judul="Riwayat Transaksi" penuh />
 
       {/* Statistik transaksi */}
       <div className="grid gap-4 md:grid-cols-3">
@@ -177,7 +177,7 @@ export default function HalamanRiwayatTransaksi() {
                   href={
                     item.status === "selesai"
                       ? "/jasa"
-                      : `/hasil/${item.id}`
+                      : `/pengguna/hasil/${item.id}`
                   }
                 >
                   {labelTombol}
