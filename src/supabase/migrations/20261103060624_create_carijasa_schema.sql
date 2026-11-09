@@ -211,11 +211,19 @@ CREATE TABLE IF NOT EXISTS public.notifikasi (
     id_notifikasi UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pengguna UUID REFERENCES public.pengguna(id) ON DELETE CASCADE,
     id_pesanan UUID REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
-    id_referensi UUID,
+    id_referensi UUID, --Bisa Menyimpan id_mediasi / id_room_chat
+    judul TEXT NOT NULL,
     pesan_notifikasi TEXT NOT NULL,
     is_read BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+CREATE INDEX IF NOT EXISTS idx_notifikasi_list 
+ON public.notifikasi(id_pengguna, created_at DESC);
+
+CREATE INDEX IF NOT EXISTS idx_notifikasi_unread 
+ON public.notifikasi(id_pengguna, is_read);
+
+ALTER PUBLICATION supabase_realtime ADD TABLE public.notifikasi;
 
 -- TABEL TANGGAPAN LAPORAN (C49)
 CREATE TABLE IF NOT EXISTS public.tanggapan_laporan (
