@@ -4,6 +4,10 @@ export class AuthError extends Error {
     constructor(
         public code: 
             | "EMPTY_INPUT"
+            | "INVALID_EMAIL"
+            | "WEAK_PASSWORD"
+            | "EMAIL_TAKEN"
+            | "INVALID_ROLE"
             | "INVALID_CREDENTIALS"
             | "ACCOUNT_SUSPENDED"
             | "PROFILE_NOT_FOUND"
@@ -13,6 +17,41 @@ export class AuthError extends Error {
     ) {
         super(message);
         this.name = "AuthError";
+    }
+}
+
+export type RoleRegistrasi = "pengguna_jasa" | "penyedia_jasa";
+
+export interface InputRegistrasi {
+    nama: string;
+    email: string;
+    password: string;
+    role: RoleRegistrasi;
+}
+
+// Panjang minimum password
+export const MIN_PANJANG_PASSWORD = 8;
+
+// Validasi input registrasi — murni (dapat diuji unit tanpa DB)
+export function validasiInputRegistrasi(input: InputRegistrasi): void {
+    if (!input.nama?.trim()) {
+        throw new AuthError("EMPTY_INPUT", "Nama tidak boleh kosong");
+    }
+    if (!input.email?.trim()) {
+        throw new AuthError("EMPTY_INPUT", "Email tidak boleh kosong");
+    }
+    const formatEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formatEmail.test(input.email.trim())) {
+        throw new AuthError("INVALID_EMAIL", "Format email tidak valid");
+    }
+    if (!input.password || input.password.length < MIN_PANJANG_PASSWORD) {
+        throw new AuthError(
+            "WEAK_PASSWORD",
+            `Password minimal ${MIN_PANJANG_PASSWORD} karakter`
+        );
+    }
+    if (input.role !== "pengguna_jasa" && input.role !== "penyedia_jasa") {
+        throw new AuthError("INVALID_ROLE", "Role tidak valid");
     }
 }
 
