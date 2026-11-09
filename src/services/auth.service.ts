@@ -227,6 +227,7 @@ export async function loginAdmin(email: string, password: string) {
 
     if (result.user.role !== "ADMIN") {
         const supabase = await createClient();
+        await supabase.from("pengguna").update({ status_online: false }).eq("id", result.user.id);
         await supabase.auth.signOut(); // Hapus cookie sesi agar tidak nyangkut
         throw new AuthError("FORBIDDEN", "Akun ini tidak memiliki akses administrator");
     }
