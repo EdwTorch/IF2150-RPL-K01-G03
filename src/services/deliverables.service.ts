@@ -1,6 +1,11 @@
 // src/services/deliverable.service.ts
 import { createClient } from "@/lib/supabase/server";
 import { ProdukAkhir, PengajuanRevisi } from "@/models/types";
+import { getStorageService } from "@/services/storage";
+
+export const FOLDER_DELIVERABLE = "deliverables-uploads";
+export const MAKS_UKURAN_DELIVERABLE = 50 * 1024 * 1024; // 50 MB
+export const TIPE_DELIVERABLE = /^(image\/(png|jpe?g|webp|gif)|video\/mp4|application\/(pdf|zip)|text\/(plain|html))$/;
 import { NotifikasiService } from "./notifikasi.service"; 
 
 export class DeliverablesService {
@@ -404,5 +409,19 @@ export class DeliverablesService {
         throw new Error("Akses ditolak, pesanan ini bukan milik anda");
     }
     return true;
+  }
+
+  // Unggah berkas ke folder deliverables-uploads via Storage Service (AC-1)
+  static async unggahBerkasDeliverable(file: File): Promise<string> {
+    if (file.size > MAKS_UKURAN_DELIVERABLE) {
+      throw new Error(`Ukuran berkas melebihi batas maksimum 50 MB`);
+    }
+    if (!TIPE_DELIVERABLE.test(file.type)) {
+      throw new Error(`Tipe berkas ${file.type} tidak diizinkan untuk deliverable`);
+    }
+    const storage = getStorageService();
+    const { url, error } = await storage.upload(file, FOLDER_DELIVERABLE);
+    if (error || !url) throw new Error(error ?? `Gagal mengunggah berkas deliverable`);
+    return url;
   }
 }

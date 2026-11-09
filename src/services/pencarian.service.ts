@@ -25,7 +25,16 @@ export interface HasilKomparasiJasa {
 
 export const BATAS_HASIL_PENCARIAN = 20; // LIMIT Q-1701
 export const MIN_PANJANG_KEYWORD = 3; // Algo-1701 baris 1
+export const MAKS_LIMIT_PENCARIAN = 100;
+export const MAKS_KOMPARASI_JASA = 4;
 export const DAFTAR_URUTAN: UrutanPencarian[] = ['terbaru', 'harga_asc', 'harga_desc', 'rating_desc'];
+
+// Normalisasi keyword satu pintu: bersihkan karakter khusus PostgREST [%,()*\\] & rapikan spasi
+export function normalisasiKeyword(raw?: string): string | undefined {
+  if (raw === undefined || raw === null) return undefined;
+  const bersih = raw.replace(/[%,()*\\]/g, ' ').replace(/\s+/g, ' ').trim();
+  return bersih.length > 0 ? bersih : undefined;
+}
 
 const rating = (j: Jasa) => j.rating_rata_rata ?? 0;
 const waktu = (j: Jasa) => Date.parse(j.created_at ?? '') || 0;
@@ -35,11 +44,13 @@ const cocok = (teks: string, kata: string) => teks.toLowerCase().includes(kata.t
 export class LayananPencarian {
   // Algo-1701 baris 1 + validasi rentang untuk Algo-1702
   static validasiFilter(f: FilterPencarian): void {
-    const keyword = f.keyword?.trim();
-    if (keyword && keyword.length < MIN_PANJANG_KEYWORD) {
-      throw new Error(`Keyword Pencarian Minimal ${MIN_PANJANG_KEYWORD} karakter`);
+    if (f.keyword !== undefined && f.keyword.trim().length > 0) {
+      const bersih = normalisasiKeyword(f.keyword);
+      if (!bersih || bersih.length < MIN_PANJANG_KEYWORD) {
+        throw new Error(`Keyword Pencarian Minimal ${MIN_PANJANG_KEYWORD} karakter`);
+      }
     }
-    const { harga_min, harga_max, rating_min, rating_max } = f;
+    const { harga_min, harga_max, rating_min, rating_max, limit } = f;
     if ([harga_min, harga_max, rating_min, rating_max].some((n) => n !== undefined && !Number.isFinite(n))) {
       throw new Error('Rentang harga dan rating harus berupa angka');
     }
@@ -50,11 +61,16 @@ export class LayananPencarian {
       throw new Error('Rentang rating harus antara 0 hingga 5');
     }
     if (f.urutkan && !DAFTAR_URUTAN.includes(f.urutkan)) throw new Error('Urutan pencarian tidak valid');
+    if (limit !== undefined) {
+      if (typeof limit !== 'number' || !Number.isInteger(limit) || limit < 1 || limit > MAKS_LIMIT_PENCARIAN) {
+        throw new Error('Batas jumlah hasil pencarian (limit) tidak valid');
+      }
+    }
   }
 
   // Inti logika murni (dipakai mode mock, post-proses hasil DB, dan unit test)
   static saringDanUrutkan(daftar: Jasa[], f: FilterPencarian = {}): Jasa[] {
-    const keyword = f.keyword?.trim();
+    const keyword = normalisasiKeyword(f.keyword);
     const hasil = daftar.filter(
       (j) =>
         j.status_aktif !== false &&
@@ -80,8 +96,11 @@ export class LayananPencarian {
 
   // Algo-1701 / Q-1701
   static async cariJasaBerdasarkanKeyword(keyword: string): Promise<Jasa[]> {
-    if (!keyword?.trim()) throw new Error(`Keyword Pencarian Minimal ${MIN_PANJANG_KEYWORD} karakter`);
-    return this.terapkanFilterPencarian({ keyword });
+    const bersih = normalisasiKeyword(keyword);
+    if (!bersih || bersih.length < MIN_PANJANG_KEYWORD) {
+      throw new Error(`Keyword Pencarian Minimal ${MIN_PANJANG_KEYWORD} karakter`);
+    }
+    return this.terapkanFilterPencarian({ keyword: bersih });
   }
 
   // Algo-1702 / Q-1701 (Tabel 5.17.2)
@@ -91,7 +110,7 @@ export class LayananPencarian {
     const supabase = await createClient();
 
     let query = supabase.from('jasa').select('*').eq('status_aktif', true);
-    const keyword = f.keyword?.trim().replace(/[%,()*\\]/g, ' ');
+    const keyword = normalisasiKeyword(f.keyword);
     if (keyword) query = query.or(`nama_jasa.ilike.%${keyword}%,deskripsi.ilike.%${keyword}%`);
     if (f.kategori) query = query.ilike('kategori', f.kategori);
     if (f.harga_min !== undefined) query = query.gte('harga', f.harga_min);
@@ -102,7 +121,7 @@ export class LayananPencarian {
     const { data, error } = await query.order('created_at', { ascending: false });
     if (error) throw new Error(error.message);
     // ponytail: relevansi (CASE WHEN) tidak didukung PostgREST -> urut + LIMIT di memori
-    return this.saringDanUrutkan((data ?? []) as Jasa[], f);
+    return this.saringDanUrutkan((data ?? []) as Jasa[], { ...f, keyword });
   }
 }
 
@@ -112,6 +131,9 @@ export class LayananPembandingJasa {
   static susunMatriks(daftar: Jasa[], id_jasa_list: string[]): HasilKomparasiJasa {
     const ids = [...new Set(id_jasa_list)];
     if (ids.length < 2) throw new Error('Minimal 2 ID jasa diperlukan untuk komparasi');
+    if (ids.length > MAKS_KOMPARASI_JASA) {
+      throw new Error(`Maksimal ${MAKS_KOMPARASI_JASA} jasa yang dapat dibandingkan secara bersamaan`);
+    }
 
     const jasa = ids.map((id) => daftar.find((j) => j.id_jasa === id && j.status_aktif !== false));
     if (jasa.some((j) => !j)) throw new Error('Data jasa tidak ditemukan atau tidak aktif');
@@ -131,13 +153,17 @@ export class LayananPembandingJasa {
     };
   }
 
-  // Algo-1801 / Q-1801 (diperluas dari 2 ID menjadi >= 2 ID)
+  // Algo-1801 / Q-1801 (diperluas dari 2 ID menjadi 2 s.d 4 ID)
   static async bandingkanSpesifikasiJasa(id_jasa_list: string[]): Promise<HasilKomparasiJasa> {
-    if (new Set(id_jasa_list).size < 2) throw new Error('Minimal 2 ID jasa diperlukan untuk komparasi');
+    const ids = [...new Set(id_jasa_list)];
+    if (ids.length < 2) throw new Error('Minimal 2 ID jasa diperlukan untuk komparasi');
+    if (ids.length > MAKS_KOMPARASI_JASA) {
+      throw new Error(`Maksimal ${MAKS_KOMPARASI_JASA} jasa yang dapat dibandingkan secara bersamaan`);
+    }
     const { createClient } = await import('@/lib/supabase/server');
     const supabase = await createClient();
-    const { data, error } = await supabase.from('jasa').select('*').in('id_jasa', id_jasa_list).eq('status_aktif', true);
+    const { data, error } = await supabase.from('jasa').select('*').in('id_jasa', ids).eq('status_aktif', true);
     if (error) throw new Error(error.message);
-    return this.susunMatriks((data ?? []) as Jasa[], id_jasa_list);
+    return this.susunMatriks((data ?? []) as Jasa[], ids);
   }
 }

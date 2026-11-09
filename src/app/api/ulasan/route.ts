@@ -7,27 +7,32 @@ export async function POST(request: Request) {
   try {
     const supabase = await createClient();
     const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
+      data: { user },
+      error,
+    } = await supabase.auth.getUser();
+
     if (error || !user) {
-        return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
-      }
-    const userId = user.id; 
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    const userId = user.id;
     const body = await request.json();
     const { id_pesanan, rating, komentar, dokumentasi_url } = body;
 
     // Validasi input minimal
-    if (!id_pesanan || !rating) {
+    if (!id_pesanan || rating === undefined || rating === null) {
       return NextResponse.json(
         { success: false, message: "ID pesanan dan penilaian (rating) wajib diisi." },
         { status: 400 }
       );
     }
 
-    if (rating < 1 || rating > 5) {
+    // Validasi rentang rating 1-5 (AC-3)
+    try {
+      UlasanService.validasiRating(Number(rating));
+    } catch (errValidation: any) {
       return NextResponse.json(
-        { success: false, message: "Rating harus bernilai antara 1 sampai 5." },
+        { success: false, message: errValidation.message || "Rating harus bernilai antara 1 sampai 5." },
         { status: 400 }
       );
     }
@@ -35,9 +40,9 @@ export async function POST(request: Request) {
     const dataUlasan = await UlasanService.simpanUlasan({
       id_pesanan,
       id_pengguna_jasa: userId,
-      rating,
+      rating: Number(rating),
       komentar: komentar || null,
-      dokumentasi : dokumentasi_url || null,
+      dokumentasi: dokumentasi_url || null,
     });
 
     return NextResponse.json(
@@ -52,15 +57,25 @@ export async function POST(request: Request) {
   }
 }
 
-// GET: Ambil Daftar Ulasan Berdasarkan Jasa
+// GET: Ambil Daftar Ulasan Berdasarkan Jasa atau Rating Agregat Profil Penyedia (I-03)
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
     const idJasa = searchParams.get("id_jasa");
+    const idPenyedia = searchParams.get("id_penyedia") ?? searchParams.get("id_penyedia_jasa");
+
+    // Mendukung tampilan profil penyedia (I-03)
+    if (idPenyedia) {
+      const dataPenyedia = await UlasanService.getRatingDanUlasanPenyedia(idPenyedia);
+      return NextResponse.json(
+        { success: true, message: "Data rating penyedia berhasil diambil", data: dataPenyedia },
+        { status: 200 }
+      );
+    }
 
     if (!idJasa) {
       return NextResponse.json(
-        { success: false, message: "Parameter id_jasa wajib diisi." },
+        { success: false, message: "Parameter id_jasa atau id_penyedia wajib diisi." },
         { status: 400 }
       );
     }

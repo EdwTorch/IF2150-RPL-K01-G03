@@ -6,10 +6,10 @@ vi.mock('@/lib/mocks/pesanan.mock', () => import('../lib/mocks/pesanan.mock'));
 vi.mock('@/services/pesanan.service', () => import('../services/pesanan.service'));
 
 import type { Jasa, Pesanan } from '../models/types';
-import { PENGGUNA_JASA_1, PENGGUNA_JASA_2, mockJasaPesananList } from '../lib/mocks/pesanan.mock';
+import { PENYEDIA_JASA_1, PENYEDIA_JASA_2, PENGGUNA_JASA_1, PENGGUNA_JASA_2, mockJasaPesananList, mockPesananList } from '../lib/mocks/pesanan.mock';
 import { PengontrolPesanan } from '../services/pesanan.service';
 import { GET as getDaftarPesanan, POST as postPesananBaru } from '../app/api/pesanan/route';
-import { GET as getDetailPesanan } from '../app/api/pesanan/[id_pesanan]/route';
+import { GET as getDetailPesanan, PATCH as patchDetailPesanan } from '../app/api/pesanan/[id_pesanan]/route';
 
 const daftarJasa: Jasa[] = [
   {
@@ -211,6 +211,33 @@ describe('PengontrolPesanan.konfirmasiPesananDiMemori (UC10, Algo-0205 & Algo-02
       PengontrolPesanan.konfirmasiPesananDiMemori(daftarPesananAwal, 'ord-2', 'p2', 'tolak'),
     ).toThrow('Pesanan ini sudah diproses sebelumnya');
   });
+
+  it('dapat mengonfirmasi pesanan dengan status MENUNGGU_PEMBAYARAN maupun MENUNGGU_KONFIRMASI', () => {
+    const pesananBayar: Pesanan = {
+      ...daftarPesananAwal[0],
+      id_pesanan: 'ord-bayar',
+      status_pesanan: 'MENUNGGU_PEMBAYARAN',
+    };
+    const hasil = PengontrolPesanan.konfirmasiPesananDiMemori(
+      [pesananBayar],
+      'ord-bayar',
+      'p1',
+      'terima',
+    );
+    expect(hasil.status_pesanan).toBe('DIPROSES');
+  });
+});
+
+describe('PengontrolPesanan.respondOrder (UC10)', () => {
+  it('menolak jika tindakan tidak valid', async () => {
+    await expect(
+      PengontrolPesanan.respondOrder({
+        id_pesanan: 'ord-1',
+        user_id: 'p1',
+        action: 'pending',
+      }),
+    ).rejects.toThrow('Tindakan konfirmasi tidak valid');
+  });
 });
 
 describe('PengontrolPesanan.ambilDaftarPesananDiMemori & ambilDetailPesananDiMemori (Algo-3104)', () => {
@@ -383,5 +410,116 @@ describe('HTTP Route Handlers /api/pesanan & /api/pesanan/[id_pesanan]', () => {
       { params: { id_pesanan: 'tidak-ada' } },
     );
     expect(res404.status).toBe(404);
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] berhasil menerima pesanan dalam mode mock', async () => {
+    mockPesananList[0].status_pesanan = 'MENUNGGU_KONFIRMASI';
+
+    const req = new NextRequest('http://localhost/api/pesanan/c0000000-0000-4000-8000-000000000001', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'Diterima',
+        user_id: PENYEDIA_JASA_1,
+      }),
+    });
+
+    const res = await patchDetailPesanan(req, {
+      params: { id_pesanan: 'c0000000-0000-4000-8000-000000000001' },
+    });
+    const json = await res.json();
+    expect(res.status).toBe(200);
+    expect(json.success).toBe(true);
+    expect(json.message).toContain('berhasil diterima');
+    expect(mockPesananList[0].status_pesanan).toBe('DIPROSES');
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] berhasil menolak pesanan dalam mode mock', async () => {
+    mockPesananList[0].status_pesanan = 'MENUNGGU_KONFIRMASI';
+
+    const req = new NextRequest('http://localhost/api/pesanan/c0000000-0000-4000-8000-000000000001', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'tolak',
+        user_id: PENYEDIA_JASA_1,
+      }),
+    });
+
+    const res = await patchDetailPesanan(req, {
+      params: { id_pesanan: 'c0000000-0000-4000-8000-000000000001' },
+    });
+    const json = await res.json();
+    expect(res.status).toBe(200);
+    expect(json.success).toBe(true);
+    expect(json.message).toContain('ditolak');
+    expect(mockPesananList[0].status_pesanan).toBe('DITOLAK');
+
+    mockPesananList[0].status_pesanan = 'MENUNGGU_KONFIRMASI';
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] menolak aksi yang tidak valid (400)', async () => {
+    const req = new NextRequest('http://localhost/api/pesanan/c0000000-0000-4000-8000-000000000001', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'batal',
+      }),
+    });
+
+    const res = await patchDetailPesanan(req, {
+      params: { id_pesanan: 'c0000000-0000-4000-8000-000000000001' },
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] menolak jika user bukan penyedia jasa (403)', async () => {
+    mockPesananList[0].status_pesanan = 'MENUNGGU_KONFIRMASI';
+
+    const req = new NextRequest('http://localhost/api/pesanan/c0000000-0000-4000-8000-000000000001', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'terima',
+        user_id: 'user-bukan-penyedia',
+      }),
+    });
+
+    const res = await patchDetailPesanan(req, {
+      params: { id_pesanan: 'c0000000-0000-4000-8000-000000000001' },
+    });
+    expect(res.status).toBe(403);
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] menolak jika pesanan sudah diproses sebelumnya (400)', async () => {
+    const req = new NextRequest('http://localhost/api/pesanan/c0000000-0000-4000-8000-000000000002', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'terima',
+        user_id: PENYEDIA_JASA_2,
+      }),
+    });
+
+    const res = await patchDetailPesanan(req, {
+      params: { id_pesanan: 'c0000000-0000-4000-8000-000000000002' },
+    });
+    expect(res.status).toBe(400);
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] mengembalikan 404 jika pesanan tidak ditemukan', async () => {
+    const req = new NextRequest('http://localhost/api/pesanan/tidak-ada', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'terima',
+        user_id: PENYEDIA_JASA_1,
+      }),
+    });
+
+    const res = await patchDetailPesanan(req, {
+      params: { id_pesanan: 'tidak-ada' },
+    });
+    expect(res.status).toBe(404);
   });
 });
