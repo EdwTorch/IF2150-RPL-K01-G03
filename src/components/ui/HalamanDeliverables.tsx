@@ -18,7 +18,7 @@ import {
   getHasil,
   konfirmasiSelesai,
   type Hasil,
-} from "@/services/layanan";
+} from "@/lib/layanan";
 
 
 type Props = {
@@ -341,7 +341,7 @@ export default function HalamanDeliverables({ peran }: Props) {
                 {/* Pengguna: laporan ke admin */}
                 {isPengguna && (
                   <Link
-                    href="/pelaporan"
+                    href={`/pengguna/pelaporan?idPesanan=${encodeURIComponent(idPesanan)}`}
                     className="text-label text-brand-text"
                   >
                     Ada masalah? Laporkan ke admin

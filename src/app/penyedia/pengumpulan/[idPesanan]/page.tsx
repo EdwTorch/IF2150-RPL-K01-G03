@@ -17,7 +17,7 @@ import {
   FORMAT_BERKAS,
   MAX_MB,
   kirimHasil,
-} from "@/services/layanan";
+} from "@/lib/layanan";
 
 type ErrorForm = {
   desk?: string;
