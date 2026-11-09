@@ -14,6 +14,16 @@ export interface Jasa {
   created_at?: string;
 }
 
+// Tipe data untuk Bookmark (C20)
+export interface Bookmark {
+  id_bookmark: string;
+  id_pengguna_jasa: string;
+  id_jasa: string;
+  waktu_disimpan?: string;
+  created_at?: string;
+  jasa?: Jasa;
+}
+
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
@@ -52,7 +62,26 @@ export interface Pesanan {
   waktu_pencairan? : string;
   created_at? : string;
   updated_at? : string;
-  jasa? : Jasa;
+}
+
+// Tipe data untuk Metode Pembayaran (C33)
+export interface MetodePembayaran {
+  id_metode: string;
+  nama_metode: string;
+  nomor_rekening_va?: string;
+  created_at?: string;
+}
+
+// Tipe data untuk Riwayat Transaksi (C34)
+export interface RiwayatTransaksi {
+  id_riwayat: string;
+  id_pesanan: string;
+  id_metode?: string;
+  total_biaya: number;
+  tanggal_transaksi?: string;
+  status_transaksi: string;
+  pesanan?: Pesanan;
+  metode_pembayaran?: MetodePembayaran;
 }
 
 export interface PencairanDana {
@@ -106,6 +135,43 @@ export interface Notifikasi{
     id_pengguna : string;
     id_pesanan : string;
     id_referensi : string,
+    judul : string,
     pesan_notifikasi : string,
     is_read : boolean,
+}
+
+export interface ChatroomRow {
+  id_chatroom: string;
+  id_pengguna_jasa: string;
+  id_penyedia_jasa: string;
+  created_at: string;
+}
+
+export interface PesanChatRow {
+  id_pesan: string;
+  id_chatroom: string;
+  id_pengirim: string;
+  isi_pesan: string;
+  lampiran: string | null;
+  waktu_dibuat: string;
+  created_at: string;
+}
+
+// 2. Extend dari tabel mentah untuk kebutuhan response API (dengan data JOIN)
+export interface ChatroomDetail extends ChatroomRow {
+  pengguna_jasa?: {
+    id: string;
+    nama: string;
+  };
+  penyedia_jasa?: {
+    id: string;
+    nama: string;
+  };
+}
+
+export interface PesanChatDetail extends PesanChatRow {
+  pengirim?: {
+    id: string;
+    nama: string;
+  };
 }
