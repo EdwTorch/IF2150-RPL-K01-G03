@@ -2,6 +2,13 @@ import { createClient } from "@/lib/supabase/server";
 import { Ulasan, RatingAgregat } from "@/models/types";
 
 export class UlasanService {
+    // Validasi rating harus berupa angka 1 sampai 5
+    static validasiRating(rating: number): void {
+        if (typeof rating !== "number" || !Number.isFinite(rating) || rating < 1 || rating > 5) {
+            throw new Error("Rating harus bernilai antara 1 sampai 5");
+        }
+    }
+
     // Ambil profil rating agregat dan total ulasan penyedia jasa untuk tampilan profil (I-03)
     static async getRatingDanUlasanPenyedia(id_penyedia_jasa: string): Promise<{
         id_penyedia_jasa: string;
