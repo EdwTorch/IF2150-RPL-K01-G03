@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, type FormEvent } from "react";
-import Navbar from "@/components/ui/navbar";
 import { Alert, Button, Input, LampiranBukti, PageContainer, PageHero, Textarea, UploadBox } from "@/components/elemen";
 import { ApiError } from "@/lib/api";
 import { sesiSaatIni } from "@/lib/client/auth";
@@ -59,9 +58,6 @@ export default function HalamanPortofolio() {
 
   useEffect(() => {
     tampilkanPortofolio();
-    sesiSaatIni()
-      .then(({ user }) => setNamaPengguna(user.nama))
-      .catch(() => {}); // belum login / backend mati → navbar pakai nama bawaan
   }, []);
 
   function validasiForm() {
@@ -111,12 +107,12 @@ export default function HalamanPortofolio() {
 
   return (
     <div className="flex min-h-screen flex-col bg-canvas">
-      <Navbar peran="PENYEDIA_JASA" nama={nama_pengguna} />
 
       <PageContainer>
         <PageHero
           judul="Portofolio"
           subjudul="Tunjukkan pengalaman, prestasi, dan karya terbaikmu kepada calon pengguna jasa."
+          penuh
         />
 
         <div className="grid grid-cols-[minmax(0,1fr)_minmax(0,1fr)] items-start gap-6">
