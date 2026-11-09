@@ -175,3 +175,19 @@ export interface PesanChatDetail extends PesanChatRow {
     nama: string;
   };
 }
+
+// Tipe data untuk Penyedia Jasa (C02) dan agregasi rating
+export interface PenyediaJasa {
+  id: string;
+  pengalaman?: string[];
+  saldo?: number;
+  prestasi?: string[];
+  daftar_produk?: string[];
+  rating_rata_rata?: number;
+  created_at?: string;
+}
+
+export interface RatingAgregat {
+  rating_rata_rata: number;
+  total_ulasan: number;
+}
