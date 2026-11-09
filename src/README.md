@@ -2,14 +2,24 @@
 ## Kelompok 3 MAYOOOOOR
 ## Daftar Isi 
 
-1. [Anggota Kelompok](#anggota-kelompok)
-2. [Deskripsi Singkat Aplikasi](#deskripsi-singkat-aplikasi)
-3. [Teknologi yang digunakan](#teknologi-yang-digunakan)
-4. [Prasyarat dan Instalasi](#prasyarat-dan-instalasi)
-5. [Cara Menjalankan Aplikasi](#cara-menjalankan-aplikasi)
-6. [Akun/data uji](#akundata-uji)
-7. [Daftar Pembagian Modul yang diimplementasikan](#daftar-pembagian-modul-yang-diimplementasikan)
-8. [Daftar Tabel Basis Data](#daftar-tabel-basis-data)
+- [Tugas Besar IF2150 Rekayasa Perangkat Lunak](#tugas-besar-if2150-rekayasa-perangkat-lunak)
+  - [Kelompok 3 MAYOOOOOR](#kelompok-3-mayooooor)
+  - [Daftar Isi](#daftar-isi)
+  - [Anggota Kelompok](#anggota-kelompok)
+  - [Deskripsi Singkat Aplikasi](#deskripsi-singkat-aplikasi)
+  - [Teknologi yang digunakan](#teknologi-yang-digunakan)
+  - [Prasyarat dan instalasi](#prasyarat-dan-instalasi)
+    - [Prasyarat (Prerequisites)](#prasyarat-prerequisites)
+    - [Instalasi \& Menjalankan Proyek](#instalasi--menjalankan-proyek)
+      - [1. Clone Repositori](#1-clone-repositori)
+      - [2. Instal Dependensi](#2-instal-dependensi)
+      - [3. Konfigurasi Environment Variables](#3-konfigurasi-environment-variables)
+      - [4. Konfigurasi Database (Supabase)](#4-konfigurasi-database-supabase)
+  - [Cara Menjalankan Aplikasi](#cara-menjalankan-aplikasi)
+  - [Akun/data uji](#akundata-uji)
+  - [Id Jasa yang dapat diuji belom ada](#id-jasa-yang-dapat-diuji-belom-ada)
+  - [Daftar Pembagian Modul yang diimplementasikan](#daftar-pembagian-modul-yang-diimplementasikan)
+  - [Daftar Tabel Basis Data](#daftar-tabel-basis-data)
 
 ## Anggota Kelompok
 | NIM | Nama |
@@ -99,8 +109,7 @@ Untuk mempermudah pengujian fitur berdasarkan masing-masing peran (*role*), guna
 ## Daftar Pembagian Modul yang diimplementasikan
 | Nama  | Tanggung Jawab Modul dan Routingnya |
 | :--- | :--- | 
-
-| Revandra Zacky Maharta | | 
+| Revandra Zacky Maharta | Backend: <br> 1. Infrastuktur Dasar (Supabase) <br> 2. Dual Storage (Lokal dan Supabase) <br> 3. Registrasi <br> 4. Login, Logout <br> 5. Manajemen Sesi | 
 | Danesh Rasyad Damotino | | 
 | Theresia Estelina Ratu Udju | | 
 | Edward Terrance Lie | BACKEND : <br> 1. Modul Deliverables (Terima/Tolak Pesanan, Konfirmasi Pesanan, Kirim Pesanan, Ajukan Revisi, Pengumpulan Revisi, Konfirmasi Hasil, Pencairan Dana) <br> 2. Modul Ulasan <br> 3. Modul Pelaporan <br> 4. Notifikasi <br> 5. Chat Realtime <br> 6. Chat Mediasi <br> 7. All about admin |
@@ -110,7 +119,7 @@ Untuk mempermudah pengujian fitur berdasarkan masing-masing peran (*role*), guna
 ## Daftar Tabel Basis Data
 | Nama Tabel | Deskripsi |
 | :--- | :--- | 
-`pengguna` | Menyimpan data akun utama dan informasi autentikasi seluruh pengguna. |
+| `pengguna` | Menyimpan data akun utama dan informasi autentikasi seluruh pengguna. |
 | `penyedia_jasa` | Menyimpan data profil dan informasi khusus pengguna yang berperan sebagai penyedia jasa. |
 | `pengguna_jasa` | Menyimpan data profil pengguna yang berperan sebagai pemesan atau klien. |
 | `admin` | Menyimpan data profil dan hak akses administrator sistem. |
