@@ -111,7 +111,7 @@ Untuk mempermudah pengujian fitur berdasarkan masing-masing peran (*role*), guna
 | :--- | :--- | 
 | Revandra Zacky Maharta | Backend: <br> 1. Infrastuktur Dasar (Supabase) <br> 2. Dual Storage (Lokal dan Supabase) <br> 3. Registrasi <br> 4. Login, Logout <br> 5. Manajemen Sesi | 
 | Danesh Rasyad Damotino | Backend: <br> 1. Pengelolaan Penawaran Jasa (CRUD) <br> 2. Pencarian & Komparasi Jasa <br> 3. Bookmark <br> 4. Pemesanan & Konfirmasi <br> 5. Pembayaran & Riwayat Transaksi| 
-| Theresia Estelina Ratu Udju | | 
+| Theresia Estelina Ratu Udju | Frontend: <br> 1. Halaman Pengumpulan Jasa <br> 2. Halaman Deliverables <br> 3. Halaman Ulasan <br> 4. Halaman Dashboard Admin <br> 5. Halaman Pengajuan Mediasi <br> 6. Halaman Riwayat Pesanan <br> 7. Halaman Request Revisi <br> 8. Halaman Pelaporan <br> 9. Halaman Konfirmasi| 
 | Edward Terrance Lie | BACKEND : <br> 1. Modul Deliverables (Terima/Tolak Pesanan, Konfirmasi Pesanan, Kirim Pesanan, Ajukan Revisi, Pengumpulan Revisi, Konfirmasi Hasil, Pencairan Dana) <br> 2. Modul Ulasan <br> 3. Modul Pelaporan <br> 4. Notifikasi <br> 5. Chat Realtime <br> 6. Chat Mediasi <br> 7. All about admin |
 | Necia Aurely Greva Dedevi | |
 
