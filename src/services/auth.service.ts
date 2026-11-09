@@ -79,6 +79,12 @@ export function validasiInputRegistrasi(input: InputRegistrasi): void {
             `Password minimal ${MIN_PANJANG_PASSWORD} karakter`
         );
     }
+    if (!input.password.trim()) {
+        throw new AuthError(
+            "WEAK_PASSWORD",
+            "Password tidak boleh hanya berisi spasi kosong"
+        );
+    }
     if (input.role !== "pengguna_jasa" && input.role !== "penyedia_jasa") {
         throw new AuthError("INVALID_ROLE", "Role tidak valid");
     }
