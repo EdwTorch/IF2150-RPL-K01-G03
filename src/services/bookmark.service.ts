@@ -41,7 +41,7 @@ export class PengontrolBookmark {
     const sudah_ada = daftar_bookmark.some(
       (b) => b.id_pengguna_jasa === id_pengguna_jasa && b.id_jasa === id_jasa,
     );
-    if (sudah_ada) throw new Error('Jasa sudah ada di dalam bookmark (input tidak valid)');
+    if (sudah_ada) throw new Error('Jasa sudah ada di dalam bookmark');
 
     const sekarang = new Date().toISOString();
     return {
@@ -112,7 +112,7 @@ export class PengontrolBookmark {
       .single();
 
     if (error) {
-      if (error.code === '23505') throw new Error('Jasa sudah ada di dalam bookmark (input tidak valid)');
+      if (error.code === '23505') throw new Error('Jasa sudah ada di dalam bookmark');
       throw new Error(error.message);
     }
     return data as Bookmark;
@@ -169,10 +169,31 @@ export class PengontrolBookmark {
     if (error) throw new Error(error.message);
 
     if (ada) {
-      await this.hapusDataBookmark(id_pengguna_jasa, id_jasa, ada.id_bookmark);
+      try {
+        await this.hapusDataBookmark(id_pengguna_jasa, id_jasa, ada.id_bookmark);
+      } catch (err: unknown) {
+        const pesan = err instanceof Error ? err.message : '';
+        if (!pesan.includes('tidak ditemukan')) throw err;
+      }
       return { action: 'removed', data: null };
     }
-    const data = await this.tambahDataBookmark(id_pengguna_jasa, id_jasa);
-    return { action: 'added', data };
+
+    try {
+      const data = await this.tambahDataBookmark(id_pengguna_jasa, id_jasa);
+      return { action: 'added', data };
+    } catch (err: unknown) {
+      const pesan = err instanceof Error ? err.message : '';
+      const kode = typeof err === 'object' && err !== null && 'code' in err ? (err as { code: string }).code : '';
+      if (pesan.includes('sudah ada') || kode === '23505') {
+        // Race condition: double click cepat saat penambahan, hapus kembali agar semantik toggle terpenuhi
+        try {
+          await this.hapusDataBookmark(id_pengguna_jasa, id_jasa);
+        } catch {
+          // Abaikan jika sudah terhapus
+        }
+        return { action: 'removed', data: null };
+      }
+      throw err;
+    }
   }
 }
