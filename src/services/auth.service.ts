@@ -90,6 +90,46 @@ export function validasiInputRegistrasi(input: InputRegistrasi): void {
     }
 }
 
+interface RawProfilPengguna {
+    id: string;
+    nama: string;
+    email: string | null;
+    role: "USER" | "ADMIN" | "PENYEDIA_JASA";
+    status_akun: boolean;
+    sanksi: string | null;
+    penyedia_jasa: unknown;
+    pengguna_jasa: unknown;
+}
+
+async function getValidProfil(
+    supabase: Awaited<ReturnType<typeof createClient>>,
+    userId: string
+): Promise<RawProfilPengguna> {
+    const { data: profil, error: profilError } = await supabase
+        .from("pengguna")
+        .select(`
+            id, nama, email, role, status_akun, sanksi,
+            penyedia_jasa ( id ),
+            pengguna_jasa ( id )
+        `)
+        .eq("id", userId)
+        .single();
+    if (profilError) {
+        await supabase.auth.signOut();
+        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat mengambil profil pengguna");
+    }
+    if (!profil) {
+        await supabase.auth.signOut();
+        throw new AuthError("PROFILE_NOT_FOUND", "Profil pengguna tidak ditemukan");
+    }
+    const diblokir = profil.status_akun === false || profil.sanksi === "SUSPENDED";
+    if (diblokir) {
+        await supabase.auth.signOut();
+        throw new AuthError("ACCOUNT_SUSPENDED", "Akun Anda ditangguhkan");
+    }
+    return profil as RawProfilPengguna;
+}
+
 // Daftarkan akun baru: buat auth user, simpan profil & tabel turunan sesuai role
 export async function registrasi(
     input: InputRegistrasi
@@ -148,7 +188,7 @@ export async function registrasi(
 export async function login(email: string, password: string) {
     const clean_email = email?.trim().toLowerCase();
 
-    if (!clean_email || !password) {
+    if (!clean_email || !password || !password.trim()) {
         throw new AuthError("EMPTY_INPUT", "Email dan password tidak boleh kosong");
     }
 
@@ -163,36 +203,15 @@ export async function login(email: string, password: string) {
         throw new AuthError("INVALID_CREDENTIALS", "Kredensial tidak valid");
     }
 
-    // Ambil data profil dari tabel publik
-    const { data: profil, error: profil_error } = await supabase
-        .from("pengguna")
-        .select(`
-            id, nama, email, role, status_akun, sanksi,
-            penyedia_jasa ( id ),
-            pengguna_jasa ( id )
-        `)
-        .eq("id", data.user.id)
-        .single();
-
-    if (profil_error || !profil) {
-        await supabase.auth.signOut();
-
-        throw new AuthError("PROFILE_NOT_FOUND", "Profil pengguna tidak ditemukan");
-    }
-
-    const diblokir = profil.status_akun === false || profil.sanksi === "SUSPENDED";
-    if (diblokir) {
-        await supabase.auth.signOut();
-
-        throw new AuthError("ACCOUNT_SUSPENDED", "Akun Anda ditangguhkan");
-    }
+    // Ambil dan validasi data profil dari tabel publik menggunakan helper DRY
+    const profil = await getValidProfil(supabase, data.user.id);
 
     await supabase.from("pengguna").update({ status_online: true }).eq("id", data.user.id);
 
     return {
         user: {
             id: data.user.id,
-            email: data.user.email,
+            email: data.user.email ?? clean_email,
             nama: profil.nama,
             role: profil.role,
             isPenyediaJasa: hasRelation(profil.penyedia_jasa),
@@ -217,35 +236,25 @@ export async function logout() {
 
 export async function getSessionUser() {
     const supabase = await createClient();
-
     const { data: { user }, error } = await supabase.auth.getUser();
+    
     if (error || !user) return null;
 
-    const { data: profil, error: profil_error } = await supabase
-        .from("pengguna")
-        .select("id, nama, email, role, status_akun, sanksi, penyedia_jasa (id), pengguna_jasa(id)")
-        .eq("id", user.id)
-        .single();
+    try {
+        const profil = await getValidProfil(supabase, user.id);
 
-    if (profil_error || !profil) {
-        await supabase.auth.signOut();
+        return {
+            id: profil.id,
+            email: profil.email!,
+            nama: profil.nama,
+            role: profil.role as "USER" | "ADMIN",
+            status_akun: profil.status_akun,
+            isPenyediaJasa: hasRelation(profil.penyedia_jasa),
+            isPenggunaJasa: hasRelation(profil.pengguna_jasa),
+        };
+    } catch {
         return null;
     }
-    if (profil.status_akun === false || profil.sanksi === "SUSPENDED"){
-      await supabase.auth.signOut();
-        return null;  
-    } 
-
-    return {
-        id: profil.id,
-        email: profil.email!,
-        nama: profil.nama,
-        role: profil.role,
-        status_akun: profil.status_akun,
-        isPenyediaJasa: hasRelation(profil.penyedia_jasa),
-        isPenggunaJasa: hasRelation(profil.pengguna_jasa),
-    };
-    
 }
 
 export async function loginAdmin(email: string, password: string) {
