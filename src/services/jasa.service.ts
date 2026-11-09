@@ -29,7 +29,9 @@ export class JasaController {
 
   // Algo-1401 / Algo-1202 (Q-1202)
   static async ambilDetailJasa(id_jasa: string): Promise<Jasa> {
-    if (!id_jasa) throw new Error('ID Jasa tidak valid');
+    if (!id_jasa || typeof id_jasa !== 'string' || !id_jasa.trim()) {
+      throw new Error('ID Jasa tidak valid');
+    }
 
     const supabase = await createClient();
     const { data, error } = await supabase.from('jasa').select('*').eq('id_jasa', id_jasa).maybeSingle();
@@ -42,8 +44,15 @@ export class JasaController {
   // Algo-1402 (+ deskripsi: kolom NOT NULL di DDL)
   static validasiDataJasa(data?: Partial<DataJasaBaru>): boolean {
     if (!data) return false;
-    if (!data.nama_jasa || !data.deskripsi || !data.kategori || data.harga == null) return false;
-    return typeof data.harga === 'number' && data.harga > 0;
+    if (
+      typeof data.nama_jasa !== 'string' || !data.nama_jasa.trim() ||
+      typeof data.deskripsi !== 'string' || !data.deskripsi.trim() ||
+      typeof data.kategori !== 'string' || !data.kategori.trim() ||
+      data.harga == null
+    ) {
+      return false;
+    }
+    return typeof data.harga === 'number' && Number.isFinite(data.harga) && data.harga > 0;
   }
 
   // Validasi format & ukuran berkas sebelum diunggah (padanan validasiFormatUkuran C11)
@@ -67,6 +76,17 @@ export class JasaController {
     return hasil.map((h) => h.url);
   }
 
+  // Bersihkan berkas yang sudah diunggah jika operasi DB gagal (pencegahan orphan files)
+  private static async bersihkanBerkas(urls: string[]): Promise<void> {
+    if (!urls || urls.length === 0) return;
+    try {
+      const storage = getStorageService();
+      await Promise.allSettled(urls.map((u) => storage.delete(u)));
+    } catch {
+      // Ignore cleanup error
+    }
+  }
+
   // Algo-1403. Relasi ke penyedia cukup lewat FK id_penyedia_jasa
   static async simpanPenawaranJasa(data: DataJasaBaru, berkas: File[] = []): Promise<Jasa> {
     if (!this.validasiDataJasa(data)) throw new Error('Data penawaran jasa tidak valid atau tidak lengkap');
@@ -74,53 +94,100 @@ export class JasaController {
     const url_berkas = berkas.length ? await this.unggahBerkas(berkas) : [];
     const { id_penyedia_jasa, nama_jasa, deskripsi, kategori, harga } = data;
 
-    const supabase = await createClient();
-    const { data: jasa, error } = await supabase
-      .from('jasa')
-      .insert({
-        id_penyedia_jasa, nama_jasa, deskripsi, kategori, harga,
-        berkas_pendukung: [...(data.berkas_pendukung ?? []), ...url_berkas],
-        status_aktif: true,
-      })
-      .select()
-      .single();
+    try {
+      const supabase = await createClient();
+      const { data: jasa, error } = await supabase
+        .from('jasa')
+        .insert({
+          id_penyedia_jasa,
+          nama_jasa: nama_jasa.trim(),
+          deskripsi: deskripsi.trim(),
+          kategori: kategori.trim(),
+          harga,
+          berkas_pendukung: [...(data.berkas_pendukung ?? []), ...url_berkas],
+          status_aktif: true,
+        })
+        .select()
+        .single();
 
-    if (error) throw new Error(error.message);
-    return jasa as Jasa;
+      if (error) throw new Error(error.message);
+      return jasa as Jasa;
+    } catch (err) {
+      if (url_berkas.length > 0) {
+        await this.bersihkanBerkas(url_berkas);
+      }
+      throw err;
+    }
   }
 
   // Algo-1203 (Q-1203). Berkas baru ditambahkan ke daftar yang sudah ada
   static async perbaruiJasa(id_jasa: string, data: DataJasaUpdate, berkas: File[] = []): Promise<Jasa> {
-    if (!id_jasa) throw new Error('ID Jasa tidak valid');
-    if (data.harga !== undefined && !(typeof data.harga === 'number' && data.harga > 0)) {
+    if (!id_jasa || typeof id_jasa !== 'string' || !id_jasa.trim()) {
+      throw new Error('ID Jasa tidak valid');
+    }
+
+    // Validasi field string jika disertakan di data
+    if (data.nama_jasa !== undefined && (typeof data.nama_jasa !== 'string' || !data.nama_jasa.trim())) {
+      throw new Error('Nama jasa tidak valid atau kosong');
+    }
+    if (data.deskripsi !== undefined && (typeof data.deskripsi !== 'string' || !data.deskripsi.trim())) {
+      throw new Error('Deskripsi jasa tidak valid atau kosong');
+    }
+    if (data.kategori !== undefined && (typeof data.kategori !== 'string' || !data.kategori.trim())) {
+      throw new Error('Kategori jasa tidak valid atau kosong');
+    }
+
+    if (data.harga !== undefined && (typeof data.harga !== 'number' || !Number.isFinite(data.harga) || data.harga <= 0)) {
       throw new Error('Harga harus lebih dari 0');
     }
 
     // Hanya kolom yang boleh diubah; field lain (mis. id_penyedia_jasa) diabaikan
     const payload = Object.fromEntries(
-      KOLOM_UPDATE.filter((k) => data[k] !== undefined).map((k) => [k, data[k]]),
+      KOLOM_UPDATE.filter((k) => data[k] !== undefined).map((k) => [
+        k,
+        typeof data[k] === 'string' ? (data[k] as string).trim() : data[k]
+      ]),
     ) as DataJasaUpdate;
-    if (berkas.length) {
-      const lama = data.berkas_pendukung ?? (await this.ambilDetailJasa(id_jasa)).berkas_pendukung ?? [];
-      payload.berkas_pendukung = [...lama, ...(await this.unggahBerkas(berkas))];
+
+    if (Object.keys(payload).length === 0 && berkas.length === 0) {
+      throw new Error('Data pembaruan jasa tidak valid atau kosong');
     }
 
-    const supabase = await createClient();
-    const { data: jasa, error } = await supabase
-      .from('jasa')
-      .update(payload)
-      .eq('id_jasa', id_jasa)
-      .select()
-      .maybeSingle();
+    // Pastikan jasa ada SEBELUM mengunggah berkas
+    const jasaLama = await this.ambilDetailJasa(id_jasa);
 
-    if (error) throw new Error('Gagal memperbarui data jasa');
-    if (!jasa) throw new Error('Data jasa tidak ditemukan');
-    return jasa as Jasa;
+    let url_berkas_baru: string[] = [];
+    if (berkas.length) {
+      url_berkas_baru = await this.unggahBerkas(berkas);
+      const daftarLama = data.berkas_pendukung ?? jasaLama.berkas_pendukung ?? [];
+      payload.berkas_pendukung = [...daftarLama, ...url_berkas_baru];
+    }
+
+    try {
+      const supabase = await createClient();
+      const { data: jasa, error } = await supabase
+        .from('jasa')
+        .update(payload)
+        .eq('id_jasa', id_jasa)
+        .select()
+        .maybeSingle();
+
+      if (error) throw new Error('Gagal memperbarui data jasa');
+      if (!jasa) throw new Error('Data jasa tidak ditemukan');
+      return jasa as Jasa;
+    } catch (err) {
+      if (url_berkas_baru.length > 0) {
+        await this.bersihkanBerkas(url_berkas_baru);
+      }
+      throw err;
+    }
   }
 
   // Algo-1204 (Q-1204): soft delete
   static async hapusJasa(id_jasa: string): Promise<void> {
-    if (!id_jasa) throw new Error('ID Jasa tidak valid');
+    if (!id_jasa || typeof id_jasa !== 'string' || !id_jasa.trim()) {
+      throw new Error('ID Jasa tidak valid');
+    }
 
     const supabase = await createClient();
     const { data, error } = await supabase
