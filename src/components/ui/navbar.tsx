@@ -215,7 +215,7 @@ export default function Navbar({
     try {
       await fetch("/api/auth/logout", { method: "POST" });
     } finally {
-      router.push("/masuk");
+      router.push("/login");
       router.refresh();
     }
   }
@@ -230,14 +230,14 @@ export default function Navbar({
           <div className="flex shrink-0 items-center gap-[12px]">
             {/* Button Style=Ghost */}
             <Link
-              href="/masuk"
+              href="/login"
               className="flex h-[48px] items-center justify-center rounded-[10px] px-[24px] text-[16px] leading-[1.2] font-semibold text-brand-text hover:bg-canvas"
             >
               Masuk
             </Link>
             {/* Button Style=Primary */}
             <Link
-              href="/daftar"
+              href="/register"
               className="flex h-[48px] items-center justify-center rounded-[10px] bg-brand px-[24px] text-[16px] leading-[1.2] font-semibold text-white hover:opacity-90"
             >
               Daftar

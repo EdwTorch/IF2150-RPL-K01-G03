@@ -42,7 +42,7 @@ export async function api<T>(url: string, opsi: OpsiApi = {}): Promise<T> {
 
     if (!res.ok) {
       if (res.status === 401 && typeof window !== "undefined") {
-        window.location.href = "/masuk";
+        window.location.href = "/login";
       }
       throw new ApiError(
         res.status,
