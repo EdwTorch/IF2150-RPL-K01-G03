@@ -33,5 +33,21 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ success: false, message: 'Berkas tidak ditemukan atau kosong' }, { status: 400 });
     }
 
+    // Validasi tipe & ukuran berkas
+    const pesanError = validasiBerkasUpload(berkas, folder as FolderUpload);
+    if (pesanError) {
+        return NextResponse.json({ success: false, message: pesanError }, { status: 400 });
+    }
+
+    // Unggah via Storage Service
+    const storage = getStorageService();
+    const { url, error } = await storage.upload(berkas, folder);
+    if (error || !url) {
+        return NextResponse.json(
+            { success: false, message: error ?? 'Gagal mengunggah berkas' },
+            { status: 500 }
+        );
+    }
+
     return NextResponse.json({ success: true, message: 'Berkas berhasil diunggah', data: { url } }, { status: 201 });
 }
