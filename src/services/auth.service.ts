@@ -168,8 +168,8 @@ export async function login(email: string, password: string) {
             email: data.user.email,
             nama: profil.nama,
             role: profil.role,
-            isPenyediaJasa: Boolean(profil.penyedia_jasa),
-            isPenggunaJasa: Boolean(profil.pengguna_jasa)
+            isPenyediaJasa: hasRelation(profil.penyedia_jasa),
+            isPenggunaJasa: hasRelation(profil.pengguna_jasa)
         }
     };
 }
@@ -215,8 +215,8 @@ export async function getSessionUser() {
         nama: profil.nama,
         role: profil.role,
         status_akun: profil.status_akun,
-        isPenyediaJasa: Boolean(profil.penyedia_jasa),
-        isPenggunaJasa: Boolean(profil.pengguna_jasa),
+        isPenyediaJasa: hasRelation(profil.penyedia_jasa),
+        isPenggunaJasa: hasRelation(profil.pengguna_jasa),
     };
     
 }
