@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PesananService } from "@/services/pesanan.service"; // Sesuaikan path service Anda
 import { createClient } from "@/lib/supabase/server";
+import { mockJasaPesananList, mockPesananList } from "@/lib/mocks/pesanan.mock";
 
 export async function PATCH(
   req: NextRequest,
@@ -40,5 +41,27 @@ export async function PATCH(
     });
   } catch (error: any) {
     return NextResponse.json({ success : false, message: error.message }, { status: 500 });
+  }
+}
+
+export async function GET(
+  _req: NextRequest,
+  { params }: { params: Promise<{ id_pesanan: string }> | { id_pesanan: string } }
+) {
+  try {
+    const { id_pesanan } = await Promise.resolve(params);
+    const data =
+      process.env.NEXT_PUBLIC_USE_MOCK === "true"
+        ? PesananService.ambilDetailPesananDiMemori(mockPesananList, mockJasaPesananList, id_pesanan)
+        : await PesananService.ambilDetailPesanan(id_pesanan);
+
+    return NextResponse.json({
+      success: true,
+      message: "Detail pesanan berhasil diambil",
+      data,
+    });
+  } catch (error: any) {
+    const status = /tidak ditemukan/i.test(error?.message) ? 404 : /tidak valid/i.test(error?.message) ? 400 : 500;
+    return NextResponse.json({ success: false, message: error.message }, { status });
   }
 }
