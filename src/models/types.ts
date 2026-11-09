@@ -31,7 +31,33 @@ export interface Pesanan {
   id_jasa : string;
   brief : string;
   total_biaya : number;
+  id_metode_pembayaran? : string;
+  status_pembayaran? : string;
   status_pesanan : string;
+  status_pencairan? : boolean;
+  waktu_pencairan? : string;
+  created_at? : string;
+  updated_at? : string;
+}
+
+// Tipe data untuk Metode Pembayaran (C33)
+export interface MetodePembayaran {
+  id_metode: string;
+  nama_metode: string;
+  nomor_rekening_va?: string;
+  created_at?: string;
+}
+
+// Tipe data untuk Riwayat Transaksi (C34)
+export interface RiwayatTransaksi {
+  id_riwayat: string;
+  id_pesanan: string;
+  id_metode?: string;
+  total_biaya: number;
+  tanggal_transaksi?: string;
+  status_transaksi: string;
+  pesanan?: Pesanan;
+  metode_pembayaran?: MetodePembayaran;
 }
 
 export interface PencairanDana {
