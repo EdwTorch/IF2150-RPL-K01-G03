@@ -7,6 +7,7 @@ export class AuthError extends Error {
             | "INVALID_CREDENTIALS"
             | "ACCOUNT_SUSPENDED"
             | "PROFILE_NOT_FOUND"
+            | "FORBIDDEN"
             | "LOGOUT_FAILED",
         message: string
     ) {
@@ -115,4 +116,17 @@ export async function getSessionUser() {
         isPenyediaJasa: Boolean(profil.penyedia_jasa),
         isPenggunaJasa: Boolean(profil.pengguna_jasa),
     };
+    
+}
+export async function loginAdmin(email: string, password: string) {
+    // Gunakan fungsi login() yang sudah ada untuk validasi kredensial, profil, & sanksi
+    const result = await login(email, password);
+
+    if (result.user.role !== "ADMIN") {
+        const supabase = await createClient();
+        await supabase.auth.signOut(); // Hapus cookie sesi agar tidak nyangkut
+        throw new AuthError("FORBIDDEN", "Akun ini tidak memiliki akses administrator");
+    }
+
+    return result;
 }

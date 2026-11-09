@@ -105,6 +105,18 @@
   --radius-xl: 24px;  /* radius/xl — kartu besar */
   /* radius/full (999) → pakai class bawaan rounded-full */
 
+  --radius-field: 12px;
+
+  /* Ukuran teks tambahan */
+  --text-body-md: 15px;
+  --text-body-md--line-height: 1.4;
+  --text-helper: 13px;
+  --text-helper--line-height: 1.4;
+  --text-helper--font-weight: 500;
+  --text-badge: 11px;
+  --text-badge--line-height: 1;
+  --text-badge--font-weight: 700;
+
   /* ---------- 4. SPACING (Figma: Dimension/spacing) ---------- */
   /* Skala bawaan Tailwind (1 = 4px) sudah sama dengan Figma:
      xs 4 = 1 | sm 8 = 2 | md 12 = 3 | lg 16 = 4 | xl 24 = 6 | 2xl 32 = 8 | 3xl 48 = 12
