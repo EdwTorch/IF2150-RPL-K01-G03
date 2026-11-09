@@ -1,5 +1,19 @@
 // src/models/types.ts
 
+// Tipe data untuk Jasa (C12)
+export interface Jasa {
+  id_jasa: string;
+  id_penyedia_jasa: string;
+  nama_jasa: string;
+  deskripsi: string;
+  kategori: string;
+  harga: number;
+  rating_rata_rata?: number; // default 0.0, rentang 0-5
+  status_aktif?: boolean; // default true
+  berkas_pendukung?: string[]; // URL berkas, default []
+  created_at?: string;
+}
+
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
@@ -23,7 +37,7 @@ export interface PengajuanRevisi {
   created_at?: string;
 }
 
-
+// Tipe data untuk Pesanan (C27)
 export interface Pesanan {
   id_pesanan : string;
   id_pengguna_jasa : string;
@@ -31,7 +45,14 @@ export interface Pesanan {
   id_jasa : string;
   brief : string;
   total_biaya : number;
+  id_metode_pembayaran? : string;
+  status_pembayaran? : string;
   status_pesanan : string;
+  status_pencairan? : boolean;
+  waktu_pencairan? : string;
+  created_at? : string;
+  updated_at? : string;
+  jasa? : Jasa;
 }
 
 export interface PencairanDana {
