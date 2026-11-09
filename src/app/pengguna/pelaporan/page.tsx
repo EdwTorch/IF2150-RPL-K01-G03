@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
@@ -46,6 +45,7 @@ export default function HalamanPelaporan() {
 
   const [nama, setN] = useState("");
   const [kat, setK] = useState("");
+  const [kategoriLainnya, setKategoriLainnya] = useState("");
   const [desk, setD] = useState("");
   const [files, setF] = useState<File[]>([]);
   const [e, setE] = useState<E>({});
@@ -116,6 +116,11 @@ export default function HalamanPelaporan() {
 
     if (!kat) {
       x.kat = "Pilih kategori pelanggaran.";
+    } else if (
+      kat === "Lainnya" &&
+      !kategoriLainnya.trim()
+    ) {
+      x.kat = "Tuliskan kategori pelanggaran lainnya.";
     }
 
     if (!desk.trim()) {
@@ -138,7 +143,10 @@ export default function HalamanPelaporan() {
       setT(
         await kirimLaporan({
           penyedia: nama,
-          kategori: kat,
+          kategori:
+            kat === "Lainnya"
+              ? kategoriLainnya.trim()
+              : kat,
           deskripsi: desk,
           files,
         })
@@ -197,15 +205,52 @@ export default function HalamanPelaporan() {
               disabled={memuatPenyedia || ro || !nama}
             />
 
-            <Select
-              label="Kategori Pelanggaran"
-              placeholder="Pilih Kategori Pelanggaran"
-              opsi={KAT}
-              value={kat}
-              onChange={(ev) => setK(ev.target.value)}
-              error={e.kat}
-              disabled={ro}
-            />
+            {kat === "Lainnya" ? (
+              <Input
+                label="Kategori Pelanggaran"
+                placeholder="Tuliskan kategori pelanggaran"
+                value={kategoriLainnya}
+                onChange={(ev) =>
+                  setKategoriLainnya(ev.target.value)
+                }
+                error={e.kat}
+                disabled={ro}
+              />
+            ) : (
+              <Select
+                label="Kategori Pelanggaran"
+                placeholder="Pilih Kategori Pelanggaran"
+                opsi={KAT}
+                value={kat}
+                onChange={(ev) => {
+                  setK(ev.target.value);
+                  setKategoriLainnya("");
+                  setE((prev) => ({
+                    ...prev,
+                    kat: undefined,
+                  }));
+                }}
+                error={e.kat}
+                disabled={ro}
+              />
+            )}
+
+            {kat === "Lainnya" && !ro && (
+              <button
+                type="button"
+                onClick={() => {
+                  setK("");
+                  setKategoriLainnya("");
+                  setE((prev) => ({
+                    ...prev,
+                    kat: undefined,
+                  }));
+                }}
+                className="self-start text-caption text-brand-text hover:underline"
+              >
+                Pilih dari kategori yang tersedia
+              </button>
+            )}
 
             <Textarea
               label="Deskripsi Masalah"
