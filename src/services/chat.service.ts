@@ -15,8 +15,8 @@ export class ChatService {
         id_pengguna_jasa,
         id_penyedia_jasa,
         created_at,
-        pengguna_jasa:pengguna!id_pengguna_jasa (id, nama, foto_profil),
-        penyedia_jasa:pengguna!id_penyedia_jasa (id, nama, foto_profil)
+        pengguna_jasa:pengguna!id_pengguna_jasa (id, nama),
+        penyedia_jasa:pengguna!id_penyedia_jasa (id, nama)
       `)
       .or(`id_pengguna_jasa.eq.${user_id},id_penyedia_jasa.eq.${user_id}`)
       .order("created_at", { ascending: false });
@@ -44,7 +44,7 @@ export class ChatService {
       .select("*")
       .eq("id_pengguna_jasa", id_pengguna_jasa)
       .eq("id_penyedia_jasa", id_penyedia_jasa)
-      .single();
+      .maybeSingle();
 
     if (existing) return existing;
 
@@ -160,13 +160,20 @@ export class ChatService {
       throw new Error(`Gagal mengirim pesan: ${error?.message}`);
     }
 
-    // Trigger notifikasi ke lawan bicara (id_referensi diisi id_chatroom agar saat diklik bisa diarahkan ke room)
+    // Ambil nama pengirim dari hasil .select() pesanBaru di atas
+    const namaPengirim = (pesanBaru.pengirim as any)?.nama || "Pengguna";
+    const teksPesan = isi_pesan.trim();
+    const previewPesan = teksPesan
+      ? `${teksPesan.slice(0, 50)}${teksPesan.length > 50 ? "..." : ""}`
+      : "Mengirimkan lampiran";
+
+    // Trigger notifikasi ke lawan bicara (id_referensi diisi id_chatroom)
     if (id_penerima && id_penerima !== user_id) {
       await NotifikasiService.kirimNotifikasi({
         id_pengguna: id_penerima,
-        id_pesanan: null,
+        judul: `${namaPengirim}: Pesan Baru`,
+        pesan_notifikasi: previewPesan,
         id_referensi: id_chatroom,
-        pesan_notifikasi: `Pesan baru: "${isi_pesan.trim().slice(0, 50)}${isi_pesan.length > 50 ? "..." : ""}"`,
       });
     }
 
