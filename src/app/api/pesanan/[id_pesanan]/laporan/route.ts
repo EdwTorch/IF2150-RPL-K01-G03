@@ -6,7 +6,7 @@ import { getSessionUser } from "@/services/auth.service";
 /* Ngecreate tiket laporan */
 export async function POST(
   req: NextRequest,
-  { params }: { params: { id_pesanan: string } }
+  { params }: { params: Promise<{ id_pesanan: string }> }
 ) {
   try {
     const supabase = await createClient();
@@ -25,9 +25,9 @@ export async function POST(
       }
 
     const body = await req.json();
-
+    const {id_pesanan} = await params;
     const tiketBaru = await PelaporanService.submitLaporan(
-      params.id_pesanan,
+      id_pesanan,
       user.id,
       {
         kategori: body.kategori,

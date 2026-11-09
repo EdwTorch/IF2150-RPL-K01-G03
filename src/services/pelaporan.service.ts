@@ -107,7 +107,7 @@ export class PelaporanService{
             throw new Error("Minimal sertakan 1 tautan atau lampiran bukti.");
         }
 
-        // 2. Batasi jumlah maksimal bukti (opsional, misal maks 5 file/link)
+        // 2. Batasi jumlah maksimal bukti
         if (urls.length > 3) {
             throw new Error("Maksimal 3 bukti yang dapat dilampirkan.");
         }
@@ -115,24 +115,31 @@ export class PelaporanService{
         // 3. Cek setiap elemen di dalam array
         const validUrls = urls.map((item, index) => {
             if (typeof item !== "string" || item.trim() === "") {
-            throw new Error(`Bukti ke-${index + 1} tidak boleh kosong.`);
+                throw new Error(`Bukti ke-${index + 1} tidak boleh kosong.`);
+            }
+
+            const trimmedItem = item.trim();
+
+            // Guard untuk path relatif lokal dari LocalStorageService
+            // (Sekaligus cegah '..' agar tidak bisa path traversal ke folder lain)
+            if (trimmedItem.startsWith("/uploads/") && !trimmedItem.includes("..")) {
+                return trimmedItem;
             }
 
             try {
-            const parsedUrl = new URL(item.trim());
-            // Pastikan protokolnya hanya http atau https (mencegah 'javascript:alert(1)' dll)
-            if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
-                throw new Error();
-            }
-            return parsedUrl.toString();
+                const parsedUrl = new URL(trimmedItem);
+                // Pastikan protokolnya hanya http atau https (mencegah 'javascript:alert(1)' dll)
+                if (parsedUrl.protocol !== "http:" && parsedUrl.protocol !== "https:") {
+                    throw new Error();
+                }
+                return parsedUrl.toString();
             } catch {
-            throw new Error(`Format URL pada bukti ke-${index + 1} tidak valid (${item}).`);
+                throw new Error(`Format URL pada bukti ke-${index + 1} tidak valid (${item}).`);
             }
         });
 
         return validUrls;
     }
-
     // 2. Ambil daftar semua tiket milik user (sebagai pelapor maupun terlapor)
   static async getTicketsByUser(user_id: string): Promise<TiketLaporan[]> {
     const supabase = await createClient();
@@ -335,7 +342,6 @@ export class TanggapanLaporanService {
       .insert([
         {
           id_tiket: data.id_tiket,
-          id_admin: data.id_admin,
           jenis_tindakan: data.jenis_tindakan,
           catatan_tanggapan: data.catatan_tanggapan.trim(),
         },

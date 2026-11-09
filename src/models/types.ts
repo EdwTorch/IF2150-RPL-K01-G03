@@ -8,9 +8,9 @@ export interface Jasa {
   deskripsi: string;
   kategori: string;
   harga: number;
-  rating_rata_rata?: number;
-  status_aktif?: boolean;
-  berkas_pendukung?: string[];
+  rating_rata_rata?: number; // default 0.0, rentang 0-5
+  status_aktif?: boolean; // default true
+  berkas_pendukung?: string[]; // URL berkas, default []
   created_at?: string;
 }
 
@@ -99,4 +99,13 @@ export interface SessionUser {
   status_akun: boolean;
   isPenyediaJasa: boolean;
   isPenggunaJasa: boolean;
+}
+
+export interface Notifikasi{
+    id_notifikasi : string;
+    id_pengguna : string;
+    id_pesanan : string;
+    id_referensi : string,
+    pesan_notifikasi : string,
+    is_read : boolean,
 }

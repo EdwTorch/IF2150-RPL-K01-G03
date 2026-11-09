@@ -11,7 +11,7 @@ export async function POST(request: Request) {
     error,
   } = await supabase.auth.getUser();
     if (error || !user) {
-        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+        return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
       }
     const userId = user.id; 
     const body = await request.json();
@@ -20,14 +20,14 @@ export async function POST(request: Request) {
     // Validasi input minimal
     if (!id_pesanan || !rating) {
       return NextResponse.json(
-        { success: false, error: "ID pesanan dan penilaian (rating) wajib diisi." },
+        { success: false, message: "ID pesanan dan penilaian (rating) wajib diisi." },
         { status: 400 }
       );
     }
 
     if (rating < 1 || rating > 5) {
       return NextResponse.json(
-        { success: false, error: "Rating harus bernilai antara 1 sampai 5." },
+        { success: false, message: "Rating harus bernilai antara 1 sampai 5." },
         { status: 400 }
       );
     }
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
     );
   } catch (err: any) {
     return NextResponse.json(
-      { success: false, error: err.message || "Gagal membuat ulasan." },
+      { success: false, message: err.message || "Gagal membuat ulasan." },
       { status: 400 }
     );
   }
@@ -60,7 +60,7 @@ export async function GET(request: Request) {
 
     if (!idJasa) {
       return NextResponse.json(
-        { success: false, error: "Parameter id_jasa wajib diisi." },
+        { success: false, message: "Parameter id_jasa wajib diisi." },
         { status: 400 }
       );
     }
@@ -73,7 +73,7 @@ export async function GET(request: Request) {
     );
   } catch (err: any) {
     return NextResponse.json(
-      { success: false, error: err.message || "Gagal mengambil ulasan." },
+      { success: false, message: err.message || "Gagal mengambil ulasan." },
       { status: 400 }
     );
   }
