@@ -9,6 +9,26 @@ export class UlasanService {
         }
     }
 
+    // Perhitungan murni rating agregat dengan pembulatan 1 desimal
+    static hitungRatingAgregat(daftar: (number | { rating: number })[]): RatingAgregat {
+        if (!daftar || daftar.length === 0) {
+            return { rating_rata_rata: 0, total_ulasan: 0 };
+        }
+
+        let total = 0;
+        for (const item of daftar) {
+            const val = typeof item === "number" ? item : item?.rating;
+            this.validasiRating(val);
+            total += val;
+        }
+
+        const rata_rata = Number((total / daftar.length).toFixed(1));
+        return {
+            rating_rata_rata: rata_rata,
+            total_ulasan: daftar.length,
+        };
+    }
+
     // Ambil profil rating agregat dan total ulasan penyedia jasa untuk tampilan profil (I-03)
     static async getRatingDanUlasanPenyedia(id_penyedia_jasa: string): Promise<{
         id_penyedia_jasa: string;
