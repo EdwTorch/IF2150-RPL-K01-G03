@@ -29,6 +29,26 @@ export class UlasanService {
         };
     }
 
+    // Format nilai rating untuk penanganan tampilan yang ramah di profil (I-03)
+    static formatRatingTampilan(rating: number | null | undefined, total_ulasan: number = 0): {
+        rating_teks: string;
+        total_ulasan_teks: string;
+        label: string;
+    } {
+        if (!rating || !total_ulasan || total_ulasan === 0) {
+            return {
+                rating_teks: "0.0",
+                total_ulasan_teks: "0 ulasan",
+                label: "Belum ada ulasan",
+            };
+        }
+        return {
+            rating_teks: rating.toFixed(1),
+            total_ulasan_teks: `${total_ulasan} ulasan`,
+            label: `★ ${rating.toFixed(1)} (${total_ulasan} ulasan)`,
+        };
+    }
+
     // Ambil profil rating agregat dan total ulasan penyedia jasa untuk tampilan profil (I-03)
     static async getRatingDanUlasanPenyedia(id_penyedia_jasa: string): Promise<{
         id_penyedia_jasa: string;
