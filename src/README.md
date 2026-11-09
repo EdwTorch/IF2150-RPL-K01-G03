@@ -110,7 +110,7 @@ Untuk mempermudah pengujian fitur berdasarkan masing-masing peran (*role*), guna
 | Nama  | Tanggung Jawab Modul dan Routingnya |
 | :--- | :--- | 
 | Revandra Zacky Maharta | Backend: <br> 1. Infrastuktur Dasar (Supabase) <br> 2. Dual Storage (Lokal dan Supabase) <br> 3. Registrasi <br> 4. Login, Logout <br> 5. Manajemen Sesi | 
-| Danesh Rasyad Damotino | | 
+| Danesh Rasyad Damotino | Backend: <br> 1. Pengelolaan Penawaran Jasa (CRUD) <br> 2. Pencarian & Komparasi Jasa <br> 3. Bookmark <br> 4. Pemesanan & Konfirmasi <br> 5. Pembayaran & Riwayat Transaksi| 
 | Theresia Estelina Ratu Udju | | 
 | Edward Terrance Lie | BACKEND : <br> 1. Modul Deliverables (Terima/Tolak Pesanan, Konfirmasi Pesanan, Kirim Pesanan, Ajukan Revisi, Pengumpulan Revisi, Konfirmasi Hasil, Pencairan Dana) <br> 2. Modul Ulasan <br> 3. Modul Pelaporan <br> 4. Notifikasi <br> 5. Chat Realtime <br> 6. Chat Mediasi <br> 7. All about admin |
 | Necia Aurely Greva Dedevi | |
