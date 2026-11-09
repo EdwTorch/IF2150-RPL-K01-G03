@@ -6,7 +6,7 @@ export default function Home() {
     <>
       <Navbar peran="PENGGUNA_JASA" nama="Rina Putri" jumlahPesanan={1} jumlahChat={3} />
       <main className="min-h-[60vh]" />
-      <Footer />
+      <Footer peran="PENGGUNA_JASA" />
     </>
   );
 }

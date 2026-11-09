@@ -1,4 +1,5 @@
 import Navbar from "@/components/ui/navbar";
+import Footer from "@/components/ui/footer";
 
 export default function PenyediaLayout({
   children,
@@ -9,6 +10,7 @@ export default function PenyediaLayout({
     <>
       <Navbar peran="PENYEDIA_JASA" />
       {children}
+      <Footer peran="PENYEDIA_JASA" />
     </>
   );
 }

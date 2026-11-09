@@ -10,9 +10,10 @@ import { useEffect, useRef, useState } from "react";
  *   Peran=Tamu          (31:110)  → logo + Masuk + Daftar (hanya di C04 Registrasi & C06 Login)
  *   Peran=Pengguna Jasa (31:136)  → Cari Jasa, Pesanan Saya, Bantuan + bookmark, chat, akun
  *   Peran=Penyedia Jasa (70:131)  → Tawarkan Jasa, Pesanan Masuk, Portofolio, Bantuan + chat, akun
+ *   Peran=Admin         → Dashboard + chat, akun
  */
 
-export type Peran = "TAMU" | "PENGGUNA_JASA" | "PENYEDIA_JASA";
+export type Peran = "TAMU" | "PENGGUNA_JASA" | "PENYEDIA_JASA" | "ADMIN";
 
 export type NavbarProps = {
   peran: Peran;
@@ -42,17 +43,23 @@ const MENU: Record<Exclude<Peran, "TAMU">, MenuItem[]> = {
     { label: "Portofolio", href: "/portofolio" },
     { label: "Bantuan", href: "/bantuan" },
   ],
+  ADMIN: [
+    { label: "Tiket Laporan", href: "/admin/tiket" },
+    { label: "Ruang Mediasi", href: "/admin" }
+  ],
 };
 
 const BERANDA: Record<Peran, string> = {
   TAMU: "/",
   PENGGUNA_JASA: "/cari",
   PENYEDIA_JASA: "/portofolio",
+  ADMIN: "/admin",
 };
 
 const LABEL_PERAN: Record<Exclude<Peran, "TAMU">, string> = {
   PENGGUNA_JASA: "Pengguna Jasa",
   PENYEDIA_JASA: "Penyedia Jasa",
+  ADMIN: "Admin",
 };
 
 /* ---------------- Bagian kecil ---------------- */
