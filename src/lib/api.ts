@@ -40,17 +40,15 @@ export async function api<T>(url: string, opsi: OpsiApi = {}): Promise<T> {
 
     const data = await res.json().catch(() => ({}));
 
-    if (!res.ok) {
-      if (res.status === 401 && typeof window !== "undefined") {
-        window.location.href = "/login";
-      }
-      throw new ApiError(
-        res.status,
-        data?.error?.kode ?? "SERVER",
-        data?.error?.pesan ?? "Terjadi kesalahan. Coba lagi.",
-        data?.error?.field,
-      );
-    }
+   if (!res.ok) {
+  // route auth: { error, code } · route lain: { success: false, message, error_code }
+  const pesan =
+    typeof data?.error === "string" ? data.error
+    : typeof data?.message === "string" ? data.message
+    : "Terjadi kesalahan. Coba lagi.";
+  const kode = data?.code ?? data?.error_code ?? "SERVER";
+  throw new ApiError(res.status, kode, pesan, data?.field);
+}
     return data as T;
   } catch (e) {
     if (e instanceof ApiError) throw e;

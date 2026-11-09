@@ -16,7 +16,7 @@ import { formatRupiah } from "@/lib/format";
 import {
   terimaPesanan,
   tolakPesanan,
-} from "@/services/layanan";
+} from "@/lib/layanan";
 
 // C35: menunggu -> diproses | ditolak
 type Status = "menunggu" | "diproses" | "ditolak";
