@@ -3,8 +3,8 @@ import {
   mockMetodePembayaranList,
   mockPesananTransaksiList,
   mockRiwayatTransaksiList,
-} from '@/lib/mocks/transaksi.mock';
-import { PengontrolTransaksi } from '@/services/transaksi.service';
+} from '../../../lib/mocks/transaksi.mock';
+import { PengontrolTransaksi } from '../../../services/transaksi.service';
 
 const isMock = () => process.env.NEXT_PUBLIC_USE_MOCK === 'true';
 

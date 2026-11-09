@@ -1,15 +1,12 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-vi.mock('@/lib/supabase/server', () => ({ createClient: vi.fn() }));
-vi.mock('@/lib/mocks/transaksi.mock', () => import('../lib/mocks/transaksi.mock'));
-vi.mock('@/services/transaksi.service', () => import('../services/transaksi.service'));
+const mockCreateClient = vi.fn();
+vi.mock('../lib/supabase/server', () => ({ createClient: () => mockCreateClient() }));
 
 import type { MetodePembayaran, Pesanan, RiwayatTransaksi } from '../models/types';
 import {
   PENGGUNA_JASA_1,
-  PENGGUNA_JASA_2,
   PENYEDIA_JASA_1,
-  PENYEDIA_JASA_2,
   mockMetodePembayaranList,
   mockPesananTransaksiList,
   mockRiwayatTransaksiList,
@@ -249,7 +246,7 @@ describe('PengontrolTransaksi.ambilRiwayatTransaksiDiMemori & setPencairanDanaDi
     ).toThrow('Peran pengguna tidak valid');
   });
 
-  it('mencairkan dana pesanan selesai (Algo-3203) dan menolak jika belum selesai', () => {
+  it('mencairkan dana pesanan selesai yang sudah lunas dan menolak jika belum selesai, belum lunas, atau sudah dicairkan', () => {
     const dicairkan = PengontrolTransaksi.setPencairanDanaDiMemori(
       daftarPesanan,
       'ord-paid-2',
@@ -261,19 +258,166 @@ describe('PengontrolTransaksi.ambilRiwayatTransaksiDiMemori & setPencairanDanaDi
     expect(() =>
       PengontrolTransaksi.setPencairanDanaDiMemori(daftarPesanan, 'ord-paid-2', false),
     ).toThrow('Pencairan dana hanya dapat dilakukan untuk pesanan selesai');
+
+    expect(() =>
+      PengontrolTransaksi.setPencairanDanaDiMemori(daftarPesanan, 'ord-unpaid', true),
+    ).toThrow('Pencairan dana hanya dapat dilakukan untuk pesanan yang sudah lunas');
+
+    expect(() =>
+      PengontrolTransaksi.setPencairanDanaDiMemori(daftarPesanan, 'ord-paid-1', true),
+    ).toThrow('Dana untuk pesanan ini sudah dicairkan sebelumnya');
+  });
+});
+
+describe('PengontrolTransaksi Query Supabase (Filter Inner Join, Guard Double-Pay, Rollback & Pencairan)', () => {
+  beforeEach(() => {
+    mockCreateClient.mockReset();
+  });
+
+  it('ambilRiwayatTransaksi memfilter langsung di DB dengan pesanan!inner dan eq(pesanan.<kolom>, id_pengguna)', async () => {
+    const mockOrder = vi.fn().mockResolvedValue({
+      data: [{ ...daftarRiwayat[0], pesanan: daftarPesanan[1], metode_pembayaran: daftarMetode[0] }],
+      error: null,
+    });
+    const mockEq = vi.fn().mockReturnValue({ order: mockOrder });
+    const mockSelect = vi.fn().mockReturnValue({ eq: mockEq });
+    const mockFrom = vi.fn().mockReturnValue({ select: mockSelect });
+    mockCreateClient.mockResolvedValue({ from: mockFrom });
+
+    const hasil = await PengontrolTransaksi.ambilRiwayatTransaksi('  u1  ', 'pengguna_jasa');
+
+    expect(mockFrom).toHaveBeenCalledWith('riwayat_transaksi');
+    expect(mockSelect).toHaveBeenCalledWith('*, pesanan!inner(*), metode_pembayaran(*)');
+    expect(mockEq).toHaveBeenCalledWith('pesanan.id_pengguna_jasa', 'u1');
+    expect(hasil).toHaveLength(1);
+    expect(hasil[0].id_riwayat).toBe('trx-1');
+  });
+
+  it('prosesPembayaranDummy melakukan rollback kompensasi ke status awal jika insert riwayat_transaksi gagal', async () => {
+    const rollbackEq = vi.fn().mockResolvedValue({ error: null });
+    const updateCalls: Record<string, unknown>[] = [];
+
+    mockCreateClient.mockResolvedValue({
+      from: (table: string) => {
+        if (table === 'metode_pembayaran') {
+          return {
+            select: () => ({
+              eq: () => ({
+                maybeSingle: vi.fn().mockResolvedValue({ data: daftarMetode[0], error: null }),
+              }),
+            }),
+          };
+        }
+        if (table === 'pesanan') {
+          return {
+            select: () => ({
+              eq: () => ({
+                maybeSingle: vi.fn().mockResolvedValue({ data: daftarPesanan[0], error: null }),
+              }),
+            }),
+            update: (payload: Record<string, unknown>) => {
+              updateCalls.push(payload);
+              if (updateCalls.length === 1) {
+                return {
+                  eq: () => ({
+                    neq: (col: string, val: string) => {
+                      expect(col).toBe('status_pembayaran');
+                      expect(val).toBe('LUNAS');
+                      return {
+                        select: () => ({
+                          maybeSingle: vi.fn().mockResolvedValue({
+                            data: { ...daftarPesanan[0], ...payload },
+                            error: null,
+                          }),
+                        }),
+                      };
+                    },
+                  }),
+                };
+              }
+              return { eq: rollbackEq };
+            },
+          };
+        }
+        if (table === 'riwayat_transaksi') {
+          return {
+            insert: () => ({
+              select: () => ({
+                single: vi.fn().mockResolvedValue({
+                  data: null,
+                  error: { message: 'Gagal menyimpan riwayat transaksi ke DB' },
+                }),
+              }),
+            }),
+          };
+        }
+        return {};
+      },
+    });
+
+    await expect(
+      PengontrolTransaksi.prosesPembayaranDummy('ord-unpaid', 'VA_BCA', 250000),
+    ).rejects.toThrow('Gagal menyimpan riwayat transaksi ke DB');
+
+    expect(updateCalls).toHaveLength(2);
+    expect(updateCalls[1]).toMatchObject({
+      status_pembayaran: 'MENUNGGU_PEMBAYARAN',
+      status_pesanan: 'MENUNGGU_PEMBAYARAN',
+      id_metode_pembayaran: null,
+    });
+    expect(rollbackEq).toHaveBeenCalledWith('id_pesanan', 'ord-unpaid');
+  });
+
+  it('setPencairanDana di DB menolak pesanan yang belum lunas atau sudah pernah dicairkan', async () => {
+    mockCreateClient.mockResolvedValue({
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            maybeSingle: vi.fn().mockResolvedValue({ data: daftarPesanan[0], error: null }),
+          }),
+        }),
+      }),
+    });
+
+    await expect(PengontrolTransaksi.setPencairanDana('ord-unpaid', true)).rejects.toThrow(
+      'Pencairan dana hanya dapat dilakukan untuk pesanan yang sudah lunas',
+    );
+
+    mockCreateClient.mockResolvedValue({
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            maybeSingle: vi.fn().mockResolvedValue({ data: daftarPesanan[1], error: null }),
+          }),
+        }),
+      }),
+    });
+
+    await expect(PengontrolTransaksi.setPencairanDana('ord-paid-1', true)).rejects.toThrow(
+      'Dana untuk pesanan ini sudah dicairkan sebelumnya',
+    );
   });
 });
 
 describe('HTTP Route Handlers /api/transaksi/dummy & /api/transaksi', () => {
   const prevMock = process.env.NEXT_PUBLIC_USE_MOCK;
+  let snapshotPesanan: Pesanan[];
+  let snapshotRiwayat: RiwayatTransaksi[];
+
   beforeEach(() => {
     process.env.NEXT_PUBLIC_USE_MOCK = 'true';
+    snapshotPesanan = mockPesananTransaksiList.map((p) => ({ ...p }));
+    snapshotRiwayat = [...mockRiwayatTransaksiList];
   });
   afterEach(() => {
     process.env.NEXT_PUBLIC_USE_MOCK = prevMock;
+    mockPesananTransaksiList.length = 0;
+    mockPesananTransaksiList.push(...snapshotPesanan);
+    mockRiwayatTransaksiList.length = 0;
+    mockRiwayatTransaksiList.push(...snapshotRiwayat);
   });
 
-  it('POST /api/transaksi/dummy memproses pembayaran instan (201) dan menolak input salah (400 / 404)', async () => {
+  it('POST /api/transaksi/dummy memproses pembayaran instan (201) dan menolak input salah / JSON rusak (400 / 404)', async () => {
     const resOk = await postPembayaranDummy(
       new Request('http://localhost/api/transaksi/dummy', {
         method: 'POST',
@@ -291,6 +435,17 @@ describe('HTTP Route Handlers /api/transaksi/dummy & /api/transaksi', () => {
     expect(jsonOk.data.pesanan.status_pesanan).toBe('DIPROSES');
     expect(jsonOk.data.pesanan.status_pembayaran).toBe('LUNAS');
     expect(jsonOk.data.transaksi.status_transaksi).toBe('BERHASIL');
+
+    const resMalformedJson = await postPembayaranDummy(
+      new Request('http://localhost/api/transaksi/dummy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: '{ invalid json',
+      }),
+    );
+    const jsonMalformed = await resMalformedJson.json();
+    expect(resMalformedJson.status).toBe(400);
+    expect(jsonMalformed.error_code).toBe('VALIDATION_ERROR');
 
     const resSalahNominal = await postPembayaranDummy(
       new Request('http://localhost/api/transaksi/dummy', {

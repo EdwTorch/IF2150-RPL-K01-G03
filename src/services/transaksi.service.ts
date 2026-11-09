@@ -1,6 +1,6 @@
 import crypto from 'crypto';
-import { createClient } from '@/lib/supabase/server';
-import type { MetodePembayaran, Pesanan, RiwayatTransaksi } from '@/models/types';
+import { createClient } from '../lib/supabase/server';
+import type { MetodePembayaran, Pesanan, RiwayatTransaksi } from '../models/types';
 
 export interface HasilPembayaranDummy {
   transaksi: RiwayatTransaksi;
@@ -93,6 +93,7 @@ export class PengontrolTransaksi {
       throw new Error('Peran pengguna tidak valid');
     }
 
+    const targetId = id_pengguna.trim();
     const kolom = peran === 'pengguna_jasa' ? 'id_pengguna_jasa' : 'id_penyedia_jasa';
     return daftar_riwayat
       .map((r) => ({
@@ -101,7 +102,7 @@ export class PengontrolTransaksi {
         metode_pembayaran:
           r.metode_pembayaran ?? daftar_metode.find((m) => m.id_metode === r.id_metode),
       }))
-      .filter((r) => r.pesanan && r.pesanan[kolom] === id_pengguna)
+      .filter((r) => r.pesanan && r.pesanan[kolom] === targetId)
       .sort((a, b) => waktuTransaksi(b) - waktuTransaksi(a));
   }
 
@@ -116,6 +117,13 @@ export class PengontrolTransaksi {
 
     const pesanan = daftar_pesanan.find((p) => p.id_pesanan === id_pesanan.trim());
     if (!pesanan) throw new Error('Pesanan tidak ditemukan');
+
+    if (this.normalisasiStatus(pesanan.status_pembayaran) !== 'LUNAS') {
+      throw new Error('Pencairan dana hanya dapat dilakukan untuk pesanan yang sudah lunas');
+    }
+    if (pesanan.status_pencairan) {
+      throw new Error('Dana untuk pesanan ini sudah dicairkan sebelumnya');
+    }
 
     const sekarang = new Date().toISOString();
     return {
@@ -189,9 +197,13 @@ export class PengontrolTransaksi {
         updated_at: hasilMemori.pesanan.updated_at,
       })
       .eq('id_pesanan', id_pesanan.trim())
+      .neq('status_pembayaran', 'LUNAS')
       .select('*')
-      .single();
+      .maybeSingle();
     if (errUpdate) throw new Error(errUpdate.message);
+    if (!pesananUpdated) {
+      throw new Error('Pesanan tidak dalam status menunggu pembayaran');
+    }
 
     const { data: riwayatBaru, error: errRiwayat } = await supabase
       .from('riwayat_transaksi')
@@ -204,7 +216,18 @@ export class PengontrolTransaksi {
       })
       .select('*, pesanan(*), metode_pembayaran(*)')
       .single();
-    if (errRiwayat) throw new Error(errRiwayat.message);
+    if (errRiwayat) {
+      await supabase
+        .from('pesanan')
+        .update({
+          id_metode_pembayaran: (pesananData as Pesanan).id_metode_pembayaran ?? null,
+          status_pembayaran: (pesananData as Pesanan).status_pembayaran ?? 'MENUNGGU_PEMBAYARAN',
+          status_pesanan: (pesananData as Pesanan).status_pesanan,
+          updated_at: (pesananData as Pesanan).updated_at ?? new Date().toISOString(),
+        })
+        .eq('id_pesanan', id_pesanan.trim());
+      throw new Error(errRiwayat.message);
+    }
 
     return {
       transaksi: riwayatBaru as RiwayatTransaksi,
@@ -212,7 +235,7 @@ export class PengontrolTransaksi {
     };
   }
 
-  // Ambil daftar riwayat transaksi pengguna berdasarkan peran di Supabase
+  // Ambil daftar riwayat transaksi pengguna berdasarkan peran di Supabase (difilter langsung di DB)
   static async ambilRiwayatTransaksi(
     id_pengguna: string,
     peran: 'pengguna_jasa' | 'penyedia_jasa' = 'pengguna_jasa',
@@ -222,10 +245,12 @@ export class PengontrolTransaksi {
       throw new Error('Peran pengguna tidak valid');
     }
 
+    const kolom = peran === 'pengguna_jasa' ? 'id_pengguna_jasa' : 'id_penyedia_jasa';
     const supabase = await createClient();
     const { data, error } = await supabase
       .from('riwayat_transaksi')
-      .select('*, pesanan(*), metode_pembayaran(*)')
+      .select('*, pesanan!inner(*), metode_pembayaran(*)')
+      .eq(`pesanan.${kolom}`, id_pengguna.trim())
       .order('tanggal_transaksi', { ascending: false });
     if (error) throw new Error(error.message);
 
@@ -233,29 +258,47 @@ export class PengontrolTransaksi {
       (data ?? []) as RiwayatTransaksi[],
       [],
       [],
-      id_pengguna,
+      id_pengguna.trim(),
       peran,
     );
   }
 
   // Algo-3203 (Q-3202): pencairan dana ke penyedia jasa di Supabase
   static async setPencairanDana(id_pesanan: string, selesai: boolean): Promise<boolean> {
-    if (!id_pesanan?.trim() || !selesai) return false;
+    if (!id_pesanan?.trim() || !selesai) {
+      this.setPencairanDanaDiMemori([], id_pesanan, selesai);
+    }
+
     const supabase = await createClient();
-    const sekarang = new Date().toISOString();
+    const { data: pesananData, error: errFetch } = await supabase
+      .from('pesanan')
+      .select('*')
+      .eq('id_pesanan', id_pesanan.trim())
+      .maybeSingle();
+    if (errFetch) throw new Error(errFetch.message);
+
+    const hasilMemori = this.setPencairanDanaDiMemori(
+      pesananData ? [pesananData as Pesanan] : [],
+      id_pesanan,
+      selesai,
+    );
 
     const { data, error } = await supabase
       .from('pesanan')
       .update({
         status_pencairan: true,
-        waktu_pencairan: sekarang,
-        updated_at: sekarang,
+        waktu_pencairan: hasilMemori.waktu_pencairan,
+        updated_at: hasilMemori.updated_at,
       })
       .eq('id_pesanan', id_pesanan.trim())
+      .eq('status_pencairan', false)
       .select('id_pesanan')
       .maybeSingle();
     if (error) throw new Error(error.message);
-    return Boolean(data?.id_pesanan);
+    if (!data?.id_pesanan) {
+      throw new Error('Dana untuk pesanan ini sudah dicairkan sebelumnya');
+    }
+    return true;
   }
 }
 

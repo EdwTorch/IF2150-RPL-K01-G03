@@ -1,4 +1,4 @@
-import type { MetodePembayaran, Pesanan, RiwayatTransaksi } from '@/models/types';
+import type { MetodePembayaran, Pesanan, RiwayatTransaksi } from '../../models/types';
 
 export const PENYEDIA_JASA_1 = '11111111-1111-4111-8111-111111111111';
 export const PENYEDIA_JASA_2 = '22222222-2222-4222-8222-222222222222';
