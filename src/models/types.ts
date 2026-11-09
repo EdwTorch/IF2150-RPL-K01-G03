@@ -85,6 +85,7 @@ export interface Notifikasi{
     id_pengguna : string;
     id_pesanan : string;
     id_referensi : string,
+    judul : string,
     pesan_notifikasi : string,
     is_read : boolean,
 }
