@@ -1,4 +1,5 @@
 import Navbar from "@/components/ui/navbar";
+import Footer from "@/components/ui/footer";
 
 export default function PenggunaLayout({
   children,
@@ -9,6 +10,7 @@ export default function PenggunaLayout({
     <>
       <Navbar peran="PENGGUNA_JASA" />
       {children}
+      <Footer peran="PENGGUNA_JASA" />
     </>
   );
 }
