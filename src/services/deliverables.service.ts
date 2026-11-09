@@ -1,6 +1,7 @@
 // src/services/deliverable.service.ts
 import { createClient } from "@/lib/supabase/server";
 import { ProdukAkhir, PengajuanRevisi } from "@/models/types";
+import { NotifikasiService } from "./notifikasi.service"; 
 
 export class DeliverablesService {
   
@@ -40,10 +41,35 @@ export class DeliverablesService {
     if (error) throw new Error(error.message);
 
     // Update status pesanan di database menjadi 'Menunggu Konfirmasi'
-    await supabase
-      .from("pesanan")
-      .update({ status_pesanan: "Menunggu Konfirmasi" })
-      .eq("id_pesanan", data.id_pesanan);
+      const { data: pesananData, error: pesananError } = await supabase
+    .from("pesanan")
+    .update({ status_pesanan: "Menunggu Konfirmasi" })
+    .eq("id_pesanan", data.id_pesanan)
+    .select(`
+      id_pesanan,
+      id_pengguna_jasa,
+      jasa (
+        nama_jasa
+      )
+    `)
+    .single();
+
+  if (pesananError) {
+    throw new Error(`Gagal memperbarui status pesanan: ${pesananError.message}`);
+  }
+
+  // Ambil nama jasa (sesuaikan 'nama_jasa' jika nama kolom di tabel jasa berbeda)
+  const nama_jasa = (pesananData?.jasa as any)?.nama_jasa || "Pesanan";
+
+  if (pesananData?.id_pengguna_jasa) {
+    await NotifikasiService.kirimNotifikasi({
+      id_pengguna: pesananData.id_pengguna_jasa, // Dikirim ke Pemesan / Klien
+      pesan_notifikasi: `Penyedia jasa telah mengumpulkan hasil pekerjaan untuk "${nama_jasa}". Silakan periksa dan konfirmasi pesanan Anda.`,
+      id_pesanan: data.id_pesanan,
+      id_referensi: id_produk_akhir,
+      judul: `${nama_jasa}: Hasil Pekerjaan Telah Dikumpulkan`,
+    });
+  }
 
     return result as ProdukAkhir;
   }
@@ -178,11 +204,31 @@ export class DeliverablesService {
     if (error) throw new Error(error.message);
 
     // Kembalikan status pesanan jadi 'Diproses' (karena sedang direvisi)
-    await supabase
-      .from("pesanan")
-      .update({ status_pesanan: "Diproses" })
-      .eq("id_pesanan", data.id_pesanan);
+    // Kembalikan status pesanan jadi 'Diproses' SEKALIGUS ambil id_penyedia_jasa & nama_jasa
+  const { data: pesananUpdated, error: pesananError } = await supabase
+    .from("pesanan")
+    .update({ status_pesanan: "Diproses" })
+    .eq("id_pesanan", data.id_pesanan)
+    .select("id_penyedia_jasa, jasa(nama_jasa)")
+    .single();
 
+  if (pesananError) {
+    throw new Error(`Gagal memperbarui status pesanan: ${pesananError.message}`);
+  }
+
+  // ---> TARUH NOTIFIKASI DI SINI <---
+  const namaJasa = (pesananUpdated?.jasa as any)?.nama_jasa || "Pesanan";
+
+  if (pesananUpdated?.id_penyedia_jasa) {
+    await NotifikasiService.kirimNotifikasi({
+      id_pengguna: pesananUpdated.id_penyedia_jasa, // Dikirim ke Penyedia Jasa
+      judul: `${namaJasa}: Pengajuan Revisi Baru`,
+      pesan_notifikasi: `Pemesan mengajukan revisi untuk "${namaJasa}" (Sisa kuota revisi: ${current_kuota-1}). Silakan periksa catatan revisi.`,
+      id_pesanan: data.id_pesanan,
+      id_referensi: id_revisi,
+    });
+  }
+    
     return result as PengajuanRevisi;
   }
 
@@ -237,10 +283,28 @@ export class DeliverablesService {
     }
 
     // D. Kembalikan status pesanan utama menjadi 'Menunggu Konfirmasi'
-    await supabase
+    const { data: pesananData, error: pesananError } = await supabase
       .from("pesanan")
       .update({ status_pesanan: "Menunggu Konfirmasi" })
-      .eq("id_pesanan", data.id_pesanan);
+      .eq("id_pesanan", data.id_pesanan)
+      .select("id_pengguna_jasa, jasa(nama_jasa)")
+      .single();
+
+    if (pesananError) {
+      throw new Error(`Gagal memperbarui status pesanan: ${pesananError.message}`);
+    }
+
+    // E. Kirim notifikasi ke Pemesan (id_pengguna_jasa)
+    const namaJasa = (pesananData?.jasa as any)?.nama_jasa || "Pesanan";
+
+    if (pesananData?.id_pengguna_jasa) {
+      await NotifikasiService.kirimNotifikasi({
+        id_pengguna: pesananData.id_pengguna_jasa,
+        judul: `${namaJasa}: Hasil Revisi Telah Dikumpulkan`,
+        pesan_notifikasi: "Penyedia jasa telah mengirimkan hasil perbaikan (revisi). Silakan periksa dan konfirmasi pesanan Anda.",
+        id_pesanan: data.id_pesanan,
+      });
+    }
 
     return result as ProdukAkhir;
   }
@@ -298,20 +362,32 @@ export class DeliverablesService {
       .update({ saldo: saldoBaru })
       .eq("id", pesanan.id_penyedia_jasa);
 
-    const {error: errUpdate} = await supabase
+      if (errSaldo) {
+        throw new Error("Gagal menambahkan saldo ke dompet penjual: " + errSaldo.message);
+      }
+    const {data : datapesanan, error: errUpdate} = await supabase
       .from("pesanan")
       .update({status_pencairan : true})
       .eq("id_pesanan",id_pesanan)
+      .select("id_penyedia_jasa, jasa(nama_jasa)")
+      .single();
 
     if (errUpdate){
       throw new Error("Gagal mengupdate state pencairan di tabel pesanan");
     }
-    if (errSaldo) {
-      throw new Error("Gagal menambahkan saldo ke dompet penjual: " + errSaldo.message);
-    }
+    const namaJasa = (datapesanan?.jasa as any)?.nama_jasa || "Pesanan";
 
-
+    // Kirim notifikasi ke Penyedia Jasa (id_penyedia_jasa)
+    if (pesanan.id_penyedia_jasa) {
+      await NotifikasiService.kirimNotifikasi({
+        id_pengguna: pesanan.id_penyedia_jasa,
+        judul: `${namaJasa}: Pesanan Selesai & Dana Cair`,
+        pesan_notifikasi: `Pemesan telah mengonfirmasi pesanan selesai. Dana sebesar Rp ${pesanan.total_biaya.toLocaleString("id-ID")} telah ditambahkan ke saldo Anda.`,
+        id_pesanan: id_pesanan,
+      });
   }
+}
+
   static async validasiOwnerPesanan(id_pesanan : string, user_id : string) : Promise<boolean>{
     const supabase = await createClient();
     const {data : pesanan} = await supabase
