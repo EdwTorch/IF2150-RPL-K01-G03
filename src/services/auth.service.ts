@@ -32,6 +32,14 @@ export interface InputRegistrasi {
 // Panjang minimum password
 export const MIN_PANJANG_PASSWORD = 8;
 
+// Helper untuk mengecek apakah data relasi PostgREST valid (bukan null, bukan array kosong, bukan object kosong)
+export function hasRelation(rel: unknown): boolean {
+    if (!rel) return false;
+    if (Array.isArray(rel)) return rel.length > 0;
+    if (typeof rel === "object") return Object.keys(rel).length > 0;
+    return false;
+}
+
 // Validasi input registrasi — murni (dapat diuji unit tanpa DB)
 export function validasiInputRegistrasi(input: InputRegistrasi): void {
     if (!input.nama?.trim()) {
@@ -212,6 +220,7 @@ export async function getSessionUser() {
     };
     
 }
+
 export async function loginAdmin(email: string, password: string) {
     // Gunakan fungsi login() yang sudah ada untuk validasi kredensial, profil, & sanksi
     const result = await login(email, password);
