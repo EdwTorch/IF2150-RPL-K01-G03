@@ -15,3 +15,4 @@ export { TabFilter } from "./TabFilter";
 export { Textarea } from "./Textarea";
 export { Toggle } from "./Toggle";
 export { UploadBox } from "./UploadBox";
+export { PageContainer } from "./PageContainer";
