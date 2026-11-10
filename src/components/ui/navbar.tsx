@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { logout } from "@/lib/client/auth";
 
 /**
  * Navbar CariJasa — sesuai komponen Figma "Navbar" (node 31:167)
@@ -27,6 +28,8 @@ export type NavbarProps = {
   jumlahChat?: number;
   /** Dipanggil saat klik "Keluar". Default: POST /api/auth/logout lalu ke /masuk. */
   onKeluar?: () => void | Promise<void>;
+  /** Jika true, hanya tampilkan logo tanpa menu navigasi. */
+  logoOnly?: boolean;
 };
 
 type MenuItem = { label: string; href: string; pakaiBadge?: boolean };
@@ -45,7 +48,7 @@ const MENU: Record<Exclude<Peran, "TAMU">, MenuItem[]> = {
   ],
   ADMIN: [
     { label: "Tiket Laporan", href: "/admin/tiket" },
-    { label: "Ruang Mediasi", href: "/admin" }
+    { label: "Ruang Mediasi", href: "/admin/mediasi" },
   ],
 };
 
@@ -66,7 +69,11 @@ const LABEL_PERAN: Record<Exclude<Peran, "TAMU">, string> = {
 
 function Brand({ href }: { href: string }) {
   return (
-    <Link href={href} className="flex shrink-0 items-center gap-[10px]" aria-label="CariJasa, ke beranda">
+    <Link
+      href={href}
+      className="flex shrink-0 items-center gap-[10px]"
+      aria-label="CariJasa, ke beranda"
+    >
       <Image src="/icons/logo-cj.svg" alt="" width={36} height={36} priority />
       <span className="text-[22px] leading-[1.35] font-semibold tracking-[-0.55px] whitespace-nowrap text-ink">
         CariJasa
@@ -76,7 +83,13 @@ function Brand({ href }: { href: string }) {
 }
 
 /** Badge merah (Figma: "Badge Notifikasi" / "Badge Chat"). */
-function Badge({ jumlah, className }: { jumlah?: number; className: string }) {
+function Badge({
+  jumlah,
+  className,
+}: {
+  jumlah?: number;
+  className: string;
+}) {
   if (!jumlah || jumlah <= 0) return null;
   return (
     <span
@@ -87,7 +100,15 @@ function Badge({ jumlah, className }: { jumlah?: number; className: string }) {
   );
 }
 
-function MenuLink({ item, aktif, jumlahBadge }: { item: MenuItem; aktif: boolean; jumlahBadge?: number }) {
+function MenuLink({
+  item,
+  aktif,
+  jumlahBadge,
+}: {
+  item: MenuItem;
+  aktif: boolean;
+  jumlahBadge?: number;
+}) {
   return (
     <Link
       href={item.href}
@@ -102,8 +123,14 @@ function MenuLink({ item, aktif, jumlahBadge }: { item: MenuItem; aktif: boolean
         {item.label}
       </span>
       {/* Indikator aktif: garis lime 20x3 */}
-      <span className={`h-[3px] w-[20px] rounded-[2px] bg-accent ${aktif ? "opacity-100" : "opacity-0"}`} />
-      {item.pakaiBadge && <Badge jumlah={jumlahBadge} className="-top-[9px] -right-[14px]" />}
+      <span
+        className={`h-[3px] w-[20px] rounded-[2px] bg-accent ${
+          aktif ? "opacity-100" : "opacity-0"
+        }`}
+      />
+      {item.pakaiBadge && (
+        <Badge jumlah={jumlahBadge} className="-top-[9px] -right-[14px]" />
+      )}
     </Link>
   );
 }
@@ -149,7 +176,9 @@ function MenuAkun({
   useEffect(() => {
     if (!buka) return;
     const klikLuar = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setBuka(false);
+      if (ref.current && !ref.current.contains(e.target as Node)) {
+        setBuka(false);
+      }
     };
     const esc = (e: KeyboardEvent) => e.key === "Escape" && setBuka(false);
     document.addEventListener("mousedown", klikLuar);
@@ -178,7 +207,9 @@ function MenuAkun({
         />
         <span className="flex flex-col items-start leading-[1.4] whitespace-nowrap">
           <span className="text-[14px] font-semibold text-ink">{nama}</span>
-          <span className="text-[12px] font-medium text-ink-muted">{peranLabel}</span>
+          <span className="text-[12px] font-medium text-ink-muted">
+            {peranLabel}
+          </span>
         </span>
       </button>
 
@@ -213,66 +244,89 @@ export default function Navbar({
   jumlahPesanan = 0,
   jumlahChat = 0,
   onKeluar,
+  logoOnly = false,
 }: NavbarProps) {
   const pathname = usePathname() ?? "";
   const router = useRouter();
 
   async function keluar() {
-    if (onKeluar) return onKeluar();
-    try {
-      await fetch("/api/auth/logout", { method: "POST" });
-    } finally {
-      router.push("/login");
-      router.refresh();
-    }
+  if (onKeluar) return onKeluar();
+
+  try {
+    await logout();
+  } finally {
+    router.push(peran === "ADMIN" ? "/admin" : "/masuk");
+    router.refresh();
   }
+}
 
   return (
     <header className="w-full border-b-2 border-line bg-white">
       <nav className="mx-auto flex h-[76px] w-full max-w-[1440px] items-center justify-between px-[80px]">
-        <Brand href={BERANDA[peran]} />
+        <Brand href={logoOnly ? "/admin" : BERANDA[peran]} />
 
-        {peran === "TAMU" ? (
-          /* ----- Peran = Tamu ----- */
-          <div className="flex shrink-0 items-center gap-[12px]">
-            {/* Button Style=Ghost */}
-            <Link
-              href="/login"
-              className="flex h-[48px] items-center justify-center rounded-[10px] px-[24px] text-[16px] leading-[1.2] font-semibold text-brand-text hover:bg-canvas"
-            >
-              Masuk
-            </Link>
-            {/* Button Style=Primary */}
-            <Link
-              href="/register"
-              className="flex h-[48px] items-center justify-center rounded-[10px] bg-brand px-[24px] text-[16px] leading-[1.2] font-semibold text-white hover:opacity-90"
-            >
-              Daftar
-            </Link>
-          </div>
-        ) : (
+        {!logoOnly && (
           <>
-            {/* ----- Menu tengah ----- */}
-            <ul className="flex shrink-0 items-center gap-[36px]">
-              {MENU[peran].map((item) => (
-                <li key={item.href}>
-                  <MenuLink
-                    item={item}
-                    aktif={pathname === item.href || pathname.startsWith(`${item.href}/`)}
-                    jumlahBadge={jumlahPesanan}
-                  />
-                </li>
-              ))}
-            </ul>
+            {peran === "TAMU" ? (
+              /* ----- Peran = Tamu ----- */
+              <div className="flex shrink-0 items-center gap-[12px]">
+                {/* Button Style=Ghost */}
+                <Link
+                  href="/masuk"
+                  className="flex h-[48px] items-center justify-center rounded-[10px] px-[24px] text-[16px] leading-[1.2] font-semibold text-brand-text hover:bg-canvas"
+                >
+                  Masuk
+                </Link>
+                {/* Button Style=Primary */}
+                <Link
+                  href="/daftar"
+                  className="flex h-[48px] items-center justify-center rounded-[10px] bg-brand px-[24px] text-[16px] leading-[1.2] font-semibold text-white hover:opacity-90"
+                >
+                  Daftar
+                </Link>
+              </div>
+            ) : (
+              <>
+                {/* ----- Menu tengah ----- */}
+                <ul className="flex shrink-0 items-center gap-[36px]">
+                  {MENU[peran].map((item) => (
+                    <li key={item.href}>
+                      <MenuLink
+                        item={item}
+                        aktif={
+                          pathname === item.href ||
+                          pathname.startsWith(`${item.href}/`)
+                        }
+                        jumlahBadge={jumlahPesanan}
+                      />
+                    </li>
+                  ))}
+                </ul>
 
-            {/* ----- Aksi kanan ----- */}
-            <div className="flex shrink-0 items-center gap-[12px]">
-              {peran === "PENGGUNA_JASA" && (
-                <TombolIkon href="/pengguna/bookmark" ikon="/icons/bookmark.svg" label="Bookmark" />
-              )}
-              <TombolIkon href="/chat" ikon="/icons/chat.svg" label="Chat" jumlahBadge={jumlahChat} />
-              <MenuAkun nama={nama} peranLabel={LABEL_PERAN[peran]} avatarUrl={avatarUrl} onKeluar={keluar} />
-            </div>
+                {/* ----- Aksi kanan ----- */}
+                <div className="flex shrink-0 items-center gap-[12px]">
+                  {peran === "PENGGUNA_JASA" && (
+                    <TombolIkon
+                      href="/bookmark"
+                      ikon="/icons/bookmark.svg"
+                      label="Bookmark"
+                    />
+                  )}
+                  <TombolIkon
+                    href="/chat"
+                    ikon="/icons/chat.svg"
+                    label="Chat"
+                    jumlahBadge={jumlahChat}
+                  />
+                  <MenuAkun
+                    nama={nama}
+                    peranLabel={LABEL_PERAN[peran]}
+                    avatarUrl={avatarUrl}
+                    onKeluar={keluar}
+                  />
+                </div>
+              </>
+            )}
           </>
         )}
       </nav>

@@ -1,14 +1,7 @@
-import Navbar from "@/components/ui/navbar";
-
-export default function PenggunaLayout({
+export default function AdminLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  return (
-    <>
-      <Navbar peran="ADMIN" />
-      {children}
-    </>
-  );
+  return <>{children}</>;
 }

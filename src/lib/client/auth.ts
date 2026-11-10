@@ -22,6 +22,17 @@ export type UserSesi = {
 export const login = (email: string, password: string) =>
   api<{ user: UserSesi }>("/api/auth", { method: "POST", body: { action: "login", email, password } });
 
+export const loginAdmin = (email: string, password: string) =>
+  api<{
+    success: boolean;
+    message: string;
+    result: { user: UserSesi };
+  }>("/api/admin/auth/login", {
+    method: "POST",
+    body: { email, password },
+    redirectOnUnauthorized: false,
+  });
+  
 export const logout = () =>
   api<{ message: string }>("/api/auth", { method: "POST", body: { action: "logout" } });
 
