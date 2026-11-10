@@ -91,3 +91,12 @@ export async function cariJasa(filter: FilterPencarian = {}) {
   // harga & rating bertipe NUMERIC di Postgres — pastikan jadi number
   return respons.data.map((j) => ({ ...j, harga: Number(j.harga), rating_rata_rata: Number(j.rating_rata_rata ?? 0) }));
 }
+
+/* ===================== Detail jasa (I-06) ===================== */
+
+/** GET /api/jasa/[id] → JasaController.ambilDetailJasa(). 404 (NOT_FOUND) kalau tidak ada */
+export async function ambilDetailJasa(id_jasa: string) {
+  const respons = await api<Respons<JasaListing>>(`/api/jasa/${encodeURIComponent(id_jasa)}`);
+  const j = respons.data;
+  return { ...j, harga: Number(j.harga), rating_rata_rata: Number(j.rating_rata_rata ?? 0) };
+}

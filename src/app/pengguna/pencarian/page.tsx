@@ -19,7 +19,6 @@ import { parseRupiah } from "@/lib/format";
  *   - Durasi     → belum ada kolom di tabel jasa, chip dinonaktifkan
  */
 
-const PILIHAN_DURASI = ["≤ 1 hari", "≤ 3 hari", "≤ 7 hari", "Lebih lama"];
 const PILIHAN_RATING = [
   { label: "★ 3+", nilai: 3 },
   { label: "★ 4+", nilai: 4 },
@@ -192,7 +191,7 @@ async function klikIkonBookmark(id_jasa: string) {
           </button>
         </div>
 
-        <div className="grid grid-cols-3 gap-10">
+        <div className="grid grid-cols-2 gap-10">
           {/* filterHarga */}
           <div className="flex flex-col gap-2">
             <span className="text-label text-ink">Harga</span>
@@ -221,17 +220,6 @@ async function klikIkonBookmark(id_jasa: string) {
             </div>
           </div>
 
-          {/* filterDurasi — BELUM didukung backend (tabel jasa belum punya kolom durasi) */}
-          <div className="flex flex-col gap-2">
-            <span className="text-label text-ink">Durasi pengerjaan</span>
-            <div className="flex flex-wrap gap-2">
-              {PILIHAN_DURASI.map((d) => (
-                <Chip key={d} disabled title="Filter durasi belum tersedia" className="cursor-not-allowed opacity-50">
-                  {d}
-                </Chip>
-              ))}
-            </div>
-          </div>
 
           {/* filterRating */}
           <div className="flex flex-col gap-2">
