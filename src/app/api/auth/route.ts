@@ -1,8 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
-import { AuthError, login, logout, getSessionUser } from "@/services/auth.service";
+import { AuthError, login, logout, getSessionUser, registrasi, type InputRegistrasi } from "@/services/auth.service";
 
 const STATUS_BY_CODE: Partial<Record<AuthError["code"], number>> = {
     EMPTY_INPUT: 400,
+    INVALID_EMAIL: 400,
+    WEAK_PASSWORD: 400,
+    EMAIL_TAKEN: 409,
+    INVALID_ROLE: 400,
     INVALID_CREDENTIALS: 401,
     ACCOUNT_SUSPENDED: 403,
     PROFILE_NOT_FOUND: 403,
@@ -58,6 +62,29 @@ export async function POST(request: NextRequest) {
     };
 
     switch (action) {
+        case "register": {
+            const { nama, email, password, role } = body as {
+                nama?: unknown; email?: unknown; password?: unknown; role?: unknown;
+            };
+            if (
+                typeof nama !== "string" ||
+                typeof email !== "string" ||
+                typeof password !== "string" ||
+                typeof role !== "string"
+            ) {
+                return NextResponse.json(
+                    { success: false, message: "nama, email, password, dan role harus berupa teks" },
+                    { status: 400 }
+                );
+            }
+            try {
+                const data = await registrasi({ nama, email, password, role } as InputRegistrasi);
+                return NextResponse.json({ success: true, message: "Registrasi berhasil", data }, { status: 201 });
+            } catch (err) {
+                return handleError(err);
+            }
+        }
+
         case "login": {
             if (typeof email !== "string" || typeof password !== "string") {
                 return NextResponse.json(
