@@ -146,7 +146,6 @@ ALTER TABLE public.pesan_chat ENABLE ROW LEVEL SECURITY;
 CREATE TABLE IF NOT EXISTS public.produk_akhir (
     id_produk_akhir UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     id_pesanan UUID NOT NULL REFERENCES public.pesanan(id_pesanan) ON DELETE CASCADE,
-    outputpath VARCHAR(500),
     deskripsi_produk TEXT NOT NULL,
     file_url VARCHAR(500),
     status_pemeriksaan BOOLEAN DEFAULT false,
