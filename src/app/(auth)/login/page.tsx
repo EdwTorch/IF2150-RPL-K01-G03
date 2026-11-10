@@ -20,9 +20,9 @@ type FieldForm = "email" | "password";
 
 /** Halaman tujuan setelah login, sesuai peran */
 function halamanAwal(user: UserSesi) {
-  if (user.role === "ADMIN") return "/admin";
+  if (user.role === "ADMIN") return "/admin/tiket";
   if (user.isPenyediaJasa) return "/penyedia/portofolio";
-  return "pengguna/pencarian";
+  return "/pengguna/pencarian";
 }
 
 function FormLogin() {
