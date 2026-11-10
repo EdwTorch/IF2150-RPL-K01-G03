@@ -1,36 +1,36 @@
 import { api } from "@/lib/api";
-import { mockRegistrasi } from "@/lib/mock/auth";
 
+/** Sama dengan InputRegistrasi di services/auth.service.ts */
 export type DataRegistrasi = {
   nama: string;
   email: string;
-  noTelepon: string;
   password: string;
-  role: "pengguna_jasa" | "penyedia_jasa"; // DRAF — konfirmasi nilai ke BE
+  role: "pengguna_jasa" | "penyedia_jasa";
 };
 
 export type UserSesi = {
   id: string;
   email: string;
   nama: string;
-  role: string;
+  role: string; // "USER" | "PENYEDIA_JASA" | "ADMIN"
   isPenyediaJasa: boolean;
   isPenggunaJasa: boolean;
 };
 
-// Sudah ada di backend → API asli
-export const login = (email: string, password: string) =>
-  api<{ user: UserSesi }>("/api/auth", { method: "POST", body: { action: "login", email, password } });
+/** POST /api/auth action "login" → { success, message, result: { user } } */
+export async function login(email: string, password: string) {
+  const respons = await api<{ result: { user: UserSesi } }>("/api/auth", {
+    method: "POST",
+    body: { action: "login", email, password },
+  });
+  return respons.result; // { user } — halaman login tidak perlu diubah
+}
 
-export const logout = () =>
-  api<{ message: string }>("/api/auth", { method: "POST", body: { action: "logout" } });
+export const logout = () => api<{ message: string }>("/api/auth", { method: "POST", body: { action: "logout" } });
 
+/** GET /api/auth → { success, message, user } */
 export const sesiSaatIni = () => api<{ user: UserSesi }>("/api/auth");
 
-// Belum ada di backend → mock dulu
-const REGISTRASI_SUDAH_ADA = false; // ubah ke true setelah BE menambah action "register"
-
-export function registrasi(data: DataRegistrasi) {
-  if (!REGISTRASI_SUDAH_ADA) return mockRegistrasi(data);
-  return api<{ message: string }>("/api/auth", { method: "POST", body: { action: "register", ...data } });
-}
+/** POST /api/auth action "register" → { success, message, data } */
+export const registrasi = (data_registrasi: DataRegistrasi) =>
+  api<{ message: string }>("/api/auth", { method: "POST", body: { action: "register", ...data_registrasi } });

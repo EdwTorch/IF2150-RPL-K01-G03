@@ -21,8 +21,8 @@ type FieldForm = "email" | "password";
 /** Halaman tujuan setelah login, sesuai peran */
 function halamanAwal(user: UserSesi) {
   if (user.role === "ADMIN") return "/admin";
-  if (user.isPenyediaJasa) return "/portofolio";
-  return "/cari";
+  if (user.isPenyediaJasa) return "/penyedia/portofolio";
+  return "pengguna/pencarian";
 }
 
 function FormLogin() {

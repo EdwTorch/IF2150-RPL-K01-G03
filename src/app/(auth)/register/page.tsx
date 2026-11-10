@@ -4,10 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import Navbar from "@/components/ui/navbar";
-import { Alert } from "@/components/elemen/Alert";
-import { Button } from "@/components/elemen/Button";
-import { Input } from "@/components/elemen/Input";
-import { OptionCard } from "@/components/elemen/OptionCard";
+import { Alert, Button, Input, OptionCard } from "@/components/elemen";
 import { ApiError } from "@/lib/api";
 import { registrasi, type DataRegistrasi } from "@/lib/client/auth";
 
@@ -15,20 +12,22 @@ import { registrasi, type DataRegistrasi } from "@/lib/client/auth";
  * I-01 Layar Registrasi — C04 HalamanRegistrasi
  * Atribut DPPL: formRegistrasi, pesanError
  * Operasi DPPL: tampilkanForm(), kirimRegistrasi(), tampilkanError()
+ * Backend: POST /api/auth action "register" (services/auth.service.ts → registrasi())
  */
 
-const RUTE_LOGIN = "/login"; // sesuaikan dengan folder halaman login di app/(auth)
+const RUTE_LOGIN = "/login";
+const MIN_PANJANG_PASSWORD = 8; // sama dengan auth.service.ts
 
-type FieldForm = "nama" | "email" | "noTelepon" | "password";
+type FieldForm = "nama" | "email" | "password";
 
-const FORM_KOSONG: Record<FieldForm, string> = { nama: "", email: "", noTelepon: "", password: "" };
+const FORM_KOSONG: Record<FieldForm, string> = { nama: "", email: "", password: "" };
 
 export default function HalamanRegistrasi() {
   const router = useRouter();
 
   // ----- formRegistrasi -----
   const [form_registrasi, setFormRegistrasi] = useState(FORM_KOSONG);
-  const [role, setRole] = useState<DataRegistrasi["role"]>("PENGGUNA_JASA");
+  const [role, setRole] = useState<DataRegistrasi["role"]>("pengguna_jasa");
 
   // ----- pesanError -----
   const [field_error, setFieldError] = useState<Partial<Record<FieldForm, string>>>({});
@@ -37,23 +36,24 @@ export default function HalamanRegistrasi() {
 
   function ubahIsian(field: FieldForm, nilai: string) {
     setFormRegistrasi((lama) => ({ ...lama, [field]: nilai }));
-    // hapus error isian itu begitu pengguna mulai mengetik ulang
     if (field_error[field]) setFieldError((lama) => ({ ...lama, [field]: undefined }));
   }
 
-  /** Validasi di sisi klien sebelum dikirim (server tetap memvalidasi ulang) */
+  /** Validasi klien (server memvalidasi ulang lewat validasiInputRegistrasi) */
   function validasiForm() {
     const error_baru: Partial<Record<FieldForm, string>> = {};
-    if (!form_registrasi.nama.trim()) error_baru.nama = "Nama wajib diisi";
+    if (!form_registrasi.nama.trim())
+      error_baru.nama = role === "penyedia_jasa" ? "Nama penyedia wajib diisi" : "Nama wajib diisi";
     if (!form_registrasi.email.trim()) error_baru.email = "Email wajib diisi";
-    else if (!/^\S+@\S+\.\S+$/.test(form_registrasi.email)) error_baru.email = "Format email tidak valid";
-    if (!form_registrasi.noTelepon.trim()) error_baru.noTelepon = "Nomor telepon wajib diisi";
-    if (form_registrasi.password.length < 8) error_baru.password = "Kata sandi minimal 8 karakter";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form_registrasi.email.trim())) error_baru.email = "Format email tidak valid";
+    if (form_registrasi.password.length < MIN_PANJANG_PASSWORD)
+      error_baru.password = `Kata sandi minimal ${MIN_PANJANG_PASSWORD} karakter`;
+    else if (!form_registrasi.password.trim()) error_baru.password = "Kata sandi tidak boleh hanya spasi";
     setFieldError(error_baru);
     return Object.keys(error_baru).length === 0;
   }
 
-  /** tampilkanError() */
+  /** tampilkanError() — kode dari AuthError di auth.service.ts */
   function tampilkanError(err: unknown) {
     if (!(err instanceof ApiError)) {
       setPesanError("Terjadi kesalahan. Coba lagi.");
@@ -64,17 +64,13 @@ export default function HalamanRegistrasi() {
         setFieldError({ email: "Email sudah terdaftar" });
         setPesanError("Email telah terdaftar. Silakan menggunakan email lain atau melakukan login.");
         break;
-      case "PHONE_TAKEN":
-        setFieldError({ noTelepon: "Nomor telepon sudah terdaftar" });
-        setPesanError("Nomor telepon telah terdaftar. Silakan menggunakan nomor lain atau melakukan login.");
-        break;
       case "INVALID_EMAIL":
         setFieldError({ email: err.message });
         break;
       case "WEAK_PASSWORD":
         setFieldError({ password: err.message });
         break;
-      default:
+      default: // EMPTY_INPUT, INVALID_ROLE, INTERNAL_ERROR, JARINGAN
         setPesanError(err.message);
     }
   }
@@ -87,11 +83,15 @@ export default function HalamanRegistrasi() {
 
     setSedangMengirim(true);
     try {
-      await registrasi({ ...form_registrasi, role });
+      await registrasi({
+        nama: form_registrasi.nama.trim(),
+        email: form_registrasi.email.trim(),
+        password: form_registrasi.password,
+        role,
+      });
       router.push(`${RUTE_LOGIN}?registrasi=berhasil`); // Algo-0401: arahkan ke login
     } catch (err) {
       tampilkanError(err);
-    } finally {
       setSedangMengirim(false);
     }
   }
@@ -106,37 +106,36 @@ export default function HalamanRegistrasi() {
 
           {pesan_error && <Alert tipe="error">{pesan_error}</Alert>}
 
-          {/* Daftar sebagai */}
           <fieldset className="flex flex-col gap-2">
             <legend className="mb-2 text-label leading-normal text-ink">Daftar sebagai</legend>
             <div className="flex gap-3">
               <OptionCard
                 name="role"
                 value="pengguna_jasa"
-                terpilih={role === "PENGGUNA_JASA"}
-                onPilih={() => setRole("PENGGUNA_JASA")}
+                terpilih={role === "pengguna_jasa"}
+                onPilih={() => setRole("pengguna_jasa")}
                 judul="Pengguna Jasa"
                 deskripsi="Saya ingin mencari jasa"
               />
               <OptionCard
                 name="role"
                 value="penyedia_jasa"
-                terpilih={role === "PENYEDIA_JASA"}
-                onPilih={() => setRole("PENYEDIA_JASA")}
+                terpilih={role === "penyedia_jasa"}
+                onPilih={() => setRole("penyedia_jasa")}
                 judul="Penyedia Jasa"
                 deskripsi="Saya ingin menawarkan jasa"
               />
             </div>
           </fieldset>
 
-            <Input
-                label={role === "PENYEDIA_JASA" ? "Nama penyedia" : "Nama"}
-                placeholder={role === "PENYEDIA_JASA" ? "Masukkan nama penyedia" : "Masukkan nama"}
-                autoComplete="name"
-                value={form_registrasi.nama}
-                onChange={(e) => ubahIsian("nama", e.target.value)}
-                error={field_error.nama}
-            />
+          <Input
+            label={role === "penyedia_jasa" ? "Nama penyedia" : "Nama"}
+            placeholder={role === "penyedia_jasa" ? "Masukkan nama penyedia" : "Masukkan nama"}
+            autoComplete="name"
+            value={form_registrasi.nama}
+            onChange={(e) => ubahIsian("nama", e.target.value)}
+            error={field_error.nama}
+          />
           <Input
             label="Email"
             type="email"
@@ -145,16 +144,6 @@ export default function HalamanRegistrasi() {
             value={form_registrasi.email}
             onChange={(e) => ubahIsian("email", e.target.value)}
             error={field_error.email}
-          />
-          <Input
-            label="Nomor telepon"
-            type="tel"
-            inputMode="numeric"
-            placeholder="08xx xxxx xxxx"
-            autoComplete="tel"
-            value={form_registrasi.noTelepon}
-            onChange={(e) => ubahIsian("noTelepon", e.target.value.replace(/[^0-9+]/g, ""))}
-            error={field_error.noTelepon}
           />
           <Input
             label="Kata sandi"
