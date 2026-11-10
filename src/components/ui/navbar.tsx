@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { logout } from "@/lib/client/auth";
 
 /**
  * Navbar CariJasa — sesuai komponen Figma "Navbar" (node 31:167)
@@ -32,16 +33,14 @@ export type NavbarProps = {
 type MenuItem = { label: string; href: string; pakaiBadge?: boolean };
 
 const MENU: Record<Exclude<Peran, "TAMU">, MenuItem[]> = {
-  PENGGUNA_JASA: [
+   PENGGUNA_JASA: [
     { label: "Cari Jasa", href: "/pengguna/pencarian" },
-    { label: "Pesanan Saya", href: "/riwayat", pakaiBadge: true },
-    { label: "Bantuan", href: "/bantuan" },
+    { label: "Pesanan Saya", href: "/pengguna/riwayat-transaksi", pakaiBadge: true },
   ],
   PENYEDIA_JASA: [
-    { label: "Tawarkan Jasa", href: "/jasa/baru" },
-    { label: "Pesanan Masuk", href: "/pesanan-masuk", pakaiBadge: true },
-    { label: "Portofolio", href: "/portofolio" },
-    { label: "Bantuan", href: "/bantuan" },
+    { label: "Tawarkan Jasa", href: "/penyedia/upload-jasa" },
+    { label: "Pesanan Masuk", href: "/penyedia/pesanan", pakaiBadge: true }, // halaman belum ada
+    { label: "Portofolio", href: "/penyedia/portofolio" },
   ],
   ADMIN: [
     { label: "Tiket Laporan", href: "/admin/tiket" },
@@ -51,9 +50,9 @@ const MENU: Record<Exclude<Peran, "TAMU">, MenuItem[]> = {
 
 const BERANDA: Record<Peran, string> = {
   TAMU: "/",
-  PENGGUNA_JASA: "/cari",
-  PENYEDIA_JASA: "/portofolio",
-  ADMIN: "/admin",
+  PENGGUNA_JASA: "/pengguna/pencarian",
+  PENYEDIA_JASA: "/penyedia/portofolio",
+  ADMIN: "/admin/tiket",
 };
 
 const LABEL_PERAN: Record<Exclude<Peran, "TAMU">, string> = {
@@ -217,10 +216,10 @@ export default function Navbar({
   const pathname = usePathname() ?? "";
   const router = useRouter();
 
-  async function keluar() {
+    async function keluar() {
     if (onKeluar) return onKeluar();
     try {
-      await fetch("/api/auth/logout", { method: "POST" });
+      await logout();
     } finally {
       router.push("/login");
       router.refresh();
