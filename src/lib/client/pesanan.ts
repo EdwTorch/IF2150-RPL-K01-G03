@@ -36,3 +36,14 @@ export async function buatPesanan(id_jasa: string, brief: string) {
   });
   return { ...respons.data, total_biaya: Number(respons.data.total_biaya) };
 }
+
+/** getDetailPesanan() → GET /api/pesanan/[id_pesanan] (beserta jasa) */
+export async function ambilDetailPesanan(id_pesanan: string) {
+  const respons = await api<Respons<Pesanan>>(`/api/pesanan/${encodeURIComponent(id_pesanan)}`);
+  const p = respons.data;
+  return {
+    ...p,
+    total_biaya: Number(p.total_biaya),
+    jasa: p.jasa ? { ...p.jasa, harga: Number(p.jasa.harga) } : undefined,
+  };
+}
