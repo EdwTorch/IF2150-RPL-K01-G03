@@ -94,7 +94,7 @@ interface RawProfilPengguna {
     id: string;
     nama: string;
     email: string | null;
-    role: "USER" | "ADMIN" | "PENYEDIA_JASA";
+    role: "USER" | "ADMIN" | "PENGGUNA_JASA" | "PENYEDIA_JASA";
     status_akun: boolean;
     sanksi: string | null;
     penyedia_jasa: unknown;
@@ -155,7 +155,7 @@ export async function registrasi(
         throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat pendaftaran akun");
     }
     const user_id = authData.user.id;
-    const role = input.role === "penyedia_jasa" ? "PENYEDIA_JASA" : "USER";
+    const role = input.role === "penyedia_jasa" ? "PENYEDIA_JASA" : "PENGGUNA_JASA";
 
     // Simpan ke tabel pengguna
     const { error: profilError } = await adminClient.from("pengguna").insert({
