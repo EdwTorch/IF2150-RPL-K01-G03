@@ -55,10 +55,8 @@ export async function updateSession(request: NextRequest) {
         return redirect_with_cookies("/dashboard");
     }
 
-    // Menolak akses api jika belum terautentikasi
-    if (!user && path_name.startsWith("/api/") && !path_name.startsWith("/api/auth")) {
-        return NextResponse.json({ success : false, message: "Tidak terautentikasi" }, { status: 401 });
-    }
+
+
 
     return supabase_response;
 }
