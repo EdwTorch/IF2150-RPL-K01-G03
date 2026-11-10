@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS public.pengguna (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.pengguna ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PENYEDIA JASA (C02)
 CREATE TABLE IF NOT EXISTS public.penyedia_jasa (
@@ -26,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.penyedia_jasa (
     rating_rata_rata NUMERIC(3, 2) DEFAULT 0.0 CHECK (rating_rata_rata >= 0 AND rating_rata_rata <= 5),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.penyedia_jasa ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PENGGUNA JASA (C03)
 CREATE TABLE IF NOT EXISTS public.pengguna_jasa (
@@ -34,12 +36,14 @@ CREATE TABLE IF NOT EXISTS public.pengguna_jasa (
     status_konfirmasi BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.pengguna_jasa ENABLE ROW LEVEL SECURITY;
 
 -- TABEL ADMIN (C52)
 CREATE TABLE IF NOT EXISTS public.admin (
     id UUID PRIMARY KEY REFERENCES public.pengguna(id) ON DELETE CASCADE,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.admin ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PORTOFOLIO (C09)
 CREATE TABLE IF NOT EXISTS public.portofolio (
@@ -50,6 +54,7 @@ CREATE TABLE IF NOT EXISTS public.portofolio (
     berkas_pendukung VARCHAR(500),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.portofolio ENABLE ROW LEVEL SECURITY;
 
 -- TABEL JASA (C12)
 CREATE TABLE IF NOT EXISTS public.jasa (
@@ -63,6 +68,7 @@ CREATE TABLE IF NOT EXISTS public.jasa (
     status_aktif BOOLEAN DEFAULT true,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.jasa ENABLE ROW LEVEL SECURITY;
 
 -- TABEL BOOKMARK (C20)
 CREATE TABLE IF NOT EXISTS public.bookmark (
@@ -73,6 +79,7 @@ CREATE TABLE IF NOT EXISTS public.bookmark (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE(id_pengguna_jasa, id_jasa)
 );
+ALTER TABLE public.bookmark ENABLE ROW LEVEL SECURITY;
 
 -- TABEL METODE PEMBAYARAN (C33)
 CREATE TABLE IF NOT EXISTS public.metode_pembayaran (
@@ -81,6 +88,7 @@ CREATE TABLE IF NOT EXISTS public.metode_pembayaran (
     nomor_rekening_va VARCHAR(50),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.metode_pembayaran ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PESANAN (C27)
 CREATE TABLE IF NOT EXISTS public.pesanan (
@@ -98,6 +106,7 @@ CREATE TABLE IF NOT EXISTS public.pesanan (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     updated_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.pesanan ENABLE ROW LEVEL SECURITY;
 
 -- TABEL RIWAYAT TRANSAKSI (C34)
 CREATE TABLE IF NOT EXISTS public.riwayat_transaksi (
@@ -108,6 +117,7 @@ CREATE TABLE IF NOT EXISTS public.riwayat_transaksi (
     tanggal_transaksi TIMESTAMPTZ DEFAULT NOW(),
     status_transaksi VARCHAR(50) DEFAULT 'BERHASIL'
 );
+ALTER TABLE public.riwayat_transaksi ENABLE ROW LEVEL SECURITY;
 
 -- TABEL CHATROOM (C23)
 CREATE TABLE IF NOT EXISTS public.chatroom (
@@ -117,6 +127,7 @@ CREATE TABLE IF NOT EXISTS public.chatroom (
     created_at TIMESTAMPTZ DEFAULT NOW(),
     UNIQUE(id_pengguna_jasa, id_penyedia_jasa)
 );
+ALTER TABLE public.chatroom ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PESAN CHAT (C23, Realtime UC08)
 CREATE TABLE IF NOT EXISTS public.pesan_chat (
@@ -129,6 +140,7 @@ CREATE TABLE IF NOT EXISTS public.pesan_chat (
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
 ALTER PUBLICATION supabase_realtime ADD TABLE public.pesan_chat;
+ALTER TABLE public.pesan_chat ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PRODUK AKHIR / DELIVERABLES (C36)
 CREATE TABLE IF NOT EXISTS public.produk_akhir (
@@ -140,6 +152,7 @@ CREATE TABLE IF NOT EXISTS public.produk_akhir (
     status_pemeriksaan BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.produk_akhir ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PENGAJUAN REVISI (C39)
 CREATE TABLE IF NOT EXISTS public.pengajuan_revisi (
@@ -151,6 +164,7 @@ CREATE TABLE IF NOT EXISTS public.pengajuan_revisi (
     jml_revisi_tersedia INT DEFAULT 2,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.pengajuan_revisi ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PENCAIRAN DANA (C42)
 CREATE TABLE IF NOT EXISTS public.pencairan_dana (
@@ -161,6 +175,7 @@ CREATE TABLE IF NOT EXISTS public.pencairan_dana (
     state_pencairan_dana BOOLEAN DEFAULT false,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.pencairan_dana ENABLE ROW LEVEL SECURITY;
 
 -- TABEL TIKET LAPORAN / MEDIASI (C43)
 CREATE TABLE IF NOT EXISTS public.tiket_laporan (
@@ -175,6 +190,7 @@ CREATE TABLE IF NOT EXISTS public.tiket_laporan (
     tanggapan_admin TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.tiket_laporan ENABLE ROW LEVEL SECURITY;
 
 -- TABEL SESI MEDIASI (C51, C52)
 CREATE TABLE IF NOT EXISTS public.sesi_mediasi (
@@ -185,6 +201,7 @@ CREATE TABLE IF NOT EXISTS public.sesi_mediasi (
     waktu_mulai TIMESTAMPTZ DEFAULT NOW(),
     waktu_selesai TIMESTAMPTZ
 );
+ALTER TABLE public.sesi_mediasi ENABLE ROW LEVEL SECURITY;
 
 -- TABEL PESAN MEDIASI (C52)
 CREATE TABLE IF NOT EXISTS public.pesan_mediasi (
@@ -194,6 +211,7 @@ CREATE TABLE IF NOT EXISTS public.pesan_mediasi (
     isi_pesan TEXT NOT NULL,
     waktu_kirim TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.pesan_mediasi ENABLE ROW LEVEL SECURITY;
 
 -- TABEL ULASAN (C46)
 CREATE TABLE IF NOT EXISTS public.ulasan (
@@ -205,6 +223,7 @@ CREATE TABLE IF NOT EXISTS public.ulasan (
     dokumentasi_path VARCHAR(500),
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.ulasan ENABLE ROW LEVEL SECURITY;
 
 -- TABEL NOTIFIKASI (C41, C45, C51)
 CREATE TABLE IF NOT EXISTS public.notifikasi (
@@ -224,6 +243,7 @@ CREATE INDEX IF NOT EXISTS idx_notifikasi_unread
 ON public.notifikasi(id_pengguna, is_read);
 
 ALTER PUBLICATION supabase_realtime ADD TABLE public.notifikasi;
+ALTER TABLE public.notifikasi ENABLE ROW LEVEL SECURITY;
 
 -- TABEL TANGGAPAN LAPORAN (C49)
 CREATE TABLE IF NOT EXISTS public.tanggapan_laporan (
@@ -233,3 +253,4 @@ CREATE TABLE IF NOT EXISTS public.tanggapan_laporan (
     catatan_tanggapan TEXT,
     created_at TIMESTAMPTZ DEFAULT NOW()
 );
+ALTER TABLE public.tanggapan_laporan ENABLE ROW LEVEL SECURITY;
