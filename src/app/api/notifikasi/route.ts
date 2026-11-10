@@ -1,48 +1,53 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/lib/supabase/server";
+import { NextResponse } from "next/server";
+import { createClient } from "@/lib/supabase/server"; // sesuaikan path
 import { NotifikasiService } from "@/services/notifikasi.service";
 
-/* Dapetin Notifikasinya */ 
+// 1. Dipanggil saat Navbar dimuat / lonceng ditekan -> ambil 20 notif teratas + jumlah unread
 export async function GET() {
   try {
     const supabase = await createClient();
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (error || !user) {
-      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
+    if (!user) {
+      return NextResponse.json({ status : false, message: "Unauthorized" }, { status: 401 });
     }
 
-    const hasil = await NotifikasiService.getNotifikasiUser(user.id);
-    return NextResponse.json({ success: true,  message: "Berhasil Menampilkan Notifikasi",data: hasil });
-  } catch (err: any) {
-    return NextResponse.json({ success : false, message: err.message }, { status: 500 });
+    const result = await NotifikasiService.getNotifikasiUser(user.id);
+    // result berisi { notifications: [...20 teratas], unreadCount: angka }
+    return NextResponse.json({status : true,  message :"Notifikasi Berhasil Dimuat",result}, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ status : false, message: error.message }, { status: 500 });
   }
 }
 
-/* ngubah is_read nya jadi true (udah dibaca) */
-export async function PATCH(req: NextRequest) {
+// 2. Dipanggil saat salah satu item notif diklik -> kirim { id_notifikasi } di body
+export async function PATCH(request: Request) {
   try {
     const supabase = await createClient();
-    const {
-      data: { user },
-      error,
-    } = await supabase.auth.getUser();
+    const { data: { user } } = await supabase.auth.getUser();
 
-    if (error || !user) {
-      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
+    if (!user) {
+      return NextResponse.json({ status : false, message: "Unauthorized" }, { status: 401 });
     }
 
-    const body = await req.json().catch(() => ({}));
-    await NotifikasiService.tandaiSudahDibaca(user.id, body.id_notifikasi);
+    const body = await request.json();
+    const { id_notifikasi } = body;
 
-    return NextResponse.json({
-      success: true,
-      message: "Notifikasi ditandai sudah dibaca.",
-    });
-  } catch (err: any) {
-    return NextResponse.json({ success : false, message: err.message }, { status: 500 });
+    if (!id_notifikasi) {
+      return NextResponse.json(
+        { status : false, message: "id_notifikasi wajib disertakan" },
+        { status: 400 }
+      );
+    }
+
+    await NotifikasiService.tandaiSudahDibaca(id_notifikasi, user.id);
+
+    return NextResponse.json(
+      { status : true,
+        message: "Notifikasi ditandai sudah dibaca" },
+      { status: 200 }
+    );
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
