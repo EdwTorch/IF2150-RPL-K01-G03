@@ -268,7 +268,7 @@ export default function Navbar({
             {/* ----- Aksi kanan ----- */}
             <div className="flex shrink-0 items-center gap-[12px]">
               {peran === "PENGGUNA_JASA" && (
-                <TombolIkon href="/bookmark" ikon="/icons/bookmark.svg" label="Bookmark" />
+                <TombolIkon href="/pengguna/bookmark" ikon="/icons/bookmark.svg" label="Bookmark" />
               )}
               <TombolIkon href="/chat" ikon="/icons/chat.svg" label="Chat" jumlahBadge={jumlahChat} />
               <MenuAkun nama={nama} peranLabel={LABEL_PERAN[peran]} avatarUrl={avatarUrl} onKeluar={keluar} />
