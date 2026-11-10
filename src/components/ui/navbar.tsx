@@ -33,7 +33,7 @@ type MenuItem = { label: string; href: string; pakaiBadge?: boolean };
 
 const MENU: Record<Exclude<Peran, "TAMU">, MenuItem[]> = {
   PENGGUNA_JASA: [
-    { label: "Cari Jasa", href: "/cari" },
+    { label: "Cari Jasa", href: "/pengguna/pencarian" },
     { label: "Pesanan Saya", href: "/riwayat", pakaiBadge: true },
     { label: "Bantuan", href: "/bantuan" },
   ],
