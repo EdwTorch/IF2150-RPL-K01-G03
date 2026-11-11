@@ -14,7 +14,7 @@ export class AuthError extends Error {
             | "PROFILE_NOT_FOUND"
             | "FORBIDDEN"
             | "LOGOUT_FAILED"
-            | "INTERNAL_ERROR";
+            | "INTERNAL_ERROR",
         message: string
     ) {
         super(message);
@@ -43,7 +43,7 @@ export function hasRelation(rel: unknown): boolean {
 }
 
 // Admin client khusus untuk operasi auth.admin (createUser, deleteUser) dengan SERVICE_ROLE_KEY
-let adminClientInstance: ReturnType<typeof createAdminClient> | null = null;
+let adminClientInstance: ReturnType<typeof createAdminClient<any>> | null = null;
 
 function getAdminClient() {
     if (adminClientInstance) return adminClientInstance;
