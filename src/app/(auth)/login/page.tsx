@@ -14,13 +14,13 @@ import { login, type UserSesi } from "@/lib/client/auth";
  * Operasi DPPL: tampilkanForm(), kirimLogin(), tampilkanError()
  */
 
-const RUTE_REGISTRASI = "/daftar";
+const RUTE_REGISTRASI = "/register";
 
 type FieldForm = "email" | "password";
 
 /** Halaman tujuan setelah login, sesuai peran */
 function halamanAwal(user: UserSesi) {
-  if (user.role === "admin") return "/admin";
+  if (user.role === "ADMIN") return "/admin";
   if (user.isPenyediaJasa) return "/portofolio";
   return "/cari";
 }

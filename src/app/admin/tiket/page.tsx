@@ -1,25 +1,54 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
-import { Alert, Button, PageHero, StatusPill } from "@/components/elemen";
+import {
+  Alert,
+  Button,
+  PageHero,
+  StatusPill,
+} from "@/components/elemen";
 import { cn } from "@/lib/cn";
-import { Tiket, getTiketList } from "@/lib/layanan";
+import { ApiError } from "@/lib/api";
+import {
+  TiketAdmin,
+  ambilDaftarTiketAdmin,
+} from "@/lib/client/admin";
 
-const NADA = {
-  Belum: "danger",
-  Mediasi: "neutral",
+const NADA: Record<string, "danger" | "neutral" | "success"> = {
+  Diproses: "neutral",
   Selesai: "success",
-} as const;
+};
+
+function formatTanggal(tanggal: string) {
+  const date = new Date(tanggal);
+
+  if (Number.isNaN(date.getTime())) {
+    return "-";
+  }
+
+  return date.toLocaleDateString("id-ID", {
+    day: "2-digit",
+    month: "long",
+    year: "numeric",
+  });
+}
 
 // C53: loading | error | tabel | empty state
 export default function HalamanDashboardAdmin() {
-  const [d, setD] = useState<Tiket[] | null>(null);
+  const [d, setD] = useState<TiketAdmin[] | null>(null);
   const [err, setErr] = useState("");
 
   useEffect(() => {
-    getTiketList()
+    ambilDaftarTiketAdmin()
       .then(setD)
-      .catch(() => setErr("Gagal memuat tiket laporan."));
+      .catch((error: unknown) => {
+        setErr(
+          error instanceof ApiError
+            ? error.message
+            : "Gagal memuat tiket laporan."
+        );
+      });
   }, []);
 
   return (
@@ -74,20 +103,38 @@ export default function HalamanDashboardAdmin() {
 
             <tbody>
               {d.map((t) => {
-                const idTiket = t.id;
+                const idTiket = t.id_tiket;
 
                 return (
                   <tr key={idTiket} className="border-t border-line">
                     <td className="px-4 py-4">{idTiket}</td>
-                    <td className="px-4">{t.pelapor}</td>
-                    <td className="px-4">{t.terlapor}</td>
-                    <td className="px-4">{t.kategori}</td>
-                    <td className="px-4">{t.tanggal}</td>
+
                     <td className="px-4">
-                      <StatusPill nada={NADA[t.status]}>
-                        {t.status}
+                      {t.pelapor?.nama ?? "-"}
+                    </td>
+
+                    <td className="px-4">
+                      {t.terlapor?.nama ?? "-"}
+                    </td>
+
+                    <td className="px-4">
+                      {Array.isArray(t.kategori)
+                        ? t.kategori.join(", ")
+                        : "-"}
+                    </td>
+
+                    <td className="px-4">
+                      {formatTanggal(t.created_at)}
+                    </td>
+
+                    <td className="px-4">
+                      <StatusPill
+                        nada={NADA[t.status_tiket] ?? "neutral"}
+                      >
+                        {t.status_tiket}
                       </StatusPill>
                     </td>
+
                     <td className="px-4 py-3">
                       <Button
                         href={`/admin/tiket/${idTiket}`}

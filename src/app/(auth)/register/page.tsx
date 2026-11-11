@@ -17,7 +17,7 @@ import { registrasi, type DataRegistrasi } from "@/lib/client/auth";
  * Operasi DPPL: tampilkanForm(), kirimRegistrasi(), tampilkanError()
  */
 
-const RUTE_LOGIN = "/masuk"; // sesuaikan dengan folder halaman login di app/(auth)
+const RUTE_LOGIN = "/login"; // sesuaikan dengan folder halaman login di app/(auth)
 
 type FieldForm = "nama" | "email" | "noTelepon" | "password";
 
@@ -28,7 +28,7 @@ export default function HalamanRegistrasi() {
 
   // ----- formRegistrasi -----
   const [form_registrasi, setFormRegistrasi] = useState(FORM_KOSONG);
-  const [role, setRole] = useState<DataRegistrasi["role"]>("pengguna_jasa");
+  const [role, setRole] = useState<DataRegistrasi["role"]>("PENGGUNA_JASA");
 
   // ----- pesanError -----
   const [field_error, setFieldError] = useState<Partial<Record<FieldForm, string>>>({});
@@ -113,16 +113,16 @@ export default function HalamanRegistrasi() {
               <OptionCard
                 name="role"
                 value="pengguna_jasa"
-                terpilih={role === "pengguna_jasa"}
-                onPilih={() => setRole("pengguna_jasa")}
+                terpilih={role === "PENGGUNA_JASA"}
+                onPilih={() => setRole("PENGGUNA_JASA")}
                 judul="Pengguna Jasa"
                 deskripsi="Saya ingin mencari jasa"
               />
               <OptionCard
                 name="role"
                 value="penyedia_jasa"
-                terpilih={role === "penyedia_jasa"}
-                onPilih={() => setRole("penyedia_jasa")}
+                terpilih={role === "PENYEDIA_JASA"}
+                onPilih={() => setRole("PENYEDIA_JASA")}
                 judul="Penyedia Jasa"
                 deskripsi="Saya ingin menawarkan jasa"
               />
@@ -130,8 +130,8 @@ export default function HalamanRegistrasi() {
           </fieldset>
 
             <Input
-                label={role === "penyedia_jasa" ? "Nama penyedia" : "Nama"}
-                placeholder={role === "penyedia_jasa" ? "Masukkan nama penyedia" : "Masukkan nama"}
+                label={role === "PENYEDIA_JASA" ? "Nama penyedia" : "Nama"}
+                placeholder={role === "PENYEDIA_JASA" ? "Masukkan nama penyedia" : "Masukkan nama"}
                 autoComplete="name"
                 value={form_registrasi.nama}
                 onChange={(e) => ubahIsian("nama", e.target.value)}
