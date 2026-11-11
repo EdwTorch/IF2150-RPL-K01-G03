@@ -24,7 +24,7 @@ export default function HalamanLoginAdmin() {
   try {
     await loginAdmin(email, password);
 
-    router.push("/admin/tiket");
+    window.location.href = "/admin/tiket";
     router.refresh();
   } catch (err) {
     if (err instanceof ApiError) {
