@@ -19,8 +19,22 @@ export type UserSesi = {
 };
 
 // Sudah ada di backend → API asli
-export const login = (email: string, password: string) =>
-  api<{ user: UserSesi }>("/api/auth", { method: "POST", body: { action: "login", email, password } });
+export const login = async (email: string, password: string) => {
+  const response = await api<{
+    success: boolean;
+    message: string;
+    result: {
+      user: UserSesi;
+    };
+  }>("/api/auth", {
+    method: "POST",
+    body: { action: "login", email, password },
+  });
+
+  return {
+    user: response.result.user,
+  };
+};
 
 export const loginAdmin = (email: string, password: string) =>
   api<{
@@ -30,7 +44,6 @@ export const loginAdmin = (email: string, password: string) =>
   }>("/api/admin/auth/login", {
     method: "POST",
     body: { email, password },
-    redirectOnUnauthorized: false,
   });
   
 export const logout = () =>
