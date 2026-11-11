@@ -205,3 +205,332 @@ describe("UlasanService.perbaruiRatingPenyedia (AC-2: Pembaruan Profil Otomatis)
     expect(mockUpdate).toHaveBeenCalledWith({ rating_rata_rata: 0 });
   });
 });
+
+describe("UlasanService.getRatingDanUlasanPenyedia", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("menolak jika ID penyedia jasa kosong", async () => {
+    await expect(UlasanService.getRatingDanUlasanPenyedia("")).rejects.toThrow("ID penyedia jasa tidak valid");
+  });
+
+  it("mengembalikan data rating dan ulasan penyedia jasa dengan benar", async () => {
+    mockCreateClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "penyedia_jasa") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: { rating_rata_rata: 4.8 },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        if (table === "pesanan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({
+                data: [{ id_pesanan: "p1" }],
+                error: null,
+              }),
+            }),
+          };
+        }
+        if (table === "ulasan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              in: vi.fn().mockResolvedValue({
+                count: 5,
+                error: null,
+              }),
+            }),
+          };
+        }
+        return {};
+      }),
+    });
+
+    const result = await UlasanService.getRatingDanUlasanPenyedia("penyedia-1");
+    expect(result).toEqual({
+      id_penyedia_jasa: "penyedia-1",
+      rating_rata_rata: 4.8,
+      total_ulasan: 5,
+      tampilan: {
+        rating_teks: "4.8",
+        total_ulasan_teks: "5 ulasan",
+        label: "★ 4.8 (5 ulasan)",
+      },
+    });
+  });
+});
+
+describe("UlasanService.getStatistikUlasanJasa", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("mengembalikan rating 0 jika tidak ada pesanan untuk jasa tersebut", async () => {
+    mockCreateClient.mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+        }),
+      }),
+    });
+
+    const result = await UlasanService.getStatistikUlasanJasa("jasa-kosong");
+    expect(result).toEqual({ rata_rata_rating: 0, total_ulasan: 0 });
+  });
+
+  it("menghitung statistik ulasan berdasarkan id_jasa", async () => {
+    mockCreateClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "pesanan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({
+                data: [{ id_pesanan: "p1" }, { id_pesanan: "p2" }],
+                error: null,
+              }),
+            }),
+          };
+        }
+        if (table === "ulasan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              in: vi.fn().mockResolvedValue({
+                data: [{ rating: 5 }, { rating: 3 }],
+                error: null,
+              }),
+            }),
+          };
+        }
+        return {};
+      }),
+    });
+
+    const result = await UlasanService.getStatistikUlasanJasa("jasa-1");
+    expect(result).toEqual({ rata_rata_rating: 4.0, total_ulasan: 2 });
+  });
+});
+
+describe("UlasanService.getUlasanJasaById & getUlasanbyJasa", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("getUlasanJasaById mengembalikan daftar ulasan dan totalnya", async () => {
+    const mockUlasanList = [
+      { id_ulasan: "u1", rating: 5, komentar: "Bagus", created_at: "2026-01-01", id_pengguna_jasa: "user1" },
+    ];
+
+    mockCreateClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "pesanan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({ data: [{ id_pesanan: "p1" }] }),
+            }),
+          };
+        }
+        if (table === "ulasan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              in: vi.fn().mockReturnValue({
+                order: vi.fn().mockResolvedValue({ data: mockUlasanList, error: null, count: 1 }),
+              }),
+            }),
+          };
+        }
+        return {};
+      }),
+    });
+
+    const res = await UlasanService.getUlasanJasaById("jasa-1");
+    expect(res).toEqual({ ulasan: mockUlasanList, total: 1 });
+  });
+
+  it("getUlasanbyJasa membatasi jumlah data sesuai parameter limit", async () => {
+    const mockUlasanList = [
+      { id_ulasan: "u1", rating: 5, komentar: "Sangat Puas", created_at: "2026-01-01", id_pengguna_jasa: "user1" },
+    ];
+
+    mockCreateClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "pesanan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockResolvedValue({ data: [{ id_pesanan: "p1" }] }),
+            }),
+          };
+        }
+        if (table === "ulasan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              in: vi.fn().mockReturnValue({
+                order: vi.fn().mockReturnValue({
+                  limit: vi.fn().mockResolvedValue({ data: mockUlasanList, error: null, count: 1 }),
+                }),
+              }),
+            }),
+          };
+        }
+        return {};
+      }),
+    });
+
+    const res = await UlasanService.getUlasanbyJasa("jasa-1", 1);
+    expect(res).toEqual({ ulasan: mockUlasanList, total: 1 });
+  });
+});
+
+describe("UlasanService.simpanUlasan", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("harus throw error jika pesanan tidak ditemukan", async () => {
+    mockCreateClient.mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({ data: null, error: { message: "Not found" } }),
+          }),
+        }),
+      }),
+    });
+
+    await expect(
+      UlasanService.simpanUlasan({
+        id_pesanan: "invalid-p",
+        id_pengguna_jasa: "user-1",
+        rating: 5,
+      })
+    ).rejects.toThrow("Pesanan tidak ditemukan.");
+  });
+
+  it("berhasil menyimpan ulasan baru dan memicu perbaruiRatingPenyedia", async () => {
+    const mockCreatedUlasan = {
+      id_ulasan: "u-new",
+      id_pesanan: "p-1",
+      id_pengguna_jasa: "user-1",
+      rating: 5,
+      komentar: "Hebat",
+    };
+
+    vi.spyOn(UlasanService, "perbaruiRatingPenyedia").mockResolvedValue({
+      rating_rata_rata: 5.0,
+      total_ulasan: 1,
+    });
+
+    mockCreateClient.mockReturnValue({
+      from: vi.fn((table: string) => {
+        if (table === "pesanan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({ data: { id_penyedia_jasa: "seller-1" } }),
+              }),
+            }),
+          };
+        }
+        if (table === "ulasan") {
+          return {
+            insert: vi.fn().mockReturnValue({
+              select: vi.fn().mockReturnValue({
+                single: vi.fn().mockResolvedValue({ data: mockCreatedUlasan, error: null }),
+              }),
+            }),
+          };
+        }
+        return {};
+      }),
+    });
+
+    const res = await UlasanService.simpanUlasan({
+      id_pesanan: "p-1",
+      id_pengguna_jasa: "user-1",
+      rating: 5,
+      komentar: "Hebat",
+    });
+
+    expect(res).toEqual(mockCreatedUlasan);
+    expect(UlasanService.perbaruiRatingPenyedia).toHaveBeenCalledWith("seller-1");
+  });
+});
+
+describe("UlasanService.validasiOwnerUlasan, updateUlasan & deleteUlasan", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("validasiOwnerUlasan menolak pengguna yang bukan pemilik ulasan", async () => {
+    mockCreateClient.mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({ data: { id_pengguna_jasa: "pemilik-asli" } }),
+          }),
+        }),
+      }),
+    });
+
+    await expect(
+      UlasanService.validasiOwnerUlasan("ulasan-1", "bukan-pemilik")
+    ).rejects.toThrow("Bukan Ulasan milik anda");
+  });
+
+  it("updateUlasan memperbarui ulasan dan pemicu pembaruan rating", async () => {
+    vi.spyOn(UlasanService, "validasiOwnerUlasan").mockResolvedValue();
+    vi.spyOn(UlasanService, "perbaruiRatingPenyedia").mockResolvedValue({ rating_rata_rata: 4.0, total_ulasan: 1 });
+
+    mockCreateClient.mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({
+              data: { id_pesanan: "p1", pesanan: { id_penyedia_jasa: "seller-1" } },
+            }),
+          }),
+        }),
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({ error: null }),
+        }),
+      }),
+    });
+
+    await expect(
+      UlasanService.updateUlasan("u-1", "pemilik", { rating: 4, komentar: "Diubah" })
+    ).resolves.not.toThrow();
+
+    expect(UlasanService.perbaruiRatingPenyedia).toHaveBeenCalledWith("seller-1");
+  });
+
+  it("deleteUlasan menghapus ulasan dan memicu pembaruan rating", async () => {
+    vi.spyOn(UlasanService, "validasiOwnerUlasan").mockResolvedValue();
+    vi.spyOn(UlasanService, "perbaruiRatingPenyedia").mockResolvedValue({ rating_rata_rata: 0, total_ulasan: 0 });
+
+    mockCreateClient.mockReturnValue({
+      from: vi.fn().mockReturnValue({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            single: vi.fn().mockResolvedValue({
+              data: { id_pesanan: "p1", pesanan: { id_penyedia_jasa: "seller-1" } },
+            }),
+          }),
+        }),
+        delete: vi.fn().mockReturnValue({
+          eq: vi.fn().mockResolvedValue({ error: null }),
+        }),
+      }),
+    });
+
+    await expect(UlasanService.deleteUlasan("u-1", "pemilik")).resolves.not.toThrow();
+
+    expect(UlasanService.perbaruiRatingPenyedia).toHaveBeenCalledWith("seller-1");
+  });
+});
