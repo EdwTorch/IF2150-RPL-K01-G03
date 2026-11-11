@@ -231,9 +231,7 @@ Tabel B.4. Kontribusi Anggota
 
 | NIM | Nama | Modul / Fitur yang Dikerjakan | Persentase Kontribusi |
 | :--- | :--- | :--- | :--- |
-| NIM | Nama |
-|---|---|
-| 13525031 | Revandra Zacky Maharta | | 20% |
+| 13525031 | Revandra Zacky Maharta | 1. Pembuatan _database_ setiap kelas yang membutuhkannya <br> 2. Service autentikasi login dan logout <br> 3. Route handler autentikasi <br> 4. Dual storage adapter (local dan supabase) <br> 5. Upload gateway <br> 6. Validasi berkas yang di-upload <br> 7. Integrasi storage untuk berkas deliverable <br> 8. Pembaruan rating agregat | 20% |
 | 13525079 | Danesh Rasyad Damotino | | 20% |
 | 13525088 | Theresia Estelina Ratu Udju | Frontend: <br> 1. Halaman Pengumpulan Jasa <br> 2. Halaman Deliverables <br> 3. Halaman Ulasan <br> 4. Halaman Dashboard Admin <br> 5. Halaman Pengajuan Mediasi <br> 6. Halaman Riwayat Pesanan <br> 7. Halaman Request Revisi <br> 8. Halaman Pelaporan <br> 9. Halaman Konfirmasi| 20%|
 | 13525127 | Edward Terrance Lie | 1. Setup ENV dan npm install awal <br> 2. Modul deliverables dan Pengumpulan Revisi <br> 3. Modul Chat <br> 4. Modul Notifikasi <br> 5. Modul Pelaporan <br> 6. Modul Mediasi <br> 7. Modul Ulasan <br> 8. Bikin testing | 20% |
