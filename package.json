@@ -1,9 +1,17 @@
 {
-  "devDependencies": {
+  "name": "if2150-rpl-k01-g03",
+  "version": "0.1.0",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "test": "vitest"
+  }, "devDependencies": {
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
     "@vitejs/plugin-react": "^6.1.2",
     "jsdom": "^30.1.3",
+    "vite-tsconfig-paths": "^6.1.1",
     "vitest": "^5.0.5"
   }
 }

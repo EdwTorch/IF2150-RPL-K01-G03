@@ -112,7 +112,7 @@ describe("UlasanService.formatRatingTampilan (AC-1 & AC-2: Tampilan Profil I-03)
     expect(tampilan).toEqual({
       rating_teks: "4.8",
       total_ulasan_teks: "15 ulasan",
-      label: "⭐ 4.8 (15 ulasan)",
+      label: "★ 4.8 (15 ulasan)",
     });
   });
 });
