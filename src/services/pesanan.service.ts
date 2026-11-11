@@ -1,9 +1,15 @@
-
 import crypto from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import type { Jasa, Pesanan } from "@/models/types";
 
 export type PesananDetail = Pesanan & {
+  pengguna_jasa: {
+    id: string;
+    pengguna: {
+      id: string;
+      nama: string;
+    } | null;
+  } | null;
   penyedia_jasa: {
     id: string;
     pengguna: {
@@ -49,7 +55,6 @@ const waktu = (p: Pesanan) => Date.parse(p.created_at ?? "") || 0;
 export class PesananService {
   /**
    * Penyedia Jasa menerima atau menolak pesanan masuk (UC10)
-   * Terunifikasi menggunakan konfirmasiPesanan & konfirmasiPesananDiMemori
    */
   static async respondOrder(data: {
     id_pesanan: string;
@@ -86,7 +91,7 @@ export class PesananService {
     return norm !== "" && !STATUS_TERMINAL.has(norm);
   }
 
-  // Order State Machine (AGENTS.md 7.3 & Algo-3103)
+  // Order State Machine
   static validasiTransisiStatus(
     status_awal: string,
     status_baru: string,
@@ -103,8 +108,7 @@ export class PesananService {
     return tujuan;
   }
 
-  // Inti murni UC09 (Algo-3101, Algo-3102, SKPL #13):
-  // snapshot harga & maks 2 pesanan aktif
+  // UC09: membuat pesanan di memori
   static buatPesananDiMemori(
     daftar_pesanan: Pesanan[],
     daftar_jasa: Jasa[],
@@ -160,7 +164,7 @@ export class PesananService {
     };
   }
 
-  // Inti murni UC10 (Algo-0205 & Algo-0206)
+  // UC10: konfirmasi pesanan di memori
   static konfirmasiPesananDiMemori(
     daftar_pesanan: Pesanan[],
     id_pesanan: string,
@@ -215,7 +219,7 @@ export class PesananService {
     };
   }
 
-  // Inti murni daftar pesanan per peran & filter status (Algo-3104)
+  // Mengambil daftar pesanan di memori
   static ambilDaftarPesananDiMemori(
     daftar_pesanan: Pesanan[],
     daftar_jasa: Jasa[],
@@ -259,7 +263,7 @@ export class PesananService {
       .sort((a, b) => waktu(b) - waktu(a));
   }
 
-  // Inti murni detail pesanan (Algo-3103 / Algo-3104)
+  // Mengambil detail pesanan di memori
   static ambilDetailPesananDiMemori(
     daftar_pesanan: Pesanan[],
     daftar_jasa: Jasa[],
@@ -281,7 +285,7 @@ export class PesananService {
     };
   }
 
-  // UC09 (Algo-3101 & Algo-3102): buat pesanan baru di Supabase
+  // UC09: membuat pesanan baru di Supabase
   static async buatPesananBaru(
     id_pengguna_jasa: string,
     id_jasa: string,
@@ -347,7 +351,7 @@ export class PesananService {
     return data as Pesanan;
   }
 
-  // UC10 (Algo-0205 & Algo-0206): konfirmasi terima/tolak oleh penyedia jasa
+  // UC10: konfirmasi pesanan di Supabase
   static async konfirmasiPesanan(
     id_pesanan: string,
     id_penyedia_jasa: string,
@@ -453,6 +457,13 @@ export class PesananService {
       .select(`
         *,
         jasa(*),
+        pengguna_jasa:pengguna_jasa!pesanan_id_pengguna_jasa_fkey(
+          id,
+          pengguna:pengguna!pengguna_jasa_id_fkey(
+            id,
+            nama
+          )
+        ),
         penyedia_jasa:penyedia_jasa!pesanan_id_penyedia_jasa_fkey(
           id,
           pengguna:pengguna!penyedia_jasa_id_fkey(

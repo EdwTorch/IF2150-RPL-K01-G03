@@ -17,6 +17,23 @@ export type Pesanan = {
   jasa?: JasaListing;
 };
 
+export type PesananDetail = Pesanan & {
+  penyedia_jasa: {
+    id: string;
+    pengguna: {
+      id: string;
+      nama: string;
+    } | null;
+  } | null;
+  pengguna_jasa: {
+    id: string;
+    pengguna: {
+      id: string;
+      nama: string;
+    } | null;
+  } | null;
+};
+
 /** Sama dengan MAKS_PESANAN_AKTIF di services/pesanan.service.ts */
 export const MAKS_PESANAN_AKTIF = 2;
 
@@ -29,9 +46,15 @@ type Respons<T> = {
   data: T;
 };
 
+type ResponsAksiPesanan = {
+  success: boolean;
+  message: string;
+  data?: Pesanan;
+};
+
 /**
- * tombolPesanTerklik() → POST /api/pesanan → PengontrolPesanan.buatPesananBaru()
- * Backend masih minta id_pengguna_jasa di body → diambil dari sesi login.
+ * C31 — membuat pesanan baru
+ * POST /api/pesanan
  */
 export async function buatPesanan(id_jasa: string, brief: string) {
   const { user } = await sesiSaatIni();
@@ -51,11 +74,15 @@ export async function buatPesanan(id_jasa: string, brief: string) {
   };
 }
 
-/** getDetailPesanan() → GET /api/pesanan/[id_pesanan] (beserta jasa) */
-export async function ambilDetailPesanan(id_pesanan: string) {
-  const respons = await api<Respons<Pesanan>>(
-    `/api/pesanan/${encodeURIComponent(id_pesanan)}`
+/**
+ * C35 — mengambil detail pesanan
+ * GET /api/pesanan/[id_pesanan]
+ */
+export async function ambilDetailPesanan(idPesanan: string) {
+  const respons = await api<Respons<PesananDetail>>(
+    `/api/pesanan/${encodeURIComponent(idPesanan)}`
   );
+  
 
   const p = respons.data;
 
@@ -69,7 +96,7 @@ export async function ambilDetailPesanan(id_pesanan: string) {
 }
 
 /**
- * C30 Riwayat Transaksi
+ * C30 — mengambil daftar pesanan pengguna jasa
  * GET /api/pesanan?id_pengguna=...&peran=pengguna_jasa
  */
 export async function ambilDaftarPesanan() {
@@ -90,4 +117,32 @@ export async function ambilDaftarPesanan() {
       ? { ...p.jasa, harga: Number(p.jasa.harga) }
       : undefined,
   }));
+}
+
+/**
+ * C35 — menerima pesanan
+ * PATCH /api/pesanan/[id_pesanan]
+ */
+export async function terimaPesanan(idPesanan: string) {
+  return api<ResponsAksiPesanan>(
+    `/api/pesanan/${encodeURIComponent(idPesanan)}`,
+    {
+      method: "PATCH",
+      body: { action: "diterima" },
+    }
+  );
+}
+
+/**
+ * C35 — menolak pesanan
+ * PATCH /api/pesanan/[id_pesanan]
+ */
+export async function tolakPesanan(idPesanan: string) {
+  return api<ResponsAksiPesanan>(
+    `/api/pesanan/${encodeURIComponent(idPesanan)}`,
+    {
+      method: "PATCH",
+      body: { action: "ditolak" },
+    }
+  );
 }
