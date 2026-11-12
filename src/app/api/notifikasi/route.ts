@@ -40,7 +40,7 @@ export async function PATCH(request: Request) {
       );
     }
 
-    await NotifikasiService.tandaiSudahDibaca(id_notifikasi, user.id);
+    await NotifikasiService.tandaiSudahDibaca(user.id, id_notifikasi);
 
     return NextResponse.json(
       { status : true,
