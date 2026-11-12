@@ -81,10 +81,10 @@ Repo fork kelompok bersifat **public**, sehingga:
 
 ## A.4 Struktur Folder
 
-Seluruh kode ditempatkan di `src/` pada repo fork. Jangan mengubah folder milestone lama.
+Seluruh kode ditempatkan di `src/app/` pada repo fork. Jangan mengubah folder milestone lama.
 
 ```
-src/                              # SELURUH kode implementasi
+src/app/                              # SELURUH kode implementasi
 	README.md                     # dokumentasi utama aplikasi (lihat A.5)
 	.env.example                  # jika memakai environment variable
 	<struktur kode kalian>        # bebas, mengikuti pola arsitektur DPPL
@@ -96,11 +96,11 @@ docs/
 ```
 
 Catatan:
-- `README.md` aplikasi diletakkan di **`src/README.md`**, bukan di root repo.
-- Jika kerangka kerja kalian mewajibkan struktur tertentu (misalnya Maven `src/main/java`, Flutter `lib/`, monorepo `frontend/` dan `backend/`), letakkan semuanya **di dalam `src/`**.
+- `README.md` aplikasi diletakkan di **`src/app/README.md`**, bukan di root repo.
+- Jika kerangka kerja kalian mewajibkan struktur tertentu (misalnya Maven `src/app/main/java`, Flutter `lib/`, monorepo `frontend/` dan `backend/`), letakkan semuanya **di dalam `src/app/`**.
 - Nama file dan folder pada `docs/M9/` mengikuti aturan penamaan milestone sebelumnya (`KXX_GYY_...`).
 
-## A.5 Isi Minimal `src/README.md`
+## A.5 Isi Minimal `src/app/README.md`
 
 README harus cukup bagi orang yang belum pernah melihat proyek kalian untuk menjalankan aplikasi dari nol. Minimal berisi:
 
@@ -204,8 +204,8 @@ Tabel B.2. Bukti Best Practices
 | Branching | Graph Commit : [https://github.com/EdwTorch/IF2150-RPL-K01-G03/network](https://github.com/EdwTorch/IF2150-RPL-K01-G03/network) <br> All Branches : [https://github.com/EdwTorch/IF2150-RPL-K01-G03/branches/all](https://github.com/EdwTorch/IF2150-RPL-K01-G03/branches/all) | Menggunakan skema Git Flow : dengan development sebagai branch utama untuk merge setelah suatu fitur telah selesai dalam suatu branch, untuk fitur akan dipisah dalam branch, misal feat/backend-chat, feat/fe-layar-konfirmasi |
 | Semantic commit | [https://github.com/EdwTorch/IF2150-RPL-K01-G03/commits/development/](https://github.com/EdwTorch/IF2150-RPL-K01-G03/commits/development/) | Menggunakan Konvensi Semantic Commit, dengan menggunakan feat, fix, docs, style, refactor, test, dan chore |
 | Track tasks | [https://github.com/EdwTorch/IF2150-RPL-K01-G03/issues?q=is%3Aissue](https://github.com/EdwTorch/IF2150-RPL-K01-G03/issues?q=is%3Aissue) | 40 Issue, <br> Pembagian : Danesh : 5 Issue Backend <br> Revandra : 7 Issue Backend <br> Theresia : 15 Issue Frontend <br> Edward : 5 Issue Backend <br> Necia : 8 Issue Frontend  |
-| Pull request dan review | 1. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/49](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/49) <br> 2. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/38](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/38) <br> 3. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/57](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/57) 4. []() 5. []() | 1. Danesh Review Edward <br> 2. Edward Review Revandra <br> 3. Revandra Review Danesh <br> 4. Theresia Review Necia <br> 5. Necia Review Theresia |
-| Pengujian | *[Tautan ke `src/tests/` dan hasil test]* | *[Apa yang diuji, cara menjalankan]* |
+| Pull request dan review | 1. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/49](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/49) <br> 2. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/38](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/38) <br> 3. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/57](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/57) 4. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/68](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/68) 5. [https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/69](https://github.com/EdwTorch/IF2150-RPL-K01-G03/pull/69)  | 1. Danesh Review Edward <br> 2. Edward Review Revandra <br> 3. Revandra Review Danesh <br> 4. Theresia Review Necia <br> 5. Necia Review Theresia |
+| Pengujian | *[Tautan ke `src/app/tests/` dan hasil test]* | *[Apa yang diuji, cara menjalankan]* |
 
 ### B.2.1 Profiling dan Optimasi
 
@@ -245,22 +245,21 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 
 | ID Kelas | Nama Kelas Perancangan | Bentuk Implementasi | Lokasi (File dan Nama) | Keterangan |
 | :--- | :--- | :--- | :--- | :--- |
-| *[C01]* | *[Nama kelas pada DPPL]* | *[mis. Kelas / Fungsi / Komponen / Route / Tabel]* | *[mis. `src/models/user.py` - `User`]* | *[Cara atribut dan operasi kelas diwujudkan; "-" jika tidak ada penjelasan tambahan]* |
-| *[C02]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/components/LoginForm.tsx` - `LoginForm`]* | *[mis. atribut menjadi *state*, operasi menjadi *handler*]* |
-| *[C03]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/routes/auth.js` - `POST /login`]* | *[Keterangan]* |
-
-| C01 | Pengguna  |  | | |
-| C02 | PenyediaJasa  | | | |
-| C03 | PenggunaJasa  | | | |
+| *[C01]* | *[Nama kelas pada DPPL]* | *[mis. Kelas / Fungsi / Komponen / Route / Tabel]* | *[mis. `src/app/models/user.py` - `User`]* | *[Cara atribut dan operasi kelas diwujudkan; "-" jika tidak ada penjelasan tambahan]* |
+| *[C02]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/app/components/LoginForm.tsx` - `LoginForm`]* | *[mis. atribut menjadi *state*, operasi menjadi *handler*]* |
+| *[C03]* | *[Nama kelas pada DPPL]* | *[Bentuk implementasi]* | *[mis. `src/app/routes/auth.js` - `POST /login`]* | *[Keterangan]* |
+| C01 | Pengguna  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | - |
+| C02 | PenyediaJasa | Tabel Basis Data <br> Interface (Tipe Data) <br> Fungsi (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.penyedia_jasa <br> src/models/types.ts - PenyediaJasa, RatingAgregat <br> src/services/ulasan.service.ts - perbaruiRatingPenyedia, getRatingDanUlasanPenyedia, hitungRatingAgregat, formatRatingTampilan, validasiRating <br> src/app/api/ulasan/route.ts - GET (query id_penyedia / id_penyedia_jasa) <br> src/test/ulasan.test.ts - Unit test rating agregat penyedia | - |
+| C03 | PenggunaJasa  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | Penggunaan id_pengguna_jasa berasal atribut id pengguna (inheritance) |
 | C04 | HalamanRegistrasi  | | | |
-| C05 | LayananRegistrasi | | | |
+| C05 | LayananRegistrasi | Fungsi (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/auth.service.ts - validasiInputRegistrasi, registrasi, InputRegistrasi <br> src/app/api/auth/route.ts - POST (action: register) <br> src/test/auth.test.ts - Pengujian unit validasi input registrasi | - |
 | C06 | HalamanLogin  | | | |
-| C07 | Autentikator  | | | |
+| C07 | Autentikator | Fungsi (Service) <br> Route Handler <br> Middleware <br> Interface (Tipe Data) | src/services/auth.service.ts - login, logout, getSessionUser, loginAdmin <br> src/app/api/auth/route.ts - POST (action: login, logout, me), GET <br> src/lib/supabase/middleware.ts - updateSession (diintegrasikan di src/middleware.ts) <br> src/models/types.ts - SessionUser | - |
 | C08 | HalamanPortofolio  | | | |
-| C09 | Portofolio  | | | |
+| C09 | Portofolio  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | Tambahan atribut id_portofolio, id_penyedia_jasa |
 | C10 | PengontrolPortofolio | | | |
 | C11 | LayananUploadFile  | | | |
-| C12 | Jasa  | | | |
+| C12 | Jasa  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | tambahan atribut rating_rata_rata |
 | C13 | HalamanUploadJasa  | | | |
 | C14 | JasaController  | | | |
 | C15 | HalamanPencarian  | | | |
@@ -268,41 +267,45 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C17 | LayananPencarian  | | | |
 | C18 | LayananPembandingJasa  | | | |
 | C19 | HalamanDetailJasa  | | | |
-| C20 | Bookmark  | | | |
+| C20 | Bookmark  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
 | C21 | HalamanBookmark  | | | |
 | C22 | PengontrolBookmark  | | | |
-| C23 | ChatRoom  | | | |
+| C23 | ChatRoom  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
 | C24 | HalamanChat  | | | |
-| C25 | LayananPesanInstan  | | | |
-| C26 | LayananNotifikasiChat  | | | |
-| C27 | Pesanan  | | | |
-| C28 | HalamanPemesanan  | | | |
+| C25 | LayananPesanInstan  | Fungsi, Kelas, dan Routing | src\services\chat.service.ts - ChatService <br> src\app\api\chat\[id_chatroom]\route.ts <br> src\app\api\chat\route.ts | - |
+| C26 | LayananNotifikasiChat  | Fungsi, Kelas, dan Routing | src\services\notifikasi.service.ts - NotifikasiService <br> src\app\api\notifikasi\route.ts | Menampilkan Notifikasi Untuk setiap aksi yang dilakukan terkait pesanan atau chat |
+| C27 | Pesanan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | Penambahan Atribut, id_metode_pembayaran, status_pembayaran, status_pencairan, waktu_pencairan |
+| C28 | HalamanPemesanan  |  | | |
 | C29 | HalamanPembayaran  | | | |
 | C30 | HalamanRiwayatTransaksi  | | | |
 | C31 | PengontrolPesanan  | | | |
 | C32 | PengontrolTransaksi  | | | |
-| C33 | MetodePembayaran  | | | |
-| C34 | RiwayatTransaksi  | | | |
+| C33 | MetodePembayaran  |  Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
+| C34 | RiwayatTransaksi  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | Menambahkan atribut id_metode dan total_biaya |
 | C35 | HalamanKonfirmasi  | | | |
-| C36 | ProdukAkhir  | | | |
+| C36 | ProdukAkhir  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | |
 | C37 | HalamanPengumpulan  | | | |
 | C38 | HalamanDeliverables  | | | |
-| C39 | PengajuanRevisi  | | | |
+| C39 | PengajuanRevisi  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambahkan atribut id_revisi dan id_pesanan |
 | C40 | HalamanRequestRevisi  | | | |
-| C41 | RevisiHandler  | | | |
-| C42 | PencairanDana  | | | |
-| C43 | TiketLaporan  | | | |
+| C41 | RevisiHandler  | Fungsi, Kelas, dan Routing | src\services\deliverables.service.ts - DeliverablesService <br> src\app\api\pesanan\[id_pesanan]\deliverables\revisi\route.ts  | Class ini Digabung dengan RevisiHandler dan Sebagian PesananHandler. Fungsi yang relevan antara lain : getRevisionHistory, requestRevision, submitRevisionFix, confirmOrderComplete |
+| C42 | PencairanDana  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
+| C43 | TiketLaporan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
 | C44 | HalamanPelaporan | | | |
-| C45 | LaporanHandler | | | |
-| C46 | Ulasan | | | |
+| C45 | LaporanHandler | Fungsi, Kelas dan Routing | src\services\pelaporan.service.ts <br> src\app\api\pesanan\[id_pesanan]\laporan\route.ts <br> src\app\api\admin\laporan\[id_tiket]\route.ts <br> src\app\api\admin\laporan\[id_tiket]\tanggapan\route.ts - PelaporanService dan TanggapanLaporanService | fungsi yang terkait PelaporanService : submitLaporan, validasiOwnerPesanan, validateUrlBukti, getTicketsByUser. fungsi yang terkait TanggapanLaporanService : getAllTicketsForAdmin, getDetailTiketAdmin, catatKeputusanTindakan |
+| C46 | Ulasan | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | |
 | C47 | HalamanUlasan  | | | |
-| C48 | UlasanHandler  | | | |
-| C49 | TanggapanLaporan  | | | |
+| C48 | UlasanHandler  | Fungsi, Kelas, dan Routing | src\services\ulasan.service.ts <br> src\app\api\ulasan\route.ts| Class UlasanService, validasiRating, hitungRatingAgregat, perbaruiRatingPenyedia, getRatingDanUlasanPenyedia, geStatistikUlasanJasa, getUlasanJasaById, simpanUlasan, getUlasanbyJasa,updateUlasan, deleteUlasan |
+| C49 | TanggapanLaporan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
 | C50 | HalamanPengajuanMediasi | | | |
-| C51 | MediasiHandler | | | |
-| C52 | Admin  | | | |
+| C51 | MediasiHandler | Fungsi, Kelas, dan Routing | src/app/deliverables/mediasi.service.ts - MediasiService <br> src/app/api/admin/mediasi/[id_sesi_mediasi]/selesai <br> src/app/api/admin/mediasi/route.ts <br> src/app/api/mediasi/route.ts <br> src/app/api/mediasi/[id_sesi_mediasi]/route.ts <br> src/app/api/mediasi/[id_sesi_mediasi]/pesan/route.ts | fungsi yang disediakan : mulaiMediasi, kirimPesanMediasi, getDaftarMediasiUser, getDetalDanPesanMediasi, selesaikanMediasi. |
+| C52 | Admin  | Tabel Basis Data | src/app/supabase/20261103060624_create_carijasa_schema.sql  | Penggunaan id_admin pada rancangan berasal atribut id pengguna (inheritance), tetapi dengan role pengguna berupa 'ADMIN'|
 | C53 | HalamanDashboardAdmin | | | |
-| C54 | PengumpulanController | | | |
+| C54 | PengumpulanController | Fungsi, Kelas, dan Routing | src/app/service/deliverarble.service.ts - DeliverablesService <br> src/app/api/pesanan/route.ts src/app/api/pesanan/[id_pesanan]/route.ts <br> | Class ini Digabung dengan RevisiHandler dan Sebagian PesananHandler. Fungsi yang relevan antara lain : submitDeliverable, getDeliverablebyPesanan, getDeliverableByProdukAkhir, confirmOrderComplete |
+| C55 | pesan_chat | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | Menambah Class Baru untuk pesan dalam chat |
+| C56 | notifikasi | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambah tabel data notifikasi |
+| C57 | sesi_mediasi | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambah tabel data sesi_mediasi (mirip roomchat tapi bertiga) |
+| C58 | pesan_mediasi | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambah tabel data pesan dalam sesi_mediasi |
 Catatan:
 - Satu kelas perancangan boleh diwujudkan oleh beberapa file/unit, dan satu file/unit boleh mewujudkan beberapa kelas perancangan. Tuliskan semuanya.
 - Kelas perancangan yang **tidak diimplementasikan** atau **digabung/dipecah** tetap dicantumkan, dan alasannya dicatat di Bagian B.1.
