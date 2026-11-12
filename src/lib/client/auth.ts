@@ -17,16 +17,36 @@ export type UserSesi = {
   isPenggunaJasa: boolean;
 };
 
-/** POST /api/auth action "login" → { success, message, result: { user } } */
-export async function login(email: string, password: string) {
-  const respons = await api<{ result: { user: UserSesi } }>("/api/auth", {
+// Sudah ada di backend → API asli
+export const login = async (email: string, password: string) => {
+  const response = await api<{
+    success: boolean;
+    message: string;
+    result: {
+      user: UserSesi;
+    };
+  }>("/api/auth", {
     method: "POST",
     body: { action: "login", email, password },
   });
-  return respons.result; // { user } — halaman login tidak perlu diubah
-}
 
-export const logout = () => api<{ message: string }>("/api/auth", { method: "POST", body: { action: "logout" } });
+  return {
+    user: response.result.user,
+  };
+};
+
+export const loginAdmin = (email: string, password: string) =>
+  api<{
+    success: boolean;
+    message: string;
+    result: { user: UserSesi };
+  }>("/api/admin/auth/login", {
+    method: "POST",
+    body: { email, password },
+  });
+  
+export const logout = () =>
+  api<{ message: string }>("/api/auth", { method: "POST", body: { action: "logout" } });
 
 /** GET /api/auth → { success, message, user } */
 export const sesiSaatIni = () => api<{ user: UserSesi }>("/api/auth");

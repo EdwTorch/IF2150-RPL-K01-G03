@@ -62,6 +62,7 @@ export interface Pesanan {
   waktu_pencairan? : string;
   created_at? : string;
   updated_at? : string;
+  jasa?: Jasa;
 }
 
 // Tipe data untuk Metode Pembayaran (C33)
