@@ -3,7 +3,7 @@ import { sesiSaatIni } from "@/lib/client/auth";
 import { mockUnggahJasa } from "@/lib/mock/jasa";
 
 /** Kategori disimpan sebagai teks di kolom jasa.kategori — sepakati daftarnya dengan BE */
-export const DAFTAR_KATEGORI = ["Desain Grafis", "Penulisan", "Pengembangan Web", "Video & Animasi", "Penerjemahan"];
+export const DAFTAR_KATEGORI = ["Desain Grafis", "Penulisan", "Pengembangan Web", "Video & Animasi"];
 
 /** Sama dengan TIPE_BERKAS_DIIZINKAN & MAKS_UKURAN_BERKAS di services/jasa.service.ts */
 export const FORMAT_BERKAS_JASA = ["jpg", "jpeg", "png", "webp", "gif", "mp4", "pdf"];
