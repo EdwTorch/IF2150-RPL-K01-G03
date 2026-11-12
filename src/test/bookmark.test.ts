@@ -3,6 +3,7 @@ import type { Bookmark, Jasa } from '../models/types';
 import { PengontrolBookmark } from '../services/bookmark.service';
 import { GET, POST, DELETE, responsGagal } from '../app/api/bookmark/route';
 import { mockBookmarkList } from '../lib/mocks/bookmark.mock';
+import { mockJasaList } from '../lib/mocks/jasa.mock';
 
 // --- MOCK SUPABASE & AUTH ---
 let mockSessionUser: { id: string; email: string; nama: string; role: string; status_akun: boolean; isPenyediaJasa: boolean; isPenggunaJasa: boolean } | null = null;
@@ -373,5 +374,121 @@ describe('responsGagal mapping status kode', () => {
 
     const resDatabase = responsGagal(new Error('Koneksi timeout'));
     expect(resDatabase.status).toBe(500);
+  });
+});
+
+describe('PengontrolBookmark & Route Integrasi Tambahan (C20, C22)', () => {
+  it('tambahDataBookmark melempar pesan error jika kode error bukan 23505', async () => {
+    mockDbJasa = { id_jasa: 'j1', status_aktif: true };
+    mockDbInsertError = { code: '42P01', message: 'Tabel tidak ditemukan' };
+
+    await expect(PengontrolBookmark.tambahDataBookmark('u1', 'j1')).rejects.toThrow('Tabel tidak ditemukan');
+    mockDbInsertError = null;
+  });
+
+  it('toggleBookmark melempar error tak terduga saat penghapusan atau penambahan gagal', async () => {
+    // Saat ada bookmark, hapusDataBookmark melempar error bukan 'tidak ditemukan'
+    vi.spyOn(PengontrolBookmark, 'hapusDataBookmark').mockRejectedValueOnce(new Error('Koneksi database putus'));
+    mockDbSelectBookmarks = [{ id_bookmark: 'bm-1', id_pengguna_jasa: 'u1', id_jasa: 'j1' }];
+    await expect(PengontrolBookmark.toggleBookmark('u1', 'j1')).rejects.toThrow('Koneksi database putus');
+
+    // Saat tidak ada bookmark, tambahDataBookmark melempar error tak terduga
+    mockDbSelectBookmarks = [];
+    vi.spyOn(PengontrolBookmark, 'tambahDataBookmark').mockRejectedValueOnce(new Error('Fatal DB crash'));
+    await expect(PengontrolBookmark.toggleBookmark('u1', 'j1')).rejects.toThrow('Fatal DB crash');
+  });
+
+  it('POST /api/bookmark mendukung toggle pada mode mock (tambah dan hapus)', async () => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'true';
+    mockSessionUser = {
+      id: 'u1',
+      email: 'u1@test.com',
+      nama: 'User 1',
+      role: 'USER',
+      status_akun: true,
+      isPenyediaJasa: false,
+      isPenggunaJasa: true,
+    };
+
+    const idJasaTarget = mockJasaList[0].id_jasa;
+
+    // Pastikan tidak ada bookmark awal untuk idJasaTarget
+    const idxAwal = mockBookmarkList.findIndex((b) => b.id_pengguna_jasa === 'u1' && b.id_jasa === idJasaTarget);
+    if (idxAwal !== -1) mockBookmarkList.splice(idxAwal, 1);
+
+    // Toggle add
+    const reqToggleAdd = new Request('http://localhost/api/bookmark', {
+      method: 'POST',
+      body: JSON.stringify({ id_pengguna_jasa: 'u1', id_jasa: idJasaTarget, toggle: true }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const resAdd = await POST(reqToggleAdd);
+    expect(resAdd.status).toBe(201);
+    const jsonAdd = await resAdd.json();
+    expect(jsonAdd.message).toContain('berhasil disimpan');
+
+    // Toggle remove dengan action: 'toggle'
+    const reqToggleRemove = new Request('http://localhost/api/bookmark', {
+      method: 'POST',
+      body: JSON.stringify({ id_pengguna_jasa: 'u1', id_jasa: idJasaTarget, action: 'toggle' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const resRemove = await POST(reqToggleRemove);
+    expect(resRemove.status).toBe(200);
+    const jsonRemove = await resRemove.json();
+    expect(jsonRemove.message).toContain('berhasil dihapus');
+  });
+
+  it('POST /api/bookmark dan DELETE /api/bookmark pada mode non-mock', async () => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'false';
+    mockSessionUser = {
+      id: 'u1',
+      email: 'u1@test.com',
+      nama: 'User 1',
+      role: 'USER',
+      status_akun: true,
+      isPenyediaJasa: false,
+      isPenggunaJasa: true,
+    };
+
+    // Mock DB jasa & bookmark
+    mockDbJasa = { id_jasa: 'j1', status_aktif: true };
+    mockDbInsertBookmark = { id_bookmark: 'bm-new', id_pengguna_jasa: 'u1', id_jasa: 'j1' };
+
+    // POST non-mock toggle
+    vi.spyOn(PengontrolBookmark, 'toggleBookmark').mockResolvedValueOnce({
+      action: 'added',
+      data: mockDbInsertBookmark as Bookmark,
+    });
+
+    const reqToggle = new Request('http://localhost/api/bookmark', {
+      method: 'POST',
+      body: JSON.stringify({ id_pengguna_jasa: 'u1', id_jasa: 'j1', toggle: true }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const resToggle = await POST(reqToggle);
+    expect(resToggle.status).toBe(201);
+
+    // POST non-mock normal tambah
+    vi.spyOn(PengontrolBookmark, 'tambahDataBookmark').mockResolvedValueOnce(mockDbInsertBookmark as Bookmark);
+    const reqTambah = new Request('http://localhost/api/bookmark', {
+      method: 'POST',
+      body: JSON.stringify({ id_pengguna_jasa: 'u1', id_jasa: 'j1' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const resTambah = await POST(reqTambah);
+    expect(resTambah.status).toBe(201);
+
+    // DELETE non-mock dengan JSON body
+    vi.spyOn(PengontrolBookmark, 'hapusDataBookmark').mockResolvedValueOnce(true);
+    const reqDelete = new Request('http://localhost/api/bookmark', {
+      method: 'DELETE',
+      body: JSON.stringify({ id_pengguna_jasa: 'u1', id_jasa: 'j1' }),
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const resDelete = await DELETE(reqDelete);
+    expect(resDelete.status).toBe(200);
+    const jsonDelete = await resDelete.json();
+    expect(jsonDelete.success).toBe(true);
   });
 });

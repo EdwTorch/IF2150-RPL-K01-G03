@@ -330,4 +330,180 @@ describe('confirmOrderComplete', () => {
       expect(mockUpload).toHaveBeenCalledWith(validFile, FOLDER_DELIVERABLE);
     });
   });
+  // =========================================================================
+// TEST CASE TAMBAHAN UNTUK MENUTUP BARIS 97, 109–148, 221, 248–314, 371, 381
+// =========================================================================
+
+describe("DeliverablesService Additional Coverage", () => {
+  let mockSupabase: any;
+
+  beforeEach(() => {
+    vi.clearAllMocks();
+
+    mockSupabase = {
+      from: vi.fn().mockReturnThis(),
+      select: vi.fn().mockReturnThis(),
+      insert: vi.fn().mockReturnThis(),
+      update: vi.fn().mockReturnThis(),
+      eq: vi.fn().mockReturnThis(),
+      order: vi.fn().mockReturnThis(),
+      limit: vi.fn().mockReturnThis(),
+      single: vi.fn(),
+      maybeSingle: vi.fn(),
+    };
+
+    (createClient as any).mockResolvedValue(mockSupabase);
+    mockSupabase.eq.mockReturnThis();
+  });
+
+  // 1. Coverage: getDeliverableByProdukAkhir
+  describe("getDeliverableByProdukAkhir", () => {
+    it("harus throw error jika produk akhir tidak ditemukan atau query error", async () => {
+      mockSupabase.single.mockResolvedValueOnce({ data: null, error: { message: "Not found" } });
+
+      await expect(
+        DeliverablesService.getDeliverableByProdukAkhir("p-invalid", "user-1")
+      ).rejects.toThrow("Hasil Pekerjaan tidak ditemukan");
+    });
+
+    it("harus mengembalikan produk akhir jika ditemukan dan user adalah owner", async () => {
+      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+
+      const mockData = { id_produk_akhir: "p-1", id_pesanan: "order-1" };
+      mockSupabase.single.mockResolvedValueOnce({ data: mockData, error: null });
+
+      const res = await DeliverablesService.getDeliverableByProdukAkhir("p-1", "user-1");
+      expect(res).toEqual(mockData);
+      expect(DeliverablesService.validasiOwnerPesanan).toHaveBeenCalledWith("order-1", "user-1");
+    });
+  });
+
+  // 2. Coverage: getRevisionHistory
+  describe("getRevisionHistory", () => {
+    it("harus throw error jika query riwayat revisi gagal di Supabase", async () => {
+      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+      mockSupabase.order.mockResolvedValueOnce({ data: null, error: { message: "DB Error History" } });
+
+      await expect(
+        DeliverablesService.getRevisionHistory("order-1", "user-1")
+      ).rejects.toThrow("Gagal mengambil riwayat revisi: DB Error History");
+    });
+
+    it("harus mengembalikan daftar riwayat revisi", async () => {
+      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+      const mockHistory = [{ id_revisi: "rev-1", deskripsi_revisi: "Perbaiki warna" }];
+      mockSupabase.order.mockResolvedValueOnce({ data: mockHistory, error: null });
+
+      const res = await DeliverablesService.getRevisionHistory("order-1", "user-1");
+      expect(res).toEqual(mockHistory);
+    });
+  });
+
+  // 3. Coverage: submitRevisionFix
+  describe("submitRevisionFix", () => {
+    it("harus throw error jika insert produk akhir perbaikan gagal", async () => {
+      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+      mockSupabase.single.mockResolvedValueOnce({ data: null, error: { message: "Insert produk error" } });
+
+      await expect(
+        DeliverablesService.submitRevisionFix({
+          id_pesanan: "order-1",
+          deskripsi_produk: "Hasil revisi 1",
+          user_id: "penyedia-1",
+        })
+      ).rejects.toThrow("Insert produk error");
+    });
+
+    it("berhasil mengumpulkan hasil perbaikan revisi dan update status pesanan & pengajuan revisi", async () => {
+      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+
+      const mockProdukBaru = { id_produk_akhir: "prod-fix-1" };
+      const mockLatestRevisi = { id_revisi: "rev-old" };
+      const mockPesananUpdated = {
+        id_pengguna_jasa: "klien-1",
+        jasa: { nama_jasa: "Desain Logo" },
+      };
+
+      mockSupabase.single
+        .mockResolvedValueOnce({ data: mockProdukBaru, error: null }) // insert produk_akhir
+        .mockResolvedValueOnce({ data: mockPesananUpdated, error: null }); // update pesanan status 'Menunggu Konfirmasi'
+
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: mockLatestRevisi }); // get latest revisi
+
+      const res = await DeliverablesService.submitRevisionFix({
+        id_pesanan: "order-1",
+        deskripsi_produk: "Hasil perbaikan logo",
+        user_id: "penyedia-1",
+      });
+
+      expect(res).toEqual(mockProdukBaru);
+      expect(mockSupabase.update).toHaveBeenCalledWith(
+        expect.objectContaining({ status_pengerjaan: "Revisi Dikumpulkan" })
+      );
+      expect(NotifikasiService.kirimNotifikasi).toHaveBeenCalledWith(
+        expect.objectContaining({ id_pengguna: "klien-1" })
+      );
+    });
+  });
+
+  // 4. Coverage: confirmOrderComplete Error Branches (Line 371 & 381)
+  describe("confirmOrderComplete Error Handling Branches", () => {
+    it("harus throw error jika gagal menambahkan saldo ke dompet penjual (errSaldo)", async () => {
+      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+
+      mockSupabase.single
+        .mockResolvedValueOnce({ data: { id_penyedia_jasa: "p1", total_biaya: 100000, status_pesanan: "Menunggu" } }) // fetch pesanan
+        .mockResolvedValueOnce({ data: { saldo: 50000 } }); // fetch penyedia
+
+      mockSupabase.update
+        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: null }) }) // update status pesanan
+        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: { message: "Saldo DB Fail" } }) }); // update saldo (ERROR)
+
+      mockSupabase.insert.mockResolvedValueOnce({ error: null }); // insert pencairan
+
+      await expect(DeliverablesService.confirmOrderComplete("order-1", "user-1")).rejects.toThrow(
+        "Gagal menambahkan saldo ke dompet penjual: Saldo DB Fail"
+      );
+    });
+
+    it("harus throw error jika gagal mengupdate state pencairan di tabel pesanan (errUpdate)", async () => {
+      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+
+      mockSupabase.single
+        .mockResolvedValueOnce({ data: { id_penyedia_jasa: "p1", total_biaya: 100000, status_pesanan: "Menunggu" } }) // fetch pesanan
+        .mockResolvedValueOnce({ data: { saldo: 50000 } }) // fetch penyedia
+        .mockResolvedValueOnce({ data: null, error: { message: "Update state fail" } }); // update state pencairan pesanan (ERROR)
+
+      mockSupabase.update
+        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: null }) }) // update status pesanan
+        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: null }) }); // update saldo
+
+      mockSupabase.insert.mockResolvedValueOnce({ error: null }); // insert pencairan
+
+      await expect(DeliverablesService.confirmOrderComplete("order-1", "user-1")).rejects.toThrow(
+        "Gagal mengupdate state pencairan di tabel pesanan"
+      );
+    });
+  });
+
+  // 5. Coverage: unggahBerkasDeliverable
+  describe("unggahBerkasDeliverable", () => {
+    it("harus throw error jika ukuran berkas melebihi 50 MB", async () => {
+      const bigFile = new File(["a".repeat(100)], "big.png", { type: "image/png" });
+      Object.defineProperty(bigFile, "size", { value: 51 * 1024 * 1024 });
+
+      await expect(DeliverablesService.unggahBerkasDeliverable(bigFile)).rejects.toThrow(
+        "Ukuran berkas melebihi batas maksimum 50 MB"
+      );
+    });
+
+    it("harus throw error jika tipe berkas tidak diizinkan", async () => {
+      const invalidFile = new File(["test"], "exe.exe", { type: "application/x-msdownload" });
+
+      await expect(DeliverablesService.unggahBerkasDeliverable(invalidFile)).rejects.toThrow(
+        "Tipe berkas application/x-msdownload tidak diizinkan untuk deliverable"
+      );
+    });
+  });
+});
 });

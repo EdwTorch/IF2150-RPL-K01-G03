@@ -1,7 +1,29 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { NextRequest } from 'next/server';
 
-vi.mock('@/lib/supabase/server', () => ({ createClient: vi.fn() }));
+let mockPesananSupabaseResponse: { data: unknown; error: unknown } = { data: null, error: null };
+let mockGetUserResult: { data: { user: unknown }; error: unknown } = { data: { user: null }, error: null };
+
+const createMockSupabase = () => {
+  const q: Record<string, unknown> = {};
+  q.select = vi.fn().mockReturnValue(q);
+  q.eq = vi.fn().mockReturnValue(q);
+  q.order = vi.fn().mockImplementation(() => Promise.resolve(mockPesananSupabaseResponse));
+  q.maybeSingle = vi.fn().mockImplementation(() => Promise.resolve(mockPesananSupabaseResponse));
+  q.single = vi.fn().mockImplementation(() => Promise.resolve(mockPesananSupabaseResponse));
+  q.insert = vi.fn().mockReturnValue(q);
+  q.update = vi.fn().mockReturnValue(q);
+  return {
+    from: vi.fn().mockReturnValue(q),
+    auth: {
+      getUser: vi.fn(async () => mockGetUserResult),
+    },
+  };
+};
+
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(async () => createMockSupabase()),
+}));
 vi.mock('@/lib/mocks/pesanan.mock', () => import('../lib/mocks/pesanan.mock'));
 vi.mock('@/services/pesanan.service', () => import('../services/pesanan.service'));
 
@@ -521,5 +543,386 @@ describe('HTTP Route Handlers /api/pesanan & /api/pesanan/[id_pesanan]', () => {
       params: { id_pesanan: 'tidak-ada' },
     });
     expect(res.status).toBe(404);
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] mode mock mengambil userId dari session supabase jika body user_id kosong', async () => {
+    mockGetUserResult = { data: { user: { id: PENYEDIA_JASA_1 } }, error: null };
+    const req = new NextRequest('http://localhost/api/pesanan/c0000000-0000-4000-8000-000000000001', {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'terima' }),
+    });
+    const res = await patchDetailPesanan(req, {
+      params: { id_pesanan: 'c0000000-0000-4000-8000-000000000001' },
+    });
+    expect(res.status).toBe(200);
+  });
+});
+
+describe('PengontrolPesanan Operasi Supabase Database (C29, C30)', () => {
+  it('respondOrder memvalidasi aksi dan meneruskan ke konfirmasiPesanan', async () => {
+    await expect(
+      PengontrolPesanan.respondOrder({
+        id_pesanan: 'ord-1',
+        user_id: 'p1',
+        action: 'invalid_action',
+      })
+    ).rejects.toThrow('Tindakan konfirmasi tidak valid');
+
+    vi.spyOn(PengontrolPesanan, 'konfirmasiPesanan').mockResolvedValueOnce({
+      id_pesanan: 'ord-1',
+      status_pesanan: 'DIPROSES',
+    } as Pesanan);
+
+    const hasil = await PengontrolPesanan.respondOrder({
+      id_pesanan: 'ord-1',
+      user_id: 'p1',
+      action: 'Diterima',
+    });
+    expect(hasil.status_pesanan).toBe('DIPROSES');
+  });
+
+  it('buatPesananBaru memvalidasi input parameter dan brief', async () => {
+    await expect(PengontrolPesanan.buatPesananBaru('', 'j1', 'brief')).rejects.toThrow('Parameter pemesanan tidak valid');
+    await expect(PengontrolPesanan.buatPesananBaru('u1', '', 'brief')).rejects.toThrow('Parameter pemesanan tidak valid');
+    await expect(PengontrolPesanan.buatPesananBaru('u1', 'j1', '   ')).rejects.toThrow('Brief pemesanan wajib diisi');
+  });
+
+  it('buatPesananBaru melempar error saat query jasa gagal, jasa tidak ada, atau milik sendiri', async () => {
+    mockPesananSupabaseResponse = { data: null, error: { message: 'Koneksi gagal' } };
+    await expect(PengontrolPesanan.buatPesananBaru('u1', 'j1', 'brief')).rejects.toThrow('Koneksi gagal');
+
+    mockPesananSupabaseResponse = { data: null, error: null };
+    await expect(PengontrolPesanan.buatPesananBaru('u1', 'j1', 'brief')).rejects.toThrow('Data jasa tidak ditemukan');
+
+    mockPesananSupabaseResponse = {
+      data: { id_jasa: 'j1', id_penyedia_jasa: 'u1', harga: 50000 },
+      error: null,
+    };
+    await expect(PengontrolPesanan.buatPesananBaru('u1', 'j1', 'brief')).rejects.toThrow('Tidak dapat memesan jasa milik sendiri');
+  });
+
+  it('buatPesananBaru menolak jika pesanan aktif pengguna telah mencapai batas maksimum 2', async () => {
+    let callCount = 0;
+    const q: Record<string, unknown> = {};
+    q.select = vi.fn().mockReturnValue(q);
+    q.eq = vi.fn().mockReturnValue(q);
+    q.maybeSingle = vi.fn().mockImplementation(() => {
+      return Promise.resolve({
+        data: { id_jasa: 'j1', id_penyedia_jasa: 'p1', harga: 50000 },
+        error: null,
+      });
+    });
+    q.then = undefined;
+
+    // Call 1: jasa (maybeSingle) -> handled above
+    // Call 2: listAktif (direct or order)
+    mockPesananSupabaseResponse = {
+      data: [
+        { status_pesanan: 'MENUNGGU_PEMBAYARAN' },
+        { status_pesanan: 'MENUNGGU_KONFIRMASI' },
+        { status_pesanan: 'DIPROSES' },
+        { status_pesanan: 'MENUNGGU_KONFIRMASI_SELESAI' },
+        { status_pesanan: 'PENGAJUAN_REVISI' },
+      ],
+      error: null,
+    };
+
+    // Spy on apakahPesananAktif to return true
+    vi.spyOn(PengontrolPesanan, 'apakahPesananAktif').mockReturnValue(true);
+
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      from: vi.fn((table: string) => {
+        if (table === 'jasa') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                eq: vi.fn().mockReturnValue({
+                  maybeSingle: vi.fn().mockResolvedValue({
+                    data: { id_jasa: 'j1', id_penyedia_jasa: 'p1', harga: 50000 },
+                    error: null,
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({
+              data: [
+                { status_pesanan: 'DIPROSES' },
+                { status_pesanan: 'DIPROSES' },
+                { status_pesanan: 'DIPROSES' },
+                { status_pesanan: 'DIPROSES' },
+                { status_pesanan: 'DIPROSES' },
+              ],
+              error: null,
+            }),
+          }),
+        };
+      }),
+    });
+
+    await expect(PengontrolPesanan.buatPesananBaru('u1', 'j1', 'brief')).rejects.toThrow('Batas maksimal 2 pesanan aktif');
+  });
+
+  it('buatPesananBaru sukses membuat record pesanan di database', async () => {
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      from: vi.fn((table: string) => {
+        if (table === 'jasa') {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                eq: vi.fn().mockReturnValue({
+                  maybeSingle: vi.fn().mockResolvedValue({
+                    data: { id_jasa: 'j1', id_penyedia_jasa: 'p1', harga: 50000 },
+                    error: null,
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ data: [], error: null }),
+          }),
+          insert: vi.fn().mockReturnValue({
+            select: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: {
+                  id_pesanan: 'ord-sukses',
+                  id_jasa: 'j1',
+                  status_pesanan: 'MENUNGGU_PEMBAYARAN',
+                },
+                error: null,
+              }),
+            }),
+          }),
+        };
+      }),
+    });
+
+    const hasil = await PengontrolPesanan.buatPesananBaru('u1', 'j1', 'brief');
+    expect(hasil.id_pesanan).toBe('ord-sukses');
+  });
+
+  it('konfirmasiPesanan memvalidasi parameter dan menangani not found serta DB error', async () => {
+    await expect(PengontrolPesanan.konfirmasiPesanan('', 'p1', 'terima')).rejects.toThrow('Identitas pesanan tidak valid');
+    await expect(PengontrolPesanan.konfirmasiPesanan('ord-1', 'p1', 'invalid')).rejects.toThrow('Tindakan konfirmasi tidak valid');
+
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      from: vi.fn(() => ({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+          }),
+        }),
+      })),
+    });
+
+    await expect(PengontrolPesanan.konfirmasiPesanan('ord-not-found', 'p1', 'terima')).rejects.toThrow('Pesanan tidak ditemukan');
+  });
+
+  it('konfirmasiPesanan berhasil mengonfirmasi pesanan di database', async () => {
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      from: vi.fn(() => ({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: {
+                id_pesanan: 'ord-1',
+                id_penyedia_jasa: 'p1',
+                status_pesanan: 'MENUNGGU_KONFIRMASI',
+                status_pembayaran: 'LUNAS',
+              },
+              error: null,
+            }),
+          }),
+        }),
+        update: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            select: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: {
+                  id_pesanan: 'ord-1',
+                  status_pesanan: 'DIPROSES',
+                },
+                error: null,
+              }),
+            }),
+          }),
+        }),
+      })),
+    });
+
+    const hasil = await PengontrolPesanan.konfirmasiPesanan('ord-1', 'p1', 'terima');
+    expect(hasil.id_pesanan).toBe('ord-1');
+  });
+
+  it('ambilDaftarPesanan memvalidasi parameter dan mengembalikan data dari database', async () => {
+    await expect(PengontrolPesanan.ambilDaftarPesanan('', 'pengguna_jasa')).rejects.toThrow('ID pengguna tidak valid');
+    await expect(PengontrolPesanan.ambilDaftarPesanan('u1', 'admin' as never)).rejects.toThrow('Peran pengguna tidak valid');
+
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      from: vi.fn(() => ({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            order: vi.fn().mockResolvedValue({
+              data: [{ id_pesanan: 'ord-1', id_pengguna_jasa: 'u1' }],
+              error: null,
+            }),
+          }),
+        }),
+      })),
+    });
+
+    const hasil = await PengontrolPesanan.ambilDaftarPesanan('u1', 'pengguna_jasa');
+    expect(hasil).toHaveLength(1);
+  });
+
+  it('ambilDetailPesanan memvalidasi id dan menangani not found serta sukses', async () => {
+    await expect(PengontrolPesanan.ambilDetailPesanan('')).rejects.toThrow('ID pesanan tidak valid');
+
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      from: vi.fn(() => ({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+          }),
+        }),
+      })),
+    });
+    await expect(PengontrolPesanan.ambilDetailPesanan('ord-not-found')).rejects.toThrow('Pesanan tidak ditemukan');
+
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      from: vi.fn(() => ({
+        select: vi.fn().mockReturnValue({
+          eq: vi.fn().mockReturnValue({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: { id_pesanan: 'ord-1', brief: 'Brief' },
+              error: null,
+            }),
+          }),
+        }),
+      })),
+    });
+    const detail = await PengontrolPesanan.ambilDetailPesanan('ord-1');
+    expect(detail.id_pesanan).toBe('ord-1');
+  });
+});
+
+describe('Route Handler Pesanan Mode Non-Mock', () => {
+  beforeEach(() => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'false';
+  });
+
+  afterEach(() => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'true';
+  });
+
+  it('GET /api/pesanan mengambil daftar pesanan non-mock dan menampilkan pesan kosong jika data kosong', async () => {
+    vi.spyOn(PengontrolPesanan, 'ambilDaftarPesanan').mockResolvedValueOnce([]);
+    const resKosong = await getDaftarPesanan(new Request('http://localhost/api/pesanan?id_pengguna_jasa=u1'));
+    expect(resKosong.status).toBe(200);
+    const jsonKosong = await resKosong.json();
+    expect(jsonKosong.message).toBe('Daftar pesanan kosong');
+
+    vi.spyOn(PengontrolPesanan, 'ambilDaftarPesanan').mockResolvedValueOnce([
+      { id_pesanan: 'ord-1' } as Pesanan,
+    ]);
+    const resAda = await getDaftarPesanan(new Request('http://localhost/api/pesanan?id_pengguna_jasa=u1'));
+    expect(resAda.status).toBe(200);
+    const jsonAda = await resAda.json();
+    expect(jsonAda.message).toBe('Daftar pesanan berhasil diambil');
+  });
+
+  it('POST /api/pesanan membuat pesanan baru pada mode non-mock', async () => {
+    vi.spyOn(PengontrolPesanan, 'buatPesananBaru').mockResolvedValueOnce({
+      id_pesanan: 'ord-baru',
+      status_pesanan: 'MENUNGGU_PEMBAYARAN',
+    } as Pesanan);
+
+    const res = await postPesananBaru(
+      new Request('http://localhost/api/pesanan', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          id_pengguna_jasa: 'u1',
+          id_jasa: 'j1',
+          brief_kebutuhan: 'Desain logo',
+        }),
+      })
+    );
+    expect(res.status).toBe(201);
+    const json = await res.json();
+    expect(json.success).toBe(true);
+    expect(json.data.id_pesanan).toBe('ord-baru');
+  });
+
+  it('GET /api/pesanan/[id_pesanan] mengambil detail pesanan non-mock', async () => {
+    vi.spyOn(PengontrolPesanan, 'ambilDetailPesanan').mockResolvedValueOnce({
+      id_pesanan: 'ord-1',
+      brief: 'Brief pesanan',
+    } as Pesanan);
+
+    const res = await getDetailPesanan(new Request('http://localhost/api/pesanan/ord-1'), {
+      params: { id_pesanan: 'ord-1' },
+    });
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.data.id_pesanan).toBe('ord-1');
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] non-mock menolak 401 jika auth error atau user null', async () => {
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: { message: 'Unauthorized' } }),
+      },
+    });
+
+    const res = await patchDetailPesanan(
+      new NextRequest('http://localhost/api/pesanan/ord-1', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'terima' }),
+      }),
+      { params: { id_pesanan: 'ord-1' } }
+    );
+    expect(res.status).toBe(401);
+  });
+
+  it('PATCH /api/pesanan/[id_pesanan] non-mock sukses menerima pesanan', async () => {
+    const { createClient } = await import('@/lib/supabase/server');
+    (createClient as unknown as ReturnType<typeof vi.fn>).mockResolvedValueOnce({
+      auth: {
+        getUser: vi.fn().mockResolvedValue({ data: { user: { id: 'p1' } }, error: null }),
+      },
+    });
+    vi.spyOn(PengontrolPesanan, 'respondOrder').mockResolvedValueOnce({
+      id_pesanan: 'ord-1',
+      status_pesanan: 'DIPROSES',
+    } as Pesanan);
+
+    const res = await patchDetailPesanan(
+      new NextRequest('http://localhost/api/pesanan/ord-1', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'terima' }),
+      }),
+      { params: { id_pesanan: 'ord-1' } }
+    );
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.success).toBe(true);
+    expect(json.message).toContain('berhasil diterima');
   });
 });

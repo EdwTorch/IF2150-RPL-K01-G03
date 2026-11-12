@@ -520,4 +520,257 @@ describe('HTTP Route Handlers /api/transaksi/dummy & /api/transaksi', () => {
     const resTanpaId = await getTransaksi(new Request('http://localhost/api/transaksi'));
     expect(resTanpaId.status).toBe(400);
   });
+
+  it('HTTP Route Handlers mode non-mock untuk metode, detail metode, riwayat, dan dummy payment', async () => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'false';
+
+    // GET ?type=metode
+    vi.spyOn(PengontrolTransaksi, 'ambilDaftarMetode').mockResolvedValueOnce(daftarMetode);
+    const resMetode = await getTransaksi(new Request('http://localhost/api/transaksi?type=metode'));
+    expect(resMetode.status).toBe(200);
+    const jsonMetode = await resMetode.json();
+    expect(jsonMetode.data).toHaveLength(2);
+
+    // GET ?id_metode=...
+    vi.spyOn(PengontrolTransaksi, 'dapatkanDetailMetode').mockResolvedValueOnce(daftarMetode[0]);
+    const resDetail = await getTransaksi(new Request('http://localhost/api/transaksi?id_metode=VA_BCA'));
+    expect(resDetail.status).toBe(200);
+    const jsonDetail = await resDetail.json();
+    expect(jsonDetail.data.id_metode).toBe('VA_BCA');
+
+    // GET ?id_pengguna_jasa=...
+    vi.spyOn(PengontrolTransaksi, 'ambilRiwayatTransaksi').mockResolvedValueOnce([
+      { id_transaksi: 't1', id_pesanan: 'ord-1' } as RiwayatTransaksi,
+    ]);
+    const resRiwayat = await getTransaksi(new Request('http://localhost/api/transaksi?id_pengguna_jasa=u1'));
+    expect(resRiwayat.status).toBe(200);
+    const jsonRiwayat = await resRiwayat.json();
+    expect(jsonRiwayat.data).toHaveLength(1);
+
+    // POST /api/transaksi/dummy
+    vi.spyOn(PengontrolTransaksi, 'prosesPembayaranDummy').mockResolvedValueOnce({
+      transaksi: { id_transaksi: 'tx-new', status_transaksi: 'BERHASIL' } as RiwayatTransaksi,
+      pesanan: { id_pesanan: 'ord-1', status_pesanan: 'DIPROSES' } as Pesanan,
+    });
+    const resDummy = await postPembayaranDummy(
+      new Request('http://localhost/api/transaksi/dummy', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id_pesanan: 'ord-1', id_metode: 'VA_BCA' }),
+      })
+    );
+    expect(resDummy.status).toBe(201);
+    const jsonDummy = await resDummy.json();
+    expect(jsonDummy.success).toBe(true);
+    expect(jsonDummy.data.transaksi.status_transaksi).toBe('BERHASIL');
+  });
+});
+
+describe('PengontrolTransaksi Supabase Edge Cases & Error Handling (C31-C34)', () => {
+  it('ambilDaftarMetode menangani error dan sukses query', async () => {
+    mockCreateClient.mockResolvedValueOnce({
+      from: () => ({
+        select: () => ({
+          order: vi.fn().mockResolvedValue({ data: null, error: { message: 'Database error' } }),
+        }),
+      }),
+    });
+    await expect(PengontrolTransaksi.ambilDaftarMetode()).rejects.toThrow('Database error');
+
+    mockCreateClient.mockResolvedValueOnce({
+      from: () => ({
+        select: () => ({
+          order: vi.fn().mockResolvedValue({ data: daftarMetode, error: null }),
+        }),
+      }),
+    });
+    const hasil = await PengontrolTransaksi.ambilDaftarMetode();
+    expect(hasil).toHaveLength(2);
+  });
+
+  it('prosesPembayaranDummy memvalidasi parameter dan menangani update nonaktif atau rollback saat insert gagal', async () => {
+    await expect(PengontrolTransaksi.prosesPembayaranDummy('', 'VA_BCA')).rejects.toThrow('Parameter pembayaran tidak valid');
+    await expect(PengontrolTransaksi.prosesPembayaranDummy('ord-1', '')).rejects.toThrow('Parameter pembayaran tidak valid');
+
+    // Jasa metode ditemukan, tetapi pesanan update mengembalikan null (sudah bukan menunggu pembayaran)
+    vi.spyOn(PengontrolTransaksi, 'dapatkanDetailMetode').mockResolvedValueOnce(daftarMetode[0]);
+    mockCreateClient.mockResolvedValueOnce({
+      from: (table: string) => {
+        if (table === 'pesanan') {
+          return {
+            select: () => ({
+              eq: () => ({
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: {
+                    id_pesanan: 'ord-1',
+                    total_biaya: 250000,
+                    status_pembayaran: 'MENUNGGU_PEMBAYARAN',
+                    status_pesanan: 'MENUNGGU_PEMBAYARAN',
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+            update: () => ({
+              eq: () => ({
+                neq: () => ({
+                  select: () => ({
+                    maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        return {};
+      },
+    });
+
+    await expect(PengontrolTransaksi.prosesPembayaranDummy('ord-1', 'VA_BCA', 250000)).rejects.toThrow(
+      'Pesanan tidak dalam status menunggu pembayaran'
+    );
+
+    // Rollback saat insert riwayat_transaksi error
+    vi.spyOn(PengontrolTransaksi, 'dapatkanDetailMetode').mockResolvedValueOnce(daftarMetode[0]);
+    const mockUpdateRollback = vi.fn().mockReturnValue({ eq: vi.fn().mockResolvedValue({}) });
+
+    mockCreateClient.mockResolvedValueOnce({
+      from: (table: string) => {
+        if (table === 'pesanan') {
+          return {
+            select: () => ({
+              eq: () => ({
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: {
+                    id_pesanan: 'ord-1',
+                    total_biaya: 250000,
+                    status_pembayaran: 'MENUNGGU_PEMBAYARAN',
+                    status_pesanan: 'MENUNGGU_PEMBAYARAN',
+                  },
+                  error: null,
+                }),
+              }),
+            }),
+            update: () => ({
+              eq: () => ({
+                neq: () => ({
+                  select: () => ({
+                    maybeSingle: vi.fn().mockResolvedValue({
+                      data: {
+                        id_pesanan: 'ord-1',
+                        status_pembayaran: 'LUNAS',
+                        status_pesanan: 'DIPROSES',
+                      },
+                      error: null,
+                    }),
+                  }),
+                }),
+              }),
+            }),
+          };
+        }
+        if (table === 'riwayat_transaksi') {
+          return {
+            insert: () => ({
+              select: () => ({
+                single: vi.fn().mockResolvedValue({
+                  data: null,
+                  error: { message: 'Insert riwayat failed' },
+                }),
+              }),
+            }),
+          };
+        }
+        return { update: mockUpdateRollback };
+      },
+    });
+
+    await expect(PengontrolTransaksi.prosesPembayaranDummy('ord-1', 'VA_BCA', 250000)).rejects.toThrow(
+      'Insert riwayat failed'
+    );
+  });
+
+  it('ambilRiwayatTransaksi memvalidasi peran dan menangani error DB', async () => {
+    await expect(PengontrolTransaksi.ambilRiwayatTransaksi('', 'pengguna_jasa')).rejects.toThrow('ID pengguna tidak valid');
+    await expect(PengontrolTransaksi.ambilRiwayatTransaksi('u1', 'admin' as never)).rejects.toThrow('Peran pengguna tidak valid');
+
+    mockCreateClient.mockResolvedValueOnce({
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            order: vi.fn().mockResolvedValue({ data: null, error: { message: 'Query error' } }),
+          }),
+        }),
+      }),
+    });
+    await expect(PengontrolTransaksi.ambilRiwayatTransaksi('u1', 'pengguna_jasa')).rejects.toThrow('Query error');
+  });
+
+  it('setPencairanDana memvalidasi status pencairan dan sukses jika belum dicairkan', async () => {
+    await expect(PengontrolTransaksi.setPencairanDana('', true)).rejects.toThrow('ID pesanan tidak valid');
+    await expect(PengontrolTransaksi.setPencairanDana('ord-1', false)).rejects.toThrow('hanya dapat dilakukan untuk pesanan selesai');
+
+    // Gagal update karena data.id_pesanan null
+    mockCreateClient.mockResolvedValueOnce({
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: {
+                id_pesanan: 'ord-1',
+                status_pembayaran: 'LUNAS',
+                status_pesanan: 'SELESAI',
+                status_pencairan: false,
+              },
+              error: null,
+            }),
+          }),
+        }),
+        update: () => ({
+          eq: () => ({
+            eq: () => ({
+              select: () => ({
+                maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+              }),
+            }),
+          }),
+        }),
+      }),
+    });
+
+    await expect(PengontrolTransaksi.setPencairanDana('ord-1', true)).rejects.toThrow(
+      'Dana untuk pesanan ini sudah dicairkan sebelumnya'
+    );
+
+    // Sukses pencairan dana
+    mockCreateClient.mockResolvedValueOnce({
+      from: () => ({
+        select: () => ({
+          eq: () => ({
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: {
+                id_pesanan: 'ord-1',
+                status_pembayaran: 'LUNAS',
+                status_pesanan: 'SELESAI',
+                status_pencairan: false,
+              },
+              error: null,
+            }),
+          }),
+        }),
+        update: () => ({
+          eq: () => ({
+            eq: () => ({
+              select: () => ({
+                maybeSingle: vi.fn().mockResolvedValue({ data: { id_pesanan: 'ord-1' }, error: null }),
+              }),
+            }),
+          }),
+        }),
+      }),
+    });
+
+    const sukses = await PengontrolTransaksi.setPencairanDana('ord-1', true);
+    expect(sukses).toBe(true);
+  });
 });
