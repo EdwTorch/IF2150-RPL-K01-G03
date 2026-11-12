@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import type { Jasa } from '../models/types';
 import {
   LayananPembandingJasa,
@@ -8,6 +8,34 @@ import {
   MAKS_LIMIT_PENCARIAN,
 } from '../services/pencarian.service';
 import { GET as getJasa } from '../app/api/jasa/route';
+
+// Mock Supabase Server
+let mockSupabaseSelectResult: { data: unknown; error: unknown } = { data: [], error: null };
+let mockSupabaseInResult: { data: unknown; error: unknown } = { data: [], error: null };
+
+const createMockSupabase = () => {
+  const queryBuilder: Record<string, unknown> = {};
+  queryBuilder.select = vi.fn().mockReturnValue(queryBuilder);
+  queryBuilder.eq = vi.fn().mockReturnValue(queryBuilder);
+  queryBuilder.or = vi.fn().mockReturnValue(queryBuilder);
+  queryBuilder.ilike = vi.fn().mockReturnValue(queryBuilder);
+  queryBuilder.gte = vi.fn().mockReturnValue(queryBuilder);
+  queryBuilder.lte = vi.fn().mockReturnValue(queryBuilder);
+  queryBuilder.in = vi.fn().mockImplementation(() => {
+    return {
+      eq: vi.fn().mockImplementation(() => Promise.resolve(mockSupabaseInResult)),
+    };
+  });
+  queryBuilder.order = vi.fn().mockImplementation(() => Promise.resolve(mockSupabaseSelectResult));
+
+  return {
+    from: vi.fn().mockReturnValue(queryBuilder),
+  };
+};
+
+vi.mock('@/lib/supabase/server', () => ({
+  createClient: vi.fn(async () => createMockSupabase()),
+}));
 
 const jasa = (o: Partial<Jasa> & Pick<Jasa, 'id_jasa'>): Jasa => ({
   id_penyedia_jasa: 'p1',
@@ -172,5 +200,119 @@ describe('Route Handler GET /api/jasa (Pencarian & Komparasi)', () => {
     const json = await res.json();
     expect(json.error_code).toBe('VALIDATION_ERROR');
     expect(json.message).toContain('Maksimal 4 jasa');
+  });
+
+  it('mendukung mode non-mock untuk perbandingan jasa (?compare=id1,id2)', async () => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'false';
+    mockSupabaseInResult = {
+      data: [
+        jasa({ id_jasa: 'j1', nama_jasa: 'Jasa 1', harga: 100000, rating_rata_rata: 4.5 }),
+        jasa({ id_jasa: 'j2', nama_jasa: 'Jasa 2', harga: 200000, rating_rata_rata: 4.8 }),
+      ],
+      error: null,
+    };
+
+    const res = await getJasa(new Request('http://localhost/api/jasa?compare=j1,j2'));
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.success).toBe(true);
+    expect(json.data.ringkasan.id_termurah).toBe('j1');
+    expect(json.data.ringkasan.id_termahal).toBe('j2');
+  });
+
+  it('mendukung mode non-mock untuk pencarian dengan filter', async () => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'false';
+    mockSupabaseSelectResult = {
+      data: [
+        jasa({ id_jasa: 'j1', nama_jasa: 'Desain Logo Unik', harga: 150000, kategori: 'Desain Grafis', rating_rata_rata: 4.5 }),
+      ],
+      error: null,
+    };
+
+    const res = await getJasa(new Request('http://localhost/api/jasa?q=Logo&kategori=Desain%20Grafis&harga_min=100000&harga_max=200000&rating_min=4&rating_max=5&sort=harga_asc&limit=10'));
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.success).toBe(true);
+    expect(json.data).toHaveLength(1);
+    expect(json.message).toBe('Data penawaran jasa berhasil diambil');
+  });
+
+  it('mengembalikan pesan "Data jasa tidak ditemukan" jika hasil pencarian kosong pada mode non-mock', async () => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'false';
+    mockSupabaseSelectResult = { data: [], error: null };
+
+    const res = await getJasa(new Request('http://localhost/api/jasa?q=TidakAda'));
+    expect(res.status).toBe(200);
+    const json = await res.json();
+    expect(json.data).toEqual([]);
+    expect(json.message).toBe('Data jasa tidak ditemukan');
+  });
+
+  it('mengembalikan status 500 jika terjadi kegagalan basis data pada mode non-mock', async () => {
+    process.env.NEXT_PUBLIC_USE_MOCK = 'false';
+    mockSupabaseSelectResult = { data: null, error: { message: 'Database connection failed' } };
+
+    const res = await getJasa(new Request('http://localhost/api/jasa?q=Logo'));
+    expect(res.status).toBe(500);
+    const json = await res.json();
+    expect(json.success).toBe(false);
+    expect(json.error_code).toBe('DATABASE_ERROR');
+  });
+});
+
+describe('LayananPencarian & LayananPembandingJasa Integrasi Supabase (Algo-1701, 1702, 1801)', () => {
+  it('cariJasaBerdasarkanKeyword melempar error jika keyword kurang dari 3 karakter setelah dinormalisasi', async () => {
+    await expect(LayananPencarian.cariJasaBerdasarkanKeyword('ab')).rejects.toThrow('Keyword Pencarian Minimal 3 karakter');
+    await expect(LayananPencarian.cariJasaBerdasarkanKeyword('   %a%  ')).rejects.toThrow('Keyword Pencarian Minimal 3 karakter');
+  });
+
+  it('cariJasaBerdasarkanKeyword berhasil memanggil terapkanFilterPencarian dan mengembalikan data', async () => {
+    mockSupabaseSelectResult = {
+      data: [jasa({ id_jasa: 'j1', nama_jasa: 'Desain Logo Modern', rating_rata_rata: 4.7 })],
+      error: null,
+    };
+
+    const hasil = await LayananPencarian.cariJasaBerdasarkanKeyword('Logo');
+    expect(hasil).toHaveLength(1);
+    expect(hasil[0].id_jasa).toBe('j1');
+  });
+
+  it('terapkanFilterPencarian melempar error jika query supabase gagal', async () => {
+    mockSupabaseSelectResult = {
+      data: null,
+      error: { message: 'Koneksi database terputus' },
+    };
+
+    await expect(LayananPencarian.terapkanFilterPencarian({ keyword: 'Logo' })).rejects.toThrow('Koneksi database terputus');
+  });
+
+  it('bandingkanSpesifikasiJasa memvalidasi jumlah ID jasa yang diberikan', async () => {
+    await expect(LayananPembandingJasa.bandingkanSpesifikasiJasa(['j1'])).rejects.toThrow('Minimal 2 ID');
+    await expect(LayananPembandingJasa.bandingkanSpesifikasiJasa(['j1', 'j2', 'j3', 'j4', 'j5'])).rejects.toThrow('Maksimal 4 jasa');
+  });
+
+  it('bandingkanSpesifikasiJasa melempar error jika query supabase gagal', async () => {
+    mockSupabaseInResult = {
+      data: null,
+      error: { message: 'Gagal mengambil data komparasi' },
+    };
+
+    await expect(LayananPembandingJasa.bandingkanSpesifikasiJasa(['j1', 'j2'])).rejects.toThrow('Gagal mengambil data komparasi');
+  });
+
+  it('bandingkanSpesifikasiJasa berhasil menyusun matriks dari database', async () => {
+    mockSupabaseInResult = {
+      data: [
+        jasa({ id_jasa: 'j1', nama_jasa: 'Logo Murah', harga: 50000, rating_rata_rata: 4.2 }),
+        jasa({ id_jasa: 'j2', nama_jasa: 'Logo Premium', harga: 500000, rating_rata_rata: 4.9 }),
+      ],
+      error: null,
+    };
+
+    const hasil = await LayananPembandingJasa.bandingkanSpesifikasiJasa(['j1', 'j2']);
+    expect(hasil.ringkasan.id_termurah).toBe('j1');
+    expect(hasil.ringkasan.id_termahal).toBe('j2');
+    expect(hasil.ringkasan.selisih_harga).toBe(450000);
+    expect(hasil.ringkasan.id_rating_tertinggi).toBe('j2');
   });
 });
