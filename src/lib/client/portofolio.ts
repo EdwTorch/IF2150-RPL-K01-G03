@@ -1,53 +1,56 @@
 import { api } from "@/lib/api";
-import { mockAmbilPortofolio, mockSimpanPortofolio } from "@/lib/mock/portofolio";
+import { unggahBerkas } from "@/lib/client/upload";
 
-/** DRAF — samakan dengan backend kalau route portofolio sudah dibuat */
-export type BerkasKarya = {
-  nama: string;
-  ukuran: number; // byte
-  tipe: string; // mime type, mis. "image/png"
-  url: string;
-};
-
+/** Sama dengan services/portofolio.service.ts */
 export type KaryaPortofolio = {
-  id: string;
+  id_portofolio: string;
   judul: string;
-  deskripsi: string;
-  berkas_pendukung: BerkasKarya;
+  deskripsi: string | null;
+  berkas_pendukung: string | null;
+  created_at?: string;
 };
 
 export type DataPortofolio = {
-  pengalaman: string; // satu baris = satu pengalaman
-  prestasi: string; // satu baris = satu prestasi
+  pengalaman: string[];
+  prestasi: string[];
   daftar_karya: KaryaPortofolio[];
 };
 
 export type IsianPortofolio = {
   judul: string;
   deskripsi: string;
-  pengalaman: string;
-  prestasi: string;
-  berkas_pendukung: File | null;
+  pengalaman: string[];
+  prestasi: string[];
+  berkas_pendukung: File;
 };
 
-const PORTOFOLIO_SUDAH_ADA = false; // ubah jadi true kalau backend sudah siap
+/** Sama dengan validasi /api/upload (folder "portofolio") dan DPPL I-03 */
+export const FORMAT_BERKAS_PORTOFOLIO = ["jpg", "jpeg", "png", "pdf"];
+export const MAKS_MB_PORTOFOLIO = 10;
 
-/** tampilkanPortofolio() — ambil data portofolio penyedia yang sedang login */
-export function ambilPortofolio() {
-  if (!PORTOFOLIO_SUDAH_ADA) return mockAmbilPortofolio();
-  return api<DataPortofolio>("/api/portofolio");
+type Respons<T> = { success: true; message: string; data: T };
+
+/** tampilkanPortofolio() → GET /api/portofolio */
+export async function ambilPortofolio() {
+  return (await api<Respons<DataPortofolio>>("/api/portofolio")).data;
 }
 
-/** kirimPortofolio(data) — dikirim sebagai FormData karena ada berkas */
-export function simpanPortofolio(isian: IsianPortofolio) {
-  if (!PORTOFOLIO_SUDAH_ADA) return mockSimpanPortofolio(isian);
-
-  const form_data = new FormData();
-  form_data.append("judul", isian.judul);
-  form_data.append("deskripsi", isian.deskripsi);
-  form_data.append("pengalaman", isian.pengalaman);
-  form_data.append("prestasi", isian.prestasi);
-  if (isian.berkas_pendukung) form_data.append("berkas_pendukung", isian.berkas_pendukung);
-
-  return api<DataPortofolio>("/api/portofolio", { method: "POST", body: form_data });
+/**
+ * kirimPortofolio(data) — Algo-0801:
+ * 1) unggah berkas → POST /api/upload (folder "portofolio")
+ * 2) simpan karya + pengalaman/prestasi → POST /api/portofolio
+ */
+export async function simpanPortofolio(isian: IsianPortofolio) {
+  const { url } = await unggahBerkas(isian.berkas_pendukung, "portofolio");
+  const respons = await api<Respons<DataPortofolio>>("/api/portofolio", {
+    method: "POST",
+    body: {
+      judul: isian.judul.trim(),
+      deskripsi: isian.deskripsi.trim(),
+      berkas_pendukung: url,
+      pengalaman: isian.pengalaman,
+      prestasi: isian.prestasi,
+    },
+  });
+  return respons.data;
 }
