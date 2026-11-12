@@ -1,9 +1,13 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import path from 'path';
 import fs from 'fs/promises';
 import { LocalStorageService } from '@/services/storage/local.storage';
 import { SupabaseStorageService } from '@/services/storage/supabase.storage';
-import * as SupabaseJs from '@supabase/supabase-js';
+import { createClient } from '@supabase/supabase-js';
+
+vi.mock('@supabase/supabase-js', () => ({
+  createClient: vi.fn(),
+}));
 
 describe('Dual Storage Adapter (LocalStorageService & SupabaseStorageService)', () => {
   beforeEach(() => {
@@ -90,7 +94,7 @@ describe('Dual Storage Adapter (LocalStorageService & SupabaseStorageService)', 
     };
 
     beforeEach(() => {
-      vi.spyOn(SupabaseJs, 'createClient').mockReturnValue({
+      vi.mocked(createClient).mockReturnValue({
         storage: mockStorageClient,
       } as any);
     });
@@ -193,6 +197,54 @@ describe('Dual Storage Adapter (LocalStorageService & SupabaseStorageService)', 
       // Inisialisasi SupabaseStorageService
       const supabaseService = new SupabaseStorageService();
       expect(supabaseService).toBeInstanceOf(SupabaseStorageService);
+    });
+
+    it('mengembalikan LocalStorageService jika STORAGE_DRIVER=local (line 13–14)', async () => {
+      // Reset singleton via dynamic import trick
+      vi.resetModules();
+      process.env.STORAGE_DRIVER = 'local';
+
+      const { getStorageService } = await import('@/services/storage/index');
+      const service = getStorageService();
+      expect(service.constructor.name).toBe('LocalStorageService');
+
+      delete process.env.STORAGE_DRIVER;
+    });
+
+    it('mengembalikan SupabaseStorageService jika STORAGE_DRIVER=supabase (default, line 15–17)', async () => {
+      vi.resetModules();
+      process.env.STORAGE_DRIVER = 'supabase';
+      process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://mock.supabase.co';
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'mock-key';
+
+      const { getStorageService } = await import('@/services/storage/index');
+      const service = getStorageService();
+      expect(service.constructor.name).toBe('SupabaseStorageService');
+
+      delete process.env.STORAGE_DRIVER;
+    });
+
+    it('mengembalikan instance yang sama (singleton) pada pemanggilan berulang (line 8–18)', async () => {
+      vi.resetModules();
+      process.env.STORAGE_DRIVER = 'local';
+
+      const { getStorageService } = await import('@/services/storage/index');
+      const s1 = getStorageService();
+      const s2 = getStorageService();
+      expect(s1).toBe(s2);
+
+      delete process.env.STORAGE_DRIVER;
+    });
+
+    it('mengembalikan SupabaseStorageService jika env STORAGE_DRIVER tidak diset (default, line 10)', async () => {
+      vi.resetModules();
+      delete process.env.STORAGE_DRIVER;
+      process.env.NEXT_PUBLIC_SUPABASE_URL = 'https://mock.supabase.co';
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY = 'mock-key';
+
+      const { getStorageService } = await import('@/services/storage/index');
+      const service = getStorageService();
+      expect(service.constructor.name).toBe('SupabaseStorageService');
     });
   });
 });
