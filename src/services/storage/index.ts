@@ -1,4 +1,4 @@
-import { StorageService } from "./storage.interface";
+import type { StorageService } from "./storage.interface";
 import { LocalStorageService } from "./local.storage";
 import { SupabaseStorageService } from "./supabase.storage";
 
@@ -20,4 +20,4 @@ export function getStorageService(): StorageService {
     return storageInstance;
 }
 
-export * from "./storage.interface";
+export type * from "./storage.interface";
