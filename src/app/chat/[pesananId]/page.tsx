@@ -211,7 +211,7 @@ function HalamanChatIsi() {
     if (!berkas) return;
     setMengunggah(true);
     try {
-      const { url, nama } = await unggahBerkas(berkas);
+      const { url, nama } = await unggahBerkas(berkas, "chat");
       await kirim(nama, url);
     } catch {
       tampilkanPesanError("Lampiran gagal diunggah. Coba lagi.");
@@ -362,8 +362,8 @@ function HalamanChatIsi() {
               {/* Input pesan */}
               <form onSubmit={tombolKirimTerklik} className="flex flex-col gap-1 border-t border-line px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <input ref={input_dokumen} type="file" accept=".pdf,.doc,.docx,.zip" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
-                  <input ref={input_foto} type="file" accept="image/*" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
+                <input ref={input_dokumen} type="file" accept=".pdf" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
+                <input ref={input_foto} type="file" accept=".png,.jpg,.jpeg,.webp" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
 
                   <button type="button" onClick={() => input_dokumen.current?.click()} disabled={mengunggah} aria-label="Lampirkan dokumen" className="flex size-11 shrink-0 items-center justify-center rounded-field bg-canvas hover:bg-line disabled:opacity-50">
                     <Image src="/icons/lampiran.svg" alt="" width={20} height={20} />
