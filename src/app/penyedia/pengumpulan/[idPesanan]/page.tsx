@@ -17,7 +17,7 @@ import {
   FORMAT_BERKAS,
   MAX_MB,
   kirimHasil,
-} from "@/lib/layanan";
+} from "@/lib/client/produk-akhir";
 
 type ErrorForm = {
   desk?: string;
@@ -54,8 +54,24 @@ export default function HalamanPengumpulan() {
       errorBaru.url = " ";
     }
 
-    if (url.trim() && !/^https:\/\//i.test(url.trim())) {
-      errorBaru.url = "Tautan harus diawali https://";
+    if (url.trim()) {
+      try {
+        const tautanInput = url.trim();
+        const tautan = new URL(
+          /^[a-z][a-z\d+.-]*:\/\//i.test(tautanInput)
+            ? tautanInput
+            : `https://${tautanInput}`
+        );
+
+        if (
+          !["http:", "https:"].includes(tautan.protocol) ||
+          !tautan.hostname.includes(".")
+        ) {
+          errorBaru.url = "Format tautan tidak valid.";
+        }
+      } catch {
+        errorBaru.url = "Format tautan tidak valid.";
+      }
     }
 
     setError(errorBaru);
@@ -122,7 +138,7 @@ export default function HalamanPengumpulan() {
               label="Unggah Berkas Hasil"
               format={FORMAT_BERKAS}
               maksMB={MAX_MB}
-              maksBerkas={5}
+              maksBerkas={3}
               berkas={files}
               onUbah={setFiles}
               error={error.berkas}

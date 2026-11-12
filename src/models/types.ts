@@ -27,11 +27,10 @@ export interface Bookmark {
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
-  id_produk_akhir: string; 
+  id_produk_akhir: string;
   id_pesanan: string;
-  output_path?: string; 
   deskripsi_produk: string;
-  file_url?: string; //bra
+  file_url?: string;
   status_pemeriksaan?: boolean;
   created_at?: string;
 }
