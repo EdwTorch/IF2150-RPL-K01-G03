@@ -109,7 +109,10 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Gemini | Membuat Backend | Berdasarkan DPPL Bagian X, bagaimana cara saya membuat backend dan bantu saya membuat kodenya  | AI Memberikan Kode, saya (Edward) mengetes dan memberikan masukan sesuai kriteria DPPL yang seharusnya |
 | Gemini (Antigravity) | Planning implementasi per-issue | Kita akan mengerjakan Issue #42. <br> Aturan kerja yang wajib diikuti: <br> 1. Ikuti hierarki dokumen AGENTS.md, MODELS.md, dan PLAN.md. <br> 2. Branch aktif saat ini: feat/be-jasa-crud (sudah sinkron dengan origin/development). <br> 3. Jelaskan apa yang anda kerjakan, agar saya dapat memahaminya <br> Mulai dari langkah pertama: buatlah planning menyeluruh terkait implementasi dari issue ini. | Plan di-*review*, jika terdapat ketidaksesuaian dengan milestone sebelumnya, AI akan diminta melakukan revisi. Saya (Danesh) juga mengecek apakah terdapat rencana yang redundan. |
 | Gemini | Membantu membuat test | Saya sudah mengimplementasikan fitur autentikasi yang berada pada src/..., tolong bantu saya membuat file test case pada src/test yang mengcover seluruh fitur yang sudah saya implementasikan | AI memberikan file untuk pengetesan kode yang sudah saya implementasikan sebelumnya, lalu saya (Revandra) me-review ulang apakah seluruh fitur sudah di-cover secara benar. |
-
+| Claude & ChatGPT | Necia | Tolong bantu buatkan FE dengan instrumen sebagai berikut ...  | AI Memberikan kode pembuatan FE, saya (Necia) melakukan review ulang dan memastikan sudah sesuai dengan spesifikasi mockup yang sudah pernah dibuat |
+| Claude & ChatGPT | Necia | Tolong bantu integrasikan FE dan BE pada bagian berikut ...  | AI Memberikan bantuan integrasi, saya (Necia) melakukan review dan testing integrasi yang telah dibuat |
+| Claude & ChatGPT | There | Tolong bantu buatkan FE dengan instrumen sebagai berikut ...  | AI memberi kode program FE, saya (There) melakukan review, membaca kode yang diberikan dan menyesuaikan dengan spesifikasi mockup yang sudah pernah dibuat |
+| Claude & ChatGPT | There | Tolong bantu integrasikan FE dan BE pada bagian berikut ...  | AI Memberikan bantuan integrasi, saya (There) melakukan review dan testing integrasi yang telah dibuat |
 
 ### Pernyataan Integritas dan Persetujuan
 
