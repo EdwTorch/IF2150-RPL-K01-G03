@@ -20,18 +20,12 @@ const TAB = ["Semua", "Berjalan", "Selesai", "Dikembalikan"] as const;
 
 type Tab = (typeof TAB)[number];
 type StatusTampilan =
-  | "menunggu_pembayaran" | "menunggu_konfirmasi" | "berjalan" | "cek" | "komplain" | "selesai" | "ditolak" | "dikembalikan" | "dibatalkan";
+   | "menunggu_konfirmasi" | "berjalan" | "cek" | "komplain" | "selesai" | "ditolak" | "dikembalikan" | "dibatalkan";
 
 const STATUS: Record<
   StatusTampilan,
   [string, string, string, "secondary" | "accent" | "primary"]
 > = {
-  menunggu_pembayaran: [
-    "Menunggu pembayaran",
-    "text-ink-muted",
-    "Lihat pesanan",
-    "secondary",
-  ],
   menunggu_konfirmasi: [
     "Menunggu konfirmasi penyedia",
     "text-ink",
@@ -90,8 +84,6 @@ function tentukanStatus(statusPesanan: string): StatusTampilan {
   const status = normalisasiStatus(statusPesanan);
 
   switch (status) {
-    case "MENUNGGU_PEMBAYARAN":
-      return "menunggu_pembayaran";
 
     case "MENUNGGU_KONFIRMASI":
       return "menunggu_konfirmasi";
@@ -152,7 +144,8 @@ export default function HalamanRiwayatTransaksi() {
 
     ambilDaftarPesanan()
       .then((data) => {
-        if (aktif) setTransaksi(data);
+        // Pesanan yang belum dibayar tidak ditampilkan di riwayat transaksi
+        if (aktif) setTransaksi(data.filter((p) => normalisasiStatus(p.status_pesanan) !== "MENUNGGU_PEMBAYARAN"));
       })
       .catch((err: unknown) => {
         if (!aktif) return;
@@ -175,7 +168,6 @@ export default function HalamanRiwayatTransaksi() {
     const status = tentukanStatus(item.status_pesanan);
 
     return (
-      status === "menunggu_pembayaran" ||
       status === "menunggu_konfirmasi" ||
       status === "berjalan" ||
       status === "cek" ||
