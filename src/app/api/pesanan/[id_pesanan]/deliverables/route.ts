@@ -1,180 +1,72 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DeliverablesService } from "@/services/deliverables.service";
-import { createClient } from "@/lib/supabase/server";
+import { belumLogin, responsGagal, userLogin, type KonteksPesanan } from "./helper";
 
-/**
- * Helper internal untuk menerjemahkan error teknis & validasi service
- */
-function handleCustomError(err: any): { message: string; status: number } {
-  const raw_message = err.message || "";
-
-  // 1. Error Akses / Kepemilikan
-  if (raw_message.includes("Akses ditolak")) {
-    return { message: raw_message, status: 403 };
-  }
-
-  // 2. Error Data Tidak Ditemukan
-  if (
-    raw_message.includes("Pesanan tidak ditemukan") ||
-    raw_message.includes("Hasil Pekerjaan tidak ditemukan")
-  ) {
-    return { message: raw_message, status: 404 };
-  }
-
-  // 3. Error Validasi Bisnis dari DeliverablesService
-  if (
-    raw_message.includes("tidak boleh kosong") ||
-    raw_message.includes("Unggah berkas") ||
-    raw_message.includes("belum dikumpulkan") ||
-    raw_message.includes("sudah diselesaikan sebelumnya")
-  ) {
-    return { message: raw_message, status: 400 };
-  }
-
-  // 4. Error bawaan Supabase / PostgreSQL
-  if (raw_message.includes("violates foreign key constraint")) {
-    return { message: "Data pesanan tidak ditemukan di sistem.", status: 404 };
-  }
-  if (raw_message.includes("violates not-null constraint")) {
-    return { message: "Data yang dikirimkan kurang lengkap.", status: 400 };
-  }
-
-  // 5. Error umum / Server error
-  return {
-    message: "Terjadi kesalahan pada sistem. Silakan coba beberapa saat lagi.",
-    status: 500,
-  };
-}
-
-// ----------------------------------------------------------------------
-// 1. GET /api/pesanan/[id_pesanan]/deliverables
-// Ambil Detail Hasil Pekerjaan untuk Diperiksa Pembeli/Penyedia
-// ----------------------------------------------------------------------
-export async function GET(
-  request: NextRequest,
-  context: { params: Promise<{ id_pesanan: string }> | { id_pesanan: string } }
-) {
+// GET /api/pesanan/[id_pesanan]/deliverables
+// Hasil pekerjaan untuk C38 (pemesan & penyedia): pesanan, kiriman terakhir, riwayat revisi, kuota
+export async function GET(_request: NextRequest, { params }: KonteksPesanan) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: auth_error,
-    } = await supabase.auth.getUser();
+    const user = await userLogin();
+    if (!user) return belumLogin();
 
-    if (!user || auth_error) {
-      return NextResponse.json(
-        { success: false, message: "Anda belum login" },
-        { status: 401 }
-      );
-    }
+    const { id_pesanan } = await params;
+    const data = await DeliverablesService.getHasilPekerjaan(id_pesanan, user.id);
 
-    const { id_pesanan } = await context.params;
-
-    const deliverable = await DeliverablesService.getDeliverableByPesanan(
-      id_pesanan,
-      user.id
-    );
-
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Detail Hasil Pekerjaan berhasil dimuat",
-        deliverable,
-      },
-      { status: 200 }
-    );
-  } catch (err: any) {
-    const { message, status } = handleCustomError(err);
-    return NextResponse.json({ success: false, message }, { status });
+    return NextResponse.json({
+      success: true,
+      message: "Detail Hasil Pekerjaan berhasil dimuat",
+      data,
+      deliverable: data.deliverable, // kompatibel dengan pemanggil lama
+    });
+  } catch (err) {
+    return responsGagal(err);
   }
 }
 
-// ----------------------------------------------------------------------
-// 2. POST /api/pesanan/[id_pesanan]/deliverables
-// Penyedia Jasa Mengirim Hasil Pekerjaan Pertama Kali
-// ----------------------------------------------------------------------
-export async function POST(
-  request: NextRequest,
-  context: { params: Promise<{ id_pesanan: string }> | { id_pesanan: string } }
-) {
+// POST /api/pesanan/[id_pesanan]/deliverables
+// Penyedia mengirim hasil pekerjaan (kiriman pertama maupun perbaikan revisi)
+// Body JSON: { deskripsi_produk, berkas_hasil?: string[], file_url?: string, output_path?: string }
+export async function POST(request: NextRequest, { params }: KonteksPesanan) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: auth_error,
-    } = await supabase.auth.getUser();
+    const user = await userLogin();
+    if (!user) return belumLogin();
 
-    if (!user || auth_error) {
-      return NextResponse.json(
-        { success: false, message: "Anda belum login" },
-        { status: 401 }
-      );
-    }
+    const { id_pesanan } = await params;
+    const body = await request.json().catch(() => ({}));
 
-    const { id_pesanan } = await context.params;
-    const body = await request.json();
-    const { deskripsi_produk, file_url, output_path } = body;
-
-    // Validasi tambahan di route: pastikan user terhubung ke pesanan ini
-    // (karena di submitDeliverable belum ada validasi user_id)
-    await DeliverablesService.validasiOwnerPesanan(id_pesanan, user.id);
-
-    const result = await DeliverablesService.submitDeliverable({
+    const data = await DeliverablesService.submitDeliverable({
       id_pesanan,
-      deskripsi_produk,
-      file_url,
-      output_path,
+      user_id: user.id,
+      deskripsi_produk: body.deskripsi_produk,
+      berkas_hasil: Array.isArray(body.berkas_hasil) ? body.berkas_hasil : undefined,
+      file_url: body.file_url,
+      output_path: body.output_path,
     });
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Hasil pekerjaan berhasil dikumpulkan!",
-        data: result,
-      },
-      { status: 201 }
+      { success: true, message: "Hasil pekerjaan berhasil dikumpulkan!", data },
+      { status: 201 },
     );
-  } catch (err: any) {
-    const { message, status } = handleCustomError(err);
-    return NextResponse.json({ success: false, message }, { status });
+  } catch (err) {
+    return responsGagal(err);
   }
 }
 
-// ----------------------------------------------------------------------
-// 3. PATCH /api/pesanan/[id_pesanan]/deliverables
-// Pengguna Jasa Menyetujui / Konfirmasi Selesai Pesanan
-// ----------------------------------------------------------------------
-export async function PATCH(
-  request: NextRequest,
-  context: { params: Promise<{ id_pesanan: string }> | { id_pesanan: string } }
-) {
+// PATCH /api/pesanan/[id_pesanan]/deliverables
+// Pemesan konfirmasi pesanan selesai → dana diteruskan ke penyedia
+export async function PATCH(_request: NextRequest, { params }: KonteksPesanan) {
   try {
-    const supabase = await createClient();
-    const {
-      data: { user },
-      error: auth_error,
-    } = await supabase.auth.getUser();
+    const user = await userLogin();
+    if (!user) return belumLogin();
 
-    if (!user || auth_error) {
-      return NextResponse.json(
-        { success: false, message: "Anda belum login" },
-        { status: 401 }
-      );
-    }
-
-    const { id_pesanan } = await context.params;
-
+    const { id_pesanan } = await params;
     await DeliverablesService.confirmOrderComplete(id_pesanan, user.id);
 
-    return NextResponse.json(
-      {
-        success: true,
-        message: "Pesanan berhasil dikonfirmasi selesai dan dana telah dicairkan!",
-      },
-      { status: 200 }
-    );
-  } catch (err: any) {
-    const { message, status } = handleCustomError(err);
-    return NextResponse.json({ success: false, message }, { status });
+    return NextResponse.json({
+      success: true,
+      message: "Pesanan berhasil dikonfirmasi selesai dan dana telah dicairkan!",
+    });
+  } catch (err) {
+    return responsGagal(err);
   }
 }

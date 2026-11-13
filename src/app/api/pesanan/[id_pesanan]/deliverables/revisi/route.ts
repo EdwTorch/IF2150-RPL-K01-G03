@@ -1,94 +1,71 @@
 import { NextRequest, NextResponse } from "next/server";
 import { DeliverablesService } from "@/services/deliverables.service";
-import { createClient } from "@/lib/supabase/server";
+import { belumLogin, responsGagal, userLogin, type KonteksPesanan } from "../helper";
 
-// GET: Ambil semua daftar/riwayat revisi
-// app/api/pesanan/[id_pesanan]/deliverables/revisi/route.ts
-
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ id_pesanan: string }> }
-) {
+// GET /api/pesanan/[id_pesanan]/deliverables/revisi — riwayat revisi + kiriman terakhir + kuota
+export async function GET(_req: NextRequest, { params }: KonteksPesanan) {
   try {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const user = await userLogin();
+    if (!user) return belumLogin();
 
-    if (authError || !user) {
-      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
-    }
-
-    // Ambil riwayat revisi
-    const {id_pesanan} = await params;
-    const listRevisi = await DeliverablesService.getRevisionHistory(
-      id_pesanan,
-      user.id
-    );
-
-    // Ambil berkas deliverables paling baru (atau semua berkas)
-    const deliverableTerbaru = await DeliverablesService.getDeliverableByPesanan(
-      id_pesanan,
-      user.id
-    );
+    const { id_pesanan } = await params;
+    const hasil = await DeliverablesService.getHasilPekerjaan(id_pesanan, user.id);
 
     return NextResponse.json({
       success: true,
+      message: "Riwayat revisi berhasil dimuat",
       data: {
-        revisi: listRevisi,
-        deliverable_aktif: deliverableTerbaru,
+        revisi: hasil.revisi,
+        revisi_aktif: hasil.revisi_aktif,
+        deliverable_aktif: hasil.deliverable,
+        kuota_revisi: hasil.kuota_revisi,
       },
     });
-  } catch (error: any) {
-    return NextResponse.json({ success : false, message: error.message }, { status: 400 });
+  } catch (err) {
+    return responsGagal(err);
   }
 }
 
-// POST: Ajukan revisi baru (Pembeli) ATAU Kirim perbaikan revisi (Penjual)
-export async function POST(
-  req: NextRequest,
-  { params }: { params: Promise<{ id_pesanan: string }> }
-) {
+// POST /api/pesanan/[id_pesanan]/deliverables/revisi
+//  - Pemesan mengajukan revisi: { deskripsi_revisi, pesan_revisi?, lampiran_revisi?, id_produk_akhir? }
+//  - Penyedia mengirim perbaikan: { action: "submit_revision", deskripsi_produk, berkas_hasil?, output_path? }
+export async function POST(req: NextRequest, { params }: KonteksPesanan) {
   try {
-    const supabase = await createClient();
-    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    const user = await userLogin();
+    if (!user) return belumLogin();
 
-    if (authError || !user) {
-      return NextResponse.json({ success : false, message: "Unauthorized" }, { status: 401 });
-    }
+    const { id_pesanan } = await params;
+    const body = await req.json().catch(() => ({}));
 
-    const body = await req.json();
-    const {id_pesanan}  = await params;
-    // Skenario A: Penjual mengirim perbaikan revisi (di Halaman Form Revisi)
     if (body.action === "submit_revision") {
-      const result = await DeliverablesService.submitRevisionFix({
-        id_pesanan: id_pesanan,
+      const data = await DeliverablesService.submitRevisionFix({
+        id_pesanan,
+        user_id: user.id,
         deskripsi_produk: body.deskripsi_produk,
+        berkas_hasil: Array.isArray(body.berkas_hasil) ? body.berkas_hasil : undefined,
         file_url: body.file_url,
         output_path: body.output_path,
-        user_id: user.id,
       });
-
-      return NextResponse.json({
-        success: true,
-        message: "Hasil perbaikan revisi berhasil dikumpulkan.",
-        data: result,
-      });
+      return NextResponse.json(
+        { success: true, message: "Hasil perbaikan revisi berhasil dikumpulkan.", data },
+        { status: 201 },
+      );
     }
 
-    // Skenario B: Pembeli mengajukan komplain revisi baru
-    const result = await DeliverablesService.requestRevision({
-      id_pesanan: id_pesanan,
+    const data = await DeliverablesService.requestRevision({
+      id_pesanan,
+      user_id: user.id,
       deskripsi_revisi: body.deskripsi_revisi,
+      pesan_revisi: body.pesan_revisi,
       lampiran_revisi: body.lampiran_revisi,
       id_produk_akhir: body.id_produk_akhir,
-      user_id: user.id,
     });
 
-    return NextResponse.json({
-      success: true,
-      message: "Pengajuan revisi berhasil dikirim.",
-      data: result,
-    });
-  } catch (error: any) {
-    return NextResponse.json({ success : false, message: error.message }, { status: 400 });
+    return NextResponse.json(
+      { success: true, message: "Pengajuan revisi berhasil dikirim.", data },
+      { status: 201 },
+    );
+  } catch (err) {
+    return responsGagal(err);
   }
 }
