@@ -23,6 +23,7 @@ function handleCustomError(err: any): { message: string; status: number } {
   if (
     raw_message.includes("tidak boleh kosong") ||
     raw_message.includes("Unggah berkas") ||
+        raw_message.includes("Gagal mengonfirmasi") ||
     raw_message.includes("belum dikumpulkan") ||
     raw_message.includes("sudah diselesaikan sebelumnya") ||
     raw_message.includes("Kuota revisi") ||

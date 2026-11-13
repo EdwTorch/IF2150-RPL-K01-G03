@@ -304,7 +304,7 @@ export default function HalamanDeliverables({ peran }: Props) {
         : belumAdaHasil
           ? "Sedang dikerjakan"
           : isPengguna
-            ? "Menunggu konfirmasi"
+            ? "Menunggu konfirmasimu"
             : "Menunggu pemeriksaan";
 
   const statusNada = pesananDitolak
