@@ -168,7 +168,10 @@ describe('PengontrolPesanan.buatPesananDiMemori (UC09, Algo-3101 & Algo-3102)', 
       'j2',
       'Pesanan aktif kedua',
     );
-    const daftarDuaAktif = [...daftarPesananAwal, pesananKedua];
+    const daftarDuaAktif = [
+      ...daftarPesananAwal,
+      { ...pesananKedua, status_pesanan: 'DIPROSES' },
+    ];
 
     // Pesanan ke-3 ditolak karena sudah ada 2 pesanan aktif
     expect(() =>

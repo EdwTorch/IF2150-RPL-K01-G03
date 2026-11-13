@@ -39,10 +39,13 @@ describe('DeliverablesService', () => {
       select: vi.fn().mockReturnThis(),
       update: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
+      is: vi.fn().mockReturnThis(),
+      not: vi.fn().mockReturnThis(),
       order: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis(),
       single: vi.fn(),
       maybeSingle: vi.fn(),
+      rpc: vi.fn().mockResolvedValue({ error: null }),
     };
 
     (createClient as any).mockResolvedValue(mockSupabase);
@@ -53,8 +56,9 @@ describe('DeliverablesService', () => {
   // ==========================================
   describe('validasiOwnerPesanan', () => {
     it('harus mengembalikan true jika user adalah id_pengguna_jasa', async () => {
-      mockSupabase.single.mockResolvedValueOnce({
+      mockSupabase.maybeSingle.mockResolvedValueOnce({
         data: { id_pengguna_jasa: 'user-1', id_penyedia_jasa: 'user-2' },
+        error: null,
       });
 
       const res = await DeliverablesService.validasiOwnerPesanan('order-1', 'user-1');
@@ -62,21 +66,22 @@ describe('DeliverablesService', () => {
     });
 
     it('harus melempar error jika pesanan tidak ditemukan', async () => {
-      mockSupabase.single.mockResolvedValueOnce({ data: null });
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: null, error: null });
 
       await expect(
         DeliverablesService.validasiOwnerPesanan('order-invalid', 'user-1')
-      ).rejects.toThrow('Pesanan tidak ditemukan');
+      ).rejects.toThrow('Pesanan tidak ditemukan.');
     });
 
     it('harus melempar error jika user bukan pemesan atau penyedia', async () => {
-      mockSupabase.single.mockResolvedValueOnce({
+      mockSupabase.maybeSingle.mockResolvedValueOnce({
         data: { id_pengguna_jasa: 'user-1', id_penyedia_jasa: 'user-2' },
+        error: null,
       });
 
       await expect(
         DeliverablesService.validasiOwnerPesanan('order-1', 'user-3')
-      ).rejects.toThrow('Akses ditolak, pesanan ini bukan milik anda');
+      ).rejects.toThrow('Akses ditolak. Pesanan ini bukan milik Anda.');
     });
   });
 
@@ -111,10 +116,9 @@ describe('DeliverablesService', () => {
         jasa: { nama_jasa: 'Desain Logo' },
       };
 
-      // Mock insert produk_akhir
-      mockSupabase.single
-        .mockResolvedValueOnce({ data: mockResult, error: null }) // insert result
-        .mockResolvedValueOnce({ data: mockPesananData, error: null }); // update pesanan result
+      // Mock insert produk_akhir & fetch pesanan notification info
+      mockSupabase.single.mockResolvedValueOnce({ data: mockResult, error: null });
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: mockPesananData, error: null });
 
       const res = await DeliverablesService.submitDeliverable({
         id_pesanan: 'order-1',
@@ -132,9 +136,10 @@ describe('DeliverablesService', () => {
     });
 
     it('harus throw error jika pembaruan status pesanan gagal', async () => {
-      mockSupabase.single
-        .mockResolvedValueOnce({ data: { id: 'prod-1' }, error: null })
-        .mockResolvedValueOnce({ data: null, error: { message: 'DB Error Pesanan' } });
+      mockSupabase.single.mockResolvedValueOnce({ data: { id: 'prod-1' }, error: null });
+      mockSupabase.update.mockReturnValueOnce({
+        eq: vi.fn().mockResolvedValueOnce({ error: { message: 'DB Error Pesanan' } }),
+      });
 
       await expect(
         DeliverablesService.submitDeliverable({
@@ -154,20 +159,26 @@ describe('DeliverablesService', () => {
       // Mock validasi owner
       vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
 
-      const mockData = { id_produk_akhir: 'p-1', id_pesanan: 'order-1' };
+      const mockData = {
+        id_produk_akhir: 'p-1',
+        id_pesanan: 'order-1',
+        file_url: 'https://example.com/file.png',
+      };
       mockSupabase.maybeSingle.mockResolvedValueOnce({ data: mockData, error: null });
 
       const result = await DeliverablesService.getDeliverableByPesanan('order-1', 'user-1');
-      expect(result).toEqual(mockData);
+      expect(result).toEqual({
+        ...mockData,
+        file_download_url: 'https://example.com/file.png',
+      });
     });
 
-    it('harus throw error jika produk belum dikumpulkan', async () => {
+    it('harus mengembalikan null jika produk belum dikumpulkan', async () => {
       vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
       mockSupabase.maybeSingle.mockResolvedValueOnce({ data: null, error: null });
 
-      await expect(
-        DeliverablesService.getDeliverableByPesanan('order-1', 'user-1')
-      ).rejects.toThrow('Hasil pekerjaan belum dikumpulkan.');
+      const result = await DeliverablesService.getDeliverableByPesanan('order-1', 'user-1');
+      expect(result).toBeNull();
     });
   });
 
@@ -176,7 +187,7 @@ describe('DeliverablesService', () => {
   // ==========================================
   describe('requestRevision', () => {
     it('harus throw error jika deskripsi_revisi kosong', async () => {
-      vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
+      vi.spyOn(DeliverablesService, 'validasiPenggunaJasa').mockResolvedValueOnce(true);
 
       await expect(
         DeliverablesService.requestRevision({
@@ -189,8 +200,10 @@ describe('DeliverablesService', () => {
     });
 
     it('harus throw error jika user_id bukan id_pengguna_jasa pesanan', async () => {
-      vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
-      mockSupabase.single.mockResolvedValueOnce({ data: { id_pengguna_jasa: 'other-user' } });
+      mockSupabase.maybeSingle.mockResolvedValueOnce({
+        data: { id_pengguna_jasa: 'other-user' },
+        error: null,
+      });
 
       await expect(
         DeliverablesService.requestRevision({
@@ -199,16 +212,22 @@ describe('DeliverablesService', () => {
           id_produk_akhir: 'prod-1',
           user_id: 'client-1',
         })
-      ).rejects.toThrow('Akses ditolak. Hanya pengguna jasa yang dapat mengajukan revisi.');
+      ).rejects.toThrow('Akses ditolak. Hanya pengguna jasa pemilik pesanan yang dapat melakukan tindakan ini.');
     });
 
     it('harus throw error jika kuota revisi habis (<= 0)', async () => {
-      vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
+      vi.spyOn(DeliverablesService, 'validasiPenggunaJasa').mockResolvedValueOnce(true);
 
-      // Select pesanan
-      mockSupabase.single.mockResolvedValueOnce({ data: { id_pengguna_jasa: 'client-1' } });
-      // Select kuota existingRevisi
-      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: { jml_revisi_tersedia: 0 } });
+      mockSupabase.maybeSingle
+        .mockResolvedValueOnce({ data: { id_produk_akhir: 'prod-1' }, error: null })
+        .mockResolvedValueOnce({
+          data: {
+            id_revisi: 'rev-prev',
+            jml_revisi_tersedia: 0,
+            status_pengerjaan: 'Revisi Dikumpulkan',
+          },
+          error: null,
+        });
 
       await expect(
         DeliverablesService.requestRevision({
@@ -221,17 +240,24 @@ describe('DeliverablesService', () => {
     });
 
     it('harus berhasil mengajukan revisi dan mengurangi kuota', async () => {
-      vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
+      vi.spyOn(DeliverablesService, 'validasiPenggunaJasa').mockResolvedValueOnce(true);
 
-      mockSupabase.single
-        .mockResolvedValueOnce({ data: { id_pengguna_jasa: 'client-1' } }) // check user
-        .mockResolvedValueOnce({ data: { id_revisi: 'rev-1' }, error: null }) // insert revisi
+      mockSupabase.maybeSingle
+        .mockResolvedValueOnce({ data: { id_produk_akhir: 'prod-1' }, error: null })
+        .mockResolvedValueOnce({
+          data: {
+            id_revisi: 'rev-prev',
+            jml_revisi_tersedia: 2,
+            status_pengerjaan: 'Revisi Dikumpulkan',
+          },
+          error: null,
+        })
         .mockResolvedValueOnce({
           data: { id_penyedia_jasa: 'seller-1', jasa: { nama_jasa: 'Web App' } },
           error: null,
-        }); // update status pesanan
+        });
 
-      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: { jml_revisi_tersedia: 2 } }); // current kuota
+      mockSupabase.single.mockResolvedValueOnce({ data: { id_revisi: 'rev-1' }, error: null });
 
       const res = await DeliverablesService.requestRevision({
         id_pesanan: 'order-1',
@@ -253,48 +279,31 @@ describe('DeliverablesService', () => {
   // 5. Test confirmOrderComplete
   // ==========================================
 describe('confirmOrderComplete', () => {
-  it('harus throw error jika pesanan sudah berstatus Selesai', async () => {
-    vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
-    
-    mockSupabase.single.mockResolvedValueOnce({
-      data: { id_penyedia_jasa: 'seller-1', total_biaya: 100000, status_pesanan: 'Selesai' },
+  it('harus throw error jika user bukan pengguna jasa pemilik pesanan', async () => {
+    mockSupabase.maybeSingle.mockResolvedValueOnce({
+      data: { id_pengguna_jasa: 'other-client' },
       error: null,
     });
 
     await expect(
       DeliverablesService.confirmOrderComplete('order-1', 'client-1')
-    ).rejects.toThrow('Pesanan ini sudah diselesaikan sebelumnya.');
+    ).rejects.toThrow('Akses ditolak. Hanya pengguna jasa pemilik pesanan yang dapat melakukan tindakan ini.');
   });
 
-  it('harus mengupdate saldo penjual dan menyelesaikan pesanan', async () => {
-    vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValueOnce(true);
+  it('harus memanggil rpc konfirmasi_pesanan_selesai dan mengirim notifikasi', async () => {
+    vi.spyOn(DeliverablesService, 'validasiPenggunaJasa').mockResolvedValueOnce(true);
 
-    // Pastikan eq mengembalikan mockSupabase (this) agar bisa di-chain dengan .single()
-    mockSupabase.eq.mockReturnThis();
-
-    // 1. mock .single() untuk query SELECT pesanan pertama (line 326)
     mockSupabase.single.mockResolvedValueOnce({
-      data: { id_penyedia_jasa: 'seller-1', total_biaya: 150000, status_pesanan: 'Menunggu Konfirmasi' },
+      data: { id_penyedia_jasa: 'seller-1', total_biaya: 150000, jasa: { nama_jasa: 'Jasa Logo' } },
       error: null,
     });
-
-    // 2. mock .single() untuk query SELECT penyedia_jasa saldo (line 354)
-    mockSupabase.single.mockResolvedValueOnce({ 
-      data: { saldo: 50000 }, 
-      error: null 
-    });
-
-    // 3. mock .single() untuk query UPDATE pesanan terakhir (line 371)
-    mockSupabase.single.mockResolvedValueOnce({
-      data: { id_penyedia_jasa: 'seller-1', jasa: { nama_jasa: 'Jasa Logo' } },
-      error: null,
-    });
-
-    // 4. Mock query yang diakhiri tanpa .single() (seperti insert pencairan_dana & update saldo)
-    mockSupabase.insert.mockResolvedValue({ error: null });
+    mockSupabase.rpc.mockResolvedValueOnce({ error: null });
 
     await DeliverablesService.confirmOrderComplete('order-1', 'client-1');
 
+    expect(mockSupabase.rpc).toHaveBeenCalledWith('konfirmasi_pesanan_selesai', {
+      p_id_pesanan: 'order-1',
+    });
     expect(NotifikasiService.kirimNotifikasi).toHaveBeenCalled();
   });
 });
@@ -346,10 +355,13 @@ describe("DeliverablesService Additional Coverage", () => {
       insert: vi.fn().mockReturnThis(),
       update: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
+      is: vi.fn().mockReturnThis(),
+      not: vi.fn().mockReturnThis(),
       order: vi.fn().mockReturnThis(),
       limit: vi.fn().mockReturnThis(),
       single: vi.fn(),
       maybeSingle: vi.fn(),
+      rpc: vi.fn().mockResolvedValue({ error: null }),
     };
 
     (createClient as any).mockResolvedValue(mockSupabase);
@@ -359,18 +371,18 @@ describe("DeliverablesService Additional Coverage", () => {
   // 1. Coverage: getDeliverableByProdukAkhir
   describe("getDeliverableByProdukAkhir", () => {
     it("harus throw error jika produk akhir tidak ditemukan atau query error", async () => {
-      mockSupabase.single.mockResolvedValueOnce({ data: null, error: { message: "Not found" } });
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: null, error: null });
 
       await expect(
         DeliverablesService.getDeliverableByProdukAkhir("p-invalid", "user-1")
-      ).rejects.toThrow("Hasil Pekerjaan tidak ditemukan");
+      ).rejects.toThrow("Hasil pekerjaan tidak ditemukan.");
     });
 
     it("harus mengembalikan produk akhir jika ditemukan dan user adalah owner", async () => {
       vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
 
       const mockData = { id_produk_akhir: "p-1", id_pesanan: "order-1" };
-      mockSupabase.single.mockResolvedValueOnce({ data: mockData, error: null });
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: mockData, error: null });
 
       const res = await DeliverablesService.getDeliverableByProdukAkhir("p-1", "user-1");
       expect(res).toEqual(mockData);
@@ -402,37 +414,46 @@ describe("DeliverablesService Additional Coverage", () => {
   // 3. Coverage: submitRevisionFix
   describe("submitRevisionFix", () => {
     it("harus throw error jika insert produk akhir perbaikan gagal", async () => {
-      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
-      mockSupabase.single.mockResolvedValueOnce({ data: null, error: { message: "Insert produk error" } });
+      vi.spyOn(DeliverablesService, "validasiPenyediaJasa").mockResolvedValueOnce(true);
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: { id_revisi: "rev-old" }, error: null });
+      mockSupabase.insert.mockReturnValueOnce({
+        select: vi.fn().mockResolvedValueOnce({ data: null, error: { message: "Insert produk error" } }),
+      });
 
       await expect(
         DeliverablesService.submitRevisionFix({
           id_pesanan: "order-1",
           deskripsi_produk: "Hasil revisi 1",
+          file_urls: ["https://example.com/fix1.png"],
           user_id: "penyedia-1",
         })
       ).rejects.toThrow("Insert produk error");
     });
 
     it("berhasil mengumpulkan hasil perbaikan revisi dan update status pesanan & pengajuan revisi", async () => {
-      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+      vi.spyOn(DeliverablesService, "validasiPenyediaJasa").mockResolvedValueOnce(true);
 
-      const mockProdukBaru = { id_produk_akhir: "prod-fix-1" };
+      const mockProdukBaru = [{ id_produk_akhir: "prod-fix-1" }];
       const mockLatestRevisi = { id_revisi: "rev-old" };
       const mockPesananUpdated = {
         id_pengguna_jasa: "klien-1",
         jasa: { nama_jasa: "Desain Logo" },
       };
 
-      mockSupabase.single
-        .mockResolvedValueOnce({ data: mockProdukBaru, error: null }) // insert produk_akhir
-        .mockResolvedValueOnce({ data: mockPesananUpdated, error: null }); // update pesanan status 'Menunggu Konfirmasi'
+      mockSupabase.maybeSingle
+        .mockResolvedValueOnce({ data: mockLatestRevisi, error: null })
+        .mockResolvedValueOnce({ data: { id_revisi: "rev-old" }, error: null })
+        .mockResolvedValueOnce({ data: { id_pesanan: "order-1" }, error: null })
+        .mockResolvedValueOnce({ data: mockPesananUpdated, error: null });
 
-      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: mockLatestRevisi }); // get latest revisi
+      mockSupabase.insert.mockReturnValueOnce({
+        select: vi.fn().mockResolvedValueOnce({ data: mockProdukBaru, error: null }),
+      });
 
       const res = await DeliverablesService.submitRevisionFix({
         id_pesanan: "order-1",
         deskripsi_produk: "Hasil perbaikan logo",
+        file_urls: ["https://example.com/fix1.png"],
         user_id: "penyedia-1",
       });
 
@@ -446,42 +467,32 @@ describe("DeliverablesService Additional Coverage", () => {
     });
   });
 
-  // 4. Coverage: confirmOrderComplete Error Branches (Line 371 & 381)
+  // 4. Coverage: confirmOrderComplete Error Branches
   describe("confirmOrderComplete Error Handling Branches", () => {
-    it("harus throw error jika gagal menambahkan saldo ke dompet penjual (errSaldo)", async () => {
-      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+    it("harus throw error jika gagal mengambil data pesanan", async () => {
+      vi.spyOn(DeliverablesService, "validasiPenggunaJasa").mockResolvedValueOnce(true);
 
-      mockSupabase.single
-        .mockResolvedValueOnce({ data: { id_penyedia_jasa: "p1", total_biaya: 100000, status_pesanan: "Menunggu" } }) // fetch pesanan
-        .mockResolvedValueOnce({ data: { saldo: 50000 } }); // fetch penyedia
-
-      mockSupabase.update
-        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: null }) }) // update status pesanan
-        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: { message: "Saldo DB Fail" } }) }); // update saldo (ERROR)
-
-      mockSupabase.insert.mockResolvedValueOnce({ error: null }); // insert pencairan
+      mockSupabase.single.mockResolvedValueOnce({
+        data: null,
+        error: { message: "Pesanan fail" },
+      });
 
       await expect(DeliverablesService.confirmOrderComplete("order-1", "user-1")).rejects.toThrow(
-        "Gagal menambahkan saldo ke dompet penjual: Saldo DB Fail"
+        "Pesanan tidak ditemukan: Pesanan fail"
       );
     });
 
-    it("harus throw error jika gagal mengupdate state pencairan di tabel pesanan (errUpdate)", async () => {
-      vi.spyOn(DeliverablesService, "validasiOwnerPesanan").mockResolvedValueOnce(true);
+    it("harus throw error jika RPC konfirmasi_pesanan_selesai gagal", async () => {
+      vi.spyOn(DeliverablesService, "validasiPenggunaJasa").mockResolvedValueOnce(true);
 
-      mockSupabase.single
-        .mockResolvedValueOnce({ data: { id_penyedia_jasa: "p1", total_biaya: 100000, status_pesanan: "Menunggu" } }) // fetch pesanan
-        .mockResolvedValueOnce({ data: { saldo: 50000 } }) // fetch penyedia
-        .mockResolvedValueOnce({ data: null, error: { message: "Update state fail" } }); // update state pencairan pesanan (ERROR)
-
-      mockSupabase.update
-        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: null }) }) // update status pesanan
-        .mockReturnValueOnce({ eq: vi.fn().mockResolvedValue({ error: null }) }); // update saldo
-
-      mockSupabase.insert.mockResolvedValueOnce({ error: null }); // insert pencairan
+      mockSupabase.single.mockResolvedValueOnce({
+        data: { id_penyedia_jasa: "p1", total_biaya: 100000, jasa: { nama_jasa: "Jasa" } },
+        error: null,
+      });
+      mockSupabase.rpc.mockResolvedValueOnce({ error: { message: "RPC DB Fail" } });
 
       await expect(DeliverablesService.confirmOrderComplete("order-1", "user-1")).rejects.toThrow(
-        "Gagal mengupdate state pencairan di tabel pesanan"
+        "Gagal mengonfirmasi pesanan dan mencairkan dana: RPC DB Fail"
       );
     });
   });

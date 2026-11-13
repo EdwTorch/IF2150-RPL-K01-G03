@@ -266,7 +266,7 @@ describe('getSessionUser', () => {
     mockSupabase.from.mockReturnValueOnce({
       select: vi.fn().mockReturnValueOnce({
         eq: vi.fn().mockReturnValueOnce({
-          single: vi.fn().mockResolvedValueOnce({ data: null, error: { message: 'DB error' } }),
+          maybeSingle: vi.fn().mockResolvedValueOnce({ data: null, error: { message: 'DB error' } }),
         }),
       }),
     });
@@ -282,7 +282,7 @@ describe('getSessionUser', () => {
     mockSupabase.from.mockReturnValueOnce({
       select: vi.fn().mockReturnValueOnce({
         eq: vi.fn().mockReturnValueOnce({
-          single: vi.fn().mockResolvedValueOnce({ data: null, error: null }),
+          maybeSingle: vi.fn().mockResolvedValueOnce({ data: null, error: null }),
         }),
       }),
     });
@@ -310,7 +310,7 @@ describe('getSessionUser', () => {
     mockSupabase.from.mockReturnValueOnce({
       select: vi.fn().mockReturnValueOnce({
         eq: vi.fn().mockReturnValueOnce({
-          single: vi.fn().mockResolvedValueOnce({ data: mockProfil, error: null }),
+          maybeSingle: vi.fn().mockResolvedValueOnce({ data: mockProfil, error: null }),
         }),
       }),
     });
@@ -347,7 +347,7 @@ describe('loginAdmin', () => {
     mockSupabase.from.mockReturnValueOnce({
       select: vi.fn().mockReturnValueOnce({
         eq: vi.fn().mockReturnValueOnce({
-          single: vi.fn().mockResolvedValueOnce({ data: profil, error: null }),
+          maybeSingle: vi.fn().mockResolvedValueOnce({ data: profil, error: null }),
         }),
       }),
     });

@@ -127,7 +127,7 @@ describe('Dual Storage Adapter (LocalStorageService & SupabaseStorageService)', 
 
       mockUpload.mockResolvedValueOnce({
         data: null,
-        error: { message: 'The resource already exists' },
+        error: new Error('The resource already exists'),
       });
 
       const file = new File(['gambar'], 'duplicate.png', { type: 'image/png' });

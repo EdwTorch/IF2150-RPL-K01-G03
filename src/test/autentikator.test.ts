@@ -82,7 +82,7 @@ describe('Autentikator & Sesi Pengguna (auth.service & /api/auth)', () => {
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
               data: {
                 id: 'user-suspended',
                 nama: 'User Banned',
@@ -116,16 +116,14 @@ describe('Autentikator & Sesi Pengguna (auth.service & /api/auth)', () => {
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
               data: {
                 id: 'user-1',
                 nama: 'Pengguna Aktif',
                 email: 'aktif@test.com',
-                role: 'USER',
+                role: 'PENYEDIA_JASA',
                 status_akun: true,
                 sanksi: null,
-                penyedia_jasa: [{ id: 'p-1' }],
-                pengguna_jasa: [],
               },
               error: null,
             }),
@@ -145,7 +143,7 @@ describe('Autentikator & Sesi Pengguna (auth.service & /api/auth)', () => {
         id: 'user-1',
         email: 'aktif@test.com',
         nama: 'Pengguna Aktif',
-        role: 'USER',
+        role: 'PENYEDIA_JASA',
         isPenyediaJasa: true,
         isPenggunaJasa: false,
       });
@@ -203,16 +201,14 @@ describe('Autentikator & Sesi Pengguna (auth.service & /api/auth)', () => {
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
               data: {
                 id: 'u-1',
                 nama: 'Session User',
                 email: 'session@test.com',
-                role: 'USER',
+                role: 'PENGGUNA_JASA',
                 status_akun: true,
                 sanksi: null,
-                penyedia_jasa: [],
-                pengguna_jasa: [{ id: 'k-1' }],
               },
               error: null,
             }),
@@ -225,7 +221,7 @@ describe('Autentikator & Sesi Pengguna (auth.service & /api/auth)', () => {
         id: 'u-1',
         email: 'session@test.com',
         nama: 'Session User',
-        role: 'USER',
+        role: 'PENGGUNA_JASA',
         status_akun: true,
         isPenyediaJasa: false,
         isPenggunaJasa: true,

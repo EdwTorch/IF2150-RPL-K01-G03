@@ -1,11 +1,17 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { UlasanService } from "../services/ulasan.service";
 
-// Mock Supabase server client
+// Mock Supabase server client & admin client
 const mockCreateClient = vi.fn();
 vi.mock("../lib/supabase/server", () => ({
   createClient: () => mockCreateClient(),
 }));
+vi.mock("@supabase/supabase-js", () => ({
+  createClient: () => mockCreateClient(),
+}));
+
+process.env.NEXT_PUBLIC_SUPABASE_URL = "https://mock.supabase.co";
+process.env.SUPABASE_SERVICE_ROLE_KEY = "mock-service-role-key";
 
 describe("UlasanService.validasiRating (AC-3: Validasi Rating)", () => {
   it("menerima rating yang valid antara 1 sampai 5", () => {
@@ -244,7 +250,7 @@ describe("UlasanService.getRatingDanUlasanPenyedia", () => {
           return {
             select: vi.fn().mockReturnValue({
               in: vi.fn().mockResolvedValue({
-                count: 5,
+                data: [{ rating: 5 }, { rating: 5 }, { rating: 4 }, { rating: 5 }, { rating: 5 }],
                 error: null,
               }),
             }),
@@ -398,7 +404,7 @@ describe("UlasanService.simpanUlasan", () => {
       from: vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({ data: null, error: { message: "Not found" } }),
+            maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
           }),
         }),
       }),
@@ -433,13 +439,27 @@ describe("UlasanService.simpanUlasan", () => {
           return {
             select: vi.fn().mockReturnValue({
               eq: vi.fn().mockReturnValue({
-                single: vi.fn().mockResolvedValue({ data: { id_penyedia_jasa: "seller-1" } }),
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: {
+                    id_pesanan: "p-1",
+                    id_pengguna_jasa: "user-1",
+                    id_penyedia_jasa: "seller-1",
+                    id_jasa: null,
+                    status_pesanan: "SELESAI",
+                  },
+                  error: null,
+                }),
               }),
             }),
           };
         }
         if (table === "ulasan") {
           return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
+              }),
+            }),
             insert: vi.fn().mockReturnValue({
               select: vi.fn().mockReturnValue({
                 single: vi.fn().mockResolvedValue({ data: mockCreatedUlasan, error: null }),
@@ -473,7 +493,10 @@ describe("UlasanService.validasiOwnerUlasan, updateUlasan & deleteUlasan", () =>
       from: vi.fn().mockReturnValue({
         select: vi.fn().mockReturnValue({
           eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({ data: { id_pengguna_jasa: "pemilik-asli" } }),
+            maybeSingle: vi.fn().mockResolvedValue({
+              data: { id_ulasan: "ulasan-1", id_pengguna_jasa: "pemilik-asli" },
+              error: null,
+            }),
           }),
         }),
       }),
@@ -481,7 +504,7 @@ describe("UlasanService.validasiOwnerUlasan, updateUlasan & deleteUlasan", () =>
 
     await expect(
       UlasanService.validasiOwnerUlasan("ulasan-1", "bukan-pemilik")
-    ).rejects.toThrow("Bukan Ulasan milik anda");
+    ).rejects.toThrow("Ulasan tidak ditemukan atau bukan milik kamu.");
   });
 
   it("updateUlasan memperbarui ulasan dan pemicu pembaruan rating", async () => {
@@ -489,17 +512,32 @@ describe("UlasanService.validasiOwnerUlasan, updateUlasan & deleteUlasan", () =>
     vi.spyOn(UlasanService, "perbaruiRatingPenyedia").mockResolvedValue({ rating_rata_rata: 4.0, total_ulasan: 1 });
 
     mockCreateClient.mockReturnValue({
-      from: vi.fn().mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: { id_pesanan: "p1", pesanan: { id_penyedia_jasa: "seller-1" } },
+      from: vi.fn((table: string) => {
+        if (table === "pesanan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: { id_penyedia_jasa: "seller-1", id_jasa: null },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: { id_pesanan: "p1", dokumentasi_path: [] },
+                error: null,
+              }),
             }),
           }),
-        }),
-        update: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({ error: null }),
-        }),
+          update: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ error: null }),
+          }),
+        };
       }),
     });
 
@@ -515,17 +553,32 @@ describe("UlasanService.validasiOwnerUlasan, updateUlasan & deleteUlasan", () =>
     vi.spyOn(UlasanService, "perbaruiRatingPenyedia").mockResolvedValue({ rating_rata_rata: 0, total_ulasan: 0 });
 
     mockCreateClient.mockReturnValue({
-      from: vi.fn().mockReturnValue({
-        select: vi.fn().mockReturnValue({
-          eq: vi.fn().mockReturnValue({
-            single: vi.fn().mockResolvedValue({
-              data: { id_pesanan: "p1", pesanan: { id_penyedia_jasa: "seller-1" } },
+      from: vi.fn((table: string) => {
+        if (table === "pesanan") {
+          return {
+            select: vi.fn().mockReturnValue({
+              eq: vi.fn().mockReturnValue({
+                maybeSingle: vi.fn().mockResolvedValue({
+                  data: { id_penyedia_jasa: "seller-1", id_jasa: null },
+                  error: null,
+                }),
+              }),
+            }),
+          };
+        }
+        return {
+          select: vi.fn().mockReturnValue({
+            eq: vi.fn().mockReturnValue({
+              single: vi.fn().mockResolvedValue({
+                data: { id_pesanan: "p1", dokumentasi_path: [] },
+                error: null,
+              }),
             }),
           }),
-        }),
-        delete: vi.fn().mockReturnValue({
-          eq: vi.fn().mockResolvedValue({ error: null }),
-        }),
+          delete: vi.fn().mockReturnValue({
+            eq: vi.fn().mockResolvedValue({ error: null }),
+          }),
+        };
       }),
     });
 
