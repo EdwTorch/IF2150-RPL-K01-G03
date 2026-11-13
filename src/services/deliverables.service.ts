@@ -10,6 +10,25 @@ export const MAKS_UKURAN_DELIVERABLE = 50 * 1024 * 1024;
 export const TIPE_DELIVERABLE =
   /^(image\/(png|jpe?g|webp|gif)|video\/mp4|application\/(pdf|zip)|text\/(plain|html))$/;
 
+export type LampiranPengajuanRevisi = {
+  id_revisi: string;
+  nama_file: string;
+  file_url: string;
+  file_download_url: string;
+  created_at?: string;
+};
+
+function ambilNamaFile(filePath: string): string {
+  try {
+    const pathname = filePath.split("?")[0];
+    const nama = pathname.split("/").pop() || "Lampiran revisi";
+
+    return decodeURIComponent(nama);
+  } catch {
+    return "Lampiran revisi";
+  }
+}
+
 export class DeliverablesService {
   // Memastikan pesanan dimiliki oleh pengguna yang sedang login.
   static async validasiOwnerPesanan(
@@ -116,7 +135,6 @@ export class DeliverablesService {
       throw new Error("Deskripsi hasil pekerjaan tidak boleh kosong.");
     }
 
-    // output_path tetap diterima untuk kompatibilitas dengan route lama.
     const fileUrl = data.file_url || data.output_path;
 
     if (!fileUrl) {
@@ -141,24 +159,22 @@ export class DeliverablesService {
       throw new Error(`Gagal menyimpan hasil pekerjaan: ${error.message}`);
     }
 
-    const { data: pesananData, error: pesananError } = await supabase
+    const { error: pesananError } = await supabase
       .from("pesanan")
       .update({ status_pesanan: "Menunggu Konfirmasi" })
-      .eq("id_pesanan", data.id_pesanan)
-      .select(`
-        id_pesanan,
-        id_pengguna_jasa,
-        jasa (
-          nama_jasa
-        )
-      `)
-      .single();
+      .eq("id_pesanan", data.id_pesanan);
 
     if (pesananError) {
       throw new Error(
         `Gagal memperbarui status pesanan: ${pesananError.message}`
       );
     }
+
+    const { data: pesananData } = await supabase
+      .from("pesanan")
+      .select("id_pengguna_jasa, jasa(nama_jasa)")
+      .eq("id_pesanan", data.id_pesanan)
+      .maybeSingle();
 
     const namaJasa =
       (pesananData?.jasa as any)?.nama_jasa || "Pesanan";
@@ -177,7 +193,6 @@ export class DeliverablesService {
   }
 
   // 2. Mengambil hasil pekerjaan utama berdasarkan pesanan.
-  // Menghasilkan URL terpisah untuk melihat dan mengunduh.
   static async getDeliverableByPesanan(
     id_pesanan: string,
     user_id: string
@@ -205,7 +220,6 @@ export class DeliverablesService {
 
     const fileUrl = data.file_url;
 
-    // Tautan eksternal tidak perlu dibuatkan signed URL.
     if (!fileUrl || /^https?:\/\//i.test(fileUrl)) {
       return {
         ...data,
@@ -285,7 +299,7 @@ export class DeliverablesService {
     return data || [];
   }
 
-  // Mengambil seluruh lampiran hasil revisi beserta URL lihat dan unduh.
+  // Mengambil seluruh berkas hasil revisi yang dikirim penyedia.
   static async getRevisionAttachments(
     id_pesanan: string,
     user_id: string
@@ -304,7 +318,7 @@ export class DeliverablesService {
 
     if (error) {
       throw new Error(
-        `Gagal mengambil lampiran revisi: ${error.message}`
+        `Gagal mengambil hasil revisi: ${error.message}`
       );
     }
 
@@ -312,7 +326,6 @@ export class DeliverablesService {
       (data ?? []).map(async (item) => {
         const fileUrl = item.file_url;
 
-        // Tautan eksternal tidak perlu dibuatkan signed URL.
         if (!fileUrl || /^https?:\/\//i.test(fileUrl)) {
           return {
             ...item,
@@ -327,7 +340,7 @@ export class DeliverablesService {
 
         if (!signedUrl || !downloadUrl) {
           throw new Error(
-            `Gagal membuat URL lampiran revisi: ${item.id_produk_akhir}`
+            `Gagal membuat URL hasil revisi: ${item.id_produk_akhir}`
           );
         }
 
@@ -342,11 +355,84 @@ export class DeliverablesService {
     return lampiran;
   }
 
+  // Mengambil lampiran yang dikirim pengguna saat mengajukan revisi.
+  static async getRevisionRequestAttachments(
+    id_pesanan: string,
+    user_id: string
+  ): Promise<LampiranPengajuanRevisi[]> {
+    await this.validasiOwnerPesanan(id_pesanan, user_id);
+
+    const supabase = await createClient();
+    const storage = new SupabaseStorageService();
+
+    const { data, error } = await supabase
+      .from("pengajuan_revisi")
+      .select("id_revisi, lampiran_revisi, created_at")
+      .eq("id_pesanan", id_pesanan)
+      .not("lampiran_revisi", "is", null)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      throw new Error(
+        `Gagal mengambil lampiran pengajuan revisi: ${error.message}`
+      );
+    }
+
+    const hasil: LampiranPengajuanRevisi[] = [];
+
+    for (const revisi of data ?? []) {
+      const daftarPath: string[] = Array.isArray(revisi.lampiran_revisi)
+        ? revisi.lampiran_revisi
+        : typeof revisi.lampiran_revisi === "string"
+          ? [revisi.lampiran_revisi]
+          : [];
+
+      for (const filePath of daftarPath) {
+        if (!filePath) continue;
+
+        const namaFile = ambilNamaFile(filePath);
+
+        if (/^https?:\/\//i.test(filePath)) {
+          hasil.push({
+            id_revisi: revisi.id_revisi,
+            nama_file: namaFile,
+            file_url: filePath,
+            file_download_url: filePath,
+            created_at: revisi.created_at ?? undefined,
+          });
+
+          continue;
+        }
+
+        const [signedUrl, downloadUrl] = await Promise.all([
+          storage.buatSignedUrlProdukAkhir(filePath),
+          storage.buatSignedUrlUnduhProdukAkhir(filePath),
+        ]);
+
+        if (!signedUrl || !downloadUrl) {
+          throw new Error(
+            `Gagal membuat URL lampiran revisi: ${namaFile}`
+          );
+        }
+
+        hasil.push({
+          id_revisi: revisi.id_revisi,
+          nama_file: namaFile,
+          file_url: signedUrl,
+          file_download_url: downloadUrl,
+          created_at: revisi.created_at ?? undefined,
+        });
+      }
+    }
+
+    return hasil;
+  }
+
   // 3. Pengguna jasa mengajukan revisi.
   static async requestRevision(data: {
     id_pesanan: string;
     deskripsi_revisi: string;
-    lampiran_revisi?: string;
+    lampiran_revisi?: string[];
     id_produk_akhir: string;
     user_id: string;
   }): Promise<PengajuanRevisi> {
@@ -361,7 +447,6 @@ export class DeliverablesService {
       throw new Error("Deskripsi revisi wajib diisi.");
     }
 
-    // Pastikan produk akhir benar-benar berasal dari pesanan ini.
     const { data: produkAkhir, error: produkError } = await supabase
       .from("produk_akhir")
       .select("id_produk_akhir")
@@ -381,10 +466,11 @@ export class DeliverablesService {
       );
     }
 
-    // Cek kuota revisi.
-    const { data: existingRevisi, error: revisiError } = await supabase
+    const { data: revisiTerakhir, error: revisiError } = await supabase
       .from("pengajuan_revisi")
-      .select("jml_revisi_tersedia")
+      .select(
+        "id_revisi, jml_revisi_tersedia, status_pengerjaan"
+      )
       .eq("id_pesanan", data.id_pesanan)
       .order("created_at", { ascending: false })
       .limit(1)
@@ -392,48 +478,87 @@ export class DeliverablesService {
 
     if (revisiError) {
       throw new Error(
-        `Gagal mengambil kuota revisi: ${revisiError.message}`
+        `Gagal memeriksa riwayat revisi: ${revisiError.message}`
       );
     }
 
-    const current_kuota = existingRevisi
-      ? existingRevisi.jml_revisi_tersedia
+    if (revisiTerakhir) {
+      if (revisiTerakhir.status_pengerjaan === "Sedang Direvisi") {
+        throw new Error(
+          "Revisi sebelumnya masih dikerjakan penyedia jasa. Silakan tunggu sampai hasil revisi dikirimkan."
+        );
+      }
+
+      if (
+        revisiTerakhir.status_pengerjaan !== "Revisi Dikumpulkan"
+      ) {
+        throw new Error(
+          "Pengajuan revisi baru belum dapat dilakukan karena status revisi sebelumnya belum memungkinkan pengajuan ulang."
+        );
+      }
+    }
+
+    const current_kuota = revisiTerakhir
+      ? (revisiTerakhir.jml_revisi_tersedia ?? 0)
       : 3;
 
     if (current_kuota <= 0) {
-      throw new Error("Kuota revisi untuk pesanan ini sudah habis.");
+      throw new Error(
+        "Kuota revisi untuk pesanan ini sudah habis."
+      );
     }
 
     const id_revisi = crypto.randomUUID();
 
-    const { data: result, error } = await supabase
+    const { data: result, error: insertError } = await supabase
       .from("pengajuan_revisi")
       .insert({
         id_revisi,
         id_produk_akhir: data.id_produk_akhir,
         id_pesanan: data.id_pesanan,
         deskripsi_revisi: data.deskripsi_revisi.trim(),
-        lampiran_revisi: data.lampiran_revisi || null,
+        lampiran_revisi: data.lampiran_revisi?.length
+          ? data.lampiran_revisi
+          : null,
         jml_revisi_tersedia: current_kuota - 1,
         status_pengerjaan: "Sedang Direvisi",
       })
       .select()
       .single();
 
-    if (error) {
-      throw new Error(`Gagal mengajukan revisi: ${error.message}`);
+    if (insertError) {
+      throw new Error(
+        `Gagal mengajukan revisi: ${insertError.message}`
+      );
     }
 
-    const { data: pesananUpdated, error: pesananError } = await supabase
+    if (!result) {
+      throw new Error(
+        "Data pengajuan revisi tidak berhasil disimpan."
+      );
+    }
+
+    const { error: pesananError } = await supabase
       .from("pesanan")
-      .update({ status_pesanan: "Diproses" })
-      .eq("id_pesanan", data.id_pesanan)
-      .select("id_penyedia_jasa, jasa(nama_jasa)")
-      .single();
+      .update({ status_pesanan: "DIPROSES" })
+      .eq("id_pesanan", data.id_pesanan);
 
     if (pesananError) {
       throw new Error(
-        `Gagal memperbarui status pesanan: ${pesananError.message}`
+        `Revisi berhasil disimpan, tetapi gagal memperbarui status pesanan: ${pesananError.message}`
+      );
+    }
+
+    const { data: pesananUpdated, error: fetchError } = await supabase
+      .from("pesanan")
+      .select("id_penyedia_jasa, jasa(nama_jasa)")
+      .eq("id_pesanan", data.id_pesanan)
+      .maybeSingle();
+
+    if (fetchError) {
+      console.error(
+        "Gagal mengambil informasi pesanan:",
+        fetchError
       );
     }
 
@@ -460,7 +585,10 @@ export class DeliverablesService {
     file_urls: string[];
     user_id: string;
   }): Promise<ProdukAkhir[]> {
-    await this.validasiPenyediaJasa(data.id_pesanan, data.user_id);
+    await this.validasiPenyediaJasa(
+      data.id_pesanan,
+      data.user_id
+    );
 
     const supabase = await createClient();
 
@@ -472,7 +600,6 @@ export class DeliverablesService {
       throw new Error("Unggah berkas atau sertakan tautan hasil revisi.");
     }
 
-    // Pastikan ada revisi aktif.
     const { data: latestRevisi, error: revisiError } = await supabase
       .from("pengajuan_revisi")
       .select("id_revisi")
@@ -489,12 +616,13 @@ export class DeliverablesService {
     }
 
     if (!latestRevisi) {
-      throw new Error("Tidak ada pengajuan revisi yang sedang dikerjakan.");
+      throw new Error(
+        "Tidak ada pengajuan revisi yang sedang dikerjakan."
+      );
     }
 
     const idProdukUtama = crypto.randomUUID();
 
-    // Setiap lampiran menjadi satu baris produk_akhir.
     const rows = data.file_urls.map((fileUrl, index) => ({
       id_produk_akhir:
         index === 0 ? idProdukUtama : crypto.randomUUID(),
@@ -518,50 +646,52 @@ export class DeliverablesService {
       );
     }
 
-    // Hubungkan revisi dengan lampiran utama dan ubah status.
-    const { data: revisiUpdated, error: errUpdateRevisi } = await supabase
-      .from("pengajuan_revisi")
-      .update({
-        status_pengerjaan: "Revisi Dikumpulkan",
-        id_produk_akhir: idProdukUtama,
-      })
-      .eq("id_revisi", latestRevisi.id_revisi)
-      .eq("status_pengerjaan", "Sedang Direvisi")
-      .select("id_revisi")
-      .maybeSingle();
+    const { data: revisiUpdated, error: errUpdateRevisi } =
+      await supabase
+        .from("pengajuan_revisi")
+        .update({
+          status_pengerjaan: "Revisi Dikumpulkan",
+          id_produk_akhir: idProdukUtama,
+        })
+        .eq("id_revisi", latestRevisi.id_revisi)
+        .eq("status_pengerjaan", "Sedang Direvisi")
+        .select("id_revisi")
+        .maybeSingle();
 
     if (errUpdateRevisi || !revisiUpdated) {
-      // Hapus metadata yang sudah terlanjur dibuat.
-      await supabase
-        .from("produk_akhir")
-        .delete()
-        .eq("id_revisi", latestRevisi.id_revisi);
-
       throw new Error(
         `Gagal memperbarui status revisi: ${
-          errUpdateRevisi?.message ?? "Status revisi telah berubah."
+          errUpdateRevisi?.message ?? "Status revisi telah berubah. Periksa policy UPDATE pengajuan_revisi."
         }`
       );
     }
 
-    // Perbarui status pesanan satu kali.
-    const { data: pesananData, error: pesananError } = await supabase
+    const { data: pesananUpdated, error: pesananError } = await supabase
       .from("pesanan")
       .update({ status_pesanan: "Menunggu Konfirmasi" })
       .eq("id_pesanan", data.id_pesanan)
-      .select("id_pengguna_jasa, jasa(nama_jasa)")
-      .single();
+      .eq("status_pesanan", "DIPROSES")
+      .select("id_pesanan")
+      .maybeSingle();
 
-    if (pesananError) {
+    if (pesananError || !pesananUpdated) {
       throw new Error(
-        `Gagal memperbarui status pesanan: ${pesananError.message}`
+        `Revisi berhasil disimpan, tetapi status pesanan gagal diperbarui: ${
+          pesananError?.message ??
+          "Periksa policy UPDATE pesanan dan pastikan status sebelumnya DIPROSES."
+        }`
       );
     }
+
+    const { data: pesananData } = await supabase
+      .from("pesanan")
+      .select("id_pengguna_jasa, jasa(nama_jasa)")
+      .eq("id_pesanan", data.id_pesanan)
+      .maybeSingle();
 
     const namaJasa =
       (pesananData?.jasa as any)?.nama_jasa || "Pesanan";
 
-    // Kirim satu notifikasi untuk satu pengumpulan revisi.
     if (pesananData?.id_pengguna_jasa) {
       await NotifikasiService.kirimNotifikasi({
         id_pengguna: pesananData.id_pengguna_jasa,
@@ -577,6 +707,8 @@ export class DeliverablesService {
   }
 
   // 5. Pengguna jasa mengonfirmasi pesanan selesai.
+  // Seluruh proses status pesanan, pencairan, dan saldo dilakukan
+  // secara atomik oleh fungsi PostgreSQL.
   static async confirmOrderComplete(
     id_pesanan: string,
     user_id: string
@@ -585,112 +717,51 @@ export class DeliverablesService {
 
     const supabase = await createClient();
 
+    // Ambil informasi pesanan sebelum transaksi untuk kebutuhan notifikasi.
     const { data: pesanan, error: errFetch } = await supabase
       .from("pesanan")
-      .select(
-        "id_penyedia_jasa, total_biaya, status_pesanan, status_pencairan"
-      )
+      .select("id_penyedia_jasa, total_biaya, jasa(nama_jasa)")
       .eq("id_pesanan", id_pesanan)
       .single();
 
     if (errFetch || !pesanan) {
-      throw new Error("Pesanan tidak ditemukan.");
-    }
-
-    if (pesanan.status_pesanan !== "Menunggu Konfirmasi") {
       throw new Error(
-        "Pesanan belum berada pada tahap konfirmasi penyelesaian."
+        `Pesanan tidak ditemukan: ${errFetch?.message ?? ""}`
       );
     }
 
-    if (pesanan.status_pencairan) {
-      throw new Error("Dana pesanan ini sudah dicairkan.");
-    }
+    // Fungsi database mengurus:
+    // 1. Validasi pemilik pesanan dan status.
+    // 2. Mengubah status pesanan menjadi Selesai.
+    // 3. Mencatat pencairan dana.
+    // 4. Menambahkan saldo penyedia.
+    // Semua langkah tersebut berada dalam satu transaksi.
+    const { error: rpcError } = await supabase.rpc(
+      "konfirmasi_pesanan_selesai",
+      {
+        p_id_pesanan: id_pesanan,
+      }
+    );
 
-    // Ubah status pesanan menjadi selesai.
-    const { data: pesananSelesai, error } = await supabase
-      .from("pesanan")
-      .update({ status_pesanan: "Selesai" })
-      .eq("id_pesanan", id_pesanan)
-      .eq("status_pesanan", "Menunggu Konfirmasi")
-      .eq("status_pencairan", false)
-      .select("id_pesanan")
-      .maybeSingle();
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    if (!pesananSelesai) {
+    if (rpcError) {
       throw new Error(
-        "Pesanan sudah diproses atau statusnya telah berubah."
-      );
-    }
-
-    const id_pencairan = crypto.randomUUID();
-
-    const { error: errPencairan } = await supabase
-      .from("pencairan_dana")
-      .insert({
-        id_pencairan,
-        id_pesanan,
-        id_penyedia_jasa: pesanan.id_penyedia_jasa,
-        jumlah_pencairan: pesanan.total_biaya,
-        state_pencairan_dana: true,
-      });
-
-    if (errPencairan) {
-      throw new Error(
-        `Gagal mencatat pencairan dana: ${errPencairan.message}`
-      );
-    }
-
-    const { data: penyedia, error: errPenyedia } = await supabase
-      .from("penyedia_jasa")
-      .select("saldo")
-      .eq("id", pesanan.id_penyedia_jasa)
-      .single();
-
-    if (errPenyedia || !penyedia) {
-      throw new Error("Data penyedia jasa tidak ditemukan.");
-    }
-
-    const saldoBaru =
-      (penyedia.saldo || 0) + pesanan.total_biaya;
-
-    const { error: errSaldo } = await supabase
-      .from("penyedia_jasa")
-      .update({ saldo: saldoBaru })
-      .eq("id", pesanan.id_penyedia_jasa);
-
-    if (errSaldo) {
-      throw new Error(
-        `Gagal menambahkan saldo ke dompet penyedia jasa: ${errSaldo.message}`
-      );
-    }
-
-    const { data: dataPesanan, error: errUpdate } = await supabase
-      .from("pesanan")
-      .update({ status_pencairan: true })
-      .eq("id_pesanan", id_pesanan)
-      .select("jasa(nama_jasa)")
-      .single();
-
-    if (errUpdate) {
-      throw new Error(
-        "Gagal memperbarui status pencairan pada pesanan."
+        `Gagal mengonfirmasi pesanan dan mencairkan dana: ${rpcError.message}`
       );
     }
 
     const namaJasa =
-      (dataPesanan?.jasa as any)?.nama_jasa || "Pesanan";
+      (pesanan.jasa as any)?.nama_jasa || "Pesanan";
 
-    await NotifikasiService.kirimNotifikasi({
-      id_pengguna: pesanan.id_penyedia_jasa,
-      judul: `${namaJasa}: Pesanan Selesai & Dana Cair`,
-      pesan_notifikasi: `Pemesan telah mengonfirmasi pesanan selesai. Dana sebesar Rp ${pesanan.total_biaya.toLocaleString("id-ID")} telah ditambahkan ke saldo Anda.`,
-      id_pesanan,
-    });
+    if (pesanan.id_penyedia_jasa) {
+      await NotifikasiService.kirimNotifikasi({
+        id_pengguna: pesanan.id_penyedia_jasa,
+        judul: `${namaJasa}: Pesanan Selesai & Dana Cair`,
+        pesan_notifikasi: `Pemesan telah mengonfirmasi pesanan selesai. Dana sebesar Rp ${Number(
+          pesanan.total_biaya
+        ).toLocaleString("id-ID")} telah ditambahkan ke saldo Anda.`,
+        id_pesanan,
+      });
+    }
   }
 
   // Unggah berkas melalui Storage Service lama.

@@ -19,11 +19,33 @@ import {
   kirimHasil,
 } from "@/lib/client/produk-akhir";
 
+import { api } from "@/lib/api";
+
 type ErrorForm = {
   desk?: string;
   berkas?: string;
   url?: string;
   umum?: string;
+};
+
+type ResponsDeliverables = {
+  success: boolean;
+  message?: string;
+  data?: {
+    revisi_aktif?: {
+      id_revisi: string;
+      status_pengerjaan: string;
+    } | null;
+    revisi_terbaru?: {
+      id_revisi: string;
+      status_pengerjaan: string;
+    } | null;
+  };
+};
+
+type ResponsPengirimanRevisi = {
+  success: boolean;
+  message?: string;
 };
 
 export default function HalamanPengumpulan() {
@@ -83,11 +105,66 @@ export default function HalamanPengumpulan() {
     setSedangMengirim(true);
 
     try {
-      await kirimHasil(idPesanan, {
-        deskripsi,
-        tautan: url,
-        files,
-      });
+      // Periksa apakah pesanan memiliki pengajuan revisi aktif.
+      const respons = await api<ResponsDeliverables>(
+        `/api/pesanan/${idPesanan}/deliverables`,
+        {
+          method: "GET",
+        }
+      );
+
+      if (!respons.success || !respons.data) {
+        throw new Error(
+          respons.message || "Gagal memeriksa status pesanan."
+        );
+      }
+
+      const revisiAktif = respons.data.revisi_aktif;
+      const revisiTerbaru = respons.data.revisi_terbaru;
+
+      if (revisiAktif?.status_pengerjaan === "Sedang Direvisi") {
+        // Kirim hasil melalui endpoint khusus revisi.
+        const formData = new FormData();
+
+        formData.append("action", "submit_revision");
+        formData.append("deskripsi_produk", deskripsi.trim());
+
+        if (url.trim()) {
+          formData.append("tautan", url.trim());
+        }
+
+        files.forEach((file) => {
+          formData.append("berkas", file);
+        });
+
+        const hasilRevisi = await api<ResponsPengirimanRevisi>(
+          `/api/pesanan/${idPesanan}/deliverables/revisi`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        if (!hasilRevisi.success) {
+          throw new Error(
+            hasilRevisi.message || "Gagal mengirim hasil revisi."
+          );
+        }
+      } else if (revisiTerbaru) {
+        // Jangan sampai hasil revisi masuk sebagai hasil pekerjaan biasa.
+        throw new Error(
+          revisiTerbaru.status_pengerjaan === "Revisi Dikumpulkan"
+            ? "Hasil revisi sudah dikumpulkan. Silakan tunggu konfirmasi dari pengguna jasa."
+            : "Pengajuan revisi tidak sedang dalam status yang memungkinkan pengiriman hasil."
+        );
+      } else {
+        // Belum ada pengajuan revisi: kirim hasil pekerjaan pertama.
+        await kirimHasil(idPesanan, {
+          deskripsi,
+          tautan: url,
+          files,
+        });
+      }
 
       router.push(`/penyedia/pengumpulan/${idPesanan}/hasil`);
     } catch (err) {
@@ -103,64 +180,62 @@ export default function HalamanPengumpulan() {
   }
 
   return (
-      <div className="mx-auto flex w-full max-w-[880px] flex-col gap-6 px-6 py-8 md:px-20">
-        <PageHero
-          judul="Pengumpulan Jasa"
-          subjudul="Unggah berkas atau lampirkan tautan hasil pekerjaan Anda untuk ditinjau oleh Pembeli."
-        />
+    <div className="mx-auto flex w-full max-w-[880px] flex-col gap-6 px-6 py-8 md:px-20">
+      <PageHero
+        judul="Pengumpulan Jasa"
+        subjudul="Unggah berkas atau lampirkan tautan hasil pekerjaan Anda untuk ditinjau oleh Pembeli."
+      />
 
-        <section className="rounded-lg border border-line bg-surface p-4">
+      <section className="rounded-lg border border-line bg-surface p-4">
         <p className="text-caption text-ink-muted">ID Pesanan</p>
         <p className="text-h4 font-semibold text-ink">
-            #{idPesanan}
+          #{idPesanan}
         </p>
-        </section>
+      </section>
 
-        <section className="rounded-xl border border-line bg-surface p-6">
-          <form
-            noValidate
-            onSubmit={kirim}
-            className="flex flex-col gap-5"
+      <section className="rounded-xl border border-line bg-surface p-6">
+        <form
+          noValidate
+          onSubmit={kirim}
+          className="flex flex-col gap-5"
+        >
+          {error.umum && <Alert>{error.umum}</Alert>}
+
+          <Textarea
+            label="Deskripsi Hasil"
+            placeholder="Jelaskan hasil pekerjaan yang telah Anda buat"
+            value={deskripsi}
+            onChange={(event) => setDeskripsi(event.target.value)}
+            error={error.desk}
+          />
+
+          <UploadBox
+            label="Unggah Berkas Hasil"
+            format={FORMAT_BERKAS}
+            maksMB={MAX_MB}
+            maksBerkas={3}
+            berkas={files}
+            onUbah={setFiles}
+            error={error.berkas}
+          />
+
+          <Input
+            label="Atau Lampirkan Tautan"
+            placeholder="https://"
+            value={url}
+            onChange={(event) => setUrl(event.target.value)}
+            error={error.url}
+          />
+
+          <Button
+            type="submit"
+            loading={sedangMengirim}
+            className="self-end"
           >
-            {error.umum && (
-              <Alert>{error.umum}</Alert>
-            )}
-
-            <Textarea
-              label="Deskripsi Hasil"
-              placeholder="Jelaskan hasil pekerjaan yang telah Anda buat"
-              value={deskripsi}
-              onChange={(event) => setDeskripsi(event.target.value)}
-              error={error.desk}
-            />
-
-            <UploadBox
-              label="Unggah Berkas Hasil"
-              format={FORMAT_BERKAS}
-              maksMB={MAX_MB}
-              maksBerkas={3}
-              berkas={files}
-              onUbah={setFiles}
-              error={error.berkas}
-            />
-
-            <Input
-              label="Atau Lampirkan Tautan"
-              placeholder="https://"
-              value={url}
-              onChange={(event) => setUrl(event.target.value)}
-              error={error.url}
-            />
-
-            <Button
-              type="submit"
-              loading={sedangMengirim}
-              className="self-end"
-            >
-              Kirim Hasil Pekerjaan
-            </Button>
-          </form>
-        </section>
-      </div>
+            Kirim Hasil Pekerjaan
+          </Button>
+        </form>
+      </section>
+    </div>
   );
 }

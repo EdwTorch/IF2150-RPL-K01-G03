@@ -44,7 +44,7 @@ export interface PengajuanRevisi {
   deskripsi_revisi: string;
   jml_revisi_tersedia: number;
   status_pengerjaan: string;
-  lampiran_revisi?: string;
+  lampiran_revisi?: string[] | null;
   created_at?: string;
 }
 

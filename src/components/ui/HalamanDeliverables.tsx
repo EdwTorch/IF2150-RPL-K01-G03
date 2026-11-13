@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -40,6 +41,14 @@ type PengajuanRevisi = {
   produk_akhir?: ProdukAkhir | ProdukAkhir[] | null;
 };
 
+type LampiranPengajuanRevisi = {
+  id_revisi: string;
+  nama_file: string;
+  file_url: string;
+  file_download_url: string;
+  created_at?: string;
+};
+
 type DeliverablesResponse = {
   success: boolean;
   message: string;
@@ -51,6 +60,7 @@ type DeliverablesResponse = {
     revisi_aktif: PengajuanRevisi | null;
     riwayat_revisi: PengajuanRevisi[];
     lampiran_revisi: ProdukAkhir[];
+    lampiran_pengajuan_revisi: LampiranPengajuanRevisi[];
     kuota_revisi: number;
   };
 };
@@ -75,8 +85,6 @@ function namaBerkas(url: string) {
   }
 }
 
-// Mendeteksi tipe file berdasarkan ekstensi,
-// bukan berdasarkan apakah URL menggunakan HTTP/HTTPS.
 function tipeBerkas(url: string): BerkasHasil["tipe"] {
   let pathname = url.split("?")[0];
 
@@ -109,7 +117,6 @@ function tipeBerkas(url: string): BerkasHasil["tipe"] {
     return "berkas";
   }
 
-  // URL eksternal yang bukan file dikenali sebagai tautan.
   return /^https?:\/\//i.test(url) ? "tautan" : "berkas";
 }
 
@@ -118,8 +125,6 @@ function buatDaftarBerkas(
   lampiranRevisi: ProdukAkhir[],
   revisiTerbaru: PengajuanRevisi | null
 ): BerkasHasil[] {
-  // Jika revisi terbaru sudah dikumpulkan,
-  // tampilkan seluruh lampiran revisi.
   if (
     revisiTerbaru?.status_pengerjaan === "Revisi Dikumpulkan" &&
     lampiranRevisi.length > 0
@@ -139,7 +144,6 @@ function buatDaftarBerkas(
       });
   }
 
-  // Jika belum ada lampiran revisi, tampilkan hasil awal.
   if (!deliverable.file_url) {
     return [];
   }
@@ -241,9 +245,15 @@ export default function HalamanDeliverables({ peran }: Props) {
       )
     : [];
 
+  const lampiranPengajuanRevisi =
+    data?.lampiran_pengajuan_revisi?.filter(
+      (item) =>
+        item.file_url &&
+        (!revisiAktif || item.id_revisi === revisiAktif.id_revisi)
+    ) ?? [];
+
   const catatanHasil = data?.deliverable.deskripsi_produk;
 
-  // Konfirmasi penyelesaian pekerjaan oleh pengguna.
   async function konfirmasi() {
     if (pesananDitolak || sedangMemproses) return;
 
@@ -279,7 +289,6 @@ export default function HalamanDeliverables({ peran }: Props) {
     }
   }
 
-  // Tampilan status halaman.
   const statusLabel = pesananDitolak
     ? "Ditolak"
     : pesananSelesai
@@ -322,7 +331,6 @@ export default function HalamanDeliverables({ peran }: Props) {
 
   return (
     <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
-      {/* Notifikasi */}
       {error && <Alert>{error}</Alert>}
 
       {konfirmasiBerhasil && (
@@ -332,7 +340,6 @@ export default function HalamanDeliverables({ peran }: Props) {
         </Alert>
       )}
 
-      {/* Header halaman */}
       <PageHero
         judul="Hasil Pekerjaan"
         subjudul={`#${idPesanan} - ${data.nama_jasa}`}
@@ -344,13 +351,11 @@ export default function HalamanDeliverables({ peran }: Props) {
       />
 
       <div className="grid items-start gap-6 lg:grid-cols-[1fr_360px]">
-        {/* Informasi hasil pekerjaan */}
         <div className="flex flex-col gap-6">
-          {/* Informasi revisi */}
           {revisiAktif && (
             <section
               className={cn(
-                "flex flex-col gap-2 rounded-xl border border-warning-subtle bg-surface p-6"
+                "flex flex-col gap-3 rounded-xl border border-warning-subtle bg-surface p-6"
               )}
             >
               <h2 className="text-h4 text-ink">
@@ -362,10 +367,36 @@ export default function HalamanDeliverables({ peran }: Props) {
               <p className="text-body text-ink-muted">
                 {revisiAktif.deskripsi_revisi}
               </p>
+
+              {lampiranPengajuanRevisi.length > 0 && (
+                <div className="mt-2 flex flex-col gap-3">
+                  <h3 className="text-label text-ink">
+                    Lampiran dari pemesan
+                  </h3>
+
+                  {lampiranPengajuanRevisi.map((item, index) => (
+                    <LampiranBukti
+                      key={`${item.id_revisi}-${index}`}
+                      tipe={tipeBerkas(item.file_url)}
+                      nama={item.nama_file}
+                      keterangan="Lampiran permintaan revisi"
+                      hrefLihat={item.file_url}
+                      hrefUnduh={
+                        item.file_download_url || item.file_url
+                      }
+                    />
+                  ))}
+                </div>
+              )}
+
+              {lampiranPengajuanRevisi.length === 0 && (
+                <p className="text-body-sm text-ink-muted">
+                  Tidak ada lampiran pada pengajuan revisi ini.
+                </p>
+              )}
             </section>
           )}
 
-          {/* Catatan hasil */}
           <section className="flex flex-col gap-2 rounded-xl border border-line bg-surface p-6">
             <h2 className="text-h4 text-ink">
               {isPengguna
@@ -378,7 +409,6 @@ export default function HalamanDeliverables({ peran }: Props) {
             </p>
           </section>
 
-          {/* Berkas dan tautan hasil */}
           <section className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-6">
             <h2 className="text-h4 text-ink">
               Berkas & tautan hasil
@@ -403,9 +433,7 @@ export default function HalamanDeliverables({ peran }: Props) {
           </section>
         </div>
 
-        {/* Panel aksi berdasarkan peran dan status */}
         <section className="flex flex-col gap-4 rounded-xl border border-line bg-surface p-6">
-          {/* Pengguna: pesanan ditolak */}
           {isPengguna && pesananDitolak && (
             <div
               className="pointer-events-none flex flex-col gap-4 rounded-lg bg-disabled p-4 opacity-50"
@@ -434,10 +462,10 @@ export default function HalamanDeliverables({ peran }: Props) {
             </div>
           )}
 
-          {/* Pengguna: hasil menunggu konfirmasi */}
           {isPengguna &&
             !pesananDitolak &&
             !revisiDiminta &&
+            !revisiSudahDikirim &&
             !pesananSelesai && (
               <>
                 <h2 className="text-h4 text-ink">
@@ -478,7 +506,6 @@ export default function HalamanDeliverables({ peran }: Props) {
               </>
             )}
 
-          {/* Pengguna: revisi sedang dikerjakan */}
           {isPengguna && !pesananDitolak && revisiDiminta && (
             <>
               <h2 className="text-h4 text-ink">
@@ -500,7 +527,6 @@ export default function HalamanDeliverables({ peran }: Props) {
             </>
           )}
 
-          {/* Pengguna: revisi sudah dikirim */}
           {isPengguna &&
             !pesananDitolak &&
             revisiSudahDikirim &&
@@ -536,7 +562,6 @@ export default function HalamanDeliverables({ peran }: Props) {
               </>
             )}
 
-          {/* Pengguna: pesanan berhasil diselesaikan */}
           {isPengguna && pesananSelesai && (
             <>
               <h2 className="text-h4 text-ink">
@@ -554,7 +579,6 @@ export default function HalamanDeliverables({ peran }: Props) {
             </>
           )}
 
-          {/* Penyedia: menunggu pemeriksaan */}
           {!isPengguna &&
             !pesananDitolak &&
             !revisiDiminta &&
@@ -584,7 +608,6 @@ export default function HalamanDeliverables({ peran }: Props) {
               </>
             )}
 
-          {/* Penyedia: menerima permintaan revisi */}
           {!isPengguna && !pesananDitolak && revisiDiminta && (
             <>
               <h2 className="text-h4 text-ink">
@@ -617,7 +640,6 @@ export default function HalamanDeliverables({ peran }: Props) {
             </>
           )}
 
-          {/* Pengguna: laporan ke admin */}
           {isPengguna && (
             <Link
               href={`/pengguna/pelaporan?idPesanan=${encodeURIComponent(idPesanan)}`}
