@@ -1,3 +1,4 @@
+
 import { StorageService } from "./storage.interface";
 import { createClient } from "@supabase/supabase-js";
 import { randomUUID } from "crypto";
@@ -86,7 +87,7 @@ export class SupabaseStorageService implements StorageService {
     }
   }
 
-  // Membuat URL sementara untuk melihat file privat
+  // Membuat signed URL sementara untuk melihat file privat
   async buatSignedUrlProdukAkhir(
     file_path: string,
     masaBerlakuDetik = 300
@@ -94,6 +95,22 @@ export class SupabaseStorageService implements StorageService {
     const { data, error } = await this.supabase.storage
       .from(this.bucket_produk_akhir)
       .createSignedUrl(file_path, masaBerlakuDetik);
+
+    if (error) return null;
+
+    return data.signedUrl;
+  }
+
+  // Membuat signed URL sementara khusus untuk mengunduh file
+  async buatSignedUrlUnduhProdukAkhir(
+    file_path: string,
+    masaBerlakuDetik = 300
+  ): Promise<string | null> {
+    const { data, error } = await this.supabase.storage
+      .from(this.bucket_produk_akhir)
+      .createSignedUrl(file_path, masaBerlakuDetik, {
+        download: true,
+      });
 
     if (error) return null;
 

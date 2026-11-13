@@ -38,7 +38,7 @@ export type PesananDetail = Pesanan & {
 export const MAKS_PESANAN_AKTIF = 2;
 
 /** Default kuota revisi di services/deliverables.service.ts */
-export const KUOTA_REVISI_DEFAULT = 2;
+export const KUOTA_REVISI_DEFAULT = 3;
 
 type Respons<T> = {
   success: true;

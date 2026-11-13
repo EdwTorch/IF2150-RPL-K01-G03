@@ -50,12 +50,16 @@ function handleCustomError(err: any): { message: string; status: number } {
 // 1. GET /api/pesanan/[id_pesanan]/deliverables
 // Ambil Detail Hasil Pekerjaan untuk Diperiksa Pembeli/Penyedia
 // ----------------------------------------------------------------------
+
 export async function GET(
   request: NextRequest,
-  context: { params: Promise<{ id_pesanan: string }> | { id_pesanan: string } }
+  context: {
+    params: Promise<{ id_pesanan: string }> | { id_pesanan: string };
+  }
 ) {
   try {
     const supabase = await createClient();
+
     const {
       data: { user },
       error: auth_error,
@@ -70,22 +74,73 @@ export async function GET(
 
     const { id_pesanan } = await context.params;
 
-    const deliverable = await DeliverablesService.getDeliverableByPesanan(
-      id_pesanan,
-      user.id
-    );
+    // Ambil data deliverable, riwayat revisi, dan lampirannya.
+    const [deliverable, riwayatRevisi, lampiranRevisi] =
+      await Promise.all([
+        DeliverablesService.getDeliverableByPesanan(
+          id_pesanan,
+          user.id
+        ),
+        DeliverablesService.getRevisionHistory(
+          id_pesanan,
+          user.id
+        ),
+        DeliverablesService.getRevisionAttachments(
+          id_pesanan,
+          user.id
+        ),
+      ]);
+
+    // Ambil status pesanan dan nama jasa.
+    const { data: pesanan, error: pesananError } = await supabase
+      .from("pesanan")
+      .select(`
+        status_pesanan,
+        jasa (
+          nama_jasa
+        )
+      `)
+      .eq("id_pesanan", id_pesanan)
+      .single();
+
+    if (pesananError || !pesanan) {
+      throw new Error("Pesanan tidak ditemukan.");
+    }
+
+    const revisiTerbaru = riwayatRevisi[0] ?? null;
+
+    const revisiAktif = riwayatRevisi.find(
+      (item) => item.status_pengerjaan === "Sedang Direvisi"
+    ) ?? null;
+
+    const namaJasa =
+      (pesanan.jasa as any)?.nama_jasa || "Pesanan";
 
     return NextResponse.json(
       {
         success: true,
         message: "Detail Hasil Pekerjaan berhasil dimuat",
-        deliverable,
+        data: {
+          deliverable,
+          nama_jasa: namaJasa,
+          status_pesanan: pesanan.status_pesanan,
+          revisi_terbaru: revisiTerbaru,
+          revisi_aktif: revisiAktif,
+          riwayat_revisi: riwayatRevisi,
+          lampiran_revisi: lampiranRevisi,
+          kuota_revisi:
+            revisiTerbaru?.jml_revisi_tersedia ?? 3,
+        },
       },
       { status: 200 }
     );
   } catch (err: any) {
     const { message, status } = handleCustomError(err);
-    return NextResponse.json({ success: false, message }, { status });
+
+    return NextResponse.json(
+      { success: false, message },
+      { status }
+    );
   }
 }
 

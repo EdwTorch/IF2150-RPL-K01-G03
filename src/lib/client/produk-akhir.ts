@@ -4,17 +4,19 @@ import { api } from "@/lib/api";
 export const MAX_MB = 10;
 export const FORMAT_BERKAS = ["jpg", "jpeg", "png", "pdf"];
 
+export type ProdukAkhir = {
+  id_produk_akhir: string;
+  id_pesanan: string;
+  deskripsi_produk: string;
+  file_url: string | null;
+  status_pemeriksaan: boolean;
+  created_at: string;
+};
+
 type ResponsProdukAkhir = {
   success: boolean;
   message: string;
-  data: {
-    id_produk_akhir: string;
-    id_pesanan: string;
-    deskripsi_produk: string;
-    file_url: string;
-    status_pemeriksaan: boolean;
-    created_at: string;
-  }[];
+  data: ProdukAkhir[];
 };
 
 function normalisasiTautan(input: string): string {
@@ -45,6 +47,7 @@ export function validasiBerkas(files: File[]) {
   return null;
 }
 
+// POST: Mengirim hasil pekerjaan
 export async function kirimHasil(
   idPesanan: string,
   d: {
@@ -80,4 +83,18 @@ export async function kirimHasil(
   );
 
   return respons.success;
+}
+
+// GET: Mengambil hasil pekerjaan
+export async function ambilHasilProdukAkhir(
+  idPesanan: string
+): Promise<ProdukAkhir[]> {
+  const respons = await api<ResponsProdukAkhir>(
+    `/api/pesanan/${encodeURIComponent(idPesanan)}/produk-akhir`,
+    {
+      method: "GET",
+    }
+  );
+
+  return respons.data;
 }

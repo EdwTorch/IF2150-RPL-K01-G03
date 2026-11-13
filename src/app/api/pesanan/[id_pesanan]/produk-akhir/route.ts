@@ -334,3 +334,106 @@ export async function POST(
     );
   }
 }
+
+
+export async function GET(
+  _request: NextRequest,
+  { params }: KonteksRoute
+) {
+  try {
+    // 1. Periksa sesi pengguna
+    const user = await getSessionUser();
+
+    if (!user) {
+      return responsGagal("Tidak terautentikasi.", 401);
+    }
+
+    const { id_pesanan } = await params;
+    const supabase = await createClient();
+
+    // 2. Pastikan pengguna merupakan peserta pesanan
+    const { data: pesanan, error: errorPesanan } = await supabase
+      .from("pesanan")
+      .select("id_pesanan, id_pengguna_jasa, id_penyedia_jasa")
+      .eq("id_pesanan", id_pesanan)
+      .maybeSingle();
+
+    if (errorPesanan) {
+      return responsGagal("Gagal memeriksa data pesanan.", 500);
+    }
+
+    if (!pesanan) {
+      return responsGagal("Pesanan tidak ditemukan.", 404);
+    }
+
+    const pesertaPesanan =
+      pesanan.id_pengguna_jasa === user.id ||
+      pesanan.id_penyedia_jasa === user.id;
+
+    if (!pesertaPesanan) {
+      return responsGagal(
+        "Kamu tidak memiliki akses ke hasil pesanan ini.",
+        403
+      );
+    }
+
+    // 3. Ambil metadata hasil pekerjaan
+    const { data: daftarHasil, error: errorHasil } = await supabase
+      .from("produk_akhir")
+      .select(
+        "id_produk_akhir, id_pesanan, deskripsi_produk, file_url, status_pemeriksaan, created_at"
+      )
+      .eq("id_pesanan", id_pesanan)
+      .order("created_at", { ascending: true });
+
+    if (errorHasil) {
+      return responsGagal(
+        "Gagal mengambil hasil pekerjaan.",
+        500
+      );
+    }
+
+    // 4. Ubah path Storage menjadi signed URL
+    const storage = new SupabaseStorageService();
+
+    const data = await Promise.all(
+      (daftarHasil ?? []).map(async (item) => {
+        const fileUrl = item.file_url;
+
+        if (!fileUrl) {
+          return { ...item, file_url: null };
+        }
+
+        // Tautan eksternal tidak perlu signed URL
+        if (/^https?:\/\//i.test(fileUrl)) {
+          return { ...item, file_url: fileUrl };
+        }
+
+        // Berkas bucket privat menggunakan signed URL
+        const signedUrl =
+          await storage.buatSignedUrlProdukAkhir(fileUrl);
+
+        return {
+          ...item,
+          file_url: signedUrl,
+        };
+      })
+    );
+
+    return NextResponse.json({
+      success: true,
+      message: data.length
+        ? "Hasil pekerjaan berhasil diambil."
+        : "Belum ada hasil pekerjaan.",
+      data,
+    });
+  } catch (error) {
+    console.error("Gagal mengambil produk akhir:", error);
+
+    return responsGagal(
+      "Terjadi kesalahan saat mengambil hasil pekerjaan.",
+      500
+    );
+  }
+}
+

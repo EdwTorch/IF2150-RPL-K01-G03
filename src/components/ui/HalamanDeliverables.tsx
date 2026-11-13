@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import {
   Alert,
@@ -13,399 +13,621 @@ import {
 } from "@/components/elemen";
 
 import { cn } from "@/lib/cn";
-import {
-  getHasil,
-  getTransaksi,
-  konfirmasiSelesai,
-  type Hasil,
-} from "@/lib/layanan";
+import { api } from "@/lib/api";
 
 type Props = {
   peran: "pengguna" | "penyedia";
 };
+
+type ProdukAkhir = {
+  id_produk_akhir: string;
+  id_pesanan: string;
+  id_revisi?: string | null;
+  deskripsi_produk: string;
+  file_url?: string | null;
+  file_download_url?: string | null;
+  created_at?: string;
+};
+
+type PengajuanRevisi = {
+  id_revisi: string;
+  id_pesanan: string;
+  id_produk_akhir?: string | null;
+  deskripsi_revisi: string;
+  jml_revisi_tersedia: number;
+  status_pengerjaan: string;
+  created_at?: string;
+  produk_akhir?: ProdukAkhir | ProdukAkhir[] | null;
+};
+
+type DeliverablesResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    deliverable: ProdukAkhir;
+    nama_jasa: string;
+    status_pesanan: string;
+    revisi_terbaru: PengajuanRevisi | null;
+    revisi_aktif: PengajuanRevisi | null;
+    riwayat_revisi: PengajuanRevisi[];
+    lampiran_revisi: ProdukAkhir[];
+    kuota_revisi: number;
+  };
+};
+
+type BerkasHasil = {
+  nama: string;
+  tipe: "berkas" | "gambar" | "tautan";
+  info: string;
+  url: string;
+  urlUnduh: string;
+};
+
+function namaBerkas(url: string) {
+  try {
+    const bagian = url.split("?")[0];
+
+    return decodeURIComponent(
+      bagian.split("/").pop() || "Berkas hasil pekerjaan"
+    );
+  } catch {
+    return "Berkas hasil pekerjaan";
+  }
+}
+
+// Mendeteksi tipe file berdasarkan ekstensi,
+// bukan berdasarkan apakah URL menggunakan HTTP/HTTPS.
+function tipeBerkas(url: string): BerkasHasil["tipe"] {
+  let pathname = url.split("?")[0];
+
+  try {
+    pathname = decodeURIComponent(pathname);
+  } catch {
+    // Gunakan pathname awal jika gagal decode.
+  }
+
+  const ekstensi = pathname
+    .split("/")
+    .pop()
+    ?.split(".")
+    .pop()
+    ?.toLowerCase();
+
+  if (
+    ["jpg", "jpeg", "png", "webp", "gif"].includes(
+      ekstensi || ""
+    )
+  ) {
+    return "gambar";
+  }
+
+  if (
+    ["pdf", "zip", "mp4", "txt", "html"].includes(
+      ekstensi || ""
+    )
+  ) {
+    return "berkas";
+  }
+
+  // URL eksternal yang bukan file dikenali sebagai tautan.
+  return /^https?:\/\//i.test(url) ? "tautan" : "berkas";
+}
+
+function buatDaftarBerkas(
+  deliverable: ProdukAkhir,
+  lampiranRevisi: ProdukAkhir[],
+  revisiTerbaru: PengajuanRevisi | null
+): BerkasHasil[] {
+  // Jika revisi terbaru sudah dikumpulkan,
+  // tampilkan seluruh lampiran revisi.
+  if (
+    revisiTerbaru?.status_pengerjaan === "Revisi Dikumpulkan" &&
+    lampiranRevisi.length > 0
+  ) {
+    return lampiranRevisi
+      .filter((item) => item.file_url)
+      .map((item) => {
+        const url = item.file_url!;
+
+        return {
+          nama: namaBerkas(url),
+          tipe: tipeBerkas(url),
+          info: "Lampiran hasil revisi",
+          url,
+          urlUnduh: item.file_download_url || url,
+        };
+      });
+  }
+
+  // Jika belum ada lampiran revisi, tampilkan hasil awal.
+  if (!deliverable.file_url) {
+    return [];
+  }
+
+  const url = deliverable.file_url;
+
+  return [
+    {
+      nama: namaBerkas(url),
+      tipe: tipeBerkas(url),
+      info: "Berkas hasil pekerjaan",
+      url,
+      urlUnduh: deliverable.file_download_url || url,
+    },
+  ];
+}
 
 export default function HalamanDeliverables({ peran }: Props) {
   const { idPesanan } = useParams<{
     idPesanan: string;
   }>();
 
-  const router = useRouter();
+  const [data, setData] = useState<
+    DeliverablesResponse["data"] | null
+  >(null);
 
-  const [hasil, setHasil] = useState<Hasil | null>(null);
   const [error, setError] = useState("");
+  const [sedangMemuat, setSedangMemuat] = useState(true);
   const [sedangMemproses, setSedangMemproses] = useState(false);
-  const [konfirmasiBerhasil, setKonfirmasiBerhasil] = useState(false);
-  const [pesananDitolak, setPesananDitolak] = useState(false);
+  const [konfirmasiBerhasil, setKonfirmasiBerhasil] =
+    useState(false);
 
   const isPengguna = peran === "pengguna";
-  const revisiDiminta = hasil?.status === "revisi";
 
-  // Memuat data hasil pekerjaan dan status transaksi
   useEffect(() => {
     let aktif = true;
 
-    async function muatHasil() {
+    async function muatDeliverables() {
+      setSedangMemuat(true);
+      setError("");
+
       try {
-        const [data, daftarTransaksi] = await Promise.all([
-          getHasil(idPesanan),
-          getTransaksi().catch(() => []),
-        ]);
+        const respons = await api<DeliverablesResponse>(
+          `/api/pesanan/${encodeURIComponent(idPesanan)}/deliverables`
+        );
 
         if (aktif) {
-          setHasil(data);
-
-          const transaksi = daftarTransaksi.find(
-            (item) => item.id === idPesanan
-          );
-
-          setPesananDitolak(
-            transaksi?.status === "dikembalikan"
+          setData(respons.data);
+        }
+      } catch (err) {
+        if (aktif) {
+          setError(
+            err instanceof Error
+              ? err.message
+              : "Gagal memuat hasil pekerjaan."
           );
         }
-      } catch {
+      } finally {
         if (aktif) {
-          setError("Gagal memuat hasil pekerjaan.");
+          setSedangMemuat(false);
         }
       }
     }
 
-    muatHasil();
+    if (idPesanan) {
+      muatDeliverables();
+    }
 
     return () => {
       aktif = false;
     };
   }, [idPesanan]);
 
-  // Konfirmasi penyelesaian pekerjaan oleh pengguna
+  const statusPesanan = data?.status_pesanan?.toLowerCase() ?? "";
+
+  const pesananDitolak =
+    statusPesanan.includes("tolak") ||
+    statusPesanan.includes("kembali");
+
+  const pesananSelesai =
+    statusPesanan === "selesai" || konfirmasiBerhasil;
+
+  const revisiAktif = data?.revisi_aktif ?? null;
+  const revisiTerbaru = data?.revisi_terbaru ?? null;
+
+  const revisiDiminta =
+    revisiAktif?.status_pengerjaan === "Sedang Direvisi";
+
+  const revisiSudahDikirim =
+    revisiTerbaru?.status_pengerjaan === "Revisi Dikumpulkan";
+
+  const kuotaRevisi = data?.kuota_revisi ?? 3;
+
+  const berkas = data
+    ? buatDaftarBerkas(
+        data.deliverable,
+        data.lampiran_revisi ?? [],
+        revisiTerbaru
+      )
+    : [];
+
+  const catatanHasil = data?.deliverable.deskripsi_produk;
+
+  // Konfirmasi penyelesaian pekerjaan oleh pengguna.
   async function konfirmasi() {
-    if (pesananDitolak) return;
+    if (pesananDitolak || sedangMemproses) return;
 
     setSedangMemproses(true);
     setError("");
 
     try {
-      await konfirmasiSelesai(idPesanan);
+      await api(
+        `/api/pesanan/${encodeURIComponent(idPesanan)}/deliverables`,
+        {
+          method: "PATCH",
+        }
+      );
+
       setKonfirmasiBerhasil(true);
-    } catch {
+
+      setData((sebelumnya) =>
+        sebelumnya
+          ? {
+              ...sebelumnya,
+              status_pesanan: "Selesai",
+            }
+          : sebelumnya
+      );
+    } catch (err) {
       setError(
-        "Proses konfirmasi gagal. Periksa koneksi internet Anda dan coba lagi."
+        err instanceof Error
+          ? err.message
+          : "Proses konfirmasi gagal. Silakan coba lagi."
       );
     } finally {
       setSedangMemproses(false);
     }
   }
 
-  // Tampilan status halaman
+  // Tampilan status halaman.
   const statusLabel = pesananDitolak
     ? "Ditolak"
-    : revisiDiminta
-      ? "Revisi diminta"
-      : konfirmasiBerhasil
-        ? "Selesai"
+    : pesananSelesai
+      ? "Selesai"
+      : revisiDiminta
+        ? "Revisi diminta"
         : isPengguna
           ? "Menunggu konfirmasimu"
           : "Menunggu pemeriksaan";
 
   const statusNada = pesananDitolak
     ? "danger"
-    : revisiDiminta
-      ? "warning"
-      : konfirmasiBerhasil
-        ? "success"
+    : pesananSelesai
+      ? "success"
+      : revisiDiminta
+        ? "warning"
         : isPengguna
           ? "accent"
           : "neutral";
 
+  if (sedangMemuat) {
+    return (
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
+        <p className="text-body text-ink-muted">
+          Memuat hasil pekerjaan...
+        </p>
+      </div>
+    );
+  }
+
+  if (!data) {
+    return (
+      <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
+        <Alert>
+          {error || "Hasil pekerjaan belum tersedia."}
+        </Alert>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-auto flex w-full max-w-[1280px] flex-col gap-6 px-6 py-8 md:px-20">
-      {/* Tampilan loading dan error */}
-      {!hasil ? (
-        error ? (
-          <Alert>{error}</Alert>
-        ) : (
-          <p className="text-body text-ink-muted">
-            Memuat...
-          </p>
-        )
-      ) : (
-        <>
-          {/* Notifikasi */}
-          {error && <Alert>{error}</Alert>}
+      {/* Notifikasi */}
+      {error && <Alert>{error}</Alert>}
 
-          {konfirmasiBerhasil && (
-            <Alert tipe="success">
-              Pesanan selesai. Dana diteruskan ke penyedia jasa.
-              Jangan lupa beri ulasan!
-            </Alert>
+      {konfirmasiBerhasil && (
+        <Alert tipe="success">
+          Pesanan selesai. Dana diteruskan ke penyedia jasa.
+          Jangan lupa beri ulasan!
+        </Alert>
+      )}
+
+      {/* Header halaman */}
+      <PageHero
+        judul="Hasil Pekerjaan"
+        subjudul={`#${idPesanan} - ${data.nama_jasa}`}
+        status={
+          <StatusPill nada={statusNada}>
+            {statusLabel}
+          </StatusPill>
+        }
+      />
+
+      <div className="grid items-start gap-6 lg:grid-cols-[1fr_360px]">
+        {/* Informasi hasil pekerjaan */}
+        <div className="flex flex-col gap-6">
+          {/* Informasi revisi */}
+          {revisiAktif && (
+            <section
+              className={cn(
+                "flex flex-col gap-2 rounded-xl border border-warning-subtle bg-surface p-6"
+              )}
+            >
+              <h2 className="text-h4 text-ink">
+                {isPengguna
+                  ? "Permintaan revisimu"
+                  : "Permintaan revisi dari pemesan"}
+              </h2>
+
+              <p className="text-body text-ink-muted">
+                {revisiAktif.deskripsi_revisi}
+              </p>
+            </section>
           )}
 
-          {/* Header halaman */}
-          <PageHero
-            judul="Hasil Pekerjaan"
-            subjudul={`#${idPesanan} - ${hasil.judul}`}
-            status={
-              <StatusPill nada={statusNada}>
-                {statusLabel}
-              </StatusPill>
-            }
-          />
+          {/* Catatan hasil */}
+          <section className="flex flex-col gap-2 rounded-xl border border-line bg-surface p-6">
+            <h2 className="text-h4 text-ink">
+              {isPengguna
+                ? "Catatan dari penyedia"
+                : "Kiriman terakhirmu"}
+            </h2>
 
-          <div className="grid items-start gap-6 lg:grid-cols-[1fr_360px]">
-            {/* Informasi hasil pekerjaan */}
-            <div className="flex flex-col gap-6">
-              {/* Informasi revisi */}
-              {revisiDiminta && (
-                <section
-                  className={cn(
-                    "flex flex-col gap-2 rounded-xl border border-warning-subtle bg-surface p-6"
-                  )}
-                >
-                  <h2 className="text-h4 text-ink">
-                    {isPengguna
-                      ? "Permintaan revisimu"
-                      : "Permintaan revisi dari pemesan"}
-                  </h2>
+            <p className="text-body text-ink-muted">
+              {catatanHasil || "Belum ada catatan hasil pekerjaan."}
+            </p>
+          </section>
 
-                  <p className="text-body text-ink-muted">
-                    {hasil.revisi}
-                  </p>
-                </section>
-              )}
+          {/* Berkas dan tautan hasil */}
+          <section className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-6">
+            <h2 className="text-h4 text-ink">
+              Berkas & tautan hasil
+            </h2>
 
-              {/* Catatan hasil */}
-              <section className="flex flex-col gap-2 rounded-xl border border-line bg-surface p-6">
-                <h2 className="text-h4 text-ink">
-                  {isPengguna
-                    ? "Catatan dari penyedia"
-                    : "Kiriman terakhirmu"}
-                </h2>
+            {berkas.length > 0 ? (
+              berkas.map((item, index) => (
+                <LampiranBukti
+                  key={`${item.nama}-${index}`}
+                  tipe={item.tipe}
+                  nama={item.nama}
+                  keterangan={item.info}
+                  hrefLihat={item.url}
+                  hrefUnduh={item.urlUnduh}
+                />
+              ))
+            ) : (
+              <p className="text-body-sm text-ink-muted">
+                Belum ada berkas yang dilampirkan.
+              </p>
+            )}
+          </section>
+        </div>
 
-                <p className="text-body text-ink-muted">
-                  {hasil.catatan}
-                </p>
-              </section>
+        {/* Panel aksi berdasarkan peran dan status */}
+        <section className="flex flex-col gap-4 rounded-xl border border-line bg-surface p-6">
+          {/* Pengguna: pesanan ditolak */}
+          {isPengguna && pesananDitolak && (
+            <div
+              className="pointer-events-none flex flex-col gap-4 rounded-lg bg-disabled p-4 opacity-50"
+              aria-disabled="true"
+            >
+              <h2 className="text-h4 text-ink-disabled">
+                Sudah sesuai?
+              </h2>
 
-              {/* Berkas dan tautan hasil */}
-              <section className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-6">
-                <h2 className="text-h4 text-ink">
-                  Berkas & tautan hasil
-                </h2>
+              <p className="text-body-sm text-ink-disabled">
+                Pesanan telah ditolak. Konfirmasi selesai dan
+                pengajuan revisi tidak lagi tersedia.
+              </p>
 
-                {hasil.berkas.map((berkas) => (
-                  <LampiranBukti
-                    key={berkas.nama}
-                    tipe={berkas.tipe}
-                    nama={berkas.nama}
-                    keterangan={berkas.info}
-                    hrefLihat={berkas.url}
-                  />
-                ))}
-              </section>
+              <p className="rounded-field bg-muted px-4 py-3 text-label text-ink-disabled">
+                Sisa revisi: {kuotaRevisi} dari 3
+              </p>
+
+              <Button fullWidth disabled>
+                Konfirmasi selesai
+              </Button>
+
+              <Button fullWidth variant="secondary" disabled>
+                Ajukan revisi
+              </Button>
             </div>
+          )}
 
-            {/* Panel aksi berdasarkan peran dan status */}
-            <section className="flex flex-col gap-4 rounded-xl border border-line bg-surface p-6">
+          {/* Pengguna: hasil menunggu konfirmasi */}
+          {isPengguna &&
+            !pesananDitolak &&
+            !revisiDiminta &&
+            !pesananSelesai && (
+              <>
+                <h2 className="text-h4 text-ink">
+                  Sudah sesuai?
+                </h2>
 
-              {/* Pengguna: pesanan ditolak */}
-              {isPengguna && pesananDitolak && (
-                <div
-                  className="pointer-events-none flex flex-col gap-4 rounded-lg bg-disabled p-4 opacity-50"
-                  aria-disabled="true"
+                <p className="text-body-sm text-ink-muted">
+                  Konfirmasi jika hasil sesuai. Dana baru
+                  diteruskan ke penyedia setelah kamu konfirmasi.
+                </p>
+
+                <p className="rounded-field bg-brand-subtle px-4 py-3 text-label text-ink">
+                  Sisa revisi: {kuotaRevisi} dari 3
+                </p>
+
+                <Button
+                  fullWidth
+                  loading={sedangMemproses}
+                  disabled={sedangMemproses}
+                  onClick={konfirmasi}
                 >
-                  <h2 className="text-h4 text-ink-disabled">
-                    Sudah sesuai?
-                  </h2>
+                  Konfirmasi selesai
+                </Button>
 
-                  <p className="text-body-sm text-ink-disabled">
-                    Pesanan telah ditolak. Konfirmasi selesai dan
-                    pengajuan revisi tidak lagi tersedia.
-                  </p>
-
-                  <p className="rounded-field bg-muted px-4 py-3 text-label text-ink-disabled">
-                    Sisa revisi: {hasil.kuota} dari 3
-                  </p>
-
-                  <Button
-                    fullWidth
-                    disabled
-                  >
-                    Konfirmasi selesai
-                  </Button>
-
+                {kuotaRevisi > 0 ? (
                   <Button
                     fullWidth
                     variant="secondary"
-                    disabled
+                    href={`/pengguna/revisi/${idPesanan}`}
                   >
                     Ajukan revisi
                   </Button>
-                </div>
-              )}
-
-              {/* Pengguna: hasil menunggu konfirmasi */}
-              {isPengguna &&
-                !pesananDitolak &&
-                !revisiDiminta &&
-                !konfirmasiBerhasil && (
-                  <>
-                    <h2 className="text-h4 text-ink">
-                      Sudah sesuai?
-                    </h2>
-
-                    <p className="text-body-sm text-ink-muted">
-                      Konfirmasi jika hasil sesuai. Dana baru
-                      diteruskan ke penyedia setelah kamu konfirmasi.
-                    </p>
-
-                    <p className="rounded-field bg-brand-subtle px-4 py-3 text-label text-ink">
-                      Sisa revisi: {hasil.kuota} dari 3
-                    </p>
-
-                    <Button
-                      fullWidth
-                      loading={sedangMemproses}
-                      disabled={sedangMemproses}
-                      onClick={konfirmasi}
-                    >
-                      Konfirmasi selesai
-                    </Button>
-
-                    {hasil.kuota > 0 ? (
-                      <Button
-                        fullWidth
-                        variant="secondary"
-                        href={`/pengguna/revisi/${idPesanan}`}
-                      >
-                        Ajukan revisi
-                      </Button>
-                    ) : (
-                      <Button
-                        fullWidth
-                        variant="secondary"
-                        disabled
-                      >
-                        Kuota revisi habis
-                      </Button>
-                    )}
-                  </>
+                ) : (
+                  <Button fullWidth variant="secondary" disabled>
+                    Kuota revisi habis
+                  </Button>
                 )}
+              </>
+            )}
 
-              {/* Pengguna: revisi sedang dikerjakan */}
-              {isPengguna && !pesananDitolak && revisiDiminta && (
-                <>
-                  <h2 className="text-h4 text-ink">
-                    Revisi sedang dikerjakan
-                  </h2>
+          {/* Pengguna: revisi sedang dikerjakan */}
+          {isPengguna && !pesananDitolak && revisiDiminta && (
+            <>
+              <h2 className="text-h4 text-ink">
+                Revisi sedang dikerjakan
+              </h2>
 
-                  <p className="text-body-sm text-ink-muted">
-                    Penyedia sedang memperbaiki hasil. Kamu akan
-                    mendapat notifikasi saat hasil revisi dikirim.
-                  </p>
+              <p className="text-body-sm text-ink-muted">
+                Penyedia sedang memperbaiki hasil. Kamu akan
+                mendapat notifikasi saat hasil revisi dikirim.
+              </p>
 
-                  <Button
-                    fullWidth
-                    variant="secondary"
-                    href={`/chat/${idPesanan}`}
-                  >
-                    Chat penyedia
-                  </Button>
-                </>
-              )}
+              <Button
+                fullWidth
+                variant="secondary"
+                href={`/chat/${idPesanan}`}
+              >
+                Chat penyedia
+              </Button>
+            </>
+          )}
 
-              {/* Pengguna: pesanan berhasil diselesaikan */}
-              {isPengguna && konfirmasiBerhasil && (
-                <>
-                  <h2 className="text-h4 text-ink">
-                    Pesanan selesai
-                  </h2>
+          {/* Pengguna: revisi sudah dikirim */}
+          {isPengguna &&
+            !pesananDitolak &&
+            revisiSudahDikirim &&
+            !pesananSelesai && (
+              <>
+                <h2 className="text-h4 text-ink">
+                  Hasil revisi sudah dikirim
+                </h2>
 
-                  <p className="text-body-sm text-ink-muted">
-                    Terima kasih! Pembayaran telah diteruskan
-                    ke penyedia jasa.
-                  </p>
+                <p className="text-body-sm text-ink-muted">
+                  Periksa hasil revisi terbaru. Jika sudah sesuai,
+                  kamu dapat mengonfirmasi penyelesaian pesanan.
+                </p>
 
-                  <Button
-                    fullWidth
-                    href={`/ulasan/${idPesanan}`}
-                  >
-                    Beri ulasan
-                  </Button>
-                </>
-              )}
-
-              {/* Penyedia: menunggu pemeriksaan */}
-              {!isPengguna && !pesananDitolak && !revisiDiminta && (
-                <>
-                  <h2 className="text-h4 text-ink">
-                    Menunggu pemeriksaan
-                  </h2>
-
-                  <p className="text-body-sm text-ink-muted">
-                    Pemesan sedang memeriksa hasilmu. Kamu akan
-                    mendapat notifikasi jika ada permintaan revisi
-                    atau konfirmasi selesai.
-                  </p>
-
-                  <p className="rounded-field bg-brand-subtle px-4 py-3 text-label text-ink">
-                    Sisa kuota revisi pemesan: {hasil.kuota} dari 3
-                  </p>
-
-                  <Button
-                    fullWidth
-                    variant="secondary"
-                    href={`/chat/${idPesanan}`}
-                  >
-                    Chat pemesan
-                  </Button>
-                </>
-              )}
-
-              {/* Penyedia: menerima permintaan revisi */}
-              {!isPengguna && !pesananDitolak && revisiDiminta && (
-                <>
-                  <h2 className="text-h4 text-ink">
-                    Kerjakan revisi
-                  </h2>
-
-                  <p className="text-body-sm text-ink-muted">
-                    Perbaiki hasil sesuai permintaan, lalu kirim
-                    ulang lewat halaman pengumpulan.
-                  </p>
-
-                  <p className="rounded-field bg-brand-subtle px-4 py-3 text-label text-ink">
-                    Sisa kuota revisi pemesan: {hasil.kuota}
-                  </p>
-
-                  <Button
-                    fullWidth
-                    href={`/penyedia/pengumpulan/${idPesanan}`}
-                  >
-                    Kirim hasil revisi
-                  </Button>
-
-                  <Button
-                    fullWidth
-                    variant="secondary"
-                    href={`/chat/${idPesanan}`}
-                  >
-                    Chat pemesan
-                  </Button>
-                </>
-              )}
-
-              {/* Pengguna: laporan ke admin */}
-              {isPengguna && (
-                <Link
-                  href={`/pengguna/pelaporan?idPesanan=${encodeURIComponent(idPesanan)}`}
-                  className="text-label text-brand-text"
+                <Button
+                  fullWidth
+                  loading={sedangMemproses}
+                  disabled={sedangMemproses}
+                  onClick={konfirmasi}
                 >
-                  Ada masalah? Laporkan ke admin
-                </Link>
-              )}
-            </section>
-          </div>
-        </>
-      )}
+                  Konfirmasi selesai
+                </Button>
+
+                {kuotaRevisi > 0 && (
+                  <Button
+                    fullWidth
+                    variant="secondary"
+                    href={`/pengguna/revisi/${idPesanan}`}
+                  >
+                    Ajukan revisi lagi
+                  </Button>
+                )}
+              </>
+            )}
+
+          {/* Pengguna: pesanan berhasil diselesaikan */}
+          {isPengguna && pesananSelesai && (
+            <>
+              <h2 className="text-h4 text-ink">
+                Pesanan selesai
+              </h2>
+
+              <p className="text-body-sm text-ink-muted">
+                Terima kasih! Pembayaran telah diteruskan
+                ke penyedia jasa.
+              </p>
+
+              <Button fullWidth href={`/ulasan/${idPesanan}`}>
+                Beri ulasan
+              </Button>
+            </>
+          )}
+
+          {/* Penyedia: menunggu pemeriksaan */}
+          {!isPengguna &&
+            !pesananDitolak &&
+            !revisiDiminta &&
+            !pesananSelesai && (
+              <>
+                <h2 className="text-h4 text-ink">
+                  Menunggu pemeriksaan
+                </h2>
+
+                <p className="text-body-sm text-ink-muted">
+                  Pemesan sedang memeriksa hasilmu. Kamu akan
+                  mendapat notifikasi jika ada permintaan revisi
+                  atau konfirmasi selesai.
+                </p>
+
+                <p className="rounded-field bg-brand-subtle px-4 py-3 text-label text-ink">
+                  Sisa kuota revisi pemesan: {kuotaRevisi} dari 3
+                </p>
+
+                <Button
+                  fullWidth
+                  variant="secondary"
+                  href={`/chat/${idPesanan}`}
+                >
+                  Chat pemesan
+                </Button>
+              </>
+            )}
+
+          {/* Penyedia: menerima permintaan revisi */}
+          {!isPengguna && !pesananDitolak && revisiDiminta && (
+            <>
+              <h2 className="text-h4 text-ink">
+                Kerjakan revisi
+              </h2>
+
+              <p className="text-body-sm text-ink-muted">
+                Perbaiki hasil sesuai permintaan, lalu kirim
+                ulang lewat halaman pengumpulan.
+              </p>
+
+              <p className="rounded-field bg-brand-subtle px-4 py-3 text-label text-ink">
+                Sisa kuota revisi pemesan: {kuotaRevisi}
+              </p>
+
+              <Button
+                fullWidth
+                href={`/penyedia/pengumpulan/${idPesanan}`}
+              >
+                Kirim hasil revisi
+              </Button>
+
+              <Button
+                fullWidth
+                variant="secondary"
+                href={`/chat/${idPesanan}`}
+              >
+                Chat pemesan
+              </Button>
+            </>
+          )}
+
+          {/* Pengguna: laporan ke admin */}
+          {isPengguna && (
+            <Link
+              href={`/pengguna/pelaporan?idPesanan=${encodeURIComponent(idPesanan)}`}
+              className="text-label text-brand-text"
+            >
+              Ada masalah? Laporkan ke admin
+            </Link>
+          )}
+        </section>
+      </div>
     </div>
   );
 }
