@@ -19,6 +19,7 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
   const mockStorageUpload = vi.fn();
   const mockGetUser = vi.fn();
   const mockFrom = vi.fn();
+  const mockRpc = vi.fn();
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -31,6 +32,7 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
     vi.spyOn(SupabaseServer, 'createClient').mockResolvedValue({
       auth: { getUser: mockGetUser },
       from: mockFrom,
+      rpc: mockRpc,
     } as any);
   });
 
@@ -103,21 +105,21 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({ data: null, error: null }),
+            maybeSingle: vi.fn().mockResolvedValueOnce({ data: null, error: null }),
           }),
         }),
       });
 
       await expect(
         DeliverablesService.validasiOwnerPesanan('pesanan-none', 'user-1')
-      ).rejects.toThrow('Pesanan tidak ditemukan');
+      ).rejects.toThrow('Pesanan tidak ditemukan.');
     });
 
     it('melempar error jika user bukan pemesan maupun penyedia', async () => {
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
               data: { id_pengguna_jasa: 'klien-1', id_penyedia_jasa: 'penyedia-1' },
               error: null,
             }),
@@ -127,14 +129,14 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
 
       await expect(
         DeliverablesService.validasiOwnerPesanan('pesanan-1', 'user-asing')
-      ).rejects.toThrow('Akses ditolak, pesanan ini bukan milik anda');
+      ).rejects.toThrow('Akses ditolak. Pesanan ini bukan milik Anda.');
     });
 
     it('mengembalikan true jika user adalah pengguna jasa (pemesan)', async () => {
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
               data: { id_pengguna_jasa: 'klien-1', id_penyedia_jasa: 'penyedia-1' },
               error: null,
             }),
@@ -150,7 +152,7 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
               data: { id_pengguna_jasa: 'klien-1', id_penyedia_jasa: 'penyedia-1' },
               error: null,
             }),
@@ -169,7 +171,7 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
               data: { id_pengguna_jasa: 'klien-1', id_penyedia_jasa: 'penyedia-1' },
               error: null,
             }),
@@ -223,7 +225,7 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
     });
   });
 
-  // ─── requestRevision (line 221: pesananError → throw) ────────────────────────
+  // ─── requestRevision ────────────────────────────────────────────────────────
   describe('DeliverablesService.requestRevision', () => {
     const baseData = {
       id_pesanan: 'pesanan-1',
@@ -232,12 +234,12 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       user_id: 'klien-1',
     };
 
-    const mockValidasiOwner = () => {
+    const mockValidasiPengguna = (idPengguna = 'klien-1') => {
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_pengguna_jasa: 'klien-1', id_penyedia_jasa: 'penyedia-1' },
+            maybeSingle: vi.fn().mockResolvedValueOnce({
+              data: { id_pengguna_jasa: idPengguna },
               error: null,
             }),
           }),
@@ -245,45 +247,39 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       });
     };
 
+    const mockProdukAkhirValid = () => {
+      mockFrom.mockReturnValueOnce({
+        select: vi.fn().mockReturnValueOnce({
+          eq: vi.fn().mockReturnValueOnce({
+            eq: vi.fn().mockReturnValueOnce({
+              maybeSingle: vi.fn().mockResolvedValueOnce({
+                data: { id_produk_akhir: 'produk-1' },
+                error: null,
+              }),
+            }),
+          }),
+        }),
+      });
+    };
+
     it('melempar error jika deskripsi revisi kosong', async () => {
-      mockValidasiOwner();
+      mockValidasiPengguna();
       await expect(
         DeliverablesService.requestRevision({ ...baseData, deskripsi_revisi: '' })
-      ).rejects.toThrow('Deskripsi revisi wajib diisi');
+      ).rejects.toThrow('Deskripsi revisi wajib diisi.');
     });
 
     it('melempar error jika user bukan pengguna jasa pesanan (line 173)', async () => {
-      mockValidasiOwner();
-      // pesanan query: id_pengguna_jasa bukan klien-1
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_pengguna_jasa: 'klien-lain' },
-              error: null,
-            }),
-          }),
-        }),
-      });
+      mockValidasiPengguna('klien-lain');
 
       await expect(
         DeliverablesService.requestRevision(baseData)
-      ).rejects.toThrow('Hanya pengguna jasa yang dapat mengajukan revisi');
+      ).rejects.toThrow('Hanya pengguna jasa pemilik pesanan yang dapat melakukan tindakan ini');
     });
 
     it('melempar error jika kuota revisi habis (line 188)', async () => {
-      mockValidasiOwner();
-      // pesanan: pengguna jasa valid
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_pengguna_jasa: 'klien-1' },
-              error: null,
-            }),
-          }),
-        }),
-      });
+      mockValidasiPengguna();
+      mockProdukAkhirValid();
       // kuota revisi = 0
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
@@ -291,7 +287,11 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
             order: vi.fn().mockReturnValueOnce({
               limit: vi.fn().mockReturnValueOnce({
                 maybeSingle: vi.fn().mockResolvedValueOnce({
-                  data: { jml_revisi_tersedia: 0 },
+                  data: {
+                    id_revisi: 'rev-prev',
+                    jml_revisi_tersedia: 0,
+                    status_pengerjaan: 'Revisi Dikumpulkan',
+                  },
                   error: null,
                 }),
               }),
@@ -302,22 +302,12 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
 
       await expect(
         DeliverablesService.requestRevision(baseData)
-      ).rejects.toThrow('Kuota revisi untuk pesanan ini sudah habis');
+      ).rejects.toThrow('Kuota revisi untuk pesanan ini sudah habis.');
     });
 
     it('melempar error jika update status pesanan gagal setelah insert revisi (line 221)', async () => {
-      mockValidasiOwner();
-      // pesanan pengguna jasa
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_pengguna_jasa: 'klien-1' },
-              error: null,
-            }),
-          }),
-        }),
-      });
+      mockValidasiPengguna();
+      mockProdukAkhirValid();
       // kuota revisi = 2
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
@@ -325,7 +315,11 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
             order: vi.fn().mockReturnValueOnce({
               limit: vi.fn().mockReturnValueOnce({
                 maybeSingle: vi.fn().mockResolvedValueOnce({
-                  data: { jml_revisi_tersedia: 2 },
+                  data: {
+                    id_revisi: 'rev-prev',
+                    jml_revisi_tersedia: 2,
+                    status_pengerjaan: 'Revisi Dikumpulkan',
+                  },
                   error: null,
                 }),
               }),
@@ -347,34 +341,20 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       // update status pesanan GAGAL
       mockFrom.mockReturnValueOnce({
         update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            select: vi.fn().mockReturnValueOnce({
-              single: vi.fn().mockResolvedValueOnce({
-                data: null,
-                error: { message: 'Koneksi DB terputus' },
-              }),
-            }),
+          eq: vi.fn().mockResolvedValueOnce({
+            error: { message: 'Koneksi DB terputus' },
           }),
         }),
       });
 
       await expect(
         DeliverablesService.requestRevision(baseData)
-      ).rejects.toThrow('Gagal memperbarui status pesanan');
+      ).rejects.toThrow('gagal memperbarui status pesanan');
     });
 
     it('berhasil insert revisi dan kirim notifikasi (happy path)', async () => {
-      mockValidasiOwner();
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_pengguna_jasa: 'klien-1' },
-              error: null,
-            }),
-          }),
-        }),
-      });
+      mockValidasiPengguna();
+      mockProdukAkhirValid();
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
@@ -398,12 +378,15 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       });
       mockFrom.mockReturnValueOnce({
         update: vi.fn().mockReturnValueOnce({
+          eq: vi.fn().mockResolvedValueOnce({ error: null }),
+        }),
+      });
+      mockFrom.mockReturnValueOnce({
+        select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            select: vi.fn().mockReturnValueOnce({
-              single: vi.fn().mockResolvedValueOnce({
-                data: { id_penyedia_jasa: 'penyedia-1', jasa: { nama_jasa: 'Desain Logo' } },
-                error: null,
-              }),
+            maybeSingle: vi.fn().mockResolvedValueOnce({
+              data: { id_penyedia_jasa: 'penyedia-1', jasa: { nama_jasa: 'Desain Logo' } },
+              error: null,
             }),
           }),
         }),
@@ -414,21 +397,21 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
     });
   });
 
-  // ─── submitRevisionFix (line 248–314) ─────────────────────────────────────────
+  // ─── submitRevisionFix ──────────────────────────────────────────────────────
   describe('DeliverablesService.submitRevisionFix', () => {
     const baseData = {
       id_pesanan: 'pesanan-1',
       deskripsi_produk: 'Perbaikan sudah dilakukan',
-      file_url: 'https://cdn.example.com/hasil-fix.pdf',
+      file_urls: ['https://cdn.example.com/hasil-fix.pdf'],
       user_id: 'penyedia-1',
     };
 
-    const mockValidasiOwner = () => {
+    const mockValidasiPenyedia = () => {
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_pengguna_jasa: 'klien-1', id_penyedia_jasa: 'penyedia-1' },
+            maybeSingle: vi.fn().mockResolvedValueOnce({
+              data: { id_penyedia_jasa: 'penyedia-1' },
               error: null,
             }),
           }),
@@ -436,15 +419,33 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       });
     };
 
+    const mockLatestRevisi = () => {
+      mockFrom.mockReturnValueOnce({
+        select: vi.fn().mockReturnValueOnce({
+          eq: vi.fn().mockReturnValueOnce({
+            eq: vi.fn().mockReturnValueOnce({
+              order: vi.fn().mockReturnValueOnce({
+                limit: vi.fn().mockReturnValueOnce({
+                  maybeSingle: vi.fn().mockResolvedValueOnce({
+                    data: { id_revisi: 'rev-latest' },
+                    error: null,
+                  }),
+                }),
+              }),
+            }),
+          }),
+        }),
+      });
+    };
+
     it('melempar error jika insert produk_akhir gagal (line 268)', async () => {
-      mockValidasiOwner();
+      mockValidasiPenyedia();
+      mockLatestRevisi();
       mockFrom.mockReturnValueOnce({
         insert: vi.fn().mockReturnValueOnce({
-          select: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: null,
-              error: { message: 'Duplikat key' },
-            }),
+          select: vi.fn().mockResolvedValueOnce({
+            data: null,
+            error: { message: 'Duplikat key' },
           }),
         }),
       });
@@ -455,68 +456,23 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
     });
 
     it('melempar error jika update status pesanan gagal (line 298–300)', async () => {
-      mockValidasiOwner();
+      mockValidasiPenyedia();
+      mockLatestRevisi();
       // insert produk_akhir sukses
       mockFrom.mockReturnValueOnce({
         insert: vi.fn().mockReturnValueOnce({
-          select: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_produk_akhir: 'prod-new' },
-              error: null,
-            }),
+          select: vi.fn().mockResolvedValueOnce({
+            data: [{ id_produk_akhir: 'prod-new' }],
+            error: null,
           }),
         }),
       });
-      // latestRevisi: tidak ada
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            order: vi.fn().mockReturnValueOnce({
-              limit: vi.fn().mockReturnValueOnce({
-                maybeSingle: vi.fn().mockResolvedValueOnce({ data: null, error: null }),
-              }),
-            }),
-          }),
-        }),
-      });
-      // update pesanan status GAGAL
+      // update pengajuan_revisi sukses
       mockFrom.mockReturnValueOnce({
         update: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            select: vi.fn().mockReturnValueOnce({
-              single: vi.fn().mockResolvedValueOnce({
-                data: null,
-                error: { message: 'Gagal update' },
-              }),
-            }),
-          }),
-        }),
-      });
-
-      await expect(
-        DeliverablesService.submitRevisionFix(baseData)
-      ).rejects.toThrow('Gagal memperbarui status pesanan');
-    });
-
-    it('berhasil submit revision fix dengan latest revisi & kirim notifikasi (line 280–314)', async () => {
-      mockValidasiOwner();
-      // insert produk_akhir
-      mockFrom.mockReturnValueOnce({
-        insert: vi.fn().mockReturnValueOnce({
-          select: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_produk_akhir: 'prod-fix', id_pesanan: 'pesanan-1' },
-              error: null,
-            }),
-          }),
-        }),
-      });
-      // latestRevisi ada
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            order: vi.fn().mockReturnValueOnce({
-              limit: vi.fn().mockReturnValueOnce({
+            eq: vi.fn().mockReturnValueOnce({
+              select: vi.fn().mockReturnValueOnce({
                 maybeSingle: vi.fn().mockResolvedValueOnce({
                   data: { id_revisi: 'rev-latest' },
                   error: null,
@@ -526,39 +482,94 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
           }),
         }),
       });
-      // update pengajuan_revisi status
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockResolvedValueOnce({ error: null }),
-        }),
-      });
-      // update pesanan status sukses
+      // update pesanan status GAGAL
       mockFrom.mockReturnValueOnce({
         update: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            select: vi.fn().mockReturnValueOnce({
-              single: vi.fn().mockResolvedValueOnce({
-                data: { id_pengguna_jasa: 'klien-1', jasa: { nama_jasa: 'Desain Logo' } },
-                error: null,
+            eq: vi.fn().mockReturnValueOnce({
+              select: vi.fn().mockReturnValueOnce({
+                maybeSingle: vi.fn().mockResolvedValueOnce({
+                  data: null,
+                  error: { message: 'Gagal update' },
+                }),
               }),
             }),
           }),
         }),
       });
 
-      const result = await DeliverablesService.submitRevisionFix(baseData);
-      expect(result).toMatchObject({ id_produk_akhir: 'prod-fix' });
+      await expect(
+        DeliverablesService.submitRevisionFix(baseData)
+      ).rejects.toThrow('status pesanan gagal diperbarui');
     });
-  });
 
-  // ─── confirmOrderComplete (line 371, 381) ─────────────────────────────────────
-  describe('DeliverablesService.confirmOrderComplete', () => {
-    const mockValidasiOwner = () => {
+    it('berhasil submit revision fix dengan latest revisi & kirim notifikasi (line 280–314)', async () => {
+      mockValidasiPenyedia();
+      mockLatestRevisi();
+      // insert produk_akhir
+      mockFrom.mockReturnValueOnce({
+        insert: vi.fn().mockReturnValueOnce({
+          select: vi.fn().mockResolvedValueOnce({
+            data: [{ id_produk_akhir: 'prod-fix', id_pesanan: 'pesanan-1' }],
+            error: null,
+          }),
+        }),
+      });
+      // update pengajuan_revisi status
+      mockFrom.mockReturnValueOnce({
+        update: vi.fn().mockReturnValueOnce({
+          eq: vi.fn().mockReturnValueOnce({
+            eq: vi.fn().mockReturnValueOnce({
+              select: vi.fn().mockReturnValueOnce({
+                maybeSingle: vi.fn().mockResolvedValueOnce({
+                  data: { id_revisi: 'rev-latest' },
+                  error: null,
+                }),
+              }),
+            }),
+          }),
+        }),
+      });
+      // update pesanan status sukses
+      mockFrom.mockReturnValueOnce({
+        update: vi.fn().mockReturnValueOnce({
+          eq: vi.fn().mockReturnValueOnce({
+            eq: vi.fn().mockReturnValueOnce({
+              select: vi.fn().mockReturnValueOnce({
+                maybeSingle: vi.fn().mockResolvedValueOnce({
+                  data: { id_pesanan: 'pesanan-1' },
+                  error: null,
+                }),
+              }),
+            }),
+          }),
+        }),
+      });
+      // fetch pesanan untuk notifikasi
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_pengguna_jasa: 'klien-1', id_penyedia_jasa: 'penyedia-1' },
+            maybeSingle: vi.fn().mockResolvedValueOnce({
+              data: { id_pengguna_jasa: 'klien-1', jasa: { nama_jasa: 'Desain Logo' } },
+              error: null,
+            }),
+          }),
+        }),
+      });
+
+      const result = await DeliverablesService.submitRevisionFix(baseData);
+      expect(result[0]).toMatchObject({ id_produk_akhir: 'prod-fix' });
+    });
+  });
+
+  // ─── confirmOrderComplete ───────────────────────────────────────────────────
+  describe('DeliverablesService.confirmOrderComplete', () => {
+    const mockValidasiPengguna = (idPengguna = 'klien-1') => {
+      mockFrom.mockReturnValueOnce({
+        select: vi.fn().mockReturnValueOnce({
+          eq: vi.fn().mockReturnValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
+              data: { id_pengguna_jasa: idPengguna },
               error: null,
             }),
           }),
@@ -566,8 +577,16 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       });
     };
 
-    it('melempar error jika pesanan tidak ditemukan (line 328)', async () => {
-      mockValidasiOwner();
+    it('melempar error jika user bukan pengguna jasa pesanan (line 328)', async () => {
+      mockValidasiPengguna('klien-lain');
+
+      await expect(
+        DeliverablesService.confirmOrderComplete('pesanan-1', 'klien-1')
+      ).rejects.toThrow('Hanya pengguna jasa pemilik pesanan yang dapat melakukan tindakan ini');
+    });
+
+    it('melempar error jika pesanan tidak ditemukan (line 329)', async () => {
+      mockValidasiPengguna();
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
@@ -581,14 +600,32 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
       ).rejects.toThrow('Pesanan tidak ditemukan');
     });
 
-    it('melempar error jika pesanan sudah selesai (line 329)', async () => {
-      mockValidasiOwner();
+    it('melempar error jika RPC konfirmasi_pesanan_selesai gagal (line 371)', async () => {
+      mockValidasiPengguna();
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
             single: vi.fn().mockResolvedValueOnce({
-              data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 100000, status_pesanan: 'Selesai' },
+              data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 100000, jasa: { nama_jasa: 'Logo' } },
               error: null,
+            }),
+          }),
+        }),
+      });
+      mockRpc.mockResolvedValueOnce({ error: { message: 'DB locked' } });
+
+      await expect(
+        DeliverablesService.confirmOrderComplete('pesanan-1', 'klien-1')
+      ).rejects.toThrow('Gagal mengonfirmasi pesanan dan mencairkan dana: DB locked');
+    });
+
+    it('melempar error jika validasi pengguna jasa gagal mengambil pesanan (line 381)', async () => {
+      mockFrom.mockReturnValueOnce({
+        select: vi.fn().mockReturnValueOnce({
+          eq: vi.fn().mockReturnValueOnce({
+            maybeSingle: vi.fn().mockResolvedValueOnce({
+              data: null,
+              error: { message: 'Constraint error' },
             }),
           }),
         }),
@@ -596,152 +633,29 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
 
       await expect(
         DeliverablesService.confirmOrderComplete('pesanan-1', 'klien-1')
-      ).rejects.toThrow('sudah diselesaikan sebelumnya');
+      ).rejects.toThrow('Constraint error');
     });
 
-    it('melempar error jika gagal menambah saldo penyedia (line 371)', async () => {
-      mockValidasiOwner();
-      // fetch pesanan
+    it('berhasil menyelesaikan pesanan, memanggil rpc, dan kirim notifikasi (happy path)', async () => {
+      mockValidasiPengguna();
       mockFrom.mockReturnValueOnce({
         select: vi.fn().mockReturnValueOnce({
           eq: vi.fn().mockReturnValueOnce({
             single: vi.fn().mockResolvedValueOnce({
-              data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 100000, status_pesanan: 'Menunggu Konfirmasi' },
+              data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 200000, jasa: { nama_jasa: 'Desain Logo' } },
               error: null,
             }),
           }),
         }),
       });
-      // update pesanan → Selesai
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockResolvedValueOnce({ error: null }),
-        }),
-      });
-      // insert pencairan_dana
-      mockFrom.mockReturnValueOnce({
-        insert: vi.fn().mockResolvedValueOnce({ error: null }),
-      });
-      // select saldo penyedia
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({ data: { saldo: 500000 }, error: null }),
-          }),
-        }),
-      });
-      // update saldo GAGAL
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockResolvedValueOnce({ error: { message: 'DB locked' } }),
-        }),
-      });
-
-      await expect(
-        DeliverablesService.confirmOrderComplete('pesanan-1', 'klien-1')
-      ).rejects.toThrow('Gagal menambahkan saldo ke dompet penjual');
-    });
-
-    it('melempar error jika update status_pencairan di tabel pesanan gagal (line 381)', async () => {
-      mockValidasiOwner();
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 100000, status_pesanan: 'Menunggu Konfirmasi' },
-              error: null,
-            }),
-          }),
-        }),
-      });
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockResolvedValueOnce({ error: null }),
-        }),
-      });
-      mockFrom.mockReturnValueOnce({
-        insert: vi.fn().mockResolvedValueOnce({ error: null }),
-      });
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({ data: { saldo: 0 }, error: null }),
-          }),
-        }),
-      });
-      // update saldo OK
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockResolvedValueOnce({ error: null }),
-        }),
-      });
-      // update status_pencairan GAGAL
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            select: vi.fn().mockReturnValueOnce({
-              single: vi.fn().mockResolvedValueOnce({
-                data: null,
-                error: { message: 'Constraint error' },
-              }),
-            }),
-          }),
-        }),
-      });
-
-      await expect(
-        DeliverablesService.confirmOrderComplete('pesanan-1', 'klien-1')
-      ).rejects.toThrow('Gagal mengupdate state pencairan');
-    });
-
-    it('berhasil menyelesaikan pesanan, update saldo, dan kirim notifikasi (happy path)', async () => {
-      mockValidasiOwner();
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({
-              data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 200000, status_pesanan: 'Menunggu Konfirmasi' },
-              error: null,
-            }),
-          }),
-        }),
-      });
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockResolvedValueOnce({ error: null }),
-        }),
-      });
-      mockFrom.mockReturnValueOnce({
-        insert: vi.fn().mockResolvedValueOnce({ error: null }),
-      });
-      mockFrom.mockReturnValueOnce({
-        select: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            single: vi.fn().mockResolvedValueOnce({ data: { saldo: 300000 }, error: null }),
-          }),
-        }),
-      });
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockResolvedValueOnce({ error: null }),
-        }),
-      });
-      mockFrom.mockReturnValueOnce({
-        update: vi.fn().mockReturnValueOnce({
-          eq: vi.fn().mockReturnValueOnce({
-            select: vi.fn().mockReturnValueOnce({
-              single: vi.fn().mockResolvedValueOnce({
-                data: { id_penyedia_jasa: 'penyedia-1', jasa: { nama_jasa: 'Desain Logo' } },
-                error: null,
-              }),
-            }),
-          }),
-        }),
-      });
+      mockRpc.mockResolvedValueOnce({ error: null });
 
       await expect(
         DeliverablesService.confirmOrderComplete('pesanan-1', 'klien-1')
       ).resolves.toBeUndefined();
+      expect(mockRpc).toHaveBeenCalledWith('konfirmasi_pesanan_selesai', {
+        p_id_pesanan: 'pesanan-1',
+      });
     });
   });
 
@@ -777,7 +691,7 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
 
       expect(res.status).toBe(403);
       expect(json.success).toBe(false);
-      expect(json.message).toBe('Akses ditolak');
+      expect(json.message).toContain('Akses ditolak');
     });
 
     it('mengembalikan 400 jika body bukan multipart/form-data', async () => {
@@ -857,7 +771,7 @@ describe('Integrasi Storage Deliverables (DeliverablesService & Upload Route)', 
 
       expect(res.status).toBe(500);
       expect(json.success).toBe(false);
-      expect(json.message).toBe('Koneksi storage terputus');
+      expect(json.message).toBe('Terjadi kesalahan pada sistem. Silakan coba beberapa saat lagi.');
     });
 
     it('mengembalikan 201 dengan URL berkas saat unggahan berhasil', async () => {

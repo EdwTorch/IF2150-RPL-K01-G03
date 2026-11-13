@@ -23,6 +23,7 @@ describe('Pelaporan & Tanggapan Laporan Services', () => {
       order: vi.fn().mockReturnThis(),
       single: vi.fn(),
       maybeSingle: vi.fn(),
+      rpc: vi.fn().mockResolvedValue({ error: null }),
     };
 
     (createClient as any).mockResolvedValue(mockSupabase);
@@ -108,7 +109,7 @@ describe('Pelaporan & Tanggapan Laporan Services', () => {
           kategori: ['Layanan Buruk'],
           url_bukti: ['https://example.com/bukti.png'],
         })
-      ).rejects.toThrow('Pesanan tidak ditemukan.');
+      ).rejects.toThrow('Pesanan tidak ditemukan atau tidak dapat diakses: Not Found');
     });
 
     it('harus throw error jika user bukan pemesan atau penyedia pada pesanan tersebut', async () => {
@@ -303,7 +304,10 @@ describe('Pelaporan & Tanggapan Laporan Services', () => {
         });
 
         expect(res).toEqual(mockTanggapan);
-        expect(mockSupabase.update).toHaveBeenCalledWith({ sanksi: 'PERINGATAN' });
+        expect(mockSupabase.rpc).toHaveBeenCalledWith('admin_beri_sanksi', {
+          p_id_pengguna: 'seller-1',
+          p_jenis_tindakan: 'PERINGATAN',
+        });
         expect(mockSupabase.update).toHaveBeenCalledWith({ status_tiket: 'Selesai' });
       });
 
@@ -328,9 +332,9 @@ describe('Pelaporan & Tanggapan Laporan Services', () => {
           catatan_tanggapan: 'Akun ditangguhkan karena melanggar',
         });
 
-        expect(mockSupabase.update).toHaveBeenCalledWith({
-          status_akun: false,
-          sanksi: 'SUSPENDED',
+        expect(mockSupabase.rpc).toHaveBeenCalledWith('admin_beri_sanksi', {
+          p_id_pengguna: 'seller-1',
+          p_jenis_tindakan: 'SUSPEND_AKUN',
         });
       });
 

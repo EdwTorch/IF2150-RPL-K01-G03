@@ -37,6 +37,12 @@ vi.mock('@/lib/supabase/server', () => ({
   createClient: vi.fn(async () => createMockSupabase()),
 }));
 
+vi.mock('@/services/penyedia.service', () => ({
+  PenyediaJasaService: {
+    ambilNamaPenyedia: vi.fn(async () => ({})),
+  },
+}));
+
 const jasa = (o: Partial<Jasa> & Pick<Jasa, 'id_jasa'>): Jasa => ({
   id_penyedia_jasa: 'p1',
   nama_jasa: 'Jasa',

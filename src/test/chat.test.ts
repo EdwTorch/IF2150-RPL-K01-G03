@@ -46,7 +46,13 @@ describe('ChatService', () => {
 
       const res = await ChatService.getDaftarChatroom('user-1');
 
-      expect(res).toEqual(mockChatrooms);
+      expect(res).toEqual([
+        {
+          ...mockChatrooms[0],
+          pengguna_jasa: null,
+          penyedia_jasa: null,
+        },
+      ]);
       expect(mockSupabase.from).toHaveBeenCalledWith('chatroom');
       expect(mockSupabase.or).toHaveBeenCalledWith('id_pengguna_jasa.eq.user-1,id_penyedia_jasa.eq.user-1');
     });

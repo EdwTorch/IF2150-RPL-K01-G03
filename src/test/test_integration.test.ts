@@ -164,10 +164,13 @@ beforeEach(() => {
     select: vi.fn().mockReturnThis(),
     update: vi.fn().mockReturnThis(),
     eq: vi.fn().mockReturnThis(),
+    is: vi.fn().mockReturnThis(),
+    not: vi.fn().mockReturnThis(),
     order: vi.fn().mockReturnThis(),
     limit: vi.fn().mockReturnThis(),
     single: vi.fn(),
     maybeSingle: vi.fn(),
+    rpc: vi.fn().mockResolvedValue({ error: null }),
     auth: { getUser: vi.fn().mockResolvedValue({ data: { user: null }, error: null }) },
   };
   (createClient as any).mockResolvedValue(mockSupabase);
@@ -572,34 +575,39 @@ describe('API Admin Mediasi', () => {
         ctx({ id_sesi_mediasi: 'sesi-1' }),
       );
 
-    it('200 dengan admin dari Bearer token', async () => {
-      bearerValid('admin-1');
+    it('200 dengan admin terautentikasi', async () => {
+      jadiAdmin('admin-1');
       const spy = vi.spyOn(MediasiService, 'selesaikanMediasi').mockResolvedValue({ status_sesi: 'SELESAI' } as any);
 
-      const { status, body } = await baca(await selesai(undefined, { authorization: 'Bearer ok' }));
+      const { status, body } = await baca(await selesai());
 
       expect(status).toBe(200);
       expect(body.data.status_sesi).toBe('SELESAI');
       expect(spy).toHaveBeenCalledWith('sesi-1', 'admin-1');
     });
 
-    it('200 dengan fallback id_admin dari body', async () => {
-      const spy = vi.spyOn(MediasiService, 'selesaikanMediasi').mockResolvedValue({} as any);
-      expect((await selesai({ id_admin: 'admin-2' })).status).toBe(200);
-      expect(spy).toHaveBeenCalledWith('sesi-1', 'admin-2');
+    it('403 jika bukan admin', async () => {
+      loginSebagai({ id: 'user-biasa' });
+      mockSupabase.single.mockResolvedValueOnce({ data: { role: 'PENGGUNA_JASA' }, error: null });
+      const spy = vi.spyOn(MediasiService, 'selesaikanMediasi');
+      const { status, body } = await baca(await selesai());
+      expect(status).toBe(403);
+      expect(body.message).toBe('Akses khusus admin.');
+      expect(spy).not.toHaveBeenCalled();
     });
 
-    it('401 jika tanpa token dan tanpa body', async () => {
+    it('401 jika tanpa sesi login', async () => {
       const spy = vi.spyOn(MediasiService, 'selesaikanMediasi');
       const { status, body } = await baca(await selesai());
       expect(status).toBe(401);
-      expect(body.message).toContain('id_admin wajib');
+      expect(body.message).toBe('Silakan login terlebih dahulu.');
       expect(spy).not.toHaveBeenCalled();
     });
 
     it('400 jika sesi tidak bisa diakhiri', async () => {
+      jadiAdmin('admin-1');
       vi.spyOn(MediasiService, 'selesaikanMediasi').mockRejectedValue(new Error('Sesi sudah berakhir'));
-      const { status, body } = await baca(await selesai({ id_admin: 'admin-1' }));
+      const { status, body } = await baca(await selesai());
       expect(status).toBe(400);
       expect(body.message).toBe('Sesi sudah berakhir');
     });
@@ -611,28 +619,30 @@ describe('API Admin Mediasi', () => {
 // =========================================================================
 describe('API Mediasi', () => {
   describe('GET /api/mediasi', () => {
-    it('200 dengan user dari Bearer token', async () => {
-      bearerValid('u-1');
+    it('200 dengan user dari sesi login', async () => {
+      sesi({ id: 'u-1' });
       const spy = vi.spyOn(MediasiService, 'getDaftarMediasiUser').mockResolvedValue([{ id_sesi_mediasi: 's-1' }] as any);
-      const { status, body } = await baca(await mediasiRoute.GET(req('/api/mediasi', { headers: { authorization: 'Bearer ok' } })));
+      const { status, body } = await baca(await mediasiRoute.GET());
       expect(status).toBe(200);
       expect(body.data).toHaveLength(1);
       expect(spy).toHaveBeenCalledWith('u-1');
     });
 
-    it('200 dengan fallback query ?id_pengguna', async () => {
+    it('200 mengembalikan daftar kosong jika tidak ada sesi mediasi', async () => {
+      sesi({ id: 'u-2' });
       const spy = vi.spyOn(MediasiService, 'getDaftarMediasiUser').mockResolvedValue([] as any);
-      expect((await mediasiRoute.GET(req('/api/mediasi?id_pengguna=u-2'))).status).toBe(200);
+      expect((await mediasiRoute.GET()).status).toBe(200);
       expect(spy).toHaveBeenCalledWith('u-2');
     });
 
     it('401 tanpa identitas apapun', async () => {
-      expect((await mediasiRoute.GET(req('/api/mediasi'))).status).toBe(401);
+      expect((await mediasiRoute.GET()).status).toBe(401);
     });
 
     it('400 jika service gagal', async () => {
+      sesi({ id: 'u' });
       vi.spyOn(MediasiService, 'getDaftarMediasiUser').mockRejectedValue(new Error('DB'));
-      expect((await mediasiRoute.GET(req('/api/mediasi?id_pengguna=u'))).status).toBe(400);
+      expect((await mediasiRoute.GET()).status).toBe(400);
     });
   });
 
@@ -641,10 +651,15 @@ describe('API Mediasi', () => {
       mediasiDetailRoute.GET(req(`/api/mediasi/s-1${q}`, { headers }), ctx({ id_sesi_mediasi: 's-1' }));
 
     it('200 dan meneruskan sesi + pengguna', async () => {
-      const spy = vi.spyOn(MediasiService, 'getDetailDanPesanMediasi').mockResolvedValue({ pesan: [] } as any);
-      const { status, body } = await baca(await detail('?id_pengguna=u-1'));
+      sesi({ id: 'u-1' });
+      const spy = vi.spyOn(MediasiService, 'getDetailDanPesanMediasi').mockResolvedValue({
+        sesi: { id_sesi_mediasi: 's-1', id_admin: 'admin-1', tiket_laporan: { id_terlapor: 't-1' } },
+        pesan: [],
+      } as any);
+      const { status, body } = await baca(await detail());
       expect(status).toBe(200);
-      expect(body.data).toEqual({ pesan: [] });
+      expect(body.data.pesan).toEqual([]);
+      expect(body.data.peran_saya).toBe('PELAPOR');
       expect(spy).toHaveBeenCalledWith('s-1', 'u-1');
     });
 
@@ -657,41 +672,46 @@ describe('API Mediasi', () => {
       ['Sesi mediasi tidak ditemukan', 404],
       ['Kesalahan lain', 400],
     ])('error "%s" -> %i', async (msg, expected) => {
+      sesi({ id: 'u-1' });
       vi.spyOn(MediasiService, 'getDetailDanPesanMediasi').mockRejectedValue(new Error(msg));
-      expect((await detail('?id_pengguna=u-1')).status).toBe(expected);
+      expect((await detail()).status).toBe(expected);
     });
   });
 
-  describe('POST /api/mediasi/[id_sesi_mediasi] (mulai mediasi)', () => {
-    const mulai = (body: unknown, headers?: Record<string, string>) =>
-      mediasiDetailRoute.POST(req('/api/mediasi/x', { method: 'POST', body, headers }));
+  describe('POST /api/mediasi/[id_sesi_mediasi] (kirim pesan mediasi)', () => {
+    const kirim = (body: unknown, headers?: Record<string, string>) =>
+      mediasiDetailRoute.POST(
+        req('/api/mediasi/s-1', { method: 'POST', body, headers }),
+        ctx({ id_sesi_mediasi: 's-1' }),
+      );
 
-    it('201 jika sesi baru dibuat', async () => {
-      const spy = vi.spyOn(MediasiService, 'mulaiMediasi').mockResolvedValue({ is_new: true } as any);
-      const { status, body } = await baca(await mulai({ id_tiket: 't-1', id_admin: 'admin-1' }));
+    it('201 jika pesan berhasil dikirim', async () => {
+      sesi({ id: 'u-1' });
+      const spy = vi.spyOn(MediasiService, 'kirimPesanMediasi').mockResolvedValue({ id_pesan: 'p-1' } as any);
+      const { status, body } = await baca(await kirim({ isi_pesan: 'Mohon bantuannya' }));
       expect(status).toBe(201);
-      expect(body.message).toBe('Sesi mediasi berhasil dibuat.');
-      expect(spy).toHaveBeenCalledWith('t-1', 'admin-1');
+      expect(body.message).toBe('Pesan mediasi terkirim.');
+      expect(spy).toHaveBeenCalledWith('s-1', 'u-1', 'Mohon bantuannya');
     });
 
-    it('200 jika sesi aktif sudah ada (idempoten)', async () => {
-      bearerValid('admin-1');
-      vi.spyOn(MediasiService, 'mulaiMediasi').mockResolvedValue({ is_new: false } as any);
-      const { status, body } = await baca(await mulai({ id_tiket: 't-1' }, { authorization: 'Bearer ok' }));
-      expect(status).toBe(200);
-      expect(body.message).toBe('Sesi mediasi yang aktif sudah tersedia.');
+    it('401 jika tanpa sesi login', async () => {
+      const spy = vi.spyOn(MediasiService, 'kirimPesanMediasi');
+      expect((await kirim({ isi_pesan: 'Halo' })).status).toBe(401);
+      expect(spy).not.toHaveBeenCalled();
     });
 
-    it('400 jika id_tiket atau id_admin kosong', async () => {
-      expect((await mulai({ id_admin: 'a' })).status).toBe(400);
-      expect((await mulai({ id_tiket: 't' })).status).toBe(400);
+    it('403 jika pengirim bukan peserta mediasi', async () => {
+      sesi({ id: 'asing' });
+      vi.spyOn(MediasiService, 'kirimPesanMediasi').mockRejectedValue(new Error('Akses ditolak: bukan peserta'));
+      expect((await kirim({ isi_pesan: 'x' })).status).toBe(403);
     });
 
-    it('400 jika tiket tidak valid', async () => {
-      vi.spyOn(MediasiService, 'mulaiMediasi').mockRejectedValue(new Error('Tiket tidak ditemukan'));
-      const { status, body } = await baca(await mulai({ id_tiket: 'x', id_admin: 'a' }));
+    it('400 jika sesi sudah selesai atau isi pesan kosong', async () => {
+      sesi({ id: 'u-1' });
+      vi.spyOn(MediasiService, 'kirimPesanMediasi').mockRejectedValue(new Error('Sesi mediasi sudah selesai'));
+      const { status, body } = await baca(await kirim({ isi_pesan: '' }));
       expect(status).toBe(400);
-      expect(body.message).toBe('Tiket tidak ditemukan');
+      expect(body.message).toBe('Sesi mediasi sudah selesai');
     });
   });
 });
@@ -1303,11 +1323,11 @@ describe('API Laporan', () => {
 
     const payload = { kategori: ['Hasil Tidak Sesuai'], deskripsi_laporan: 'Tidak sesuai brief', url_bukti: ['https://b/1.png'] };
 
-    it('200 tiket dibuat', async () => {
+    it('201 tiket dibuat', async () => {
       sesi({ id: 'u-1', isPenggunaJasa: true });
       const spy = vi.spyOn(PelaporanService, 'submitLaporan').mockResolvedValue({ id_tiket: 't-1' } as any);
       const { status, body } = await baca(await lapor(payload));
-      expect(status).toBe(200);
+      expect(status).toBe(201);
       expect(body.data.id_tiket).toBe('t-1');
       expect(spy).toHaveBeenCalledWith('o-1', 'u-1', payload);
     });
@@ -1395,16 +1415,23 @@ describe('API Deliverables', () => {
     it('200 detail hasil pekerjaan', async () => {
       loginSebagai({ id: 'u-1' });
       const spy = vi.spyOn(DeliverablesService, 'getDeliverableByPesanan').mockResolvedValue({ id_produk_akhir: 'pa-1' } as any);
+      vi.spyOn(DeliverablesService, 'getRevisionHistory').mockResolvedValue([]);
+      vi.spyOn(DeliverablesService, 'getRevisionAttachments').mockResolvedValue([]);
+      vi.spyOn(DeliverablesService, 'getRevisionRequestAttachments').mockResolvedValue([]);
+      mockSupabase.single.mockResolvedValueOnce({
+        data: { status_pesanan: 'DIPROSES', jasa: { nama_jasa: 'Desain Logo' } },
+        error: null,
+      });
       const { status, body } = await baca(await deliverablesRoute.GET(req('/x'), c));
       expect(status).toBe(200);
-      expect(body.deliverable.id_produk_akhir).toBe('pa-1');
+      expect(body.data.deliverable.id_produk_akhir).toBe('pa-1');
       expect(spy).toHaveBeenCalledWith('o-1', 'u-1');
     });
 
     it('401 tanpa login', async () => {
       const { status, body } = await baca(await deliverablesRoute.GET(req('/x'), c));
       expect(status).toBe(401);
-      expect(body.message).toBe('Anda belum login');
+      expect(body.message).toBe('Anda belum login.');
     });
 
     it.each([
@@ -1417,6 +1444,9 @@ describe('API Deliverables', () => {
     ])('error "%s" -> %i (pesan disanitasi)', async (raw, expected, msg) => {
       loginSebagai({ id: 'u-1' });
       vi.spyOn(DeliverablesService, 'getDeliverableByPesanan').mockRejectedValue(new Error(raw));
+      vi.spyOn(DeliverablesService, 'getRevisionHistory').mockResolvedValue([]);
+      vi.spyOn(DeliverablesService, 'getRevisionAttachments').mockResolvedValue([]);
+      vi.spyOn(DeliverablesService, 'getRevisionRequestAttachments').mockResolvedValue([]);
       const { status, body } = await baca(await deliverablesRoute.GET(req('/x'), c));
       expect(status).toBe(expected);
       expect(body.message).toBe(msg);
@@ -1513,7 +1543,7 @@ describe('API Deliverables', () => {
 
     it('403 jika bukan pihak pesanan', async () => {
       loginSebagai({ id: 'asing' });
-      vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockRejectedValue(new Error('x'));
+      vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockRejectedValue(new Error('Akses ditolak'));
       const { status, body } = await baca(await unggah(formBerkas(file('a.png', 'image/png'))));
       expect(status).toBe(403);
       expect(body.message).toBe('Akses ditolak');
@@ -1549,9 +1579,10 @@ describe('API Deliverables', () => {
       loginSebagai({ id: 'u-1' });
       vi.spyOn(DeliverablesService, 'getRevisionHistory').mockResolvedValue([{ id_revisi: 'r-1' }]);
       vi.spyOn(DeliverablesService, 'getDeliverableByPesanan').mockResolvedValue({ id_produk_akhir: 'pa-1' } as any);
+      vi.spyOn(DeliverablesService, 'getRevisionAttachments').mockResolvedValue([]);
       const { status, body } = await baca(await revisiRoute.GET(req('/x'), c));
       expect(status).toBe(200);
-      expect(body.data).toEqual({ revisi: [{ id_revisi: 'r-1' }], deliverable_aktif: { id_produk_akhir: 'pa-1' } });
+      expect(body.data).toMatchObject({ revisi: [{ id_revisi: 'r-1' }], deliverable_aktif: { id_produk_akhir: 'pa-1' } });
     });
 
     it('GET 401 / 400', async () => {
@@ -1565,23 +1596,38 @@ describe('API Deliverables', () => {
 
     it('POST (pembeli) 200 mengajukan revisi', async () => {
       loginSebagai({ id: 'u-1' });
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: { id_produk_akhir: 'pa-1' }, error: null });
       const spy = vi.spyOn(DeliverablesService, 'requestRevision').mockResolvedValue({ id_revisi: 'r-2' } as any);
-      const payload = { deskripsi_revisi: 'Ganti warna', lampiran_revisi: ['https://l/1.png'], id_produk_akhir: 'pa-1' };
+      const payload = { deskripsi_revisi: 'Ganti warna', lampiran_revisi: ['https://l/1.png'] };
       const { status, body } = await baca(await revisiRoute.POST(req('/x', { method: 'POST', body: payload }), c));
       expect(status).toBe(200);
       expect(body.message).toBe('Pengajuan revisi berhasil dikirim.');
-      expect(spy).toHaveBeenCalledWith({ id_pesanan: 'o-1', user_id: 'u-1', ...payload });
+      expect(spy).toHaveBeenCalledWith({
+        id_pesanan: 'o-1',
+        deskripsi_revisi: 'Ganti warna',
+        lampiran_revisi: ['https://l/1.png'],
+        id_produk_akhir: 'pa-1',
+        user_id: 'u-1',
+      });
     });
 
     it('POST (penjual, action=submit_revision) 200 mengirim perbaikan', async () => {
       loginSebagai({ id: 'p-1' });
-      const fix = vi.spyOn(DeliverablesService, 'submitRevisionFix').mockResolvedValue({ id_produk_akhir: 'pa-2' } as any);
+      const fix = vi.spyOn(DeliverablesService, 'submitRevisionFix').mockResolvedValue([{ id_produk_akhir: 'pa-2' }] as any);
       const ajukan = vi.spyOn(DeliverablesService, 'requestRevision');
-      const payload = { action: 'submit_revision', deskripsi_produk: 'V2', file_url: 'https://f/v2.png', output_path: 'o/v2.png' };
-      const { status, body } = await baca(await revisiRoute.POST(req('/x', { method: 'POST', body: payload }), c));
+      const form = new FormData();
+      form.append('action', 'submit_revision');
+      form.append('deskripsi_produk', 'V2');
+      form.append('tautan', 'https://example.com/v2.png');
+      const { status, body } = await baca(await revisiRoute.POST(req('/x', { method: 'POST', body: form }), c));
       expect(status).toBe(200);
       expect(body.message).toBe('Hasil perbaikan revisi berhasil dikumpulkan.');
-      expect(fix).toHaveBeenCalledWith({ id_pesanan: 'o-1', deskripsi_produk: 'V2', file_url: 'https://f/v2.png', output_path: 'o/v2.png', user_id: 'p-1' });
+      expect(fix).toHaveBeenCalledWith({
+        id_pesanan: 'o-1',
+        deskripsi_produk: 'V2',
+        file_urls: ['https://example.com/v2.png'],
+        user_id: 'p-1',
+      });
       expect(ajukan).not.toHaveBeenCalled();
     });
 
@@ -1589,6 +1635,7 @@ describe('API Deliverables', () => {
       expect((await revisiRoute.POST(req('/x', { method: 'POST', body: {} }), c)).status).toBe(401);
 
       loginSebagai({ id: 'u-1' });
+      mockSupabase.maybeSingle.mockResolvedValueOnce({ data: { id_produk_akhir: 'pa-1' }, error: null });
       vi.spyOn(DeliverablesService, 'requestRevision').mockRejectedValue(new Error('Jatah revisi sudah habis'));
       const { status, body } = await baca(await revisiRoute.POST(req('/x', { method: 'POST', body: { deskripsi_revisi: 'x' } }), c));
       expect(status).toBe(400);
@@ -1836,13 +1883,13 @@ describe('API /api/ulasan', () => {
   describe('POST', () => {
     const kirim = (body: unknown) => ulasanRoute.POST(req('/api/ulasan', { method: 'POST', body }));
 
-    it('201 dan field opsional default null', async () => {
+    it('201 dan field opsional default', async () => {
       loginSebagai({ id: 'u-1' });
       const spy = vi.spyOn(UlasanService, 'simpanUlasan').mockResolvedValue({ id_ulasan: 'ul-1' } as any);
       const { status, body } = await baca(await kirim({ id_pesanan: 'o-1', rating: '5' }));
       expect(status).toBe(201);
       expect(body.data.id_ulasan).toBe('ul-1');
-      expect(spy).toHaveBeenCalledWith({ id_pesanan: 'o-1', id_pengguna_jasa: 'u-1', rating: 5, komentar: null, dokumentasi: null });
+      expect(spy).toHaveBeenCalledWith({ id_pesanan: 'o-1', id_pengguna_jasa: 'u-1', rating: 5, komentar: null, dokumentasi: [] });
     });
 
     it('401 tanpa login', async () => {
@@ -1852,20 +1899,20 @@ describe('API /api/ulasan', () => {
     it.each([
       ['tanpa id_pesanan', { rating: 4 }],
       ['tanpa rating', { id_pesanan: 'o' }],
-      ['rating null', { id_pesanan: 'o', rating: null }],
+      ['rating bukan angka', { id_pesanan: 'o', rating: 'abc' }],
     ])('400 jika %s', async (_label, payload) => {
       loginSebagai({ id: 'u-1' });
       const { status, body } = await baca(await kirim(payload));
       expect(status).toBe(400);
-      expect(body.message).toBe('ID pesanan dan penilaian (rating) wajib diisi.');
+      expect(body.message).toBe('ID pesanan dan penilaian wajib diisi.');
     });
 
-    it.each([0, 6, -1, 'abc'])('400 jika rating di luar rentang 1-5 (%s)', async (rating) => {
+    it.each([0, 6, -1, null])('400 jika rating di luar rentang 1-5 (%s)', async (rating) => {
       loginSebagai({ id: 'u-1' });
       const spy = vi.spyOn(UlasanService, 'simpanUlasan');
       const { status, body } = await baca(await kirim({ id_pesanan: 'o', rating }));
       expect(status).toBe(400);
-      expect(body.message).toBe('Rating harus bernilai antara 1 sampai 5');
+      expect(body.message).toBe('Rating harus bernilai antara 1 sampai 5.');
       expect(spy).not.toHaveBeenCalled();
     });
 
@@ -2015,12 +2062,11 @@ describe('Pengujian Alur Utama Sistem (Integration Flow Test)', () => {
   // ALUR 1: Pengumpulan Pekerjaan -> Revisi -> Penyelesaian Pesanan & Dana
   it('Alur Utama 1: Penyedia submit deliverable -> Klien ajukan revisi -> Klien konfirmasi selesai', async () => {
     // 1. Penyedia submit hasil pekerjaan pertama kali
-    mockSupabase.single
-      .mockResolvedValueOnce({ data: { id_produk_akhir: 'prod-1' }, error: null }) // insert produk
-      .mockResolvedValueOnce({
-        data: { id_pesanan: 'order-101', id_pengguna_jasa: 'klien-1', jasa: { nama_jasa: 'Desain Banner' } },
-        error: null,
-      }); // update pesanan status 'Menunggu Konfirmasi'
+    mockSupabase.single.mockResolvedValueOnce({ data: { id_produk_akhir: 'prod-1' }, error: null });
+    mockSupabase.maybeSingle.mockResolvedValueOnce({
+      data: { id_pesanan: 'order-101', id_pengguna_jasa: 'klien-1', jasa: { nama_jasa: 'Desain Banner' } },
+      error: null,
+    });
 
     const submitRes = await DeliverablesService.submitDeliverable({
       id_pesanan: 'order-101',
@@ -2034,17 +2080,20 @@ describe('Pengujian Alur Utama Sistem (Integration Flow Test)', () => {
     );
 
     // 2. Klien mengajukan revisi
-    vi.spyOn(DeliverablesService, 'validasiOwnerPesanan').mockResolvedValue(true);
+    vi.spyOn(DeliverablesService, 'validasiPenggunaJasa').mockResolvedValue(true);
 
-    mockSupabase.single
-      .mockResolvedValueOnce({ data: { id_pengguna_jasa: 'klien-1' } }) // check user
-      .mockResolvedValueOnce({ data: { id_revisi: 'rev-1' }, error: null }) // insert revisi
+    mockSupabase.maybeSingle
+      .mockResolvedValueOnce({ data: { id_produk_akhir: 'prod-1' }, error: null })
+      .mockResolvedValueOnce({
+        data: { id_revisi: 'rev-prev', jml_revisi_tersedia: 2, status_pengerjaan: 'Revisi Dikumpulkan' },
+        error: null,
+      })
       .mockResolvedValueOnce({
         data: { id_penyedia_jasa: 'penyedia-1', jasa: { nama_jasa: 'Desain Banner' } },
         error: null,
-      }); // update status pesanan 'Diproses'
+      });
 
-    mockSupabase.maybeSingle.mockResolvedValueOnce({ data: { jml_revisi_tersedia: 2 } });
+    mockSupabase.single.mockResolvedValueOnce({ data: { id_revisi: 'rev-1' }, error: null });
 
     const revRes = await DeliverablesService.requestRevision({
       id_pesanan: 'order-101',
@@ -2055,22 +2104,18 @@ describe('Pengujian Alur Utama Sistem (Integration Flow Test)', () => {
 
     expect(revRes).toEqual({ id_revisi: 'rev-1' });
 
-    // 3. Klien mengonfirmasi pesanan selesai & pencairan dana
-    mockSupabase.single
-      .mockResolvedValueOnce({
-        data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 250000, status_pesanan: 'Menunggu Konfirmasi' },
-        error: null,
-      }) // check status pesanan
-      .mockResolvedValueOnce({ data: { saldo: 100000 } }) // get saldo penyedia
-      .mockResolvedValueOnce({
-        data: { id_penyedia_jasa: 'penyedia-1', jasa: { nama_jasa: 'Desain Banner' } },
-        error: null,
-      }); // update state pencairan
-
-    mockSupabase.insert.mockResolvedValueOnce({ error: null });
+    // 3. Klien mengonfirmasi pesanan selesai & pencairan dana atomik via RPC
+    mockSupabase.single.mockResolvedValueOnce({
+      data: { id_penyedia_jasa: 'penyedia-1', total_biaya: 250000, jasa: { nama_jasa: 'Desain Banner' } },
+      error: null,
+    });
+    mockSupabase.rpc.mockResolvedValueOnce({ error: null });
 
     await DeliverablesService.confirmOrderComplete('order-101', 'klien-1');
 
+    expect(mockSupabase.rpc).toHaveBeenCalledWith('konfirmasi_pesanan_selesai', {
+      p_id_pesanan: 'order-101',
+    });
     expect(NotifikasiService.kirimNotifikasi).toHaveBeenCalledWith(
       expect.objectContaining({ id_pengguna: 'penyedia-1' })
     );
