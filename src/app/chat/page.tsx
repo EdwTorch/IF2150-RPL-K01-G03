@@ -11,7 +11,7 @@ import { sesiSaatIni, type UserSesi } from "@/lib/client/auth";
 import { ambilDaftarRoom, ambilRiwayatPesan, kirimPesanChat, type PesanChat, type RoomChat } from "@/lib/client/chat";
 import { unggahBerkas } from "@/lib/client/upload";
 import { createClient } from "@/lib/supabase/client";
-
+   import { ambilDaftarMediasi, type RingkasanMediasi } from "@/lib/client/mediasi";
 /**
  * I-08 Layar Chat — C24 HalamanChat
  * Rute: /chat (daftar percakapan) dan /chat?room=<id_chatroom> (percakapan terbuka)
@@ -55,6 +55,7 @@ function HalamanChatIsi() {
   const [daftar_room, setDaftarRoom] = useState<RoomChat[]>([]);
   const [cari_percakapan, setCariPercakapan] = useState("");
   const [error_room, setErrorRoom] = useState("");
+       const [daftar_mediasi, setDaftarMediasi] = useState<RingkasanMediasi[]>([]);
 
   const [pesan, setPesan] = useState<PesanTampil[]>([]);
   const [memuat_pesan, setMemuatPesan] = useState(false);
@@ -88,6 +89,11 @@ function HalamanChatIsi() {
               : "Daftar percakapan gagal dimuat.",
         ),
       );
+      
+       // Ruang mediasi bertiga (admin, pelapor, terlapor) — gagal dimuat tidak mengganggu chat biasa
+       ambilDaftarMediasi()
+         .then(setDaftarMediasi)
+         .catch(() => setDaftarMediasi([]));
   }, [id_sesi_chat]); // muat ulang daftar saat room baru dibuka (mis. dari tombol Chat Penyedia)
 
   /* ---------- statusKoneksi ---------- */
@@ -303,6 +309,33 @@ function HalamanChatIsi() {
                 );
               })}
             </ul>
+            
+               {daftar_mediasi.length > 0 && (
+                 <div className="flex max-h-[240px] flex-col border-t border-line">
+                   <h2 className="px-5 pb-2 pt-4 text-label text-ink">Ruang mediasi</h2>
+                   <ul className="min-h-0 overflow-y-auto">
+                     {daftar_mediasi.map((m) => (
+                       <li key={m.id_sesi_mediasi}>
+                         <button
+                           type="button"
+                           onClick={() => router.push(`/mediasi/${m.id_sesi_mediasi}`)}
+                           className="flex w-full items-center justify-between gap-3 px-5 py-3 text-left hover:bg-canvas"
+                         >
+                           <span className="flex min-w-0 flex-col">
+                             <span className="truncate text-label text-ink">Mediasi tiket #{m.id_tiket.slice(0, 8)}</span>
+                             <span className="truncate text-caption text-ink-muted">
+                               {m.pesan_terakhir ?? "Admin, pelapor, dan terlapor"}
+                             </span>
+                           </span>
+                           <span className="shrink-0 text-caption text-ink-muted">
+                             {m.status_sesi === "SELESAI" ? "Selesai" : "Berlangsung"}
+                           </span>
+                         </button>
+                       </li>
+                     ))}
+                   </ul>
+                 </div>
+               )}
           </aside>
 
           {/* ================= Kanan: ruang chat ================= */}

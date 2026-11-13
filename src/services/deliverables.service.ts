@@ -161,7 +161,7 @@ export class DeliverablesService {
 
     const { error: pesananError } = await supabase
       .from("pesanan")
-      .update({ status_pesanan: "Menunggu Konfirmasi" })
+      .update({ status_pesanan: "MENUNGGU_KONFIRMASI_SELESAI" })
       .eq("id_pesanan", data.id_pesanan);
 
     if (pesananError) {
@@ -670,7 +670,7 @@ export class DeliverablesService {
 
     const { data: pesananUpdated, error: pesananError } = await supabase
       .from("pesanan")
-      .update({ status_pesanan: "Menunggu Konfirmasi" })
+      .update({ status_pesanan: "MENUNGGU_KONFIRMASI_SELESAI" })
       .eq("id_pesanan", data.id_pesanan)
       .eq("status_pesanan", "DIPROSES")
       .select("id_pesanan")

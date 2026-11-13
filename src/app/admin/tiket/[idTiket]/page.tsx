@@ -1,8 +1,7 @@
-
 "use client";
 
 import { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   Alert,
   Button,
@@ -18,6 +17,7 @@ import {
   ambilDetailTiketAdmin,
   kirimKeputusanAdmin,
 } from "@/lib/client/admin";
+import { mulaiMediasi } from "@/lib/client/mediasi";
 
 type JenisTindakan =
   | "PERINGATAN"
@@ -100,6 +100,9 @@ export default function HalamanDetailTiketAdmin() {
   const [info, setInfo] = useState("");
 
   const [busy, setBusy] = useState(false);
+  
+     const router = useRouter();
+     const [membukaMediasi, setMembukaMediasi] = useState(false);
 
   useEffect(() => {
     let aktif = true;
@@ -134,7 +137,23 @@ export default function HalamanDetailTiketAdmin() {
       aktif = false;
     };
   }, [idTiket]);
+     // Buka ruang mediasi bertiga (atau masuk ke sesi yang masih berlangsung)
+     async function bukaMediasi() {
+       setMembukaMediasi(true);
+       setError("");
 
+       try {
+         const idSesi = await mulaiMediasi(idTiket);
+         router.push(`/mediasi/${idSesi}`);
+       } catch (err: unknown) {
+         setError(
+           err instanceof Error
+             ? err.message
+             : "Ruang mediasi gagal dibuka."
+         );
+         setMembukaMediasi(false);
+       }
+     }
   async function kirimKeputusan() {
     setError("");
     setInfo("");
@@ -358,7 +377,36 @@ export default function HalamanDetailTiketAdmin() {
             )}
           </div>
         </section>
+           <div className="flex flex-col gap-6">
+           {/* RUANG MEDIASI */}
+           {!selesai && tiket.id_terlapor && (
+             <section
+               className={cn(
+                 "rounded-xl border border-line bg-surface p-6",
+                 "flex flex-col gap-4"
+               )}
+             >
+               <h2 className="text-h4 text-ink">Mediasi</h2>
 
+               <p className="text-body-sm text-ink-muted">
+                 {tiket.status_tiket === "Mediasi"
+                   ? "Ruang mediasi untuk tiket ini sudah dibuka. Masuk untuk melanjutkan obrolan dengan pelapor dan terlapor."
+                   : "Buka ruang obrolan bertiga dengan pelapor dan terlapor sebelum memberi keputusan."}
+               </p>
+
+               <Button
+                 variant="secondary"
+                 fullWidth
+                 loading={membukaMediasi}
+                 disabled={membukaMediasi}
+                 onClick={bukaMediasi}
+               >
+                 {tiket.status_tiket === "Mediasi"
+                   ? "Masuk ruang mediasi"
+                   : "Mulai mediasi"}
+               </Button>
+             </section>
+           )}
         {/* FORM TANGGAPAN ADMIN */}
         <section
           className={cn(
@@ -413,6 +461,7 @@ export default function HalamanDetailTiketAdmin() {
             </>
           )}
         </section>
+                   </div>
       </div>
     </div>
   );

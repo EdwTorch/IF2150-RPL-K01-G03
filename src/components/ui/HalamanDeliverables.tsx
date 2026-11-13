@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { logout, sesiSaatIni } from "@/lib/client/auth";
 
 import {
   Alert,
@@ -237,6 +238,9 @@ export default function HalamanDeliverables({ peran }: Props) {
     revisiTerbaru?.status_pengerjaan === "Revisi Dikumpulkan";
 
   const kuotaRevisi = data?.kuota_revisi ?? 3;
+  
+  // Penyedia belum pernah mengumpulkan hasil (pesanan baru diterima / sedang dikerjakan)
+  const belumAdaHasil = !data?.deliverable;
 
   const berkas = data
     ? buatDaftarBerkas(
@@ -297,9 +301,11 @@ export default function HalamanDeliverables({ peran }: Props) {
       ? "Selesai"
       : revisiDiminta
         ? "Revisi diminta"
-        : isPengguna
-          ? "Menunggu konfirmasi"
-          : "Menunggu pemeriksaan";
+        : belumAdaHasil
+          ? "Sedang dikerjakan"
+          : isPengguna
+            ? "Menunggu konfirmasi"
+            : "Menunggu pemeriksaan";
 
   const statusNada = pesananDitolak
     ? "danger"
@@ -307,9 +313,11 @@ export default function HalamanDeliverables({ peran }: Props) {
       ? "success"
       : revisiDiminta
         ? "warning"
-        : isPengguna
-          ? "accent"
-          : "neutral";
+        : belumAdaHasil
+          ? "neutral"
+          : isPengguna
+            ? "accent"
+            : "neutral";
 
   if (sedangMemuat) {
     return (
@@ -399,17 +407,30 @@ export default function HalamanDeliverables({ peran }: Props) {
             </section>
           )}
 
-          <section className="flex flex-col gap-2 rounded-xl border border-line bg-surface p-6">
-            <h2 className="text-h4 text-ink">
-              {isPengguna
-                ? "Catatan dari penyedia"
-                : "Kiriman terakhirmu"}
-            </h2>
+          {belumAdaHasil && !isPengguna ? (
+            <section className="flex flex-col items-start gap-3 rounded-xl border border-dashed border-line-strong bg-surface p-6">
+              <h2 className="text-h4 text-ink">Belum ada hasil yang dikirim</h2>
+              <p className="text-body text-ink-muted">
+                Unggah berkas (JPG, PNG, PDF, maks. 10 MB) atau tautan hasil pekerjaan,
+                lalu tulis catatan singkat untuk pemesan.
+              </p>
+              <Button href={`/penyedia/pengumpulan/${idPesanan}`}>
+                Kumpulkan hasil
+              </Button>
+            </section>
+          ) : (
+            <section className="flex flex-col gap-2 rounded-xl border border-line bg-surface p-6">
+              <h2 className="text-h4 text-ink">
+                {isPengguna
+                  ? "Catatan dari penyedia"
+                  : "Kiriman terakhirmu"}
+              </h2>
 
-            <p className="text-body text-ink-muted">
-              {catatanHasil || "Belum ada catatan hasil pekerjaan."}
-            </p>
-          </section>
+              <p className="text-body text-ink-muted">
+                {catatanHasil || "Belum ada catatan hasil pekerjaan."}
+              </p>
+            </section>
+          )}
 
           <section className="flex flex-col gap-3 rounded-xl border border-line bg-surface p-6">
             <h2 className="text-h4 text-ink">
@@ -466,6 +487,27 @@ export default function HalamanDeliverables({ peran }: Props) {
 
           {isPengguna &&
             !pesananDitolak &&
+            belumAdaHasil &&
+            !pesananSelesai && (
+              <>
+                <h2 className="text-h4 text-ink">
+                  Pesanan sedang dikerjakan
+                </h2>
+
+                <p className="text-body-sm text-ink-muted">
+                  Penyedia sedang mengerjakan pesananmu. Kamu akan
+                  mendapat notifikasi saat hasil pekerjaan dikirim.
+                </p>
+
+                <Button fullWidth variant="secondary" href="/chat">
+                  Chat penyedia
+                </Button>
+              </>
+            )}
+
+          {isPengguna &&
+            !pesananDitolak &&
+            !belumAdaHasil &&
             !revisiDiminta &&
             !revisiSudahDikirim &&
             !pesananSelesai && (
@@ -583,6 +625,39 @@ export default function HalamanDeliverables({ peran }: Props) {
 
           {!isPengguna &&
             !pesananDitolak &&
+            belumAdaHasil &&
+            !pesananSelesai && (
+              <>
+                <h2 className="text-h4 text-ink">
+                  Kumpulkan hasil pekerjaan
+                </h2>
+
+                <p className="text-body-sm text-ink-muted">
+                  Unggah berkas atau tautan hasil pekerjaan beserta
+                  catatan untuk pemesan. Pemesan akan memeriksa
+                  hasilmu setelah dikirim.
+                </p>
+
+                <p className="rounded-field bg-brand-subtle px-4 py-3 text-label text-ink">
+                  Kuota revisi pemesan: {kuotaRevisi} dari 3
+                </p>
+
+                <Button
+                  fullWidth
+                  href={`/penyedia/pengumpulan/${idPesanan}`}
+                >
+                  Kumpulkan hasil
+                </Button>
+
+                <Button fullWidth variant="secondary" href="/chat">
+                  Chat pemesan
+                </Button>
+              </>
+            )}
+
+          {!isPengguna &&
+            !pesananDitolak &&
+            !belumAdaHasil &&
             !revisiDiminta &&
             !pesananSelesai && (
               <>
