@@ -1,3 +1,4 @@
+
 // src/models/types.ts
 
 // Tipe data untuk Jasa (C12)
@@ -8,9 +9,9 @@ export interface Jasa {
   deskripsi: string;
   kategori: string;
   harga: number;
-  rating_rata_rata?: number; // default 0.0, rentang 0-5
-  status_aktif?: boolean; // default true
-  berkas_pendukung?: string[]; // URL berkas, default []
+  rating_rata_rata?: number;
+  status_aktif?: boolean;
+  berkas_pendukung?: string[];
   created_at?: string;
 }
 
@@ -104,23 +105,31 @@ export interface Ulasan {
   created_at: string;
 }
 
+// Tipe data untuk Pelaporan
+export type JenisTindakanLaporan =
+  | "PERINGATAN"
+  | "SUSPEND_AKUN"
+  | "LAPORAN_DITOLAK";
+
 export interface TiketLaporan {
   id_tiket?: string;
   id_pesanan: string;
   id_pelapor: string;
-  id_terlapor: string;
+  id_terlapor: string | null;
   deskripsi_laporan: string;
   url_bukti: string[];
   kategori: string[];
   status_tiket: "Diproses" | "Selesai";
-  tanggapan_admin: string;
+  tanggapan_admin?: string | null;
+  created_at?: string;
 }
 
 export interface TanggapanLaporan {
   id_tanggapan: string;
   id_tiket: string;
-  jenis_tindakan: string;
-  catatan_tanggapan: string;
+  jenis_tindakan: JenisTindakanLaporan;
+  catatan_tanggapan: string | null;
+  created_at?: string;
 }
 
 // Tipe data pengguna yang sedang login (dari sesi)
