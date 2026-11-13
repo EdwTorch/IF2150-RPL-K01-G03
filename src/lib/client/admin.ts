@@ -41,3 +41,29 @@ export async function ambilDaftarTiketAdmin(): Promise<TiketAdmin[]> {
 
   return respons.data;
 }
+
+
+/** Sama dengan JenisTindakan di services/pelaporan.service.ts */
+export type JenisTindakan = "PERINGATAN" | "SUSPEND_AKUN" | "LAPORAN_DITOLAK";
+
+/** GET /api/admin/laporan/[id_tiket] → detail tiket untuk C50 */
+export async function ambilDetailTiketAdmin(id_tiket: string): Promise<TiketAdmin> {
+  const respons = await api<Respons<TiketAdmin>>(`/api/admin/laporan/${encodeURIComponent(id_tiket)}`);
+  return respons.data;
+}
+
+/** POST /api/admin/laporan/[id_tiket]/tanggapan → keputusan + catatan, tiket jadi Selesai */
+export async function kirimTanggapanAdmin(
+  id_tiket: string,
+  isian: { jenis_tindakan: JenisTindakan; catatan_tanggapan: string },
+) {
+  await api(`/api/admin/laporan/${encodeURIComponent(id_tiket)}/tanggapan`, {
+    method: "POST",
+    body: { jenis_tindakan: isian.jenis_tindakan, catatan_tanggapan: isian.catatan_tanggapan.trim() },
+  });
+}
+
+/** POST /api/admin/laporan/[id_tiket]/mediasi → buka sesi mediasi, tiket jadi Mediasi */
+export async function mulaiMediasiAdmin(id_tiket: string) {
+  await api(`/api/admin/laporan/${encodeURIComponent(id_tiket)}/mediasi`, { method: "POST" });
+}

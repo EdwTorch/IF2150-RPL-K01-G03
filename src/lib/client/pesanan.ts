@@ -15,6 +15,8 @@ export type Pesanan = {
   status_pesanan: string;
   created_at?: string;
   jasa?: JasaListing;
+  /** Diisi backend untuk daftar pesanan (Pesanan Masuk penyedia) */
+  nama_pemesan?: string | null;
 };
 
 /** Sama dengan MAKS_PESANAN_AKTIF di services/pesanan.service.ts */
@@ -90,4 +92,44 @@ export async function ambilDaftarPesanan() {
       ? { ...p.jasa, harga: Number(p.jasa.harga) }
       : undefined,
   }));
+}
+/* ===================== Pesanan Masuk penyedia (C30 tampilan penyedia) ===================== */
+
+/** Status yang dianggap selesai/berhenti — sama dengan STATUS_TERMINAL di services/pesanan.service.ts */
+const STATUS_TERMINAL = ["SELESAI", "DITOLAK", "DIKEMBALIKAN", "DIBATALKAN"];
+
+export const normalisasiStatusPesanan = (s?: string) => (s ?? "").trim().toUpperCase().replace(/[\s-]+/g, "_");
+
+export const pesananBerjalan = (s?: string) => {
+  const st = normalisasiStatusPesanan(s);
+  return st !== "" && !STATUS_TERMINAL.includes(st);
+};
+
+/**
+ * GET /api/pesanan?id_pengguna=...&peran=penyedia_jasa
+ * Pesanan yang belum dibayar disembunyikan dari penyedia.
+ */
+export async function ambilPesananMasuk() {
+  const { user } = await sesiSaatIni();
+  if (!user.isPenyediaJasa) throw new Error("Akun ini bukan penyedia jasa.");
+
+  const respons = await api<Respons<Pesanan[]>>(
+    `/api/pesanan?id_pengguna=${encodeURIComponent(user.id)}&peran=penyedia_jasa`,
+  );
+
+  return respons.data
+    .filter((p) => normalisasiStatusPesanan(p.status_pesanan) !== "MENUNGGU_PEMBAYARAN")
+    .map((p) => ({
+      ...p,
+      total_biaya: Number(p.total_biaya),
+      jasa: p.jasa ? { ...p.jasa, harga: Number(p.jasa.harga) } : undefined,
+    }));
+}
+
+
+/**
+ * C35 terima/tolak pesanan oleh penyedia → PATCH /api/pesanan/[id_pesanan] { action }
+ */
+export async function responPesanan(id_pesanan: string, aksi: "terima" | "tolak") {
+  await api(`/api/pesanan/${encodeURIComponent(id_pesanan)}`, { method: "PATCH", body: { action: aksi } });
 }

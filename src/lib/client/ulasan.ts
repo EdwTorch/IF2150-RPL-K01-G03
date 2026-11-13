@@ -1,4 +1,5 @@
 import { api } from "@/lib/api";
+import { unggahBerkasHasil } from "@/lib/client/deliverables";
 
 /** Sama dengan select di UlasanService.getUlasanJasaById() */
 export type UlasanJasa = {
@@ -18,4 +19,26 @@ export async function ambilUlasanJasa(id_jasa: string) {
     `/api/ulasan?id_jasa=${encodeURIComponent(id_jasa)}`,
   );
   return respons.data;
+}
+
+
+/**
+ * C47 kirimUlasan() → POST /api/ulasan
+ * Dokumentasi (opsional, 1 berkas) diunggah dulu ke folder pesanan ini.
+ */
+export async function kirimUlasan(
+  id_pesanan: string,
+  isian: { rating: number; komentar?: string; dokumentasi?: File | null },
+) {
+  const dokumentasi_url = isian.dokumentasi ? await unggahBerkasHasil(id_pesanan, isian.dokumentasi) : undefined;
+
+  await api("/api/ulasan", {
+    method: "POST",
+    body: {
+      id_pesanan,
+      rating: isian.rating,
+      komentar: isian.komentar?.trim() || undefined,
+      dokumentasi_url,
+    },
+  });
 }
