@@ -33,6 +33,7 @@
     - [Milestone 6](#milestone-6)
     - [Milestone 7](#milestone-7)
     - [Milestone 8](#milestone-8)
+    - [Milestone 9](#milestone-9)
 ---
 
 ### Milestone 1
@@ -189,6 +190,7 @@
 | *29-10-2026* & *3-11-2026*  | Revandra, Danesh, There, Edward, Necia| Membahas masterplan dan pembagian tugas| 1 Jam | Done | Bingung mau baginya :) |
 | *2-11-2026*  | Revandra, Danesh, There, Edward, Necia| Asistensi Akbar | 1 Jam | Done | |
 | *2-11-2026* - *9-11-2026* | Edward | Membuat Seluruh Service Backend dan routingnya | > 15 Jam | Done | Pusing Banget dan Ngedrop |
+| *05-11-2026* hingga *13-11-2026* | Revandra | 1. Pembuatan _database_ setiap kelas yang membutuhkannya <br> 2. Service autentikasi login dan logout <br> 3. Route handler autentikasi <br> 4. Dual storage adapter (local dan supabase) <br> 5. Upload gateway <br> 6. Validasi berkas yang di-upload <br> 7. Integrasi storage untuk berkas deliverable <br> 8. Pembaruan rating agregat | > 10 jam | Done | Kegiatan akademik maupun nonakademik lainnya |
 | *8-11-2026* | Danesh | Mengerjakan implementasi modul: <br> 1. Pengelolaan Penawaran Jasa (CRUD) <br> 2. Pencarian & Komparasi Jasa <br> 3. Bookmark <br> 4. Pemesanan & Konfirmasi <br> 5. Pembayaran & Riwayat Transaksi | ~10 jam | Done | Kesibukan non-akademik |
 | *9-11-2026* - *13-11-2026* | Edward | Membuat Laporan Perubahan DPPL (implementasi) readme dan traceability  | > 6 Jam | Done | DPPLnya berubah banyak banget |
 
