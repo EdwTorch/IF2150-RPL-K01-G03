@@ -13,11 +13,12 @@ import {
   UploadBox,
 } from "@/components/elemen";
 
+import { ApiError } from "@/lib/api";
 import {
-  FORMAT_BERKAS,
-  MAX_MB,
-  kirimHasil,
-} from "@/lib/layanan";
+  FORMAT_BERKAS_HASIL,
+  MAKS_MB_BERKAS_HASIL,
+  kirimHasilPekerjaan,
+} from "@/lib/client/deliverables";
 
 type ErrorForm = {
   desk?: string;
@@ -67,10 +68,10 @@ export default function HalamanPengumpulan() {
     setSedangMengirim(true);
 
     try {
-      await kirimHasil(idPesanan, {
+      await kirimHasilPekerjaan(idPesanan, {
         deskripsi,
         tautan: url,
-        files,
+        berkas: files,
       });
 
       router.push(`/penyedia/pengumpulan/${idPesanan}/hasil`);
@@ -79,7 +80,7 @@ export default function HalamanPengumpulan() {
         umum:
           err instanceof Error
             ? err.message
-            : "Gagal mengirim hasil.",
+            : "Gagal mengirim hasil. Periksa koneksi internet Anda dan coba lagi.",
       });
 
       setSedangMengirim(false);
@@ -120,8 +121,8 @@ export default function HalamanPengumpulan() {
 
             <UploadBox
               label="Unggah Berkas Hasil"
-              format={FORMAT_BERKAS}
-              maksMB={MAX_MB}
+              format={FORMAT_BERKAS_HASIL}
+              maksMB={MAKS_MB_BERKAS_HASIL}
               maksBerkas={5}
               berkas={files}
               onUbah={setFiles}
