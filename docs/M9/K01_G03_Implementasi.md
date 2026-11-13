@@ -306,13 +306,13 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C07 | Autentikator | Fungsi (Service) <br> Route Handler <br> Middleware <br> Interface (Tipe Data) | src/services/auth.service.ts - login, logout, getSessionUser, loginAdmin <br> src/app/api/auth/route.ts - POST (action: login, logout, me), GET <br> src/lib/supabase/middleware.ts - updateSession (diintegrasikan di src/middleware.ts) <br> src/models/types.ts - SessionUser | - |
 | C08 | HalamanPortofolio  | Komponen Halaman (page) | src/app/penyedia/portofolio/page.tsx - halaman portofolio penyedia | Data portofolio diambil dan disimpan lewat src/app/api/portofolio/route.ts |
 | C09 | Portofolio  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | Tambahan atribut id_portofolio, id_penyedia_jasa |
-| C10 | PengontrolPortofolio | | | |
-| C11 | LayananUploadFile  | | | |
+| C10 | PengontrolPortofolio | Fungsi, Kelas, dan Routing | src/services/portofolio.service.ts  - ambilPortofolio(id_penyedia_jasa: string): Promise<DataPortofolio>, simpanPortofolio(id_penyedia_jasa: string, data: Partial<InputPortofolio>): Promise<DataPortofolio> , src/app/api/portofolio/route.ts - POST, GET| - |
+| C11 | LayananUploadFile | Modul Validasi & Konfigurasi <br> Route Handler (API Gateway) <br> Layanan / Adapter (Storage Service) <br> Pengujian (Unit Test) | src/lib/upload.config.ts - validasiBerkasUpload, validasiFolder, MAKS_UKURAN_UPLOAD <br> src/app/api/upload/route.ts - POST <br> src/services/storage/ - StorageService, LocalStorageService, SupabaseStorageService <br> src/test/upload.test.ts - Pengujian unit validasi dan upload gateway | - |
 | C12 | Jasa  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | tambahan atribut rating_rata_rata |
 | C13 | HalamanUploadJasa  | Komponen Halaman (page) | src/app/penyedia/upload-jasa/page.tsx <br> src/app/jasa/tambah/page.tsx | Form tambah jasa; data dikirim ke src/app/api/jasa/route.ts (POST) |
 | C14 | JasaController  | | | |
 | C15 | HalamanPencarian  | Komponen Halaman (page) | src/app/pengguna/pencarian/page.tsx <br> src/app/jasa/page.tsx | Pencarian dan daftar jasa; data dari src/app/api/jasa/route.ts (GET) |
-| C16 | HasilPencarian  | | | |
+| C16 | HasilPencarian  | Komponen Jasa (Tidak diimplementasikan secara eksplisit) | - | digabungkan dengan jasa yang didapat dengan query |
 | C17 | LayananPencarian  | | | |
 | C18 | LayananPembandingJasa  | | | |
 | C19 | HalamanDetailJasa  | Komponen Halaman (page) | src/app/jasa/[id]/page.tsx | Detail jasa berdasarkan id pada URL; data dari src/app/api/jasa/[id]/route.ts |
