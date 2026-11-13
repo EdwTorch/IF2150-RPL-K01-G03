@@ -5,9 +5,10 @@ export class ChatService {
   /**
    * 1. Ambil daftar semua chatroom milik user yang sedang login (untuk halaman Inbox/Daftar Chat)
    */
-  static async getDaftarChatroom(user_id: string) {
+   static async getDaftarChatroom(user_id: string) {
     const supabase = await createClient();
 
+    // chatroom → pengguna_jasa / penyedia_jasa → pengguna (nama)
     const { data, error } = await supabase
       .from("chatroom")
       .select(`
@@ -15,8 +16,8 @@ export class ChatService {
         id_pengguna_jasa,
         id_penyedia_jasa,
         created_at,
-        pengguna_jasa:pengguna!id_pengguna_jasa (id, nama),
-        penyedia_jasa:pengguna!id_penyedia_jasa (id, nama)
+        pihak_pengguna:pengguna_jasa!id_pengguna_jasa ( pengguna ( id, nama ) ),
+        pihak_penyedia:penyedia_jasa!id_penyedia_jasa ( pengguna ( id, nama ) )
       `)
       .or(`id_pengguna_jasa.eq.${user_id},id_penyedia_jasa.eq.${user_id}`)
       .order("created_at", { ascending: false });
@@ -25,7 +26,13 @@ export class ChatService {
       throw new Error(`Gagal memuat daftar obrolan: ${error.message}`);
     }
 
-    return data || [];
+    // Ratakan supaya bentuk balasan tetap { pengguna_jasa: {id,nama}, penyedia_jasa: {id,nama} }
+    type Relasi = { pengguna: { id: string; nama: string } | null } | null;
+    return (data ?? []).map(({ pihak_pengguna, pihak_penyedia, ...room }) => ({
+      ...room,
+      pengguna_jasa: (pihak_pengguna as unknown as Relasi)?.pengguna ?? null,
+      penyedia_jasa: (pihak_penyedia as unknown as Relasi)?.pengguna ?? null,
+    }));
   }
 
   /**

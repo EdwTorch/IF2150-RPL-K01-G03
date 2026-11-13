@@ -270,7 +270,7 @@ export default function Navbar({
               <div className="flex shrink-0 items-center gap-[12px]">
                 {/* Button Style=Ghost */}
                 <Link
-                  href="/masuk"
+                  href="/login"
                   className="flex h-[48px] items-center justify-center rounded-[10px] px-[24px] text-[16px] leading-[1.2] font-semibold text-brand-text hover:bg-canvas"
                 >
                   Masuk
