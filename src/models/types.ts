@@ -27,11 +27,12 @@ export interface Bookmark {
 // Tipe data untuk Produk Akhir / Deliverables (C36)
 // ada tanda tanya artinya optional
 export interface ProdukAkhir {
-  id_produk_akhir: string; 
+  id_produk_akhir: string;
   id_pesanan: string;
-  output_path?: string; 
+  output_path?: string | null;
   deskripsi_produk: string;
-  file_url?: string; //bra
+  file_url?: string | null;
+  berkas_hasil?: string[];
   status_pemeriksaan?: boolean;
   created_at?: string;
 }
@@ -40,7 +41,9 @@ export interface ProdukAkhir {
 export interface PengajuanRevisi {
   id_revisi?: string;
   id_pesanan: string;
+  id_produk_akhir?: string | null;
   deskripsi_revisi: string;
+  pesan_revisi?: string | null;
   jml_revisi_tersedia: number;
   status_pengerjaan: string;
   lampiran_revisi?: string;
@@ -63,6 +66,7 @@ export interface Pesanan {
   created_at? : string;
   updated_at? : string;
   jasa?: Jasa;
+  nama_pemesan?: string | null;
 }
 
 // Tipe data untuk Metode Pembayaran (C33)
