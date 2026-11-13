@@ -1,4 +1,3 @@
-
 import { createClient } from "@/lib/supabase/server";
 import { createClient as createAdminClient } from "@supabase/supabase-js";
 import { Ulasan, RatingAgregat } from "@/models/types";
@@ -21,7 +20,6 @@ function adminClient() {
     if (!url || !key) throw new Error("Konfigurasi Supabase tidak lengkap");
     return createAdminClient(url, key, { auth: { autoRefreshToken: false, persistSession: false } });
 }
-
 
 export class UlasanService {
     // Mengambil ekstensi berkas
@@ -60,23 +58,17 @@ export class UlasanService {
             }
 
             if (file.size <= 0) {
-                throw new Error(
-                    `Berkas ${file.name} kosong atau tidak valid.`
-                );
+                throw new Error(`Berkas ${file.name} kosong atau tidak valid.`);
             }
 
             if (file.size > MAKS_UKURAN_BERKAS) {
-                throw new Error(
-                    `Ukuran berkas ${file.name} maksimal 10 MB.`
-                );
+                throw new Error(`Ukuran berkas ${file.name} maksimal 10 MB.`);
             }
         }
     }
 
     // Menghapus dokumentasi dari Storage
-    private static async hapusDokumentasi(
-        urls: string[]
-    ): Promise<void> {
+    private static async hapusDokumentasi(urls: string[]): Promise<void> {
         if (urls.length === 0) return;
 
         const storage = getStorageService();
@@ -90,10 +82,7 @@ export class UlasanService {
                 item.status === "rejected" ||
                 (item.status === "fulfilled" && !item.value)
             ) {
-                console.error(
-                    "Gagal menghapus dokumentasi ulasan:",
-                    urls[index]
-                );
+                console.error("Gagal menghapus dokumentasi ulasan:", urls[index]);
             }
         });
     }
@@ -109,7 +98,7 @@ export class UlasanService {
         let total = 0;
 
         for (const item of daftar) {
-            const val = typeof item === "number" ? item : item?.rating;
+            const val = Number(typeof item === "number" ? item : item?.rating);
             this.validasiRating(val);
             total += val;
         }
@@ -144,6 +133,33 @@ export class UlasanService {
         };
     }
 
+    // Ambil semua rating ulasan dari pesanan yang cocok dengan kolom tertentu
+    private static async ambilRatingUlasan(
+        kolom: "id_penyedia_jasa" | "id_jasa",
+        nilai: string
+    ): Promise<{ rating: number }[]> {
+        const supabase = adminClient();
+
+        const { data: pesananList, error: errPesanan } = await supabase
+            .from("pesanan")
+            .select("id_pesanan")
+            .eq(kolom, nilai);
+
+        if (errPesanan) throw new Error(errPesanan.message);
+
+        const ids = (pesananList || []).map((p) => p.id_pesanan);
+        if (ids.length === 0) return [];
+
+        const { data, error } = await supabase
+            .from("ulasan")
+            .select("rating")
+            .in("id_pesanan", ids);
+
+        if (error) throw new Error(error.message);
+
+        return data || [];
+    }
+
     // Hitung ulang dan simpan rating agregat penyedia jasa
     static async perbaruiRatingPenyedia(
         id_penyedia_jasa: string
@@ -152,48 +168,61 @@ export class UlasanService {
             throw new Error("ID penyedia jasa tidak valid.");
         }
 
-        const supabase = await createClient();
+        const agregat = this.hitungRatingAgregat(
+            await this.ambilRatingUlasan("id_penyedia_jasa", id_penyedia_jasa)
+        );
 
-        const { data: pesananList, error: errPesanan } = await supabase
-            .from("pesanan")
-            .select("id_pesanan")
-            .eq("id_penyedia_jasa", id_penyedia_jasa);
-
-        if (errPesanan) throw new Error(errPesanan.message);
-
-        const idsPesanan = (pesananList || []).map((p) => p.id_pesanan);
-
-        let daftarUlasan: { rating: number }[] = [];
-
-        if (idsPesanan.length > 0) {
-            const { data: ulasanData, error: errUlasan } = await supabase
-                .from("ulasan")
-                .select("rating")
-                .in("id_pesanan", idsPesanan);
-
-            if (errUlasan) throw new Error(errUlasan.message);
-
-            daftarUlasan = ulasanData || [];
-        }
-
-        const agregat = this.hitungRatingAgregat(daftarUlasan);
-
-        const { error: errUpdate } = await supabase
+        const { error: errUpdate } = await adminClient()
             .from("penyedia_jasa")
             .update({ rating_rata_rata: agregat.rating_rata_rata })
             .eq("id", id_penyedia_jasa);
 
         if (errUpdate) {
-            console.error(
-                "Gagal memperbarui rating penyedia jasa:",
-                errUpdate.message
-            );
-            throw new Error(
-                "Gagal memperbarui rata-rata rating penyedia jasa."
-            );
+            console.error("Gagal memperbarui rating penyedia jasa:", errUpdate.message);
+            throw new Error("Gagal memperbarui rata-rata rating penyedia jasa.");
         }
 
         return agregat;
+    }
+
+    // Hitung ulang dan simpan rating agregat satu jasa
+    static async perbaruiRatingJasa(id_jasa: string): Promise<RatingAgregat> {
+        if (!id_jasa?.trim()) {
+            throw new Error("ID jasa tidak valid.");
+        }
+
+        const agregat = this.hitungRatingAgregat(
+            await this.ambilRatingUlasan("id_jasa", id_jasa)
+        );
+
+        const { error: errUpdate } = await adminClient()
+            .from("jasa")
+            .update({ rating_rata_rata: agregat.rating_rata_rata })
+            .eq("id_jasa", id_jasa);
+
+        if (errUpdate) {
+            console.error("Gagal memperbarui rating jasa:", errUpdate.message);
+            throw new Error("Gagal memperbarui rata-rata rating jasa.");
+        }
+
+        return agregat;
+    }
+
+    // Perbarui rating jasa & penyedia sekaligus (kegagalan hanya dicatat)
+    private static async perbaruiSemuaRating(pesanan: {
+        id_penyedia_jasa?: string | null;
+        id_jasa?: string | null;
+    }): Promise<void> {
+        try {
+            if (pesanan.id_penyedia_jasa) {
+                await this.perbaruiRatingPenyedia(pesanan.id_penyedia_jasa);
+            }
+            if (pesanan.id_jasa) {
+                await this.perbaruiRatingJasa(pesanan.id_jasa);
+            }
+        } catch (err) {
+            console.error("Ulasan tersimpan, tetapi rating gagal diperbarui:", err);
+        }
     }
 
     // Ambil rating agregat dan total ulasan penyedia jasa
@@ -202,7 +231,7 @@ export class UlasanService {
             throw new Error("ID penyedia jasa tidak valid.");
         }
 
-        const supabase = await createClient();
+        const supabase = adminClient();
 
         const { data: penyedia, error: errPenyedia } = await supabase
             .from("penyedia_jasa")
@@ -212,28 +241,11 @@ export class UlasanService {
 
         if (errPenyedia) throw new Error(errPenyedia.message);
 
-        const { data: pesananList, error: errPesanan } = await supabase
-            .from("pesanan")
-            .select("id_pesanan")
-            .eq("id_penyedia_jasa", id_penyedia_jasa);
+        const total_ulasan = (
+            await this.ambilRatingUlasan("id_penyedia_jasa", id_penyedia_jasa)
+        ).length;
 
-        if (errPesanan) throw new Error(errPesanan.message);
-
-        const ids = (pesananList || []).map((p) => p.id_pesanan);
-        let total_ulasan = 0;
-
-        if (ids.length > 0) {
-            const { count, error: errCount } = await supabase
-                .from("ulasan")
-                .select("id_ulasan", { count: "exact", head: true })
-                .in("id_pesanan", ids);
-
-            if (errCount) throw new Error(errCount.message);
-
-            total_ulasan = count || 0;
-        }
-
-        const rating = penyedia?.rating_rata_rata ?? 0;
+        const rating = Number(penyedia?.rating_rata_rata ?? 0);
 
         return {
             id_penyedia_jasa,
@@ -245,32 +257,9 @@ export class UlasanService {
 
     // Statistik ulasan berdasarkan jasa
     static async getStatistikUlasanJasa(id_jasa: string) {
-        const supabase = await createClient();
-
-        const { data: pesananJasa, error: errPesanan } = await supabase
-            .from("pesanan")
-            .select("id_pesanan")
-            .eq("id_jasa", id_jasa);
-
-        if (errPesanan) throw new Error(errPesanan.message);
-
-        const ids = (pesananJasa || []).map((p) => p.id_pesanan);
-
-        if (ids.length === 0) {
-            return {
-                rata_rata_rating: 0,
-                total_ulasan: 0,
-            };
-        }
-
-        const { data, error } = await supabase
-            .from("ulasan")
-            .select("rating")
-            .in("id_pesanan", ids);
-
-        if (error) throw new Error(error.message);
-
-        const agregat = this.hitungRatingAgregat(data || []);
+        const agregat = this.hitungRatingAgregat(
+            await this.ambilRatingUlasan("id_jasa", id_jasa)
+        );
 
         return {
             rata_rata_rating: agregat.rating_rata_rata,
@@ -278,9 +267,12 @@ export class UlasanService {
         };
     }
 
-    // Ambil daftar ulasan berdasarkan jasa
-    static async getUlasanJasaById(id_jasa: string) {
-        const supabase = await createClient();
+    // Ambil daftar ulasan berdasarkan jasa (limit opsional)
+    static async getUlasanbyJasa(
+        id_jasa: string,
+        limit?: number
+    ): Promise<{ ulasan: Ulasan[]; total: number }> {
+        const supabase = adminClient();
 
         const { data: pesananJasa, error: errPesanan } = await supabase
             .from("pesanan")
@@ -295,32 +287,33 @@ export class UlasanService {
             return { ulasan: [], total: 0 };
         }
 
-        const { data, error, count } = await supabase
+        let query = supabase
             .from("ulasan")
             .select(
-                `
-                id_ulasan,
-                rating,
-                komentar,
-                created_at,
-                id_pengguna_jasa
-                `,
+                "id_ulasan, rating, komentar, created_at, id_pengguna_jasa",
                 { count: "exact" }
             )
             .in("id_pesanan", ids)
             .order("created_at", { ascending: false });
 
+        if (limit) query = query.limit(limit);
+
+        const { data, error, count } = await query;
+
         if (error) {
             console.error("Gagal mengambil ulasan:", error.message);
-            throw new Error(
-                "Terjadi kesalahan saat mengambil data ulasan."
-            );
+            throw new Error("Terjadi kesalahan saat mengambil data ulasan.");
         }
 
         return {
-            ulasan: data || [],
+            ulasan: (data as Ulasan[]) || [],
             total: count || 0,
         };
+    }
+
+    // Ambil semua ulasan berdasarkan jasa
+    static async getUlasanJasaById(id_jasa: string) {
+        return this.getUlasanbyJasa(id_jasa);
     }
 
     // Simpan ulasan baru beserta dokumentasi
@@ -345,9 +338,7 @@ export class UlasanService {
         // Pastikan pesanan ditemukan, milik pengguna, dan sudah selesai
         const { data: pesanan, error: errPesanan } = await supabase
             .from("pesanan")
-            .select(
-                "id_pesanan, id_pengguna_jasa, id_penyedia_jasa, status_pesanan"
-            )
+            .select("id_pesanan, id_pengguna_jasa, id_penyedia_jasa, id_jasa, status_pesanan")
             .eq("id_pesanan", data.id_pesanan)
             .maybeSingle();
 
@@ -358,15 +349,11 @@ export class UlasanService {
         }
 
         if (pesanan.id_pengguna_jasa !== data.id_pengguna_jasa) {
-            throw new Error(
-                "Kamu tidak memiliki akses untuk mengulas pesanan ini."
-            );
+            throw new Error("Kamu tidak memiliki akses untuk mengulas pesanan ini.");
         }
 
-        if (pesanan.status_pesanan !== "Selesai") {
-            throw new Error(
-                "Pesanan harus selesai sebelum dapat diberi ulasan."
-            );
+        if (pesanan.status_pesanan?.trim().toUpperCase() !== "SELESAI") {
+            throw new Error("Pesanan harus selesai sebelum dapat diberi ulasan.");
         }
 
         // Periksa apakah pesanan sudah memiliki ulasan
@@ -391,9 +378,7 @@ export class UlasanService {
                 const hasil = await storage.upload(file, "ulasan");
 
                 if (hasil.error || !hasil.url) {
-                    throw new Error(
-                        hasil.error || "Gagal mengunggah dokumentasi ulasan."
-                    );
+                    throw new Error(hasil.error || "Gagal mengunggah dokumentasi ulasan.");
                 }
 
                 urlDokumentasi.push(hasil.url);
@@ -418,23 +403,11 @@ export class UlasanService {
                 if (error.code === "23505") {
                     throw new Error("Pesanan ini sudah memiliki ulasan.");
                 }
-
                 throw new Error(error.message);
             }
 
-            // Perbarui rating penyedia setelah ulasan berhasil disimpan
-            if (pesanan.id_penyedia_jasa) {
-                try {
-                    await this.perbaruiRatingPenyedia(
-                        pesanan.id_penyedia_jasa
-                    );
-                } catch (err) {
-                    console.error(
-                        "Ulasan tersimpan, tetapi rating penyedia gagal diperbarui:",
-                        err
-                    );
-                }
-            }
+            // Perbarui rating jasa & penyedia setelah ulasan tersimpan
+            await this.perbaruiSemuaRating(pesanan);
 
             return isiulasan as Ulasan;
         } catch (err) {
@@ -442,55 +415,6 @@ export class UlasanService {
             await this.hapusDokumentasi(urlDokumentasi);
             throw err;
         }
-    }
-
-    // Ambil ulasan jasa dengan batas jumlah data
-    static async getUlasanbyJasa(
-        id_jasa: string,
-        limit: number
-    ): Promise<{ ulasan: Ulasan[]; total: number }> {
-        const supabase = await createClient();
-
-        const { data: pesananJasa, error: errPesanan } = await supabase
-            .from("pesanan")
-            .select("id_pesanan")
-            .eq("id_jasa", id_jasa);
-
-        if (errPesanan) throw new Error(errPesanan.message);
-
-        const ids = (pesananJasa || []).map((p) => p.id_pesanan);
-
-        if (ids.length === 0) {
-            return { ulasan: [], total: 0 };
-        }
-
-        const { data, error, count } = await supabase
-            .from("ulasan")
-            .select(
-                `
-                id_ulasan,
-                rating,
-                komentar,
-                created_at,
-                id_pengguna_jasa
-                `,
-                { count: "exact" }
-            )
-            .in("id_pesanan", ids)
-            .order("created_at", { ascending: false })
-            .limit(limit);
-
-        if (error) {
-            console.error("Gagal mengambil ulasan:", error.message);
-            throw new Error(
-                "Terjadi kesalahan saat mengambil data ulasan."
-            );
-        }
-
-        return {
-            ulasan: (data as Ulasan[]) || [],
-            total: count || 0,
-        };
     }
 
     // Memperbarui ulasan milik pengguna
@@ -509,12 +433,11 @@ export class UlasanService {
             this.validasiRating(data.rating);
         }
 
-        if (data.dokumentasi_path !== undefined) {
-            if (data.dokumentasi_path.length > MAKS_BERKAS_ULASAN) {
-                throw new Error(
-                    `Dokumentasi ulasan maksimal ${MAKS_BERKAS_ULASAN} berkas.`
-                );
-            }
+        if (
+            data.dokumentasi_path !== undefined &&
+            data.dokumentasi_path.length > MAKS_BERKAS_ULASAN
+        ) {
+            throw new Error(`Dokumentasi ulasan maksimal ${MAKS_BERKAS_ULASAN} berkas.`);
         }
 
         const supabase = await createClient();
@@ -527,18 +450,11 @@ export class UlasanService {
 
         if (errUlasan) throw new Error(errUlasan.message);
 
-        const dokumentasiLama: string[] =
-            ulasanData.dokumentasi_path || [];
-
+        const dokumentasiLama: string[] = ulasanData.dokumentasi_path || [];
         const updatePayload: Record<string, unknown> = {};
 
-        if (data.rating !== undefined) {
-            updatePayload.rating = data.rating;
-        }
-
-        if (data.komentar !== undefined) {
-            updatePayload.komentar = data.komentar;
-        }
+        if (data.rating !== undefined) updatePayload.rating = data.rating;
+        if (data.komentar !== undefined) updatePayload.komentar = data.komentar;
 
         if (data.dokumentasi_path !== undefined) {
             // Pastikan dokumentasi baru berasal dari dokumentasi ulasan ini
@@ -547,17 +463,13 @@ export class UlasanService {
             );
 
             if (pathTidakValid) {
-                throw new Error(
-                    "Dokumentasi yang diperbarui tidak valid."
-                );
+                throw new Error("Dokumentasi yang diperbarui tidak valid.");
             }
 
             updatePayload.dokumentasi_path = data.dokumentasi_path;
         }
 
-        if (Object.keys(updatePayload).length === 0) {
-            return;
-        }
+        if (Object.keys(updatePayload).length === 0) return;
 
         const { error } = await supabase
             .from("ulasan")
@@ -565,9 +477,7 @@ export class UlasanService {
             .eq("id_ulasan", id_ulasan);
 
         if (error) {
-            throw new Error(
-                "Terjadi kesalahan saat memperbarui ulasan."
-            );
+            throw new Error("Terjadi kesalahan saat memperbarui ulasan.");
         }
 
         // Hapus dokumentasi yang sudah tidak digunakan
@@ -575,20 +485,17 @@ export class UlasanService {
             const dokumentasiDihapus = dokumentasiLama.filter(
                 (url) => !data.dokumentasi_path!.includes(url)
             );
-
             await this.hapusDokumentasi(dokumentasiDihapus);
         }
 
-        const { data: pesanan } = await supabase
-            .from("pesanan")
-            .select("id_penyedia_jasa")
-            .eq("id_pesanan", ulasanData.id_pesanan)
-            .maybeSingle();
+        if (data.rating !== undefined) {
+            const { data: pesanan } = await supabase
+                .from("pesanan")
+                .select("id_penyedia_jasa, id_jasa")
+                .eq("id_pesanan", ulasanData.id_pesanan)
+                .maybeSingle();
 
-        if (data.rating !== undefined && pesanan?.id_penyedia_jasa) {
-            await this.perbaruiRatingPenyedia(
-                pesanan.id_penyedia_jasa
-            );
+            if (pesanan) await this.perbaruiSemuaRating(pesanan);
         }
     }
 
@@ -615,27 +522,19 @@ export class UlasanService {
             .eq("id_ulasan", id_ulasan);
 
         if (error) {
-            throw new Error(
-                "Terjadi kesalahan saat menghapus ulasan."
-            );
+            throw new Error("Terjadi kesalahan saat menghapus ulasan.");
         }
 
         // Hapus dokumentasi setelah data ulasan berhasil dihapus
-        await this.hapusDokumentasi(
-            ulasanData.dokumentasi_path || []
-        );
+        await this.hapusDokumentasi(ulasanData.dokumentasi_path || []);
 
         const { data: pesanan } = await supabase
             .from("pesanan")
-            .select("id_penyedia_jasa")
+            .select("id_penyedia_jasa, id_jasa")
             .eq("id_pesanan", ulasanData.id_pesanan)
             .maybeSingle();
 
-        if (pesanan?.id_penyedia_jasa) {
-            await this.perbaruiRatingPenyedia(
-                pesanan.id_penyedia_jasa
-            );
-        }
+        if (pesanan) await this.perbaruiSemuaRating(pesanan);
     }
 
     // Validasi kepemilikan ulasan
@@ -654,9 +553,7 @@ export class UlasanService {
         if (error) throw new Error(error.message);
 
         if (!ulasan || ulasan.id_pengguna_jasa !== id_pengguna_jasa) {
-            throw new Error(
-                "Ulasan tidak ditemukan atau bukan milik kamu."
-            );
+            throw new Error("Ulasan tidak ditemukan atau bukan milik kamu.");
         }
     }
 }

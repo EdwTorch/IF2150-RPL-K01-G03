@@ -66,4 +66,18 @@ export class PenyediaJasaService {
       rating_rata_rata: Number(data.rating_rata_rata ?? 0),
     };
   }
+  
+  // Ambil nama beberapa penyedia sekaligus (untuk kartu jasa di pencarian)
+  static async ambilNamaPenyedia(ids: string[]): Promise<Record<string, string>> {
+    const unik = [...new Set(ids.filter(Boolean))];
+    if (unik.length === 0) return {};
+
+    const { data, error } = await adminClient()
+      .from('pengguna')
+      .select('id, nama')
+      .in('id', unik);
+
+    if (error) throw new Error(error.message);
+    return Object.fromEntries((data ?? []).map((p) => [p.id, p.nama]));
+  }
 }

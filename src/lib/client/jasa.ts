@@ -61,6 +61,7 @@ export type JasaListing = Omit<Jasa, "berkas_pendukung" | "status_aktif"> & {
   berkas_pendukung?: string[];
   status_aktif?: boolean;
   created_at?: string;
+    nama_penyedia?: string | null;
 };
 
 /** Sama dengan FilterPencarian di services/pencarian.service.ts */

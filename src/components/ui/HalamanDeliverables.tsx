@@ -522,7 +522,7 @@ export default function HalamanDeliverables({ peran }: Props) {
               <Button
                 fullWidth
                 variant="secondary"
-                href={`/chat/${idPesanan}`}
+                href={`/chat`}
               >
                 Chat penyedia
               </Button>
@@ -603,7 +603,7 @@ export default function HalamanDeliverables({ peran }: Props) {
                 <Button
                   fullWidth
                   variant="secondary"
-                  href={`/chat/${idPesanan}`}
+                  href={`/chat`}
                 >
                   Chat pemesan
                 </Button>
@@ -635,7 +635,7 @@ export default function HalamanDeliverables({ peran }: Props) {
               <Button
                 fullWidth
                 variant="secondary"
-                href={`/chat/${idPesanan}`}
+                href={`/chat`}
               >
                 Chat pemesan
               </Button>

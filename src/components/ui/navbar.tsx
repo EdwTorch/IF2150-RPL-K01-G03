@@ -4,8 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import { logout } from "@/lib/client/auth";
+import { logout, sesiSaatIni } from "@/lib/client/auth";
 import { TombolNotifikasi } from "@/components/ui/notifikasi";
+
 
 /**
  * Navbar CariJasa — sesuai komponen Figma "Navbar" (node 31:167)
@@ -238,7 +239,7 @@ function MenuAkun({
 
 export default function Navbar({
   peran,
-  nama = "[Nama Pengguna]",
+  nama,
   avatarUrl,
   jumlahPesanan = 0,
   jumlahChat = 0,
@@ -247,6 +248,14 @@ export default function Navbar({
 }: NavbarProps) {
   const pathname = usePathname() ?? "";
   const router = useRouter();
+    const [nama_sesi, setNamaSesi] = useState("");
+
+  useEffect(() => {
+    if (nama || peran === "TAMU") return;
+    sesiSaatIni()
+      .then(({ user }) => setNamaSesi(user.nama))
+      .catch(() => {});
+  }, [nama, peran]);
 
   async function keluar() {
   if (onKeluar) return onKeluar();
@@ -319,7 +328,7 @@ export default function Navbar({
                     jumlahBadge={jumlahChat}
                   />
                   <MenuAkun
-                    nama={nama}
+                    nama={nama || nama_sesi || "Memuat..."}
                     peranLabel={LABEL_PERAN[peran]}
                     avatarUrl={avatarUrl}
                     onKeluar={keluar}

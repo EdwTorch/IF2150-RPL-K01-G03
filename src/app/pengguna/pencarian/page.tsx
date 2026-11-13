@@ -257,7 +257,7 @@ async function klikIkonBookmark(id_jasa: string) {
               href={`/jasa/${jasa.id_jasa}`}
               kategori={jasa.kategori}
               judul={jasa.nama_jasa}
-              namaPenyedia="Penyedia Jasa" // backend belum mengirim nama penyedia
+              namaPenyedia={jasa.nama_penyedia ?? "Penyedia Jasa"}
               rating={jasa.rating_rata_rata}
               harga={jasa.harga}
               gambarUrl={gambarPertama(jasa.berkas_pendukung)}

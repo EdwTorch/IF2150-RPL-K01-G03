@@ -9,6 +9,7 @@ import {
   type UrutanPencarian,
 } from '@/services/pencarian.service';
 import { bacaInputJasa, isMock, responsGagal } from './helper';
+import { PenyediaJasaService } from '@/services/penyedia.service';
 
 // Query param angka opsional; undefined jika tidak ada, NaN (ditolak validasi) jika bukan angka
 const angka = (p: URLSearchParams, k: string) => (p.get(k) ? Number(p.get(k)) : undefined);
@@ -43,7 +44,9 @@ export async function GET(request: Request) {
       LayananPencarian.validasiFilter(filter);
       data = LayananPencarian.saringDanUrutkan(mockJasaList, filter);
     } else {
-      data = await LayananPencarian.terapkanFilterPencarian(filter);
+            const hasil = await LayananPencarian.terapkanFilterPencarian(filter);
+      const nama = await PenyediaJasaService.ambilNamaPenyedia(hasil.map((j) => j.id_penyedia_jasa));
+      data = hasil.map((j) => ({ ...j, nama_penyedia: nama[j.id_penyedia_jasa] ?? null }));
     }
     const message = data.length ? 'Data penawaran jasa berhasil diambil' : 'Data jasa tidak ditemukan';
     return NextResponse.json({ success: true, message, data });
