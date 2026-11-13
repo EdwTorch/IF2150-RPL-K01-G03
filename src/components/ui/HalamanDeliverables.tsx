@@ -53,7 +53,7 @@ type DeliverablesResponse = {
   success: boolean;
   message: string;
   data: {
-    deliverable: ProdukAkhir;
+    deliverable: ProdukAkhir | null;
     nama_jasa: string;
     status_pesanan: string;
     revisi_terbaru: PengajuanRevisi | null;
@@ -121,7 +121,7 @@ function tipeBerkas(url: string): BerkasHasil["tipe"] {
 }
 
 function buatDaftarBerkas(
-  deliverable: ProdukAkhir,
+  deliverable: ProdukAkhir | null,
   lampiranRevisi: ProdukAkhir[],
   revisiTerbaru: PengajuanRevisi | null
 ): BerkasHasil[] {
@@ -130,7 +130,7 @@ function buatDaftarBerkas(
     lampiranRevisi.length > 0
   ) {
     return lampiranRevisi
-      .filter((item) => item.file_url)
+      .filter((item) => item?.file_url)
       .map((item) => {
         const url = item.file_url!;
 
@@ -144,7 +144,8 @@ function buatDaftarBerkas(
       });
   }
 
-  if (!deliverable.file_url) {
+  // Hasil pekerjaan belum dikumpulkan.
+  if (!deliverable?.file_url) {
     return [];
   }
 
@@ -252,7 +253,8 @@ export default function HalamanDeliverables({ peran }: Props) {
         (!revisiAktif || item.id_revisi === revisiAktif.id_revisi)
     ) ?? [];
 
-  const catatanHasil = data?.deliverable.deskripsi_produk;
+  const catatanHasil =
+    data?.deliverable?.deskripsi_produk;
 
   async function konfirmasi() {
     if (pesananDitolak || sedangMemproses) return;
@@ -296,7 +298,7 @@ export default function HalamanDeliverables({ peran }: Props) {
       : revisiDiminta
         ? "Revisi diminta"
         : isPengguna
-          ? "Menunggu konfirmasimu"
+          ? "Menunggu konfirmasi"
           : "Menunggu pemeriksaan";
 
   const statusNada = pesananDitolak

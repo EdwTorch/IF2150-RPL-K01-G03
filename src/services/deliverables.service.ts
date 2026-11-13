@@ -193,10 +193,11 @@ export class DeliverablesService {
   }
 
   // 2. Mengambil hasil pekerjaan utama berdasarkan pesanan.
+  // Jika belum dikumpulkan, kembalikan null agar halaman tetap dapat dibuka.
   static async getDeliverableByPesanan(
     id_pesanan: string,
     user_id: string
-  ): Promise<ProdukAkhir> {
+  ): Promise<ProdukAkhir | null> {
     await this.validasiOwnerPesanan(id_pesanan, user_id);
 
     const supabase = await createClient();
@@ -214,8 +215,9 @@ export class DeliverablesService {
       throw new Error(error.message);
     }
 
+    // Tidak ada hasil pekerjaan bukan berarti akses halaman ditolak.
     if (!data) {
-      throw new Error("Hasil pekerjaan belum dikumpulkan.");
+      return null;
     }
 
     const fileUrl = data.file_url;
