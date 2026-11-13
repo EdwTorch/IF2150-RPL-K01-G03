@@ -189,7 +189,9 @@
 | *29-10-2026* & *3-11-2026*  | Revandra, Danesh, There, Edward, Necia| Membahas masterplan dan pembagian tugas| 1 Jam | Done | Bingung mau baginya :) |
 | *2-11-2026*  | Revandra, Danesh, There, Edward, Necia| Asistensi Akbar | 1 Jam | Done | |
 | *2-11-2026* - *9-11-2026* | Edward | Membuat Seluruh Service Backend dan routingnya | > 15 Jam | Done | Pusing Banget dan Ngedrop |
+| *8-11-2026* | Danesh | Mengerjakan implementasi modul: <br> 1. Pengelolaan Penawaran Jasa (CRUD) <br> 2. Pencarian & Komparasi Jasa <br> 3. Bookmark <br> 4. Pemesanan & Konfirmasi <br> 5. Pembayaran & Riwayat Transaksi | ~10 jam | Done | Kesibukan non-akademik |
 | *9-11-2026* - *13-11-2026* | Edward | Membuat Laporan Perubahan DPPL (implementasi) readme dan traceability  | > 6 Jam | Done | DPPLnya berubah banyak banget |
+
 
 
 
