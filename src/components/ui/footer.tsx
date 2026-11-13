@@ -25,11 +25,10 @@ const KOLOM = [
       { label: "Portofolio", href: "/penyedia/portofolio" },
     ],
   },
-  {
+    {
     judul: "CariJasa",
     tautan: [
       { label: "Tentang Kami", href: "/tentang" },
-      { label: "Bantuan", href: "/bantuan" },
       { label: "Syarat & Ketentuan", href: "/syarat" },
       { label: "Kebijakan Privasi", href: "/privasi" },
     ],

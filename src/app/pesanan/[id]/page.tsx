@@ -20,7 +20,7 @@ import { formatRupiah } from "@/lib/format";
  */
 
 /** Rute layar Pembayaran (I-10) — samakan dengan yang mengerjakan I-10 */
-const ruteBayar = (id_pesanan: string) => `/pesanan/bayar/${id_pesanan}`;
+const ruteBayar = (id_pesanan: string) => `/pesanan/checkout/${id_pesanan}`;
 const POLA_UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 const LANGKAH = ["Isi pesanan", "Pembayaran", "Selesai"];
@@ -134,7 +134,7 @@ export default function HalamanPemesanan() {
             {status_muat === "tidak_ditemukan" && (
               <>
                 <p className="text-h4 text-ink">Jasa tidak ditemukan</p>
-                <Button href="/pengguna/cari">Kembali ke pencarian</Button>
+                <Button href="/pengguna/pencarian">Kembali ke pencarian</Button>
               </>
             )}
             {status_muat === "gagal" && <p className="text-h4 text-ink">Data jasa gagal dimuat. Coba muat ulang halaman.</p>}

@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { logout } from "@/lib/client/auth";
+import { TombolNotifikasi } from "@/components/ui/notifikasi";
 
 /**
  * Navbar CariJasa — sesuai komponen Figma "Navbar" (node 31:167)
@@ -41,7 +42,7 @@ const MENU: Record<Exclude<Peran, "TAMU">, MenuItem[]> = {
   ],
   PENYEDIA_JASA: [
     { label: "Tawarkan Jasa", href: "/penyedia/upload-jasa" },
-    { label: "Pesanan Masuk", href: "/penyedia/pesanan", pakaiBadge: true }, // halaman belum ada
+        { label: "Pesanan Masuk", href: "/penyedia/pesanan", pakaiBadge: true },
     { label: "Portofolio", href: "/penyedia/portofolio" },
   ],
   ADMIN: [
@@ -277,7 +278,7 @@ export default function Navbar({
                 </Link>
                 {/* Button Style=Primary */}
                 <Link
-                  href="/daftar"
+                  href="/register"
                   className="flex h-[48px] items-center justify-center rounded-[10px] bg-brand px-[24px] text-[16px] leading-[1.2] font-semibold text-white hover:opacity-90"
                 >
                   Daftar
@@ -305,11 +306,12 @@ export default function Navbar({
                 <div className="flex shrink-0 items-center gap-[12px]">
                   {peran === "PENGGUNA_JASA" && (
                     <TombolIkon
-                      href="/bookmark"
+                      href="/pengguna/bookmark"
                       ikon="/icons/bookmark.svg"
                       label="Bookmark"
                     />
                   )}
+                  {(peran === "PENGGUNA_JASA" || peran === "PENYEDIA_JASA") && <TombolNotifikasi />}
                   <TombolIkon
                     href="/chat"
                     ikon="/icons/chat.svg"

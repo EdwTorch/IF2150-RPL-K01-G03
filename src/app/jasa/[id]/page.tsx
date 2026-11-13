@@ -110,9 +110,10 @@ export default function HalamanDetailJasa() {
   }
 
   /** O-03 Pesan Jasa → I-09 Halaman Pemesanan */
+  /** O-03 Pesan Jasa → I-09 Halaman Pemesanan (/pesanan/[id_jasa]) */
   function klikPesan() {
     if (!sesi) return router.push("/login");
-    router.push(`/pesanan/checkout/${id}`);
+    router.push(`/pesanan/${id}`);
   }
     /** O-04 Chat Penyedia → I-08 Halaman Chat */
   async function klikChat() {
