@@ -300,56 +300,56 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C01 | Pengguna  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | - |
 | C02 | PenyediaJasa | Tabel Basis Data <br> Interface (Tipe Data) <br> Fungsi (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.penyedia_jasa <br> src/models/types.ts - PenyediaJasa, RatingAgregat <br> src/services/ulasan.service.ts - perbaruiRatingPenyedia, getRatingDanUlasanPenyedia, hitungRatingAgregat, formatRatingTampilan, validasiRating <br> src/app/api/ulasan/route.ts - GET (query id_penyedia / id_penyedia_jasa) <br> src/test/ulasan.test.ts - Unit test rating agregat penyedia | - |
 | C03 | PenggunaJasa  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | Penggunaan id_pengguna_jasa berasal atribut id pengguna (inheritance) |
-| C04 | HalamanRegistrasi  | | | |
+| C04 | HalamanRegistrasi  | Komponen Halaman (page) | src/app/(auth)/register/page.tsx - HalamanRegistrasi | Form registrasi dan pesan error tampil di halaman ini. Pengiriman data diteruskan ke LayananRegistrasi (C05) melalui src/app/api/auth/route.ts (POST, action: register) |
 | C05 | LayananRegistrasi | Fungsi (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/auth.service.ts - validasiInputRegistrasi, registrasi, InputRegistrasi <br> src/app/api/auth/route.ts - POST (action: register) <br> src/test/auth.test.ts - Pengujian unit validasi input registrasi | - |
-| C06 | HalamanLogin  | | | |
+| C06 | HalamanLogin  | Komponen Halaman (page) | src/app/(auth)/login/page.tsx - HalamanLogin <br> src/app/admin/page.tsx - HalamanLoginAdmin | Login pengguna dan login admin dipisah menjadi dua halaman. Keduanya meneruskan kredensial ke Autentikator (C07) melalui route login (src/app/api/auth/route.ts dan src/app/api/admin/auth/login/route.ts) |
 | C07 | Autentikator | Fungsi (Service) <br> Route Handler <br> Middleware <br> Interface (Tipe Data) | src/services/auth.service.ts - login, logout, getSessionUser, loginAdmin <br> src/app/api/auth/route.ts - POST (action: login, logout, me), GET <br> src/lib/supabase/middleware.ts - updateSession (diintegrasikan di src/middleware.ts) <br> src/models/types.ts - SessionUser | - |
-| C08 | HalamanPortofolio  | | | |
+| C08 | HalamanPortofolio  | Komponen Halaman (page) | src/app/penyedia/portofolio/page.tsx - halaman portofolio penyedia | Data portofolio diambil dan disimpan lewat src/app/api/portofolio/route.ts |
 | C09 | Portofolio  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | Tambahan atribut id_portofolio, id_penyedia_jasa |
 | C10 | PengontrolPortofolio | | | |
-| C11 | LayananUploadFile | Modul Validasi & Konfigurasi <br> Route Handler (API Gateway) <br> Layanan / Adapter (Storage Service) <br> Pengujian (Unit Test) | src/lib/upload.config.ts - validasiBerkasUpload, validasiFolder, MAKS_UKURAN_UPLOAD <br> src/app/api/upload/route.ts - POST <br> src/services/storage/ - StorageService, LocalStorageService, SupabaseStorageService <br> src/test/upload.test.ts - Pengujian unit validasi dan upload gateway | - |
-| C12 | Jasa  | Tabel Basis Data <br> Interface (Tipe Data) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.jasa <br> src/supabase/migrations/20261108085000_add_berkas_pendukung_jasa.sql - kolom berkas_pendukung <br> src/models/types.ts - Jasa | - |
-| C13 | HalamanUploadJasa  | | | |
-| C14 | JasaController  | Kelas Layanan (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/jasa.service.ts - JasaController (ambilSemuaJasa, ambilDetailJasa, validasiDataJasa, validasiBerkas, unggahBerkas, simpanPenawaranJasa, perbaruiJasa, hapusJasa) <br> src/app/api/jasa/route.ts (GET, POST) <br> src/app/api/jasa/[id]/route.ts (GET, PATCH, DELETE) <br> src/app/api/jasa/helper.ts - bacaInputJasa <br> src/test/jasa.test.ts | - |
-| C15 | HalamanPencarian  | | | |
+| C11 | LayananUploadFile  | | | |
+| C12 | Jasa  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | tambahan atribut rating_rata_rata |
+| C13 | HalamanUploadJasa  | Komponen Halaman (page) | src/app/penyedia/upload-jasa/page.tsx <br> src/app/jasa/tambah/page.tsx | Form tambah jasa; data dikirim ke src/app/api/jasa/route.ts (POST) |
+| C14 | JasaController  | | | |
+| C15 | HalamanPencarian  | Komponen Halaman (page) | src/app/pengguna/pencarian/page.tsx <br> src/app/jasa/page.tsx | Pencarian dan daftar jasa; data dari src/app/api/jasa/route.ts (GET) |
 | C16 | HasilPencarian  | | | |
-| C17 | LayananPencarian  | Kelas Layanan (Service) <br> Fungsi Utilitas <br> Route Handler <br> Pengujian (Unit Test) | src/services/pencarian.service.ts - LayananPencarian (validasiFilter, saringDanUrutkan, cariJasaBerdasarkanKeyword, terapkanFilterPencarian), normalisasiKeyword <br> src/app/api/jasa/route.ts - GET (query q/keyword, kategori, harga_min, harga_max, rating_min, rating_max, sort/urutkan, limit) <br> src/test/search.test.ts | - |
-| C18 | LayananPembandingJasa  | Kelas Layanan (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/pencarian.service.ts - LayananPembandingJasa (susunMatriks, bandingkanSpesifikasiJasa) <br> src/app/api/jasa/route.ts - GET (query compare) <br> src/test/search.test.ts | - |
-| C19 | HalamanDetailJasa  | | | |
-| C20 | Bookmark  | Tabel Basis Data <br> Interface (Tipe Data) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.bookmark <br> src/models/types.ts - Bookmark | - |
-| C21 | HalamanBookmark  | | | |
-| C22 | PengontrolBookmark  | Kelas Layanan (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/bookmark.service.ts - PengontrolBookmark (validasiInput, daftarDariMemori, tambahKeMemori, hapusDariMemori, toggleDiMemori, tambahDataBookmark, hapusDataBookmark, ambilDaftarBookmarkPengguna, toggleBookmark) <br> src/app/api/bookmark/route.ts (GET, POST, DELETE) <br> src/test/bookmark.test.ts | - |
+| C17 | LayananPencarian  | | | |
+| C18 | LayananPembandingJasa  | | | |
+| C19 | HalamanDetailJasa  | Komponen Halaman (page) | src/app/jasa/[id]/page.tsx | Detail jasa berdasarkan id pada URL; data dari src/app/api/jasa/[id]/route.ts |
+| C20 | Bookmark  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
+| C21 | HalamanBookmark  | Komponen Halaman (page) | src/app/pengguna/bookmark/page.tsx <br> src/app/bookmark/page.tsx | Daftar bookmark; data dari src/app/api/bookmark/route.ts |
+| C22 | PengontrolBookmark  | | | |
 | C23 | ChatRoom  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
-| C24 | HalamanChat  | | | |
+| C24 | HalamanChat  | Komponen Halaman (page) | src/app/chat/page.tsx | Daftar dan isi percakapan; data dari src/app/api/chat/route.ts dan src/app/api/chat/[id_chatroom]/route.ts |
 | C25 | LayananPesanInstan  | Fungsi, Kelas, dan Routing | src\services\chat.service.ts - ChatService <br> src\app\api\chat\[id_chatroom]\route.ts <br> src\app\api\chat\route.ts | - |
 | C26 | LayananNotifikasiChat  | Fungsi, Kelas, dan Routing | src\services\notifikasi.service.ts - NotifikasiService <br> src\app\api\notifikasi\route.ts | Menampilkan Notifikasi Untuk setiap aksi yang dilakukan terkait pesanan atau chat |
-| C27 | Pesanan  | Tabel Basis Data <br> Interface (Tipe Data) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.pesanan <br> src/models/types.ts - Pesanan | - |
-| C28 | HalamanPemesanan  |  | | |
-| C29 | HalamanPembayaran  | | | |
-| C30 | HalamanRiwayatTransaksi  | | | |
-| C31 | PengontrolPesanan  | Kelas Layanan (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/pesanan.service.ts - PesananService (normalisasiStatus, apakahPesananAktif, validasiTransisiStatus, respondOrder, buatPesananDiMemori, konfirmasiPesananDiMemori, ambilDaftarPesananDiMemori, ambilDetailPesananDiMemori, buatPesananBaru, konfirmasiPesanan, ambilDaftarPesanan, ambilDetailPesanan) <br> src/app/api/pesanan/route.ts (GET, POST) <br> src/app/api/pesanan/[id_pesanan]/route.ts (GET, PATCH) <br> src/test/pesanan.test.ts | - |
-| C32 | PengontrolTransaksi  | Kelas Layanan (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/transaksi.service.ts - PengontrolTransaksi (normalisasiStatus, dapatkanDetailMetodeDiMemori, prosesPembayaranDummyDiMemori, ambilRiwayatTransaksiDiMemori, setPencairanDanaDiMemori, dapatkanDetailMetode, ambilDaftarMetode, prosesPembayaranDummy, ambilRiwayatTransaksi, setPencairanDana) <br> src/app/api/transaksi/route.ts (GET) <br> src/app/api/transaksi/dummy/route.ts (POST) <br> src/test/transaksi.test.ts | - |
-| C33 | MetodePembayaran  | Tabel Basis Data <br> Interface (Tipe Data) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.metode_pembayaran <br> src/supabase/migrations/20261109090000_seed_metode_pembayaran.sql <br> src/models/types.ts - MetodePembayaran | - |
-| C34 | RiwayatTransaksi  | Tabel Basis Data <br> Interface (Tipe Data) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.riwayat_transaksi <br> src/models/types.ts - RiwayatTransaksi | - |
-| C35 | HalamanKonfirmasi  | | | |
+| C27 | Pesanan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | Penambahan Atribut, id_metode_pembayaran, status_pembayaran, status_pencairan, waktu_pencairan |
+| C28 | HalamanPemesanan  | Komponen Halaman (page) | src/app/pesanan/[id]/page.tsx | Form pemesanan jasa; data dikirim ke src/app/api/pesanan/route.ts (POST) |
+| C29 | HalamanPembayaran  | Komponen Halaman (page) | src/app/pesanan/checkout/[id]/page.tsx | Pemilihan metode pembayaran dan pembayaran; diproses lewat src/app/api/transaksi/route.ts |
+| C30 | HalamanRiwayatTransaksi  | Komponen Halaman (page) | src/app/pengguna/riwayat-transaksi/page.tsx - HalamanRiwayatTransaksi | Atribut menjadi state (transaksi, tab, error, pembayaranBerhasil). Filter tab memakai komponen TabFilter. Data diambil lewat getTransaksi (src/lib/layanan.ts) dari src/app/api/pesanan/route.ts (GET) |
+| C31 | PengontrolPesanan  | | | |
+| C32 | PengontrolTransaksi  | | | |
+| C33 | MetodePembayaran  |  Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
+| C34 | RiwayatTransaksi  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | Menambahkan atribut id_metode dan total_biaya |
+| C35 | HalamanKonfirmasi  | Komponen Halaman (page) | src/app/penyedia/konfirmasi/[idPesanan]/page.tsx - HalamanKonfirmasi | Tombol Terima dan Tolak memanggil fungsi prosesPesanan, yaitu terimaPesanan dan tolakPesanan (src/lib/layanan.ts), ke PATCH src/app/api/pesanan/[id_pesanan]/route.ts. State: status, aksiSedangDiproses, error |
 | C36 | ProdukAkhir  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | |
-| C37 | HalamanPengumpulan  | | | |
-| C38 | HalamanDeliverables  | | | |
+| C37 | HalamanPengumpulan  | Komponen Halaman (page) | src/app/penyedia/pengumpulan/[idPesanan]/page.tsx - HalamanPengumpulan | State deskripsi, files, url, error, sedangMengirim. Operasi kirim memanggil kirimHasil (src/lib/layanan.ts) ke src/app/api/pesanan/[id_pesanan]/deliverables/route.ts dan .../deliverables/upload/route.ts. Jika pesanan sedang direvisi, pengiriman diarahkan ke .../deliverables/revisi/route.ts |
+| C38 | HalamanDeliverables  | Komponen Halaman (page) | src/components/ui/HalamanDeliverables.tsx - HalamanDeliverables <br> src/app/pengguna/hasil/[idPesanan]/page.tsx (sisi Pengguna Jasa) <br> src/app/penyedia/pengumpulan/[idPesanan]/hasil/page.tsx (sisi Penyedia Jasa) | Satu komponen dipakai dua sisi lewat prop peran. State hasil, error, sedangMemproses, konfirmasiBerhasil, pesananDitolak. Operasi konfirmasi memanggil konfirmasiSelesai (PATCH .../deliverables/route.ts); data dimuat lewat getHasil dari .../deliverables/route.ts dan .../deliverables/revisi/route.ts |
 | C39 | PengajuanRevisi  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambahkan atribut id_revisi dan id_pesanan |
-| C40 | HalamanRequestRevisi  | | | |
+| C40 | HalamanRequestRevisi  | Komponen Halaman (page) | src/app/pengguna/revisi/[idPesanan]/page.tsx - HalamanRequestRevisi | State detail, pesan, files, kuota, errorDetail, errorUmum. Operasi kirimRevisi memanggil ajukanRevisi (src/lib/layanan.ts) ke POST src/app/api/pesanan/[id_pesanan]/deliverables/revisi/route.ts. Kuota dimuat lewat muatKuota |
 | C41 | RevisiHandler  | Fungsi, Kelas, dan Routing | src\services\deliverables.service.ts - DeliverablesService <br> src\app\api\pesanan\[id_pesanan]\deliverables\revisi\route.ts  | Class ini Digabung dengan RevisiHandler dan Sebagian PesananHandler. Fungsi yang relevan antara lain : getRevisionHistory, requestRevision, submitRevisionFix, confirmOrderComplete |
 | C42 | PencairanDana  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
 | C43 | TiketLaporan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
-| C44 | HalamanPelaporan | | | |
+| C44 | HalamanPelaporan | Komponen Halaman (page) | src/app/pengguna/pelaporan/page.tsx - HalamanPelaporan | idPesanan diambil dari query URL. State nama, kat, desk, files, tiket, e. Operasi kirim memanggil kirimLaporan (src/lib/layanan.ts) ke POST src/app/api/pesanan/[id_pesanan]/laporan/route.ts; tiket yang dikembalikan ditampilkan sebagai nomor tiket, status, dan tanggapan admin |
 | C45 | LaporanHandler | Fungsi, Kelas dan Routing | src\services\pelaporan.service.ts <br> src\app\api\pesanan\[id_pesanan]\laporan\route.ts <br> src\app\api\admin\laporan\[id_tiket]\route.ts <br> src\app\api\admin\laporan\[id_tiket]\tanggapan\route.ts - PelaporanService dan TanggapanLaporanService | fungsi yang terkait PelaporanService : submitLaporan, validasiOwnerPesanan, validateUrlBukti, getTicketsByUser. fungsi yang terkait TanggapanLaporanService : getAllTicketsForAdmin, getDetailTiketAdmin, catatKeputusanTindakan |
 | C46 | Ulasan | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | |
-| C47 | HalamanUlasan  | | | |
+| C47 | HalamanUlasan  | Komponen Halaman (page) | src/app/pengguna/ulasan/[idPesanan]/page.tsx - HalamanUlasan | State n (rating), kom (komentar), files (dokumentasi), done. Operasi kirim memanggil kirimUlasan (src/lib/layanan.ts) ke POST src/app/api/ulasan/route.ts. Rating wajib diisi sebelum dikirim |
 | C48 | UlasanHandler  | Fungsi, Kelas, dan Routing | src\services\ulasan.service.ts <br> src\app\api\ulasan\route.ts| Class UlasanService, validasiRating, hitungRatingAgregat, perbaruiRatingPenyedia, getRatingDanUlasanPenyedia, geStatistikUlasanJasa, getUlasanJasaById, simpanUlasan, getUlasanbyJasa,updateUlasan, deleteUlasan |
 | C49 | TanggapanLaporan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
-| C50 | HalamanPengajuanMediasi | | | |
+| C50 | HalamanPengajuanMediasi | Komponen Halaman (page) | src/app/admin/tiket/[idTiket]/page.tsx - HalamanPengajuanMediasi <br> src/app/mediasi/[id]/page.tsx (ruang mediasi) | Detail tiket untuk admin, dengan operasi kirim (tanggapan dan jenis sanksi) ke src/app/api/admin/laporan/[id_tiket]/tanggapan/route.ts, dan mediasi (mulai mediasi) ke src/app/api/mediasi/[id_sesi_mediasi]/route.ts (POST) |
 | C51 | MediasiHandler | Fungsi, Kelas, dan Routing | src/app/deliverables/mediasi.service.ts - MediasiService <br> src/app/api/admin/mediasi/[id_sesi_mediasi]/selesai <br> src/app/api/admin/mediasi/route.ts <br> src/app/api/mediasi/route.ts <br> src/app/api/mediasi/[id_sesi_mediasi]/route.ts <br> src/app/api/mediasi/[id_sesi_mediasi]/pesan/route.ts | fungsi yang disediakan : mulaiMediasi, kirimPesanMediasi, getDaftarMediasiUser, getDetalDanPesanMediasi, selesaikanMediasi. |
 | C52 | Admin  | Tabel Basis Data | src/app/supabase/20261103060624_create_carijasa_schema.sql  | Penggunaan id_admin pada rancangan berasal atribut id pengguna (inheritance), tetapi dengan role pengguna berupa 'ADMIN'|
-| C53 | HalamanDashboardAdmin | | | |
+| C53 | HalamanDashboardAdmin | Komponen Halaman (page) | src/app/admin/tiket/page.tsx - HalamanDashboardAdmin | Daftar tiket laporan (state d, err) dari getTiketList (src/lib/layanan.ts) ke src/app/api/admin/laporan/route.ts. Ada keadaan memuat, error, dan kosong. Tombol Detail menuju src/app/admin/tiket/[idTiket]/page.tsx |
 | C54 | PengumpulanController | Fungsi, Kelas, dan Routing | src/app/service/deliverarble.service.ts - DeliverablesService <br> src/app/api/pesanan/route.ts src/app/api/pesanan/[id_pesanan]/route.ts <br> | Class ini Digabung dengan RevisiHandler dan Sebagian PesananHandler. Fungsi yang relevan antara lain : submitDeliverable, getDeliverablebyPesanan, getDeliverableByProdukAkhir, confirmOrderComplete |
 | C55 | pesan_chat | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | Menambah Class Baru untuk pesan dalam chat |
 | C56 | notifikasi | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambah tabel data notifikasi |
