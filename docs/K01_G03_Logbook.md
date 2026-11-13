@@ -182,4 +182,18 @@
 **Catatan/Evaluasi Milestone 8:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
 
+### Milestone 9
+**Periode:** [28 Oktober 2026] - [13 November 2026]
+| Tanggal | Nama Anggota | Deskripsi Pekerjaan | Durasi (Jam) | Status | Kendala / *Blocker* | 
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| *29-10-2026* & *3-11-2026*  | Revandra, Danesh, There, Edward, Necia| Membahas masterplan dan pembagian tugas| 1 Jam | Done | Bingung mau baginya :) |
+| *2-11-2026*  | Revandra, Danesh, There, Edward, Necia| Asistensi Akbar | 1 Jam | Done | |
+| *2-11-2026* - *9-11-2026* | Edward | Membuat Seluruh Service Backend dan routingnya | > 15 Jam | Done | Pusing Banget dan Ngedrop |
+| *9-11-2026* - *13-11-2026* | Edward | Membuat Laporan Perubahan DPPL (implementasi) readme dan traceability  | > 6 Jam | Done | DPPLnya berubah banyak banget |
+
+
+
+**Catatan/Evaluasi Milestone 9:**
+* *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
+
 ``Gunakan format penulisan Logbook yang sama untuk setiap Milestone dan pastikan pembuatan Daftar Isi juga sudah sesuai sebelum Logbook dikumpulkan. ``
