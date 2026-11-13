@@ -65,6 +65,7 @@ cd nama-repo-kamu
 
 #### 2. Instal Dependensi
 ```bash
+cd src
 npm install
 ```
 
@@ -87,6 +88,12 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 
 
 ## Cara Menjalankan Aplikasi
+Note : Maaf Kak, kami salah setting dependencies, udah mepet belum sempat solve juga
+Pastikan sudah berada di 
+IF2150-RPL-K01-G03\src. Jika belum
+```
+cd src
+```
 ```bash
 npm run dev
 ```
