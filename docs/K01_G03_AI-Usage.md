@@ -101,6 +101,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Claude | Membantu dalam mengerjakan Bab 6  | Buatkan spesifikasi objek antarmuka | AI membuatkan spesifikasi objek antarmuka, saya (Neci) menjadikannya sebagai referensi untuk mengerjakan bab 6 |
 | Gemini | Membantu dalam menentukan notasi pseudocode | Tolong beri contoh pseudocode yang cocok untuk file berikut | AI memberikan contoh pseudocode yang cocok untuk pengerjaan milestone 8, lalu saya (Revandra) menyesuaikan penulisan pseudocode dengan itu. |
 
+## Milestone 9
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Gemini | Membuat Pembagian Tugas | Berdasarkan DPPL yang telah kami buat, apa yang harus kami lakukan untuk mengimplementasikannya?  | Kami Sekelompok membaca dan membaginya sesuai dengan yang sudah diberikan AI, tetapi tetap kami crosscheck bagian yang mungkin tertinggal / tidak tercover  |
+| Claude | Membuat Testing | Berdasarkan Routing yang telah saya buat, tolong bantu saya membuat test untuk integrasi secara total untuk setiap routing yang ada menggunakan vitest | AI memberikan kode dan penjelasan setiap kode dan saya (Edward) mereview tugas dan kode yang dibuat serta melakukan crosscheck cakupan yang sudah ia kerjakan |
+| Gemini | Membuat Backend | Berdasarkan DPPL Bagian X, bagaimana cara saya membuat backend dan bantu saya membuat kodenya  | AI Memberikan Kode, saya (Edward) mengetes dan memberikan masukan sesuai kriteria DPPL yang seharusnya |
 
 
 ### Pernyataan Integritas dan Persetujuan
