@@ -1,3 +1,4 @@
+
 // src/models/types.ts
 
 // Tipe data untuk Jasa (C12)
@@ -8,9 +9,9 @@ export interface Jasa {
   deskripsi: string;
   kategori: string;
   harga: number;
-  rating_rata_rata?: number; // default 0.0, rentang 0-5
-  status_aktif?: boolean; // default true
-  berkas_pendukung?: string[]; // URL berkas, default []
+  rating_rata_rata?: number;
+  status_aktif?: boolean;
+  berkas_pendukung?: string[];
   created_at?: string;
 }
 
@@ -25,13 +26,13 @@ export interface Bookmark {
 }
 
 // Tipe data untuk Produk Akhir / Deliverables (C36)
-// ada tanda tanya artinya optional
 export interface ProdukAkhir {
-  id_produk_akhir: string; 
+  id_produk_akhir: string;
   id_pesanan: string;
-  output_path?: string; 
+  id_revisi?: string | null;
   deskripsi_produk: string;
-  file_url?: string; //bra
+  file_url?: string;
+  file_download_url?: string | null;
   status_pemeriksaan?: boolean;
   created_at?: string;
 }
@@ -40,28 +41,32 @@ export interface ProdukAkhir {
 export interface PengajuanRevisi {
   id_revisi?: string;
   id_pesanan: string;
+  id_produk_akhir?: string | null;
   deskripsi_revisi: string;
+  pesan_revisi?: string | null;
   jml_revisi_tersedia: number;
   status_pengerjaan: string;
-  lampiran_revisi?: string;
+  lampiran_revisi?: string[] | null;
   created_at?: string;
 }
 
 // Tipe data untuk Pesanan (C27)
 export interface Pesanan {
-  id_pesanan : string;
-  id_pengguna_jasa : string;
-  id_penyedia_jasa : string;
-  id_jasa : string;
-  brief : string;
-  total_biaya : number;
-  id_metode_pembayaran? : string;
-  status_pembayaran? : string;
-  status_pesanan : string;
-  status_pencairan? : boolean;
-  waktu_pencairan? : string;
-  created_at? : string;
-  updated_at? : string;
+  id_pesanan: string;
+  id_pengguna_jasa: string;
+  id_penyedia_jasa: string;
+  id_jasa: string;
+  brief: string;
+  total_biaya: number;
+  id_metode_pembayaran?: string;
+  status_pembayaran?: string;
+  status_pesanan: string;
+  status_pencairan?: boolean;
+  waktu_pencairan?: string;
+  created_at?: string;
+  updated_at?: string;
+  jasa?: Jasa;
+  nama_pemesan?: string | null;
 }
 
 // Tipe data untuk Metode Pembayaran (C33)
@@ -85,40 +90,50 @@ export interface RiwayatTransaksi {
 }
 
 export interface PencairanDana {
-  id_pencairan : string;
-  id_pesanan : string;
-  id_penyedia_jasa : string;
-  jumlah_pencairan : number;
-  state_pencairan_dana : boolean;
+  id_pencairan: string;
+  id_pesanan: string;
+  id_penyedia_jasa: string;
+  jumlah_pencairan: number;
+  state_pencairan_dana: boolean;
 }
+
 export interface Ulasan {
-  id_ulasan : string;
-  id_pesanan : string;
-  id_pengguna_jasa : string;
-  rating : number;
-  komentar? : string;
-  dokumentasi_path? : string;
-  created_at : string;
+  id_ulasan: string;
+  id_pesanan: string;
+  id_pengguna_jasa: string;
+  rating: number;
+  komentar?: string;
+  dokumentasi_path?: string;
+  created_at: string;
 }
+
+// Tipe data untuk Pelaporan
+export type JenisTindakanLaporan =
+  | "PERINGATAN"
+  | "SUSPEND_AKUN"
+  | "LAPORAN_DITOLAK";
 
 export interface TiketLaporan {
   id_tiket?: string;
-  id_pesanan : string;
-  id_pelapor : string;
-  id_terlapor : string;
-  deskripsi_laporan : string;
-  url_bukti : string[];
-  kategori : string[];
-  status_tiket : "Diproses" | "Selesai";
-  tanggapan_admin : string;
+  id_pesanan: string;
+  id_pelapor: string;
+  id_terlapor: string | null;
+  deskripsi_laporan: string;
+  url_bukti: string[];
+  kategori: string[];
+  status_tiket: "Diproses" | "Selesai";
+  tanggapan_admin?: string | null;
+  created_at?: string;
 }
 
-export interface TanggapanLaporan{
-  id_tanggapan : string;
-  id_tiket : string;
-  jenis_tindakan : string;
-  catatan_tanggapan : string;
+export interface TanggapanLaporan {
+  id_tanggapan: string;
+  id_tiket: string;
+  jenis_tindakan: JenisTindakanLaporan;
+  catatan_tanggapan: string | null;
+  created_at?: string;
 }
+
 // Tipe data pengguna yang sedang login (dari sesi)
 export interface SessionUser {
   id: string;
@@ -130,14 +145,14 @@ export interface SessionUser {
   isPenggunaJasa: boolean;
 }
 
-export interface Notifikasi{
-    id_notifikasi : string;
-    id_pengguna : string;
-    id_pesanan : string;
-    id_referensi : string,
-    judul : string,
-    pesan_notifikasi : string,
-    is_read : boolean,
+export interface Notifikasi {
+  id_notifikasi: string;
+  id_pengguna: string;
+  id_pesanan: string;
+  id_referensi: string;
+  judul: string;
+  pesan_notifikasi: string;
+  is_read: boolean;
 }
 
 export interface ChatroomRow {
@@ -157,7 +172,7 @@ export interface PesanChatRow {
   created_at: string;
 }
 
-// 2. Extend dari tabel mentah untuk kebutuhan response API (dengan data JOIN)
+// Extend dari tabel mentah untuk kebutuhan response API (dengan data JOIN)
 export interface ChatroomDetail extends ChatroomRow {
   pengguna_jasa?: {
     id: string;

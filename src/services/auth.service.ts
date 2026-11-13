@@ -3,7 +3,7 @@ import { createClient as createAdminClient } from "@supabase/supabase-js";
 
 export class AuthError extends Error {
     constructor(
-        public code: 
+        public code:
             | "EMPTY_INPUT"
             | "INVALID_EMAIL"
             | "WEAK_PASSWORD"
@@ -31,10 +31,8 @@ export interface InputRegistrasi {
     role: RoleRegistrasi;
 }
 
-// Panjang minimum password
 export const MIN_PANJANG_PASSWORD = 8;
 
-// Helper untuk mengecek apakah data relasi PostgREST valid (bukan null, bukan array kosong, bukan object kosong)
 export function hasRelation(rel: unknown): boolean {
     if (!rel) return false;
     if (Array.isArray(rel)) return rel.length > 0;
@@ -42,50 +40,70 @@ export function hasRelation(rel: unknown): boolean {
     return false;
 }
 
-// Admin client khusus untuk operasi auth.admin (createUser, deleteUser) dengan SERVICE_ROLE_KEY
 let adminClientInstance: ReturnType<typeof createAdminClient<any>> | null = null;
 
 function getAdminClient() {
     if (adminClientInstance) return adminClientInstance;
+
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const serviceRoleKey =
+        process.env.SUPABASE_SERVICE_ROLE_KEY ||
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
     if (!supabaseUrl || !serviceRoleKey) {
-        throw new AuthError("INTERNAL_ERROR", "Konfigurasi Supabase tidak lengkap");
+        throw new AuthError(
+            "INTERNAL_ERROR",
+            "Konfigurasi Supabase tidak lengkap"
+        );
     }
-    adminClientInstance = createAdminClient(supabaseUrl, serviceRoleKey, {
-        auth: {
-            autoRefreshToken: false,
-            persistSession: false,
-        },
-    });
+
+    adminClientInstance = createAdminClient(
+        supabaseUrl,
+        serviceRoleKey,
+        {
+            auth: {
+                autoRefreshToken: false,
+                persistSession: false,
+            },
+        }
+    );
+
     return adminClientInstance;
 }
 
-// Validasi input registrasi — murni (dapat diuji unit tanpa DB)
 export function validasiInputRegistrasi(input: InputRegistrasi): void {
     if (!input.nama?.trim()) {
         throw new AuthError("EMPTY_INPUT", "Nama tidak boleh kosong");
     }
+
     if (!input.email?.trim()) {
         throw new AuthError("EMPTY_INPUT", "Email tidak boleh kosong");
     }
+
     const formatEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
     if (!formatEmail.test(input.email.trim())) {
         throw new AuthError("INVALID_EMAIL", "Format email tidak valid");
     }
+
     if (!input.password || input.password.length < MIN_PANJANG_PASSWORD) {
         throw new AuthError(
             "WEAK_PASSWORD",
             `Password minimal ${MIN_PANJANG_PASSWORD} karakter`
         );
     }
+
     if (!input.password.trim()) {
         throw new AuthError(
             "WEAK_PASSWORD",
             "Password tidak boleh hanya berisi spasi kosong"
         );
     }
-    if (input.role !== "pengguna_jasa" && input.role !== "penyedia_jasa") {
+
+    if (
+        input.role !== "pengguna_jasa" &&
+        input.role !== "penyedia_jasa"
+    ) {
         throw new AuthError("INVALID_ROLE", "Role tidak valid");
     }
 }
@@ -105,32 +123,70 @@ async function getValidProfil(
     supabase: Awaited<ReturnType<typeof createClient>>,
     userId: string
 ): Promise<RawProfilPengguna> {
+    // Ambil profil utama saja, tanpa nested relationship.
     const { data: profil, error: profilError } = await supabase
         .from("pengguna")
-        .select(`
-            id, nama, email, role, status_akun, sanksi,
-            penyedia_jasa ( id ),
-            pengguna_jasa ( id )
-        `)
+        .select("id, nama, email, role, status_akun, sanksi")
         .eq("id", userId)
-        .single();
+        .maybeSingle();
+
     if (profilError) {
+        // Detail error hanya dicatat di terminal server.
+        console.error("[AUTH] Gagal mengambil profil pengguna:", {
+            code: profilError.code,
+            message: profilError.message,
+            details: profilError.details,
+            hint: profilError.hint,
+            userId,
+        });
+
         await supabase.auth.signOut();
-        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat mengambil profil pengguna");
+
+        throw new AuthError(
+            "INTERNAL_ERROR",
+            "Terjadi kesalahan saat mengambil profil pengguna"
+        );
     }
+
     if (!profil) {
+        console.error(
+            "[AUTH] Profil tidak ditemukan untuk Auth user:",
+            userId
+        );
+
         await supabase.auth.signOut();
-        throw new AuthError("PROFILE_NOT_FOUND", "Profil pengguna tidak ditemukan");
+
+        throw new AuthError(
+            "PROFILE_NOT_FOUND",
+            "Profil pengguna tidak ditemukan"
+        );
     }
-    const diblokir = profil.status_akun === false || profil.sanksi === "SUSPENDED";
+
+    const diblokir =
+        profil.status_akun === false ||
+        profil.sanksi === "SUSPENDED";
+
     if (diblokir) {
         await supabase.auth.signOut();
-        throw new AuthError("ACCOUNT_SUSPENDED", "Akun Anda ditangguhkan");
+
+        throw new AuthError(
+            "ACCOUNT_SUSPENDED",
+            "Akun Anda ditangguhkan"
+        );
     }
-    return profil as RawProfilPengguna;
+
+    // Relasi ditentukan dari role yang tersimpan di tabel pengguna.
+    // Registrasi CariJasa membuat data turunan sesuai role tersebut.
+    return {
+        ...profil,
+        role: profil.role,
+        penyedia_jasa:
+            profil.role === "PENYEDIA_JASA" ? { id: userId } : null,
+        pengguna_jasa:
+            profil.role === "PENGGUNA_JASA" ? { id: userId } : null,
+    } as RawProfilPengguna;
 }
 
-// Daftarkan akun baru: buat auth user, simpan profil & tabel turunan sesuai role
 export async function registrasi(
     input: InputRegistrasi
 ): Promise<{ id: string; email: string; nama: string; role: string }> {
@@ -139,12 +195,13 @@ export async function registrasi(
     const email = input.email.trim().toLowerCase();
     const adminClient = getAdminClient();
 
-    // Buat akun di Supabase Auth menggunakan admin client (SERVICE_ROLE_KEY)
-    const { data: authData, error: authError } = await adminClient.auth.admin.createUser({
-        email,
-        password: input.password,
-        email_confirm: true,
-    });
+    const { data: authData, error: authError } =
+        await adminClient.auth.admin.createUser({
+            email,
+            password: input.password,
+            email_confirm: true,
+        });
+
     if (authError || !authData?.user) {
         if (
             authError?.message?.toLowerCase().includes("already registered") ||
@@ -152,61 +209,115 @@ export async function registrasi(
         ) {
             throw new AuthError("EMAIL_TAKEN", "Email sudah terdaftar");
         }
-        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat pendaftaran akun");
-    }
-    const user_id = authData.user.id;
-    const role = input.role === "penyedia_jasa" ? "PENYEDIA_JASA" : "PENGGUNA_JASA";
 
-    // Simpan ke tabel pengguna
-    const { error: profilError } = await adminClient.from("pengguna").insert({
-        id: user_id,
-        nama: input.nama.trim(),
-        email,
-        role,
-    });
+        console.error("[AUTH] Registrasi Auth gagal:", authError);
+
+        throw new AuthError(
+            "INTERNAL_ERROR",
+            "Terjadi kesalahan saat pendaftaran akun"
+        );
+    }
+
+    const user_id = authData.user.id;
+
+    const role =
+        input.role === "penyedia_jasa"
+            ? "PENYEDIA_JASA"
+            : "PENGGUNA_JASA";
+
+    const { error: profilError } = await adminClient
+        .from("pengguna")
+        .insert({
+            id: user_id,
+            nama: input.nama.trim(),
+            email,
+            role,
+        });
 
     if (profilError) {
-        // Rollback: hapus auth user agar tidak orphan
+        console.error("[AUTH] Gagal menyimpan profil:", profilError);
+
         await adminClient.auth.admin.deleteUser(user_id);
-        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat menyimpan profil pengguna");
+
+        throw new AuthError(
+            "INTERNAL_ERROR",
+            "Terjadi kesalahan saat menyimpan profil pengguna"
+        );
     }
 
-    // Simpan ke tabel turunan sesuai role
-    const tabelTurunan = input.role === "penyedia_jasa" ? "penyedia_jasa" : "pengguna_jasa";
-    const { error: turunanError } = await adminClient.from(tabelTurunan).insert({ id: user_id });
+    const tabelTurunan =
+        input.role === "penyedia_jasa"
+            ? "penyedia_jasa"
+            : "pengguna_jasa";
+
+    const { error: turunanError } = await adminClient
+        .from(tabelTurunan)
+        .insert({ id: user_id });
 
     if (turunanError) {
-        // Rollback: bersihkan data pengguna dan auth user agar tidak meninggalkan orphan data
-        await adminClient.from("pengguna").delete().eq("id", user_id);
+        console.error(
+            "[AUTH] Gagal menyimpan data peran:",
+            turunanError
+        );
+
+        await adminClient
+            .from("pengguna")
+            .delete()
+            .eq("id", user_id);
+
         await adminClient.auth.admin.deleteUser(user_id);
-        throw new AuthError("INTERNAL_ERROR", "Terjadi kesalahan saat menyimpan data peran pengguna");
+
+        throw new AuthError(
+            "INTERNAL_ERROR",
+            "Terjadi kesalahan saat menyimpan data peran pengguna"
+        );
     }
 
-    return { id: user_id, email, nama: input.nama.trim(), role };
+    return {
+        id: user_id,
+        email,
+        nama: input.nama.trim(),
+        role,
+    };
 }
 
 export async function login(email: string, password: string) {
     const clean_email = email?.trim().toLowerCase();
 
     if (!clean_email || !password || !password.trim()) {
-        throw new AuthError("EMPTY_INPUT", "Email dan password tidak boleh kosong");
+        throw new AuthError(
+            "EMPTY_INPUT",
+            "Email dan password tidak boleh kosong"
+        );
     }
 
     const supabase = await createClient();
+
     const { data, error } = await supabase.auth.signInWithPassword({
         email: clean_email,
-        password
+        password,
     });
 
     if (error || !data.user) {
-        // Jangan bocorkan apakah email atau password yang salah
-        throw new AuthError("INVALID_CREDENTIALS", "Kredensial tidak valid");
+        throw new AuthError(
+            "INVALID_CREDENTIALS",
+            "Kredensial tidak valid"
+        );
     }
 
-    // Ambil dan validasi data profil dari tabel publik menggunakan helper DRY
     const profil = await getValidProfil(supabase, data.user.id);
 
-    await supabase.from("pengguna").update({ status_online: true }).eq("id", data.user.id);
+    const { error: onlineError } = await supabase
+        .from("pengguna")
+        .update({ status_online: true })
+        .eq("id", data.user.id);
+
+    if (onlineError) {
+        console.error(
+            "[AUTH] Gagal memperbarui status online:",
+            onlineError
+        );
+    }
 
     return {
         user: {
@@ -215,29 +326,43 @@ export async function login(email: string, password: string) {
             nama: profil.nama,
             role: profil.role,
             isPenyediaJasa: hasRelation(profil.penyedia_jasa),
-            isPenggunaJasa: hasRelation(profil.pengguna_jasa)
-        }
+            isPenggunaJasa: hasRelation(profil.pengguna_jasa),
+        },
     };
 }
 
 export async function logout() {
     const supabase = await createClient();
 
-    const { data: { user } } = await supabase.auth.getUser();
+    const {
+        data: { user },
+    } = await supabase.auth.getUser();
+
     if (user) {
-        await supabase.from("pengguna").update({ status_online: false }).eq("id", user.id);
+        await supabase
+            .from("pengguna")
+            .update({ status_online: false })
+            .eq("id", user.id);
     }
 
     const { error } = await supabase.auth.signOut();
+
     if (error) {
-        throw new AuthError("LOGOUT_FAILED", "Gagal keluar dari akun");
+        throw new AuthError(
+            "LOGOUT_FAILED",
+            "Gagal keluar dari akun"
+        );
     }
 }
 
 export async function getSessionUser() {
     const supabase = await createClient();
-    const { data: { user }, error } = await supabase.auth.getUser();
-    
+
+    const {
+        data: { user },
+        error,
+    } = await supabase.auth.getUser();
+
     if (error || !user) return null;
 
     try {
@@ -258,14 +383,22 @@ export async function getSessionUser() {
 }
 
 export async function loginAdmin(email: string, password: string) {
-    // Gunakan fungsi login() yang sudah ada untuk validasi kredensial, profil, & sanksi
     const result = await login(email, password);
 
     if (result.user.role !== "ADMIN") {
         const supabase = await createClient();
-        await supabase.from("pengguna").update({ status_online: false }).eq("id", result.user.id);
-        await supabase.auth.signOut(); // Hapus cookie sesi agar tidak nyangkut
-        throw new AuthError("FORBIDDEN", "Akun ini tidak memiliki akses administrator");
+
+        await supabase
+            .from("pengguna")
+            .update({ status_online: false })
+            .eq("id", result.user.id);
+
+        await supabase.auth.signOut();
+
+        throw new AuthError(
+            "FORBIDDEN",
+            "Akun ini tidak memiliki akses administrator"
+        );
     }
 
     return result;
