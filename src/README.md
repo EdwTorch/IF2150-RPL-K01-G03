@@ -110,6 +110,17 @@ Untuk mempermudah pengujian fitur berdasarkan masing-masing peran (*role*), guna
 | **Penyedia Jasa** | `penyedia.uji@contoh.com` | `Bujank123` | Memiliki daftar layanan aktif & menerima pesanan. |
 | **Pemesan (Klien)** | `klien.uji@contoh.com` | `Another123!` | Dapat mencari jasa, membuat pesanan, & mengirim ulasan. |
 
+### Cara Test 
+Jika belum di ./src/
+```
+cd src
+npm run test
+```
+
+jika sudah 
+```
+npm run test
+```
 
 ## Daftar Pembagian Modul yang diimplementasikan
 | Nama  | Tanggung Jawab Modul dan Routingnya |
