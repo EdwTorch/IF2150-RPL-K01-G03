@@ -129,7 +129,7 @@ npm run test
 | Danesh Rasyad Damotino | Backend: <br> 1. Pengelolaan Penawaran Jasa (CRUD) <br> 2. Pencarian & Komparasi Jasa <br> 3. Bookmark <br> 4. Pemesanan & Konfirmasi <br> 5. Pembayaran & Riwayat Transaksi| 
 | Theresia Estelina Ratu Udju | Frontend: <br> 1. Halaman Pengumpulan Jasa <br> 2. Halaman Deliverables <br> 3. Halaman Ulasan <br> 4. Halaman Dashboard Admin <br> 5. Halaman Pengajuan Mediasi <br> 6. Halaman Riwayat Pesanan <br> 7. Halaman Request Revisi <br> 8. Halaman Pelaporan <br> 9. Halaman Konfirmasi| 
 | Edward Terrance Lie | BACKEND : <br> 1. Modul Deliverables (Terima/Tolak Pesanan, Konfirmasi Pesanan, Kirim Pesanan, Ajukan Revisi, Pengumpulan Revisi, Konfirmasi Hasil, Pencairan Dana) <br> 2. Modul Ulasan <br> 3. Modul Pelaporan <br> 4. Notifikasi <br> 5. Chat Realtime <br> 6. Chat Mediasi <br> 7. All about admin |
-| Necia Aurely Greva Dedevi | |
+| Necia Aurely Greva Dedevi | Frontend:<br>1. Halaman Registrasi<br>2. Halaman Login<br>3. Halaman Portofolio<br>4. Halaman Upload Jasa<br>5. Halaman Pencarian<br>6. Halaman Hasil Pencarian<br>7. Halaman Detail Jasa<br>8. Halaman Bookmark<br>9. Halaman Pemesanan<br>10. Halaman Pembayaran |
 
 
 ## Daftar Tabel Basis Data

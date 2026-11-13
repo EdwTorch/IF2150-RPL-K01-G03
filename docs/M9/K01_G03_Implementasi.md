@@ -267,8 +267,11 @@ Jika tidak ada perbaikan yang perlu dilakukan, jelaskan hasil profiling dan alas
 2. **Fitur yang Belum Sempurna (*Known Issues*):**
    * **Chat & Notifikasi Real-time:** Fitur obrolan langsung yang berjalan secara *real-time* membutuhkan koneksi aktif ke peladen server. Pada pengujian offline, fungsionalitas ini dipastikan melalui pengecekan keberhasilan penyimpanan data di database.
 
+3. **Fitur Tambahan yang Belum Diimplementasikan:**
+	* **Profil Pengguna dan Penyedia Jasa:** Fitur bagi pengguna dan penyedia jasa meilhat profil mereka belum diimplementasikan karena keterbatasan waktu dan tenaga.
+
 3. **Catatan untuk Asisten Penilai:**
-   * Cara menjalankan aplikasi cukup ikuti perintah `npm install` lalu `npm run dev`.
+   * Cara menjalankan aplikasi: pindah ke folder /src dengan cd src, lalu cukup ikuti perintah `npm install` lalu `npm run dev`.
    * Untuk menjalankan pengujian, gunakan perintah `npx vitest run`.
    * Akun uji coba (Admin, Seller, Buyer) sudah disertakan di readme.MD.
 
