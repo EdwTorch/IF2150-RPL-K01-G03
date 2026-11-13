@@ -44,7 +44,7 @@ describe('Upload Gateway (/api/upload & upload.config)', () => {
       Object.defineProperty(largeFile, 'size', { value: MAKS_UKURAN_UPLOAD + 1 });
 
       const err = validasiBerkasUpload(largeFile, 'jasa');
-      expect(err).toBe('Ukuran berkas gambar.png melebihi 10 MB');
+      expect(err).toBe('Ukuran berkas gambar.png melebihi 10 MB.');
     });
 
     it('menolak ekstensi yang tidak diizinkan pada folder tujuan', () => {
@@ -68,7 +68,7 @@ describe('Upload Gateway (/api/upload & upload.config)', () => {
     it('menolak tipe MIME yang tidak valid dengan fallback jika file.type kosong', () => {
       const untypedFile = new File(['teks'], 'dokumen.pdf', { type: '' });
       const err = validasiBerkasUpload(untypedFile, 'jasa');
-      expect(err).toBe('Tipe berkas tidak diketahui tidak diizinkan untuk folder jasa');
+      expect(err).toBe('Tipe berkas tidak diketahui tidak diizinkan untuk folder jasa.');
     });
 
     it('mengembalikan null jika berkas dan formatnya valid', () => {
