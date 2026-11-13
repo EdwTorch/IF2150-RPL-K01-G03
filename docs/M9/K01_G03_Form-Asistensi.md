@@ -26,10 +26,9 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
+| 1. Perubahan DPPL Harus dicatat  |
+| 2. Bikin Readme yang mencakup Deskripsi, Teknologi + Versi,  Prasyarat & Instalasi, Konfigurasi, Cara Jalanin program, Akun / Data Uji, Daftar Modul & Pembagian Tugas, Tabel/Skema Basis Data,  |
+| 3. Pakai Git Workflow untuk memudahkan pengerjaan dan best practice pake juga code review dan issue biar lebih jelas bagi2nya |
 
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
@@ -38,7 +37,7 @@
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/image.png" width="100%">
 </p>
 
 <p align="center">
