@@ -25,21 +25,10 @@ const KOLOM = [
       { label: "Portofolio", href: "/penyedia/portofolio" },
     ],
   },
-    {
-    judul: "CariJasa",
-    tautan: [
-      { label: "Tentang Kami", href: "/tentang" },
-      { label: "Syarat & Ketentuan", href: "/syarat" },
-      { label: "Kebijakan Privasi", href: "/privasi" },
-    ],
-  },
+   
 ];
 
-const SOSIAL = [
-  { label: "Instagram", ikon: "/icons/instagram.svg", href: "#" },
-  { label: "LinkedIn", ikon: "/icons/linkedin.svg", href: "#" },
-  { label: "Email", ikon: "/icons/email.svg", href: "mailto:halo@carijasa.test" },
-];
+
 
 export default function Footer({
   peran,
@@ -99,20 +88,7 @@ export default function Footer({
         </div>
 
         {/* Bagian bawah: ikon sosial media */}
-        <div className="flex w-full items-center justify-between border-t border-line pt-6">
-          <div className="flex items-start gap-[10px]">
-            {SOSIAL.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                aria-label={s.label}
-                className="flex size-10 items-center justify-center rounded-full bg-brand-subtle hover:bg-line-strong"
-              >
-                <Image src={s.ikon} alt="" width={18} height={18} />
-              </a>
-            ))}
-          </div>
-        </div>
+        
       </div>
     </footer>
   );
