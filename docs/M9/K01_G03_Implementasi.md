@@ -284,7 +284,7 @@ Tabel B.4. Kontribusi Anggota
 | 13525079 | Danesh Rasyad Damotino | Backend: <br> 1. Pengelolaan Penawaran Jasa (CRUD) <br> 2. Pencarian & Komparasi Jasa <br> 3. Bookmark <br> 4. Pemesanan & Konfirmasi <br> 5. Pembayaran & Riwayat Transaksi <br> 6. Unit Testing Vitest untuk kelima modul di atas | 20% |
 | 13525088 | Theresia Estelina Ratu Udju | Frontend: <br> 1. Halaman Pengumpulan Jasa <br> 2. Halaman Deliverables <br> 3. Halaman Ulasan <br> 4. Halaman Dashboard Admin <br> 5. Halaman Pengajuan Mediasi <br> 6. Halaman Riwayat Pesanan <br> 7. Halaman Request Revisi <br> 8. Halaman Pelaporan <br> 9. Halaman Konfirmasi| 20%|
 | 13525127 | Edward Terrance Lie | 1. Setup ENV dan npm install awal <br> 2. Modul deliverables dan Pengumpulan Revisi <br> 3. Modul Chat <br> 4. Modul Notifikasi <br> 5. Modul Pelaporan <br> 6. Modul Mediasi <br> 7. Modul Ulasan <br> 8. Bikin testing | 20% |
-| 13525130 | Necia Aurely Greva Dedevi | | 20% |
+| 13525130 | Necia Aurely Greva Dedevi | **Frontend:**<br>1. Halaman Registrasi<br>2. Halaman Login<br>3. Halaman Portofolio<br>4. Halaman Upload Jasa<br>5. Halaman Pencarian<br>6. Halaman Hasil Pencarian<br>7. Halaman Detail Jasa<br>8. Halaman Bookmark<br>9. Halaman Pemesanan<br>10. Halaman Pembayaran | 20% |
 
 ## B.5 Traceability Kelas Perancangan ke Implementasi
 
