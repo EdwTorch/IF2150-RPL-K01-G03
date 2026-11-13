@@ -14,6 +14,7 @@ import { createClient } from "@/lib/supabase/client";
 
 /**
  * I-08 Layar Chat — C24 HalamanChat
+ * Rute: /chat (daftar percakapan) dan /chat?room=<id_chatroom> (percakapan terbuka)
  * Atribut DPPL: idSesiChat, inputPesan, statusKoneksi
  * Operasi DPPL: tampilkanMenuChat(), tampilkanRiwayatPesan(), inputPesan(), tombolKirimTerklik(),
  *               tampilkanPesanError(), tampilkanStatusBelumTerkirim()
@@ -40,7 +41,7 @@ function labelTanggal(iso: string) {
   return d.toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 }
 
-const adalahGambar = (url: string) => /\.(png|jpe?g|webp|gif)(\?|$)/i.test(url) || url.startsWith("blob:");
+const adalahGambar = (url: string) => /\.(png|jpe?g|webp|gif)(\?|$)/i.test(url);
 const namaBerkas = (url: string) => decodeURIComponent(url.split("/").pop()?.split("?")[0] ?? "lampiran");
 
 function HalamanChatIsi() {
@@ -87,7 +88,7 @@ function HalamanChatIsi() {
               : "Daftar percakapan gagal dimuat.",
         ),
       );
-  }, []);
+  }, [id_sesi_chat]); // muat ulang daftar saat room baru dibuka (mis. dari tombol Chat Penyedia)
 
   /* ---------- statusKoneksi ---------- */
   useEffect(() => {
@@ -104,33 +105,61 @@ function HalamanChatIsi() {
   /* ---------- tampilkanRiwayatPesan() + realtime ---------- */
   useEffect(() => {
     if (!id_sesi_chat) return;
+    const id_room = id_sesi_chat;
     let batal = false;
     setMemuatPesan(true);
     setPesan([]);
     setPesanError("");
 
-    ambilRiwayatPesan(id_sesi_chat)
-      .then((data) => !batal && setPesan(data))
-      .catch((err) => !batal && setPesanError(err instanceof ApiError ? err.message : "Pesan gagal dimuat."))
-      .finally(() => !batal && setMemuatPesan(false));
+    /** Gabungkan pesan dari server dengan pesan lokal yang masih mengirim/gagal */
+    function gabungkan(dari_server: PesanChat[]) {
+      setPesan((lama) => {
+        const id_server = new Set(dari_server.map((p) => p.id_pesan));
+        const lokal = lama.filter((p) => p.status_kirim && !id_server.has(p.id_pesan));
+        return [...dari_server, ...lokal];
+      });
+    }
 
-    // Pesan baru dari lawan bicara langsung muncul (tabel pesan_chat sudah di publication supabase_realtime)
+    function muatRiwayat(awal = false) {
+      return ambilRiwayatPesan(id_room)
+        .then((data) => !batal && gabungkan(data))
+        .catch((err) => {
+          if (!batal && awal) setPesanError(err instanceof ApiError ? err.message : "Pesan gagal dimuat.");
+        })
+        .finally(() => !batal && awal && setMemuatPesan(false));
+    }
+
+    muatRiwayat(true);
+
+    // Realtime: pastikan token sesi terpasang SEBELUM berlangganan, supaya lolos RLS pesan_chat
     const supabase = createClient();
-    const kanal = supabase
-      .channel(`chat-${id_sesi_chat}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "pesan_chat", filter: `id_chatroom=eq.${id_sesi_chat}` },
-        (payload) => {
-          const baru = payload.new as PesanChat;
-          setPesan((lama) => (lama.some((p) => p.id_pesan === baru.id_pesan) ? lama : [...lama, baru]));
-        },
-      )
-      .subscribe();
+    let kanal: ReturnType<typeof supabase.channel> | null = null;
+
+    (async () => {
+      const { data } = await supabase.auth.getSession();
+      if (batal) return;
+      if (data.session) supabase.realtime.setAuth(data.session.access_token);
+
+      kanal = supabase
+        .channel(`chat-${id_room}`)
+        .on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "pesan_chat", filter: `id_chatroom=eq.${id_room}` },
+          (payload) => {
+            const baru = payload.new as PesanChat;
+            setPesan((lama) => (lama.some((p) => p.id_pesan === baru.id_pesan) ? lama : [...lama, baru]));
+          },
+        )
+        .subscribe();
+    })();
+
+    // Cadangan: ambil ulang riwayat tiap 5 detik, kalau realtime terputus pesan tetap masuk
+    const cadangan = setInterval(() => muatRiwayat(), 5000);
 
     return () => {
       batal = true;
-      supabase.removeChannel(kanal);
+      clearInterval(cadangan);
+      if (kanal) supabase.removeChannel(kanal);
     };
   }, [id_sesi_chat]);
 
@@ -143,30 +172,28 @@ function HalamanChatIsi() {
     const kata = cari_percakapan.trim().toLowerCase();
     return kata ? daftar_room.filter((r) => namaLawan(r, sesi?.id).toLowerCase().includes(kata)) : daftar_room;
   }, [daftar_room, cari_percakapan, sesi?.id]);
-
+  
   /* ---------- kirim ---------- */
   async function kirim(isi: string, lampiran: string | null, id_lokal?: string) {
     if (!id_sesi_chat || !sesi) return;
+
     const id_sementara = id_lokal ?? `lokal-${Date.now()}`;
     const sekarang = new Date().toISOString();
 
     // tampilkan dulu (status "mengirim")
-    setPesan((lama) => {
-      const tanpa_lama = lama.filter((p) => p.id_pesan !== id_sementara);
-      return [
-        ...tanpa_lama,
-        {
-          id_pesan: id_sementara,
-          id_chatroom: id_sesi_chat,
-          id_pengirim: sesi.id,
-          isi_pesan: isi,
-          lampiran,
-          waktu_dibuat: sekarang,
-          created_at: sekarang,
-          status_kirim: "mengirim",
-        },
-      ];
-    });
+    setPesan((lama) => [
+      ...lama.filter((p) => p.id_pesan !== id_sementara),
+      {
+        id_pesan: id_sementara,
+        id_chatroom: id_sesi_chat,
+        id_pengirim: sesi.id,
+        isi_pesan: isi,
+        lampiran,
+        waktu_dibuat: sekarang,
+        created_at: sekarang,
+        status_kirim: "mengirim",
+      },
+    ]);
 
     try {
       const tersimpan = await kirimPesanChat(id_sesi_chat, isi, lampiran);
@@ -206,17 +233,19 @@ function HalamanChatIsi() {
     setPesanError(teks);
   }
 
-  /** O-03 / O-04 — lampirkan dokumen atau foto */
+  /** O-03 / O-04 — lampirkan dokumen atau foto (POST /api/upload, folder "chat") */
   async function pilihLampiran(berkas: File | undefined) {
     if (!berkas) return;
     setMengunggah(true);
     try {
-      const { url, nama } = await unggahBerkas(berkas);
+      const { url, nama } = await unggahBerkas(berkas, "chat");
       await kirim(nama, url);
-    } catch {
-      tampilkanPesanError("Lampiran gagal diunggah. Coba lagi.");
+    } catch (err) {
+      tampilkanPesanError(err instanceof ApiError ? err.message : "Lampiran gagal diunggah. Coba lagi.");
     } finally {
       setMengunggah(false);
+      if (input_dokumen.current) input_dokumen.current.value = "";
+      if (input_foto.current) input_foto.current.value = "";
     }
   }
 
@@ -304,8 +333,7 @@ function HalamanChatIsi() {
 
                 {pesan.map((p, i) => {
                   const milik_saya = p.id_pengirim === sesi?.id;
-                  const tanggal_baru =
-                    i === 0 || labelTanggal(p.created_at) !== labelTanggal(pesan[i - 1].created_at);
+                  const tanggal_baru = i === 0 || labelTanggal(p.created_at) !== labelTanggal(pesan[i - 1].created_at);
                   return (
                     <div key={p.id_pesan} className="flex flex-col gap-1">
                       {tanggal_baru && (
@@ -362,13 +390,26 @@ function HalamanChatIsi() {
               {/* Input pesan */}
               <form onSubmit={tombolKirimTerklik} className="flex flex-col gap-1 border-t border-line px-6 py-4">
                 <div className="flex items-center gap-3">
-                  <input ref={input_dokumen} type="file" accept=".pdf,.doc,.docx,.zip" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
-                  <input ref={input_foto} type="file" accept="image/*" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
+                  {/* Sesuai TIPE_PER_FOLDER.chat di lib/upload.config.ts: PNG, JPG, WEBP, PDF */}
+                  <input ref={input_dokumen} type="file" accept=".pdf" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
+                  <input ref={input_foto} type="file" accept=".png,.jpg,.jpeg,.webp" hidden onChange={(e) => pilihLampiran(e.target.files?.[0])} />
 
-                  <button type="button" onClick={() => input_dokumen.current?.click()} disabled={mengunggah} aria-label="Lampirkan dokumen" className="flex size-11 shrink-0 items-center justify-center rounded-field bg-canvas hover:bg-line disabled:opacity-50">
+                  <button
+                    type="button"
+                    onClick={() => input_dokumen.current?.click()}
+                    disabled={mengunggah}
+                    aria-label="Lampirkan dokumen"
+                    className="flex size-11 shrink-0 items-center justify-center rounded-field bg-canvas hover:bg-line disabled:opacity-50"
+                  >
                     <Image src="/icons/lampiran.svg" alt="" width={20} height={20} />
                   </button>
-                  <button type="button" onClick={() => input_foto.current?.click()} disabled={mengunggah} aria-label="Lampirkan foto" className="flex size-11 shrink-0 items-center justify-center rounded-field bg-canvas hover:bg-line disabled:opacity-50">
+                  <button
+                    type="button"
+                    onClick={() => input_foto.current?.click()}
+                    disabled={mengunggah}
+                    aria-label="Lampirkan foto"
+                    className="flex size-11 shrink-0 items-center justify-center rounded-field bg-canvas hover:bg-line disabled:opacity-50"
+                  >
                     <Image src="/icons/gambar.svg" alt="" width={20} height={20} />
                   </button>
 

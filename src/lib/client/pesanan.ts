@@ -1,4 +1,3 @@
-
 import { api } from "@/lib/api";
 import { sesiSaatIni } from "@/lib/client/auth";
 import type { JasaListing } from "@/lib/client/jasa";
@@ -27,6 +26,9 @@ export type Pesanan = {
 
   sudah_diulas?: boolean;
   rating_ulasan?: number | null;
+
+  /** Diisi backend untuk daftar pesanan (Pesanan Masuk penyedia) */
+  nama_pemesan?: string | null;
 };
 
 export type PesananDetail = Pesanan & {
@@ -134,28 +136,4 @@ export async function ambilDaftarPesanan() {
 
 /**
  * C35 — menerima pesanan
- * PATCH /api/pesanan/[id_pesanan]
- */
-export async function terimaPesanan(idPesanan: string) {
-  return api<ResponsAksiPesanan>(
-    `/api/pesanan/${encodeURIComponent(idPesanan)}`,
-    {
-      method: "PATCH",
-      body: { action: "diterima" },
-    }
-  );
-}
-
-/**
- * C35 — menolak pesanan
- * PATCH /api/pesanan/[id_pesanan]
- */
-export async function tolakPesanan(idPesanan: string) {
-  return api<ResponsAksiPesanan>(
-    `/api/pesanan/${encodeURIComponent(idPesanan)}`,
-    {
-      method: "PATCH",
-      body: { action: "ditolak" },
-    }
-  );
-}
+ * PATCH

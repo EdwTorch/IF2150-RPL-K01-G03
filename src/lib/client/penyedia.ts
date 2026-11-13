@@ -1,20 +1,17 @@
-import { mockAmbilProfilPenyedia } from "@/lib/mock/penyedia";
+import { api } from "@/lib/api";
 
-/** Data "Tentang penyedia" di detail jasa (tabel pengguna + penyedia_jasa) */
+/** Sama dengan ProfilPenyedia di services/penyedia.service.ts */
 export type ProfilPenyedia = {
   id: string;
   nama: string;
   pengalaman: string[];
   prestasi: string[];
+  rating_rata_rata: number;
 };
 
-/**
- * Backend BELUM punya endpoint profil penyedia → mock.
- * Kalau sudah ada (mis. GET /api/penyedia/[id]), ubah PROFIL_PENYEDIA_SUDAH_ADA = true.
- */
-const PROFIL_PENYEDIA_SUDAH_ADA = false;
+type Respons<T> = { success: true; message: string; data: T };
 
-export async function ambilProfilPenyedia(id_penyedia_jasa: string): Promise<ProfilPenyedia> {
-  if (!PROFIL_PENYEDIA_SUDAH_ADA) return mockAmbilProfilPenyedia(id_penyedia_jasa);
-  throw new Error("Endpoint profil penyedia belum tersedia");
+/** GET /api/penyedia/[id] — dipakai detail jasa, pemesanan, pembayaran */
+export async function ambilProfilPenyedia(id_penyedia_jasa: string) {
+  return (await api<Respons<ProfilPenyedia>>(`/api/penyedia/${encodeURIComponent(id_penyedia_jasa)}`)).data;
 }

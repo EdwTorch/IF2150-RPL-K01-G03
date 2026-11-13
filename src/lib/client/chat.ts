@@ -33,6 +33,13 @@ export async function bukaRoomDenganPenyedia(id_penyedia_jasa: string) {
   return (await api<Respons<RoomChat>>("/api/chat", { method: "POST", body: { id_penyedia_jasa } })).data;
 }
 
+/** buatSesiChat() dari sisi penyedia → POST /api/chat. Dipakai tombol "Chat pemesan" di Hasil Pekerjaan */
+export async function bukaRoomDenganPemesan(id_pengguna_jasa: string, id_penyedia_jasa: string) {
+  return (
+    await api<Respons<RoomChat>>("/api/chat", { method: "POST", body: { id_pengguna_jasa, id_penyedia_jasa } })
+  ).data;
+}
+
 /** tampilkanRiwayatPesan() → GET /api/chat/[id_chatroom] */
 export async function ambilRiwayatPesan(id_chatroom: string) {
   return (await api<Respons<PesanChat[]>>(`/api/chat/${id_chatroom}`)).data;

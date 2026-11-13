@@ -1,4 +1,3 @@
-
 import { api } from "@/lib/api";
 
 /** Sama dengan select di UlasanService.getUlasanJasaById() */

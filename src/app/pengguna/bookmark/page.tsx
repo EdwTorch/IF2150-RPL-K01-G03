@@ -13,7 +13,7 @@ import { ambilDaftarBookmark, hapusBookmark, type Bookmark } from "@/lib/client/
  * Sumber data: GET & DELETE /api/bookmark (backend asli)
  */
 
-const RUTE_PENCARIAN = "/pengguna/cari";
+const RUTE_PENCARIAN = "/pengguna/pencarian";
 const gambarPertama = (berkas: string[] = []) => berkas.find((u) => /\.(png|jpe?g|webp|gif)(\?|$)/i.test(u));
 
 type Notifikasi = { tipe: "success" | "error"; pesan: string } | null;

@@ -197,6 +197,7 @@ export async function GET(
 
     return NextResponse.json({
       success: true,
+      message: "Riwayat revisi berhasil dimuat",
       data: {
         revisi: listRevisi,
         deliverable_aktif: deliverableTerbaru,

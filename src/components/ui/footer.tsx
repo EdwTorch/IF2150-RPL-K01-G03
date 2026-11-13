@@ -12,24 +12,23 @@ const KOLOM = [
   {
     judul: "Pengguna Jasa",
     tautan: [
-      { label: "Cari Jasa", href: "/cari" },
-      { label: "Bookmark", href: "/bookmark" },
-      { label: "Pesanan Saya", href: "/riwayat" },
+      { label: "Cari Jasa", href: "/pengguna/pencarian" },
+      { label: "Bookmark", href: "/pengguna/bookmark" },
+      { label: "Pesanan Saya", href: "/pengguna/riwayat-transaksi" },
     ],
   },
   {
     judul: "Penyedia Jasa",
     tautan: [
-      { label: "Tawarkan Jasa", href: "/jasa/baru" },
-      { label: "Pesanan Masuk", href: "/pesanan-masuk" },
-      { label: "Portofolio", href: "/portofolio" },
+      { label: "Tawarkan Jasa", href: "/penyedia/upload-jasa" },
+      { label: "Pesanan Masuk", href: "/penyedia/pesanan" },
+      { label: "Portofolio", href: "/penyedia/portofolio" },
     ],
   },
-  {
+    {
     judul: "CariJasa",
     tautan: [
       { label: "Tentang Kami", href: "/tentang" },
-      { label: "Bantuan", href: "/bantuan" },
       { label: "Syarat & Ketentuan", href: "/syarat" },
       { label: "Kebijakan Privasi", href: "/privasi" },
     ],

@@ -13,6 +13,7 @@ import {
   UploadBox,
 } from "@/components/elemen";
 
+import { ApiError } from "@/lib/api";
 import {
   FORMAT_BERKAS,
   MAX_MB,
@@ -172,7 +173,7 @@ export default function HalamanPengumpulan() {
         umum:
           err instanceof Error
             ? err.message
-            : "Gagal mengirim hasil.",
+            : "Gagal mengirim hasil. Periksa koneksi internet Anda dan coba lagi.",
       });
 
       setSedangMengirim(false);

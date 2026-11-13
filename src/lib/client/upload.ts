@@ -1,13 +1,13 @@
-import { mockUnggahBerkas } from "@/lib/mock/upload";
+import { api } from "@/lib/api";
 
-/**
- * Unggah satu berkas, kembalikan URL-nya.
- * app/api/upload/route.ts masih KOSONG → mock. Kalau sudah ada, ubah UPLOAD_SUDAH_ADA = true
- * dan sesuaikan nama field/balasan dengan route backend.
- */
-const UPLOAD_SUDAH_ADA = false;
+/** Sama dengan FOLDER_DIIZINKAN di lib/upload.config.ts */
+export type FolderUpload = "jasa" | "chat" | "revisi" | "portofolio";
 
-export async function unggahBerkas(berkas: File): Promise<{ url: string; nama: string }> {
-  if (!UPLOAD_SUDAH_ADA) return mockUnggahBerkas(berkas);
-  throw new Error("Route upload belum tersedia");
+/** POST /api/upload → { success, message, data: { url } }. Maks 10 MB */
+export async function unggahBerkas(berkas: File, folder: FolderUpload): Promise<{ url: string; nama: string }> {
+  const form_data = new FormData();
+  form_data.append("berkas", berkas);
+  form_data.append("folder", folder);
+  const respons = await api<{ data: { url: string } }>("/api/upload", { method: "POST", body: form_data });
+  return { url: respons.data.url, nama: berkas.name };
 }

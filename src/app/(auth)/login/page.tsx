@@ -20,7 +20,7 @@ type FieldForm = "email" | "password";
 
 /** Halaman tujuan setelah login, sesuai peran */
 function halamanAwal(user: UserSesi) {
-  if (user.role === "ADMIN") return "/admin";
+  if (user.role === "ADMIN") return "/admin/tiket";
   if (user.isPenyediaJasa) return "/penyedia/portofolio";
   return "/pengguna/pencarian";
 }
@@ -72,7 +72,7 @@ function FormLogin() {
 
   /** kirimLogin() */
   async function kirimLogin(e: FormEvent) {
-    e.preventDefault();
+    e.preventDefault(); 
     setPesanError("");
     if (!validasiForm()) return;
 

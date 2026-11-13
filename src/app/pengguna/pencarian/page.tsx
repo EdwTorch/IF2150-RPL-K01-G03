@@ -45,7 +45,7 @@ export default function HalamanPencarian() {
 
   // ----- bookmark -----
   const [id_bookmark, setIdBookmark] = useState<Set<string>>(new Set());
-  const [notifikasi, setNotifikasi] = useState("");
+  const [notifikasi, setNotifikasi] = useState<{ tipe: "success" | "error"; pesan: string } | null>(null);
 
   /** tampilkanPesanError(pesan) */
   function tampilkanPesanError(pesan: string) {
@@ -137,16 +137,16 @@ async function klikIkonBookmark(id_jasa: string) {
   try {
     const { tersimpan, pesan } = await toggleBookmark(id_jasa);
     ubahTanda(tersimpan); // samakan dengan hasil server
-    tampilkanNotifikasi(pesan); // "Bookmark berhasil disimpan" / "Bookmark berhasil dihapus"
+    tampilkanNotifikasi("success", pesan); // "Bookmark berhasil disimpan" / "Bookmark berhasil dihapus"
   } catch (err) {
     ubahTanda(sebelumnya); // gagal → kembalikan ikon
-    tampilkanNotifikasi(err instanceof ApiError ? err.message : "Bookmark gagal disimpan. Coba lagi.");
+    tampilkanNotifikasi("error",err instanceof ApiError ? err.message : "Bookmark gagal disimpan. Coba lagi.");
   }
 }
 
-  function tampilkanNotifikasi(pesan: string) {
-    setNotifikasi(pesan);
-    setTimeout(() => setNotifikasi(""), 2500);
+   function tampilkanNotifikasi(tipe: "success" | "error", pesan: string) {
+    setNotifikasi({ tipe, pesan });
+    setTimeout(() => setNotifikasi(null), 2500);
   }
 
   const search_bar_merah = !!pesan_error;
@@ -238,7 +238,7 @@ async function klikIkonBookmark(id_jasa: string) {
       {/* ================= Hasil (C16 HasilPencarian) ================= */}
       {notifikasi && (
         <div className="max-w-[440px]">
-          <Alert tipe="success">{notifikasi}</Alert>
+          <Alert tipe={notifikasi.tipe}>{notifikasi.pesan}</Alert>
         </div>
       )}
 

@@ -150,7 +150,8 @@ export class PesananService {
     const aktif = daftar_pesanan.filter(
       (p) =>
         p.id_pengguna_jasa === id_pengguna_jasa &&
-        this.apakahPesananAktif(p.status_pesanan),
+        this.apakahPesananAktif(p.status_pesanan) &&
+        this.normalisasiStatus(p.status_pesanan) !== "MENUNGGU_PEMBAYARAN",
     ).length;
 
     if (aktif >= MAKS_PESANAN_AKTIF) {
@@ -332,13 +333,35 @@ export class PesananService {
 
     const { data: listAktif, error: errAktif } = await supabase
       .from("pesanan")
-      .select("status_pesanan")
+      .select("id_pesanan, id_jasa, status_pesanan")
       .eq("id_pengguna_jasa", id_pengguna_jasa);
 
     if (errAktif) throw new Error(errAktif.message);
 
-    const jmlAktif = (listAktif ?? []).filter((p) =>
-      this.apakahPesananAktif(p.status_pesanan),
+    const belumDibayar = (p: { status_pesanan: string }) =>
+      this.normalisasiStatus(p.status_pesanan) === "MENUNGGU_PEMBAYARAN";
+
+    // Pesanan jasa yang sama yang belum dibayar dipakai ulang (brief diperbarui), tidak membuat pesanan baru
+    const pesananGantung = (listAktif ?? []).find((p) => p.id_jasa === id_jasa && belumDibayar(p));
+    if (pesananGantung) {
+      const { data: diperbarui, error: errUlang } = await supabase
+        .from("pesanan")
+        .update({
+          brief: brief_kebutuhan.trim(),
+          total_biaya: Number(jasa.harga),
+          updated_at: new Date().toISOString(),
+        })
+        .eq("id_pesanan", pesananGantung.id_pesanan)
+        .select("*, jasa(*)")
+        .single();
+
+      if (errUlang) throw new Error(errUlang.message);
+      return diperbarui as Pesanan;
+    }
+
+    // Yang dihitung aktif hanya pesanan yang sudah dibayar dan belum selesai
+    const jmlAktif = (listAktif ?? []).filter(
+      (p) => this.apakahPesananAktif(p.status_pesanan) && !belumDibayar(p),
     ).length;
 
     if (jmlAktif >= MAKS_PESANAN_AKTIF) {
@@ -346,7 +369,6 @@ export class PesananService {
         `Batas maksimal ${MAKS_PESANAN_AKTIF} pesanan aktif telah tercapai`,
       );
     }
-
     const { data, error } = await supabase
       .from("pesanan")
       .insert({
@@ -454,6 +476,9 @@ export class PesananService {
             id,
             nama
           )
+        ),
+        pemesan:pengguna_jasa!pesanan_id_pengguna_jasa_fkey(
+          pengguna:pengguna!pengguna_jasa_id_fkey( nama )
         )
       `)
       .eq(kolom, id_pengguna)
@@ -474,12 +499,17 @@ export class PesananService {
       } | null;
     } | null;
 
+    type RelasiPemesan = {
+      pengguna: { nama: string } | null;
+    } | null;
+
     type PesananQuery = Pesanan & {
       ulasan?: RelasiUlasan | RelasiUlasan[] | null;
       penyedia_jasa?: RelasiPenyedia;
+      pemesan?: RelasiPemesan;
     };
 
-    const daftar = (data ?? []) as PesananQuery[];
+    const daftar = (data ?? []) as unknown as PesananQuery[];
 
     const hasil = this.ambilDaftarPesananDiMemori(
       daftar,
@@ -502,6 +532,7 @@ export class PesananService {
           {
             ulasan: ulasan ?? null,
             penyedia_jasa: item.penyedia_jasa ?? null,
+            nama_pemesan: item.pemesan?.pengguna?.nama ?? null,
           },
         ] as const;
       }),
@@ -514,6 +545,8 @@ export class PesananService {
       return {
         ...pesanan,
         penyedia_jasa: dataRelasi?.penyedia_jasa ?? null,
+        // Dipakai halaman Pesanan Masuk penyedia
+        nama_pemesan: dataRelasi?.nama_pemesan ?? null,
         sudah_diulas: Boolean(ulasan?.id_ulasan),
         rating_ulasan: ulasan?.rating ?? null,
       };

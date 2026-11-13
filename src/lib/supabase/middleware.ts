@@ -46,13 +46,13 @@ export async function updateSession(request: NextRequest) {
     const path_name = request.nextUrl.pathname;
 
     // Menolak akses ke dashboard jika belum login
-    if (!user && path_name.startsWith("/dashboard")) {
+    if (!user && path_name.startsWith("/pengguna/pencarian")) {
         return redirect_with_cookies("/login");
     }
 
     // Menolak akses ke halaman login dan register jika sudah login
     if (user && (path_name.startsWith("/login") || path_name.startsWith("/register"))) {
-        return redirect_with_cookies("/dashboard");
+        return redirect_with_cookies("/pengguna/pencarian");
     }
 
 

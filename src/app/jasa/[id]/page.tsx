@@ -14,6 +14,7 @@ import { ambilDetailJasa, type JasaListing } from "@/lib/client/jasa";
 import { ambilProfilPenyedia, type ProfilPenyedia } from "@/lib/client/penyedia";
 import { ambilUlasanJasa, type UlasanJasa } from "@/lib/client/ulasan";
 import { formatRupiah } from "@/lib/format";
+import { bukaRoomDenganPenyedia } from "@/lib/client/chat";
 
 /**
  * I-06 Layar Detail Jasa — C19 HalamanDetailJasa
@@ -109,9 +110,20 @@ export default function HalamanDetailJasa() {
   }
 
   /** O-03 Pesan Jasa → I-09 Halaman Pemesanan */
+  /** O-03 Pesan Jasa → I-09 Halaman Pemesanan (/pesanan/[id_jasa]) */
   function klikPesan() {
     if (!sesi) return router.push("/login");
-    router.push(`/pesanan/checkout/${id}`);
+    router.push(`/pesanan/${id}`);
+  }
+    /** O-04 Chat Penyedia → I-08 Halaman Chat */
+  async function klikChat() {
+    if (!sesi) return router.push("/login");
+    try {
+      const room = await bukaRoomDenganPenyedia(jasa!.id_penyedia_jasa);
+      router.push(`/chat?room=${room.id_chatroom}`);
+    } catch (err) {
+      tampilkanNotifikasi("error", err instanceof ApiError ? err.message : "Chat gagal dibuka. Coba lagi.");
+    }
   }
 
   /* ---------------- Tampilan selain "ada" ---------------- */
@@ -300,7 +312,7 @@ export default function HalamanDetailJasa() {
                   Pesan Jasa
                 </Button>
                 <div className="flex gap-[10px]">
-                  <Button variant="secondary" className="flex-1" disabled title="Chat tersedia setelah fitur chat selesai">
+                  <Button variant="secondary" className="flex-1" onClick={klikChat}>
                     Chat Penyedia
                   </Button>
                   <button

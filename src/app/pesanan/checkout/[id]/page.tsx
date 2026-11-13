@@ -129,7 +129,7 @@ export default function HalamanPembayaran() {
       <main className="mx-auto w-full max-w-[1440px] flex-1 px-20 pt-8 pb-20">
         {/* Breadcrumb */}
         <nav className="mb-2 flex items-center gap-2 text-body-sm text-ink-muted" aria-label="Breadcrumb">
-          <Link href="/pengguna/cari" className="hover:underline">Cari Jasa</Link>
+          <Link href="/pengguna/pencarian" className="hover:underline">Cari Jasa</Link>
           {jasa && (
             <>
               <span>/</span>
@@ -182,7 +182,7 @@ export default function HalamanPembayaran() {
             {status_muat === "tidak_ditemukan" && (
               <>
                 <p className="text-h4 text-ink">Pesanan tidak ditemukan</p>
-                <Button href="/pengguna/cari">Kembali ke pencarian</Button>
+                <Button href="/pengguna/pencarian">Kembali ke pencarian</Button>
               </>
             )}
             {status_muat === "gagal" && <p className="text-h4 text-ink">Data pembayaran gagal dimuat. Coba muat ulang halaman.</p>}

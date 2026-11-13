@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from "next/server";
 import { DeliverablesService } from "@/services/deliverables.service";
 import { createClient } from "@/lib/supabase/server";
@@ -125,8 +124,6 @@ export async function GET(
     const revisiTerbaru = riwayatRevisi[0] ?? null;
 
     // Hanya revisi TERBARU yang boleh dianggap sedang aktif.
-    // Jangan mencari status "Sedang Direvisi" dari seluruh riwayat,
-    // karena revisi lama tidak boleh memengaruhi status revisi terbaru.
     const revisiAktif =
       revisiTerbaru?.status_pengerjaan === "Sedang Direvisi"
         ? revisiTerbaru
@@ -214,12 +211,8 @@ export async function POST(
     });
 
     return NextResponse.json(
-      {
-        success: true,
-        message: "Hasil pekerjaan berhasil dikumpulkan!",
-        data: result,
-      },
-      { status: 201 }
+      { success: true, message: "Hasil pekerjaan berhasil dikumpulkan!", data: result },
+      { status: 201 },
     );
   } catch (err: any) {
     const { message, status } = handleCustomError(err);

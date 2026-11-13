@@ -43,6 +43,7 @@ export interface PengajuanRevisi {
   id_pesanan: string;
   id_produk_akhir?: string | null;
   deskripsi_revisi: string;
+  pesan_revisi?: string | null;
   jml_revisi_tersedia: number;
   status_pengerjaan: string;
   lampiran_revisi?: string[] | null;
@@ -65,6 +66,7 @@ export interface Pesanan {
   created_at?: string;
   updated_at?: string;
   jasa?: Jasa;
+  nama_pemesan?: string | null;
 }
 
 // Tipe data untuk Metode Pembayaran (C33)
