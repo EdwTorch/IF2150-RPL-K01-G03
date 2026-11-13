@@ -307,7 +307,7 @@ Tabel B.5. Traceability Kelas Perancangan ke Implementasi
 | C08 | HalamanPortofolio  | | | |
 | C09 | Portofolio  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql  | Tambahan atribut id_portofolio, id_penyedia_jasa |
 | C10 | PengontrolPortofolio | | | |
-| C11 | LayananUploadFile  | | | |
+| C11 | LayananUploadFile | Modul Validasi & Konfigurasi <br> Route Handler (API Gateway) <br> Layanan / Adapter (Storage Service) <br> Pengujian (Unit Test) | src/lib/upload.config.ts - validasiBerkasUpload, validasiFolder, MAKS_UKURAN_UPLOAD <br> src/app/api/upload/route.ts - POST <br> src/services/storage/ - StorageService, LocalStorageService, SupabaseStorageService <br> src/test/upload.test.ts - Pengujian unit validasi dan upload gateway | - |
 | C12 | Jasa  | Tabel Basis Data <br> Interface (Tipe Data) | src/supabase/migrations/20261103060624_create_carijasa_schema.sql - public.jasa <br> src/supabase/migrations/20261108085000_add_berkas_pendukung_jasa.sql - kolom berkas_pendukung <br> src/models/types.ts - Jasa | - |
 | C13 | HalamanUploadJasa  | | | |
 | C14 | JasaController  | Kelas Layanan (Service) <br> Route Handler <br> Pengujian (Unit Test) | src/services/jasa.service.ts - JasaController (ambilSemuaJasa, ambilDetailJasa, validasiDataJasa, validasiBerkas, unggahBerkas, simpanPenawaranJasa, perbaruiJasa, hapusJasa) <br> src/app/api/jasa/route.ts (GET, POST) <br> src/app/api/jasa/[id]/route.ts (GET, PATCH, DELETE) <br> src/app/api/jasa/helper.ts - bacaInputJasa <br> src/test/jasa.test.ts | - |
