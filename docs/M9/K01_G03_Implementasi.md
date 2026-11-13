@@ -255,7 +255,24 @@ Jika tidak ada perbaikan yang perlu dilakukan, jelaskan hasil profiling dan alas
 
 ## B.3 Kendala dan Catatan Penting
 
-Tuliskan kendala yang ditemui, fitur yang belum sempurna (*known issues*), serta hal yang perlu diketahui asisten saat menjalankan atau menilai aplikasi (misalnya akun uji khusus, urutan menjalankan, atau batasan).
+1. **Kendala yang Ditemui:**
+   * **Akses Keamanan Pengguna (RBAC):** Saat pengujian otomatis, sistem keamanan bawaan database terkadang membatasi akses peran tertentu. Hal ini diatasi dengan menggunakan kunci khusus (*service role*) agar program pengujian bisa memeriksa data lintas pengguna dengan lancar.
+   * **Simulasi Data Tiruan (Mocking):** Penyesuaian struktur data tiruan diperlukan agar pengujian dapat berjalan di lingkungan lokal tanpa harus selalu terhubung ke database produksi.
+
+2. **Fitur yang Belum Sempurna (*Known Issues*):**
+   * **Chat & Notifikasi Real-time:** Fitur obrolan langsung yang berjalan secara *real-time* membutuhkan koneksi aktif ke peladen server. Pada pengujian offline, fungsionalitas ini dipastikan melalui pengecekan keberhasilan penyimpanan data di database.
+
+3. **Catatan untuk Asisten Penilai:**
+   * Cara menjalankan aplikasi cukup ikuti perintah `npm install` lalu `npm run dev`.
+   * Untuk menjalankan pengujian, gunakan perintah `npx vitest run`.
+   * Akun uji coba (Admin, Seller, Buyer) sudah disertakan di readme.MD.
+
+Akun UJI : 
+| Role | Email | Password | Keterangan |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@contoh.com` | `Admin123` | Mengelola laporan/tiket bantuan dan moderasi. |
+| **Penyedia Jasa** | `penyedia.uji@contoh.com` | `Bujank123` | Memiliki daftar layanan aktif & menerima pesanan. |
+| **Pemesan (Klien)** | `klien.uji@contoh.com` | `Another123!` | Dapat mencari jasa, membuat pesanan, & mengirim ulasan. |
 
 ## B.4 Kontribusi Anggota
 
