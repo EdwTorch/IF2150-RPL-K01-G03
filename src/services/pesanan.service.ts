@@ -1,3 +1,4 @@
+
 import crypto from "crypto";
 import { createClient } from "@/lib/supabase/server";
 import type { Jasa, Pesanan } from "@/models/types";
@@ -10,6 +11,18 @@ export type PesananDetail = Pesanan & {
       nama: string;
     } | null;
   } | null;
+  penyedia_jasa: {
+    id: string;
+    pengguna: {
+      id: string;
+      nama: string;
+    } | null;
+  } | null;
+};
+
+export type PesananDenganStatusUlasan = Pesanan & {
+  sudah_diulas: boolean;
+  rating_ulasan: number | null;
   penyedia_jasa: {
     id: string;
     pengguna: {
@@ -281,7 +294,9 @@ export class PesananService {
 
     return {
       ...pesanan,
-      jasa: pesanan.jasa ?? daftar_jasa.find((j) => j.id_jasa === pesanan.id_jasa),
+      jasa:
+        pesanan.jasa ??
+        daftar_jasa.find((j) => j.id_jasa === pesanan.id_jasa),
     };
   }
 
@@ -411,7 +426,7 @@ export class PesananService {
     id_pengguna: string,
     peran: "pengguna_jasa" | "penyedia_jasa",
     filter_status?: string,
-  ): Promise<Pesanan[]> {
+  ): Promise<PesananDenganStatusUlasan[]> {
     if (!id_pengguna?.trim()) {
       throw new Error("ID pengguna tidak valid");
     }
@@ -423,23 +438,86 @@ export class PesananService {
     const supabase = await createClient();
 
     const kolom =
-      peran === "pengguna_jasa" ? "id_pengguna_jasa" : "id_penyedia_jasa";
+      peran === "pengguna_jasa"
+        ? "id_pengguna_jasa"
+        : "id_penyedia_jasa";
 
     const { data, error } = await supabase
       .from("pesanan")
-      .select("*, jasa(*)")
+      .select(`
+        *,
+        jasa(*),
+        ulasan(id_ulasan, rating),
+        penyedia_jasa:penyedia_jasa!pesanan_id_penyedia_jasa_fkey(
+          id,
+          pengguna:pengguna!penyedia_jasa_id_fkey(
+            id,
+            nama
+          )
+        )
+      `)
       .eq(kolom, id_pengguna)
       .order("created_at", { ascending: false });
 
     if (error) throw new Error(error.message);
 
-    return this.ambilDaftarPesananDiMemori(
-      (data ?? []) as Pesanan[],
+    type RelasiUlasan = {
+      id_ulasan: string;
+      rating: number;
+    };
+
+    type RelasiPenyedia = {
+      id: string;
+      pengguna: {
+        id: string;
+        nama: string;
+      } | null;
+    } | null;
+
+    type PesananQuery = Pesanan & {
+      ulasan?: RelasiUlasan | RelasiUlasan[] | null;
+      penyedia_jasa?: RelasiPenyedia;
+    };
+
+    const daftar = (data ?? []) as PesananQuery[];
+
+    const hasil = this.ambilDaftarPesananDiMemori(
+      daftar,
       [],
       id_pengguna,
       peran,
       filter_status,
     );
+
+    const dataPerPesanan = new Map(
+      daftar.map((item) => {
+        const relasiUlasan = item.ulasan;
+
+        const ulasan = Array.isArray(relasiUlasan)
+          ? relasiUlasan[0]
+          : relasiUlasan;
+
+        return [
+          item.id_pesanan,
+          {
+            ulasan: ulasan ?? null,
+            penyedia_jasa: item.penyedia_jasa ?? null,
+          },
+        ] as const;
+      }),
+    );
+
+    return hasil.map((pesanan) => {
+      const dataRelasi = dataPerPesanan.get(pesanan.id_pesanan);
+      const ulasan = dataRelasi?.ulasan;
+
+      return {
+        ...pesanan,
+        penyedia_jasa: dataRelasi?.penyedia_jasa ?? null,
+        sudah_diulas: Boolean(ulasan?.id_ulasan),
+        rating_ulasan: ulasan?.rating ?? null,
+      };
+    });
   }
 
   // Ambil detail pesanan berdasarkan ID beserta nama penyedia jasa

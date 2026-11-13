@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -6,7 +7,6 @@ import {
   Alert,
   Button,
   PageHero,
-  RatingInput,
   TabFilter,
 } from "@/components/elemen";
 import { cn } from "@/lib/cn";
@@ -19,8 +19,17 @@ import {
 const TAB = ["Semua", "Berjalan", "Selesai", "Dikembalikan"] as const;
 
 type Tab = (typeof TAB)[number];
+
 type StatusTampilan =
-  | "menunggu_pembayaran" | "menunggu_konfirmasi" | "berjalan" | "cek" | "komplain" | "selesai" | "ditolak" | "dikembalikan" | "dibatalkan";
+  | "menunggu_pembayaran"
+  | "menunggu_konfirmasi"
+  | "berjalan"
+  | "cek"
+  | "komplain"
+  | "selesai"
+  | "ditolak"
+  | "dikembalikan"
+  | "dibatalkan";
 
 const STATUS: Record<
   StatusTampilan,
@@ -191,10 +200,10 @@ export default function HalamanRiwayatTransaksi() {
     if (tab === "Selesai") return status === "selesai";
 
     return (
-    status === "ditolak" ||
-    status === "dikembalikan" ||
-    status === "dibatalkan"
-  );
+      status === "ditolak" ||
+      status === "dikembalikan" ||
+      status === "dibatalkan"
+    );
   });
 
   const statistik = [
@@ -273,6 +282,11 @@ export default function HalamanRiwayatTransaksi() {
         const [labelStatus, warnaStatus, labelTombol, varianTombol] =
           STATUS[status];
 
+        const rating = Math.min(
+          5,
+          Math.max(0, Math.round(Number(item.rating_ulasan ?? 0)))
+        );
+
         return (
           <div
             key={idPesanan}
@@ -300,7 +314,9 @@ export default function HalamanRiwayatTransaksi() {
                 </span>
 
                 <span className="text-caption text-ink-muted">
-                  #TRX-{idPesanan} · Penyedia jasa
+                  #{idPesanan.slice(0, 8).toUpperCase()} ·{" "}
+                  {item.penyedia_jasa?.pengguna?.nama ??
+                    "Nama penyedia belum tersedia"}
                 </span>
               </div>
 
@@ -313,7 +329,7 @@ export default function HalamanRiwayatTransaksi() {
                   variant={varianTombol}
                   href={
                     status === "selesai"
-                      ? "/jasa"
+                      ? `/jasa/${item.id_jasa}`
                       : `/pengguna/hasil/${idPesanan}`
                   }
                 >
@@ -324,18 +340,47 @@ export default function HalamanRiwayatTransaksi() {
 
             {/* Rating transaksi selesai */}
             {status === "selesai" && (
-              <div className="flex items-center gap-3 bg-brand-subtle px-6 py-3">
-                <span className="text-label text-ink">
-                  Ditunggu ratingnya!
-                </span>
+              <div className="flex items-center gap-6 border-l-2 border-dotted border-brand px-6 py-4 bg-brand-subtle">
+                {item.sudah_diulas ? (
+                  <>
+                    <span className="text-label text-ink">
+                      Rating kamu
+                    </span>
 
-                <Button
-                  variant="accent"
-                  href={`/pengguna/ulasan/${idPesanan}`}
-                  className="h-9 px-4"
-                >
-                  Beri ulasan
-                </Button>
+                    <div
+                      className="flex items-center gap-2"
+                      aria-label={`Rating kamu ${rating} dari 5 bintang`}
+                    >
+                      {[1, 2, 3, 4, 5].map((bintang) => (
+                        <span
+                          key={bintang}
+                          className={cn(
+                            "text-2xl leading-none",
+                            bintang <= rating
+                              ? "text-[#F5A623]"
+                              : "text-ink-muted/30"
+                          )}
+                        >
+                          ★
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <span className="text-label text-ink">
+                      Ditunggu ratingnya!
+                    </span>
+
+                    <Button
+                      variant="accent"
+                      href={`/pengguna/ulasan/${idPesanan}`}
+                      className="h-9 px-4"
+                    >
+                      Beri ulasan
+                    </Button>
+                  </>
+                )}
               </div>
             )}
           </div>

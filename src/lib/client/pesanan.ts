@@ -1,3 +1,4 @@
+
 import { api } from "@/lib/api";
 import { sesiSaatIni } from "@/lib/client/auth";
 import type { JasaListing } from "@/lib/client/jasa";
@@ -15,6 +16,17 @@ export type Pesanan = {
   status_pesanan: string;
   created_at?: string;
   jasa?: JasaListing;
+
+  penyedia_jasa?: {
+    id: string;
+    pengguna: {
+      id: string;
+      nama: string;
+    } | null;
+  } | null;
+
+  sudah_diulas?: boolean;
+  rating_ulasan?: number | null;
 };
 
 export type PesananDetail = Pesanan & {
@@ -82,7 +94,6 @@ export async function ambilDetailPesanan(idPesanan: string) {
   const respons = await api<Respons<PesananDetail>>(
     `/api/pesanan/${encodeURIComponent(idPesanan)}`
   );
-  
 
   const p = respons.data;
 
@@ -113,6 +124,8 @@ export async function ambilDaftarPesanan() {
   return respons.data.map((p) => ({
     ...p,
     total_biaya: Number(p.total_biaya),
+    sudah_diulas: p.sudah_diulas ?? false,
+    rating_ulasan: p.rating_ulasan ?? null,
     jasa: p.jasa
       ? { ...p.jasa, harga: Number(p.jasa.harga) }
       : undefined,

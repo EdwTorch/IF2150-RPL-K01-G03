@@ -573,7 +573,7 @@ export default function HalamanDeliverables({ peran }: Props) {
                 ke penyedia jasa.
               </p>
 
-              <Button fullWidth href={`/ulasan/${idPesanan}`}>
+              <Button fullWidth href={`/pengguna/ulasan/${idPesanan}`}>
                 Beri ulasan
               </Button>
             </>
