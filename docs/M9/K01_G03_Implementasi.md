@@ -230,7 +230,7 @@ Tabel B.1. Perubahan dari DPPL
 | 38 | Batasan upload berkas | 5 berkas dan 20 mb per berkasnya | 3 berkas dan 10 mb per berkasnya | mempermudah implementasi |
 | 39 | Kelas C06 HalamanLogin | Satu halaman login untuk semua peran | Login pengguna di src/app/(auth)/login/page.tsx dan login admin terpisah di src/app/admin/page.tsx (HalamanLoginAdmin) dengan route /api/admin/auth/login | Admin memakai akun terdaftar tersendiri dan tampilan berbeda (Masuk sebagai Admin) |
 | 40 | Komponen baru: pustaka komponen antarmuka | Tidak direncanakan | src/components/elemen (Button, Alert, Input, Textarea, Select, UploadBox, LampiranBukti, PageHero, StatusPill, Rating, TabFilter, dst.) dan token desain di src/app/globals.css | Menjaga tampilan konsisten di semua layar dan mengurangi pengulangan kode |
-| 49 | Komponen baru: Navbar berbasis peran | Tidak direncanakan | src/components/ui/navbar.tsx dengan peran TAMU, PENGGUNA_JASA, PENYEDIA_JASA, berisi menu, badge notifikasi, dan tombol keluar | Menu dan badge berbeda per peran sesuai komponen Navbar di Figma |
+| 41 | Komponen baru: Navbar berbasis peran | Tidak direncanakan | src/components/ui/navbar.tsx dengan peran TAMU, PENGGUNA_JASA, PENYEDIA_JASA, berisi menu, badge notifikasi, dan tombol keluar | Menu dan badge berbeda per peran sesuai komponen Navbar di Figma |
 
 ## B.2 Bukti Penerapan Best Practices
 
