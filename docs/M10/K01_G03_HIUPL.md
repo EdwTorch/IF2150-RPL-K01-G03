@@ -182,13 +182,13 @@ Tabel 3.1. Lingkungan Implementasi
 ### Danesh 
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| Hardware | Laptop Lenovo ThinkPad P14s Gen 5, Intel Core Ultra 7 165H, RAM 32 GB |
+| Operating System | Windows 11 Pro 26H2 |
+| Bahasa Pemrograman | TypeScript 5, Node.js 24.19.0 |
+| Framework/Library | Next.js 16.4.3, React 19.3.0, Tailwind CSS 4, Supabase JS 2.118.0, Supabase SSR 0.12.7 |
+| DBMS | PostgreSQL 15 (via Supabase) |
+| Development Tools | Visual Studio Code, Git 2.55.0, GitHub |
+| Testing Tools | Vitest 5.1.0, Node.js performance.now() |
 
 ### Theresia 
 | Aspek | Keterangan |
@@ -227,38 +227,117 @@ Tabel 3.1. Lingkungan Implementasi
 
 ## 3.2 Implementasi Modul
 
-Daftar modul/kelas yang **TELAH** diimplementasikan. Gunakan nama dan ID kelas yang sama dengan DPPL, dan konsisten dengan Tabel B.5 pada dokumen Implementasi (Tugas 9).
-
 Tabel 3.2. Implementasi Modul
 
 | No | ID Kelas | Nama Modul/Kelas | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[C01]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[C02]* | *[Nama modul/kelas]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
+| 1 | C01 | Pengguna | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pengguna`)* | - |
+| 2 | C02 | PenyediaJasa | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` (`public.penyedia_jasa`), `src/models/types.ts` (`PenyediaJasa`, `RatingAgregat`), `src/services/ulasan.service.ts` (`perbaruiRatingPenyedia`, `getRatingDanUlasanPenyedia`, `hitungRatingAgregat`, `formatRatingTampilan`, `validasiRating`), `src/app/api/ulasan/route.ts` (`GET`), `src/test/ulasan.test.ts` | - |
+| 3 | C03 | PenggunaJasa | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pengguna_jasa`)* | - |
+| 4 | C04 | HalamanRegistrasi | `src/app/(auth)/register/page.tsx` (`HalamanRegistrasi`) | - |
+| 5 | C05 | LayananRegistrasi | `src/services/auth.service.ts` (`validasiInputRegistrasi`, `registrasi`, `InputRegistrasi`), `src/app/api/auth/route.ts` (`POST action: register`), `src/test/auth.test.ts` | - |
+| 6 | C06 | HalamanLogin | `src/app/(auth)/login/page.tsx` (`HalamanLogin`), `src/app/admin/page.tsx` (`HalamanLoginAdmin`) | - |
+| 7 | C07 | Autentikator | `src/services/auth.service.ts` (`login`, `logout`, `getSessionUser`, `loginAdmin`), `src/app/api/auth/route.ts` (`POST action: login, logout, me`, `GET`), `src/lib/supabase/middleware.ts` (`updateSession`, diintegrasikan di `src/middleware.ts`), `src/models/types.ts` (`SessionUser`) | - |
+| 8 | C08 | HalamanPortofolio | `src/app/penyedia/portofolio/page.tsx` | - |
+| 9 | C09 | Portofolio | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `portofolio`)* | - |
+| 10 | C10 | PengontrolPortofolio | `src/services/portofolio.service.ts` (`ambilPortofolio`, `simpanPortofolio`), `src/app/api/portofolio/route.ts` (`POST`, `GET`) | - |
+| 11 | C11 | LayananUploadFile | `src/lib/upload.config.ts` (`validasiBerkasUpload`, `validasiFolder`, `MAKS_UKURAN_UPLOAD`), `src/app/api/upload/route.ts` (`POST`), `src/services/storage/` (`StorageService`, `LocalStorageService`, `SupabaseStorageService`), `src/test/upload.test.ts` | - |
+| 12 | C12 | Jasa | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` (`public.jasa`), `src/supabase/migrations/20261108085000_add_berkas_pendukung_jasa.sql`, `src/models/types.ts` (`Jasa`) | - |
+| 13 | C13 | HalamanUploadJasa | `src/app/penyedia/upload-jasa/page.tsx`, `src/app/jasa/tambah/page.tsx` | - |
+| 14 | C14 | JasaController | `src/services/jasa.service.ts` (`JasaController`), `src/app/api/jasa/route.ts` (`GET`, `POST`), `src/app/api/jasa/[id]/route.ts` (`GET`, `PATCH`, `DELETE`), `src/app/api/jasa/helper.ts` (`bacaInputJasa`), `src/test/jasa.test.ts` | - |
+| 15 | C15 | HalamanPencarian | `src/app/pengguna/pencarian/page.tsx`, `src/app/jasa/page.tsx` | - |
+| 16 | C16 | HasilPencarian | - (digabungkan dengan jasa yang didapat melalui query pada HalamanPencarian) | - |
+| 17 | C17 | LayananPencarian | `src/services/pencarian.service.ts` (`LayananPencarian`, `normalisasiKeyword`), `src/app/api/jasa/route.ts` (`GET`), `src/test/search.test.ts` | - |
+| 18 | C18 | LayananPembandingJasa | `src/services/pencarian.service.ts` (`LayananPembandingJasa`), `src/app/api/jasa/route.ts` (`GET query compare`), `src/test/search.test.ts` | - |
+| 19 | C19 | HalamanDetailJasa | `src/app/jasa/[id]/page.tsx` | - |
+| 20 | C20 | Bookmark | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` (`public.bookmark`), `src/models/types.ts` (`Bookmark`) | - |
+| 21 | C21 | HalamanBookmark | `src/app/pengguna/bookmark/page.tsx`, `src/app/bookmark/page.tsx` | - |
+| 22 | C22 | PengontrolBookmark | `src/services/bookmark.service.ts` (`PengontrolBookmark`), `src/app/api/bookmark/route.ts` (`GET`, `POST`, `DELETE`), `src/test/bookmark.test.ts` | - |
+| 23 | C23 | ChatRoom | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `chatroom`)* | - |
+| 24 | C24 | HalamanChat | `src/app/chat/page.tsx` | - |
+| 25 | C25 | LayananPesanInstan | `src/services/chat.service.ts` (`ChatService`), `src/app/api/chat/[id_chatroom]/route.ts`, `src/app/api/chat/route.ts` | - |
+| 26 | C26 | LayananNotifikasiChat | `src/services/notifikasi.service.ts` (`NotifikasiService`), `src/app/api/notifikasi/route.ts` | - |
+| 27 | C27 | Pesanan | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` (`public.pesanan`), `src/models/types.ts` (`Pesanan`) | - |
+| 28 | C28 | HalamanPemesanan | `src/app/pesanan/[id]/page.tsx` | - |
+| 29 | C29 | HalamanPembayaran | `src/app/pesanan/checkout/[id]/page.tsx` | - |
+| 30 | C30 | HalamanRiwayatTransaksi | `src/app/pengguna/riwayat-transaksi/page.tsx` (`HalamanRiwayatTransaksi`) | - |
+| 31 | C31 | PengontrolPesanan | `src/services/pesanan.service.ts` (`PesananService`), `src/app/api/pesanan/route.ts` (`GET`, `POST`), `src/app/api/pesanan/[id_pesanan]/route.ts` (`GET`, `PATCH`), `src/test/pesanan.test.ts` | - |
+| 32 | C32 | PengontrolTransaksi | `src/services/transaksi.service.ts` (`PengontrolTransaksi`), `src/app/api/transaksi/route.ts` (`GET`), `src/app/api/transaksi/dummy/route.ts` (`POST`), `src/test/transaksi.test.ts` | - |
+| 33 | C33 | MetodePembayaran | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` (`public.metode_pembayaran`), `src/supabase/migrations/20261109090000_seed_metode_pembayaran.sql`, `src/models/types.ts` (`MetodePembayaran`) | - |
+| 34 | C34 | RiwayatTransaksi | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` (`public.riwayat_transaksi`), `src/models/types.ts` (`RiwayatTransaksi`) | - |
+| 35 | C35 | HalamanKonfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx` (`HalamanKonfirmasi`) | - |
+| 36 | C36 | ProdukAkhir | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `produk_akhir`)* | - |
+| 37 | C37 | HalamanPengumpulan | `src/app/penyedia/pengumpulan/[idPesanan]/page.tsx` (`HalamanPengumpulan`) | - |
+| 38 | C38 | HalamanDeliverables | `src/components/ui/HalamanDeliverables.tsx` (`HalamanDeliverables`), `src/app/pengguna/hasil/[idPesanan]/page.tsx`, `src/app/penyedia/pengumpulan/[idPesanan]/hasil/page.tsx` | - |
+| 39 | C39 | PengajuanRevisi | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pengajuan_revisi`)* | - |
+| 40 | C40 | HalamanRequestRevisi | `src/app/pengguna/revisi/[idPesanan]/page.tsx` (`HalamanRequestRevisi`) | - |
+| 41 | C41 | RevisiHandler | `src/services/deliverables.service.ts` (`DeliverablesService`), `src/app/api/pesanan/[id_pesanan]/deliverables/revisi/route.ts` | - |
+| 42 | C42 | PencairanDana | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pencairan_dana`)* | - |
+| 43 | C43 | TiketLaporan | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `tiket_laporan`)* | - |
+| 44 | C44 | HalamanPelaporan | `src/app/pengguna/pelaporan/page.tsx` (`HalamanPelaporan`) | - |
+| 45 | C45 | LaporanHandler | `src/services/pelaporan.service.ts` (`PelaporanService`, `TanggapanLaporanService`), `src/app/api/pesanan/[id_pesanan]/laporan/route.ts`, `src/app/api/admin/laporan/[id_tiket]/route.ts`, `src/app/api/admin/laporan/[id_tiket]/tanggapan/route.ts` | - |
+| 46 | C46 | Ulasan | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `ulasan`)* | - |
+| 47 | C47 | HalamanUlasan | `src/app/pengguna/ulasan/[idPesanan]/page.tsx` (`HalamanUlasan`) | - |
+| 48 | C48 | UlasanHandler | `src/services/ulasan.service.ts` (`UlasanService`), `src/app/api/ulasan/route.ts` | - |
+| 49 | C49 | TanggapanLaporan | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `tanggapan_laporan`)* | - |
+| 50 | C50 | HalamanPengajuanMediasi | `src/app/admin/tiket/[idTiket]/page.tsx` (`HalamanPengajuanMediasi`), `src/app/mediasi/[id]/page.tsx` | - |
+| 51 | C51 | MediasiHandler | `src/services/mediasi.service.ts` (`MediasiService`), `src/app/api/admin/mediasi/[id_sesi_mediasi]/selesai/route.ts`, `src/app/api/admin/mediasi/route.ts`, `src/app/api/mediasi/route.ts`, `src/app/api/mediasi/[id_sesi_mediasi]/route.ts` | - |
+| 52 | C52 | Admin | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pengguna` dengan `role = 'ADMIN'`)* | - |
+| 53 | C53 | HalamanDashboardAdmin | `src/app/admin/tiket/page.tsx` (`HalamanDashboardAdmin`) | - |
+| 54 | C54 | PengumpulanController | `src/services/deliverables.service.ts` (`DeliverablesService`), `src/app/api/pesanan/route.ts`, `src/app/api/pesanan/[id_pesanan]/route.ts` | - |
+| 55 | C55 | pesan_chat *(Tambahan M9)* | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pesan_chat`)* | - |
+| 56 | C56 | notifikasi *(Tambahan M9)* | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `notifikasi`)* | - |
+| 57 | C57 | sesi_mediasi *(Tambahan M9)* | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `sesi_mediasi`)* | - |
+| 58 | C58 | pesan_mediasi *(Tambahan M9)* | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pesan_mediasi`)* | - |
 
 ## 3.3 Implementasi Antarmuka
-
-Daftar antarmuka yang telah diimplementasikan. Gunakan ID dan nama layar yang sama dengan ID dan nama layar pada tugas DPPL.
 
 Tabel 3.3. Implementasi Antarmuka
 
 | No | ID Antarmuka | Nama Antarmuka | Nama File Fisik | Nama File Executable |
 | :--- | :--- | :--- | :--- | :--- |
-| 1 | *[I-01]* | *[Nama layar]* | *[path/ke/file]* | *[Nama file executable, atau - jika tidak ada]* |
-| 2 | *[I-02]* | *[Nama layar]* | *[path/ke/file]* | *[...]* |
-| ... | *...* | *...* | *...* | *...* |
+| 1 | I-01 | Layar Registrasi | `src/app/(auth)/register/page.tsx` | - |
+| 2 | I-02 | Layar Login | `src/app/(auth)/login/page.tsx`, `src/app/admin/page.tsx` (`HalamanLoginAdmin`) | - |
+| 3 | I-03 | Layar Portofolio | `src/app/penyedia/portofolio/page.tsx` | - |
+| 4 | I-04 | Layar Upload Jasa | `src/app/penyedia/upload-jasa/page.tsx`, `src/app/jasa/tambah/page.tsx` | - |
+| 5 | I-05 | Layar Pencarian | `src/app/pengguna/pencarian/page.tsx`, `src/app/jasa/page.tsx` | - |
+| 6 | I-06 | Layar Detail Jasa | `src/app/jasa/[id]/page.tsx` | - |
+| 7 | I-07 | Layar Bookmark | `src/app/pengguna/bookmark/page.tsx`, `src/app/bookmark/page.tsx` | - |
+| 8 | I-08 | Layar Chat | `src/app/chat/page.tsx` | - |
+| 9 | I-09 | Layar Pemesanan | `src/app/pesanan/[id]/page.tsx` | - |
+| 10 | I-10 | Layar Pembayaran | `src/app/pesanan/checkout/[id]/page.tsx` | - |
+| 11 | I-11 | Layar Riwayat Transaksi | `src/app/pengguna/riwayat-transaksi/page.tsx` | - |
+| 12 | I-12 | Layar Konfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx` | - |
+| 13 | I-13 | Layar Pengumpulan | `src/app/penyedia/pengumpulan/[idPesanan]/page.tsx` | - |
+| 14 | I-14 | Layar Deliverables | `src/components/ui/HalamanDeliverables.tsx`, `src/app/pengguna/hasil/[idPesanan]/page.tsx`, `src/app/penyedia/pengumpulan/[idPesanan]/hasil/page.tsx` | - |
+| 15 | I-15 | Layar Request Revisi | `src/app/pengguna/revisi/[idPesanan]/page.tsx` | - |
+| 16 | I-16 | Layar Pelaporan | `src/app/pengguna/pelaporan/page.tsx` | - |
+| 17 | I-17 | Layar Ulasan | `src/app/pengguna/ulasan/[idPesanan]/page.tsx` | - |
+| 18 | I-18 | Layar Pengajuan Mediasi | `src/app/admin/tiket/[idTiket]/page.tsx`, `src/app/mediasi/[id]/page.tsx` | - |
+| 19 | I-19 | Layar Dashboard Admin | `src/app/admin/tiket/page.tsx` | - |
 
 ## 3.4 File Lain
-
-Daftar file lain yang dibuat selain file kelas dan antarmuka, misalnya file *utility*, *configuration*, *database schema/seed*, *file test*, atau *data*.
-
+  
 Tabel 3.4. File Lain
 
 | No | Nama File | Keterangan |
 | :--- | :--- | :--- |
-| 1 | *[Nama file]* | *[Fungsi file]* |
-| ... | *...* | *...* |
+| 1 | `src/package.json`, `src/package-lock.json`, `src/tsconfig.json`, `src/next.config.ts`, `src/vite.config.js`, `src/eslint.config.mjs` | Konfigurasi proyek Next.js, TypeScript, ESLint, dependensi aplikasi, dan konfigurasi *test runner* Vitest. |
+| 2 | `src/README.md`, `src/READMENodeJS.md`, `src/AGENTS.md` | Dokumentasi instalasi, panduan menjalankan aplikasi dan pengujian, akun uji, serta standar pengembangan tim. |
+| 3 | `src/app/layout.tsx`, `src/app/page.tsx`, `src/app/globals.css`, `src/app/favicon.ico` | *Root layout*, halaman utama (*landing page*), dan token desain Tailwind CSS global. |
+| 4 | `src/app/admin/layout.tsx`, `src/app/admin/mediasi/layout.tsx`, `src/app/admin/tiket/layout.tsx`, `src/app/pengguna/layout.tsx`, `src/app/penyedia/layout.tsx` | Layout pembungkus berbasis peran (*role layout*) untuk area Admin, Pengguna Jasa, dan Penyedia Jasa. |
+| 5 | `src/app/(auth)/profil/page.tsx`, `src/app/pesanan/page.tsx`, `src/app/penyedia/pesanan/page.tsx`, `src/app/penyedia/pesanan/[idPesanan]/page.tsx`, `src/app/admin/mediasi/page.tsx` | Rute halaman pendukung/pengalih untuk profil, daftar pesanan penyedia, detail pesanan penyedia, dan daftar mediasi admin. |
+| 6 | `src/app/api/admin/auth/login/route.ts`, `src/app/api/admin/laporan/route.ts`, `src/app/api/admin/laporan/[id_tiket]/mediasi/route.ts`, `src/app/api/laporan/route.ts`, `src/app/api/laporan/[id_tiket]/route.ts`, `src/app/api/mediasi/helper.ts`, `src/app/api/penyedia/[id]/route.ts`, `src/app/api/pesanan/[id_pesanan]/deliverables/route.ts`, `src/app/api/pesanan/[id_pesanan]/deliverables/upload/route.ts`, `src/app/api/pesanan/[id_pesanan]/deliverables/helper.ts`, `src/app/api/pesanan/[id_pesanan]/produk-akhir/route.ts` | Route handler dan helper API tambahan untuk login admin, laporan, mediasi, profil penyedia, dan deliverables. |
+| 7 | `src/components/elemen/*` (`Alert.tsx`, `Badge.tsx`, `Button.tsx`, `CardJasa.tsx`, `Chip.tsx`, `Field.tsx`, `Input.tsx`, `LampiranBukti.tsx`, `OptionCard.tsx`, `PageContainer.tsx`, `PageHero.tsx`, `Rating.tsx`, `Select.tsx`, `StatusPill.tsx`, `TabFilter.tsx`, `Textarea.tsx`, `Toggle.tsx`, `UploadBox.tsx`, `index.ts`) | Pustaka komponen antarmuka *reusable* sesuai sistem desain aplikasi. |
+| 8 | `src/components/ui/navbar.tsx`, `src/components/ui/footer.tsx`, `src/components/ui/notifikasi.tsx` | Komponen navigasi berbasis peran, *footer* global, dan panel notifikasi. |
+| 9 | `src/lib/api.ts`, `src/lib/cn.ts`, `src/lib/format.ts`, `src/lib/layanan.ts`, `src/lib/auth-admin.ts` | Utilitas pemanggilan API (`fetch` + *timeout* 10 detik), pemformatan Rupiah/ukuran berkas, penggabung kelas CSS, dan autentikasi admin. |
+| 10 | `src/lib/client/*` (`admin.ts`, `auth.ts`, `bookmark.ts`, `chat.ts`, `deliverables.ts`, `jasa.ts`, `laporan.ts`, `mediasi.ts`, `notifikasi.ts`, `penyedia.ts`, `pesanan.ts`, `portofolio.ts`, `produk-akhir.ts`, `transaksi.ts`, `ulasan.ts`, `upload.ts`) | Modul *client-side API wrapper* penghubung komponen antarmuka ke endpoint `/api/...`. |
+| 11 | `src/lib/supabase/client.ts`, `src/lib/supabase/server.ts`, `src/lib/supabase/middleware.ts`, `src/middleware.ts` | Konfigurasi koneksi Supabase browser, server SSR (*cookie-based*), dan *middleware* penyegaran sesi. |
+| 12 | `src/lib/mock/jasa.ts`, `src/lib/mocks/*` (`bookmark.mock.ts`, `jasa.mock.ts`, `penyedia.mock.ts`, `pesanan.mock.ts`, `portofolio.mock.ts`, `transaksi.mock.ts`) | Data tiruan (*mock data*) untuk mode simulasi `NEXT_PUBLIC_USE_MOCK=true` dan pengujian unit. |
+| 13 | `src/services/storage/portofolio.service.ts`, `src/services/penyedia.service.ts` | Layanan pendukung penyimpanan portofolio dan pengambilan profil/nama penyedia jasa. |
+| 14 | `src/supabase/config.toml`, `src/supabase/seed.sql`, `src/supabase/migrations/20261108085000_add_berkas_pendukung_jasa.sql` s.d. `20261113200000_rpc_konfirmasi_selesai.sql` | Konfigurasi Supabase lokal, skema tambahan, kebijakan RLS (*Row Level Security*), fungsi/RPC database, dan data awal (*seed*). |
+| 15 | `src/public/icons/*.svg`, `src/Fonts/*.ttf` | Aset ikon antarmuka SVG dan berkas tipografi Plus Jakarta Sans. |
+| 16 | `src/test/*` (20 file: `App.test.jsx`, `autentikator.test.ts`, `auth.test.ts`, `bookmark.test.ts`, `chat.test.ts`, `deliverable.test.ts`, `deliverables.test.ts`, `dual-storage.test.ts`, `jasa.test.ts`, `mediasi.test.ts`, `notifikasi.test.ts`, `pelaporan.test.ts`, `pesanan.test.ts`, `portofolio.test.ts`, `search.test.ts`, `storage-interface.test.ts`, `test_integration.test.ts`, `transaksi.test.ts`, `ulasan.test.ts`, `upload.test.ts`) | Suite pengujian unit dan pengujian integrasi API/alur utama menggunakan Vitest. |
 
 <br>
 
