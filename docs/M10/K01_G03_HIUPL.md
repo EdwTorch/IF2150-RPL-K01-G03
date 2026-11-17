@@ -168,6 +168,7 @@ Tuliskan *hardware* dan *software* yang digunakan untuk implementasi, mencakup *
 
 Tabel 3.1. Lingkungan Implementasi
 
+### Revandra 
 | Aspek | Keterangan |
 | :--- | :--- |
 | *Hardware* | *[Spesifikasi perangkat keras]* |
@@ -177,6 +178,52 @@ Tabel 3.1. Lingkungan Implementasi
 | *DBMS* | *[Nama dan versi DBMS]* |
 | *Development Tools* | *[IDE, version control, tools lain]* |
 | *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+
+### Danesh 
+| Aspek | Keterangan |
+| :--- | :--- |
+| *Hardware* | *[Spesifikasi perangkat keras]* |
+| *Operating System* | *[Nama dan versi OS]* |
+| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
+| *Framework/Library* | *[Daftar framework/library beserta versi]* |
+| *DBMS* | *[Nama dan versi DBMS]* |
+| *Development Tools* | *[IDE, version control, tools lain]* |
+| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+
+### Theresia 
+| Aspek | Keterangan |
+| :--- | :--- |
+| *Hardware* | *[Spesifikasi perangkat keras]* |
+| *Operating System* | *[Nama dan versi OS]* |
+| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
+| *Framework/Library* | *[Daftar framework/library beserta versi]* |
+| *DBMS* | *[Nama dan versi DBMS]* |
+| *Development Tools* | *[IDE, version control, tools lain]* |
+| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+
+### Edward 
+| Aspek | Keterangan |
+| :--- | :--- |
+| Hardware | Laptop ASUS ROG G614JU, Intel Core I5 - 13450HX (4.8 GHz), GeForce RTX 4050 TDP 140 Watt, 16GB DDR5-4800 MHz  |
+| Operating System | Windows 11 26H2 |
+| Bahasa Pemrograman | Typescript with NodeJS 11.19.1 |
+| Framework/Library | NextJS |
+| DBMS | PostGreSQL 15 dengan Supabase |
+| Development Tools | VSCode, Git, Github |
+| Testing Tools | Vitest |
+
+### Necia
+| Aspek | Keterangan |
+| :--- | :--- |
+| *Hardware* | *[Spesifikasi perangkat keras]* |
+| *Operating System* | *[Nama dan versi OS]* |
+| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
+| *Framework/Library* | *[Daftar framework/library beserta versi]* |
+| *DBMS* | *[Nama dan versi DBMS]* |
+| *Development Tools* | *[IDE, version control, tools lain]* |
+| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+
+
 
 ## 3.2 Implementasi Modul
 
