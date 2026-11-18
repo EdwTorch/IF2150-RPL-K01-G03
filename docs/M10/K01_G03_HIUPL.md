@@ -280,6 +280,28 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | *C03* | *Keranjang* | *Sedang* | *Delegasi sederhana ke Produk dan Pesanan* | *C03-UT01 s.d. C03-UT03, INT-TC02* |
 | *C01* | *Pelanggan* | *Tidak perlu* | *Hanya menyimpan data akun, tanpa logika* | *-* |
 | *[CXX]* | *[Nama kelas]* | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
+| *[CXX]* | *[Nama kelas]* | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
+| C38 | HalamanDeliverables | Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C39 | PengajuanRevisi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C40 | HalamanRequestRevisi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C41 | RevisiHandler | Mendalam | Menguji Logika Bisnis, Validasi Revisi,  Aturan sesuai status, dan Algoritma | *[ID test case atau -]* |
+| C42 | PencairanDana | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C43 | TiketLaporan |  Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C44 | HalamanPelaporan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C45 | LaporanHandler | Mendalam | Menguji Logika Bisnis, Validasi input laporan,  Aturan sesuai status pengguna, dan Algoritma sesuai dengan role pengguna  |*[ID test case atau -]* |
+| C46 | Ulasan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C47 | HalamanUlasan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C48 | UlasanHandler | Mendalam | Menguji pembuatan Ulasan,  validasi input rating, formatting, CRUD terhadap data rating jasa dan rating penyediajasa | *[ID test case atau -]* |
+| C49 | TanggapanLaporan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C50 | HalamanPengajuanMediasi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C51 | MediasiHandler | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
+| C52 | Admin | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C53 | HalamanDashboardAdmin |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C54 | PengumpulanController | Mendalam | Berisi Logika Utama bisnis untuk pengumpulan deliverables | *[ID test case atau -]* |
+| C55 | pesan_chat | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C56 | notifikasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C57 | sesi_mediasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C58 | pesan_mediasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | *...* | *...* | *...* | *...* | *...* |
 
 ## 4.2 Pengujian Unit Kelas
@@ -319,6 +341,45 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
 ### 4.2.2 Kelas [Nama Kelas 2]
 
 *[Ulangi pola 4.2.1 untuk setiap kelas bertingkat Mendalam atau Sedang.]*
+
+### 4.2.13 Kelas RevisiHandler (Bagian dari Deliverables Service)
+
+**ID Kelas:**   C41
+**Nama Kelas:** RevisiHandler
+**Tingkat:** Mendalam
+
+Tabel 4.2.13. Hasil Pengujian Unit Kelas [C41]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C41-UT01 | requestRevision() | Batas | deskripsi_revisi = '' atau ' ' | Sistem melempar error "Deskripsi revisi wajib diisi." | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C41-UT02 | requestRevision() | Negatif | user_id tidak sesuai dengan id_pengguna_jasa pemilik pesanan (klien-lain) | Sistem melempar error otorisasi / penolakan akses | Sesuai Ekspektasi, akses ditolak | Pass |
+| C41-UT03 | requestRevision() | Batas | jumlah revisi habis(jml_revisi_tersedia=0) | Sistem melempar error "Kuota revisi untuk pesanan ini sudah habis." | Sesuai Ekspektasi (sistem melempar pesan error) | Pass |
+| C41-UT04 | requestRevision() | Negatif | Simulasi koneksi DB terputus saat proses update status pesanan | Sistem menangkap error DB & melempar pesan gagal memperbarui status pesanan | Sesuai ekspektasi, error DB tertangkap | Pass |
+| C41-UT05 | requestRevision() | Batas | data revisi sebelumnya = null (pengajuan revisi pertama kali) | Pengajuan revisi berhasil diproses tanpa error | revisi pertama berhasil diproses | Pass |
+| C41-UT06 | requestRevision() | Positif | Input valid, kuota revisi > 0, DB normal | Berhasil insert revisi (mengembalikan id_revisi) dan NotifikasiService.kirimNotifikasi berhasil dipanggil untuk seller | revisi dibuat & notifikasi terkirim | Pass |
+| C41-UT07 | submitRevisionFix() | Negatif | permintaan insert produk akhir ke database gagal  | Menangkap Eror Database dan melempar pesan error insert produk perbaikan  | Error Ditangkap | Pass |
+| C41-UT08 | submitRevisionFix() | Negatif | gagal mengupdate status pesanan setelah insert produk akhir berhasil ke dalam database | Melempar pesan error update ("status pesanan gagal diperbarui") | error update tertangkap | Pass |
+| C41-UT09 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
+| C41-UT10 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
+| C41-UT11 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
+| C41-UT12 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
+| C41-UT13 | getRevisionHistory() | Batas | id_pesanan valid, namun belum pernah ada riwayat revisi | Fungsi mengembalikan array kosong [] tanpa melempar error | array kosong dikembalikan | Pass |
+| C41-UT14 | getRevisionHistory() | Negatif  | kegagalan query database saat mengambil riwayat revisi | Sistem menangkap error DataBase & melempar pesan "Gagal mengambil riwayat revisi" | Error DataBase tertangkap | Pass |
+| C41-UT15 | getRevisionHistory() | Positif | id_pesanan dan user_id owner valid, terdapat data riwayat revisi di DB | Fungsi mengembalikan daftar/array data riwayat revisi yang sesuai| daftar riwayat berhasil diambil | Pass |
+
+
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | kirimRevisi() --> submitRevisionFix(), isRevisiRequestValid() --> X, sendNotifikasiRevisi() --> X, updateStatusPengerjaan() --> X |
+| Operasi yang diuji | requestRevision(),submitRevision(), getRevisionHistory() <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing|
+| ID Algoritma yang tercakup | Algo-4101, Algo-4102, Algo-4103, Algo-4104, Algo-4105, dan tambahan yang tidak tercata |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c41) |
 
 <br>
 
@@ -399,7 +460,12 @@ Tabel 4.6. Bukti Hasil Pengujian
 | *UC01-TC01* | *[Sisipkan tangkapan layar UC01-TC01 sesuai prosedur pengujian]* |
 | *UC01-TC02* | *[Sisipkan tangkapan layar UC01-TC02 sesuai prosedur pengujian]* |
 | *KNF01-TC01* | *[Sisipkan bukti pengukuran parameter KNF01-TC01]* |
-| *...* | *...* |
+| C41-UT01 - C41-UT06 |  <img alt="Pengujian" src="../M10/assets/C41-T1_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T1_2.png" width="70%"> |
+| C41-UT07 - C41-UT12 | <img alt="Pengujian" src="../M10/assets/C41-T2_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T2_2.png" width="70%">|
+| C41-UT13 - C41-UT15 | <img alt="Pengujian" src="../M10/assets/C41-T3_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T3_2.png" width="70%"> |
+| <a id="bukti-c41"></a>C41 Coverage | <img alt="Pengujian" src="../M10/assets/C41-Coverage1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-Coverage2.png" width="70%"> |
+
+
 
 <br>
 
