@@ -355,49 +355,131 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
 | ID Kelas | Nama Kelas | Tingkat | Alasan | Test Case Terkait |
 | :--- | :--- | :--- | :--- | :--- |
-| *C02* | *Pesanan* | *Mendalam* | *Memuat `hitungTotal()` dan transisi status pembayaran* | *C02-UT01 s.d. C02-UT08* |
-| *C03* | *Keranjang* | *Sedang* | *Delegasi sederhana ke Produk dan Pesanan* | *C03-UT01 s.d. C03-UT03, INT-TC02* |
-| *C01* | *Pelanggan* | *Tidak perlu* | *Hanya menyimpan data akun, tanpa logika* | *-* |
-| *[CXX]* | *[Nama kelas]* | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
-| *...* | *...* | *...* | *...* | *...* |
+| C19 | HalamanDetailJasa | Tidak perlu | Halaman UI (Boundary) untuk detail jasa tanpa logika bisnis; teruji lewat C14 dan UC06. | - |
+| C20 | Bookmark | Tidak perlu | Entity model data (`src/models/types.ts`) dan tabel `public.bookmark` tanpa logika mandiri; teruji lewat C22. | - |
+| C21 | HalamanBookmark | Tidak perlu | Halaman UI (Boundary) daftar bookmark tanpa logika bisnis; teruji lewat C22 dan UC07. | - |
+| C22 | PengontrolBookmark | Mendalam | Berisi validasi input, cegah duplikat bookmark, toggle idempotent + handle race condition `23505`, filter jasa nonaktif, serta cek auth dan anti-IDOR di `/api/bookmark`. | C22-UT01 s.d. C22-UT12 |
+| C23 | ChatRoom | Tidak perlu | Entity model data (`ChatroomRow`, `ChatroomDetail`) dan tabel `public.chatroom` tanpa logika mandiri; teruji lewat C25 dan UC08. | - |
+| C24 | HalamanChat | Tidak perlu | Halaman UI (Boundary) chat; teruji lewat C25 dan UC08. | - |
+| C25 | LayananPesanInstan | Mendalam | Berisi validasi peserta room (`validasiAksesChatroom`), larangan room dengan diri sendiri, cek pesan/lampiran kosong, `getOrCreateChatroom`, dan trigger notifikasi ke `NotifikasiService`. | C25-UT01 s.d. C25-UT12 |
+| C26 | LayananNotifikasiChat | Mendalam | Berisi guard `id_pengguna`/`user_id`, query paralel 20 notifikasi terbaru + `unread_count`, error handling non-blocking saat insert, dan `tandaiSudahDibaca`. | C26-UT01 s.d. C26-UT09 |
+| C27 | Pesanan | Tidak perlu | Entity model data (`Pesanan`) dan tabel `public.pesanan`; aturan state dan bisnisnya teruji lewat C31. | - |
+| C28 | HalamanPemesanan | Tidak perlu | Halaman UI (Boundary) form pemesanan jasa; teruji lewat C31 dan UC09. | - |
+| C29 | HalamanPembayaran | Tidak perlu | Halaman UI (Boundary) pilih metode dan tombol bayar; teruji lewat C32 dan UC09. | - |
+| C30 | HalamanRiwayatTransaksi | Tidak perlu | Halaman UI (Boundary) daftar pesanan dan riwayat transaksi; teruji lewat C31, C32, UC09, UC10, dan UC14. | - |
+| C31 | PengontrolPesanan | Mendalam | Mengatur state transition pesanan (`validasiTransisiStatus`), batas maksimal 2 pesanan aktif (`MAKS_PESANAN_AKTIF`), larangan pesan jasa sendiri, snapshot harga, cek role penyedia, dan logika refund. | C31-UT01 s.d. C31-UT12 |
+| C32 | PengontrolTransaksi | Mendalam | Berisi validasi metode bayar, guard double payment (`neq('status_pembayaran', 'LUNAS')`), cek nominal `total_biaya`, rollback saat insert `riwayat_transaksi` gagal, filter riwayat per role, dan `setPencairanDana`. | C32-UT01 s.d. C32-UT12, KNF04-TC01 |
+| C33 | MetodePembayaran | Tidak perlu | Entity model data (`MetodePembayaran`) dan tabel `public.metode_pembayaran` tanpa logika mandiri; teruji lewat C32. | - |
+| C34 | RiwayatTransaksi | Tidak perlu | Entity model data (`RiwayatTransaksi`) dan tabel `public.riwayat_transaksi` tanpa logika mandiri; teruji lewat C32. | - |
+| C35 | HalamanKonfirmasi | Tidak perlu | Halaman UI (Boundary) konfirmasi pesanan penyedia; teruji lewat C31 dan UC10. | - |
+| C36 | ProdukAkhir | Tidak perlu | Entity model data (`ProdukAkhir`) dan tabel `public.produk_akhir` tanpa logika mandiri; teruji lewat C54 (`DeliverablesService`), UC11, dan UC12. | - |
+| C37 | HalamanPengumpulan | Tidak perlu | Halaman UI (Boundary) upload hasil kerja penyedia; teruji lewat C54 dan UC11. | - |
+| C38–C58 | *[Diisi oleh Edward: C38–C58]* | *...* | *...* | *...* |
 
 ## 4.2 Pengujian Unit Kelas
 
 Pengujian unit dilakukan pada kelas bertingkat Mendalam dan Sedang. Kelas Mendalam diuji pada seluruh operasi public dengan kasus normal, batas, dan negatif, serta mencapai *coverage* minimal 70%. Kelas Sedang diuji minimal dengan satu kasus normal dan satu kasus gagal pada operasi public utama.
 
-Cara menjalankan unit test: *[tuliskan perintah, mis. `pytest src/tests/`]*.
+Cara menjalankan unit test: `cd src && npx vitest run` (atau `cd src && npx vitest run --coverage`).
 
-Lokasi file test: *[path, mis. `src/tests/`]*.
+Lokasi file test: `src/test/`.
 
-### 4.2.1 Kelas [Nama Kelas 1]
+### 4.2.1 Kelas PengontrolBookmark (C22)
 
-**ID Kelas:** *[C02]*  
-**Nama Kelas:** *[Pesanan]*  
-**Tingkat:** *[Mendalam]*
+**ID Kelas:** C22  
+**Nama Kelas:** `PengontrolBookmark` (`src/services/bookmark.service.ts`)  
+**Tingkat:** Mendalam
 
-Tabel 4.2.1. Hasil Pengujian Unit Kelas [C02]
+Tabel 4.2.1. Hasil Pengujian Unit Kelas C22 (`PengontrolBookmark`)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *C02-UT01* | *`hitungTotal(): Decimal`* | *Normal* | *Pesanan berisi 2 item: 10.000 x 2 dan 5.000 x 1* | *Total = 25.000* | *[Hasil aktual]* | *Pass/Fail* |
-| *C02-UT02* | *`hitungTotal(): Decimal`* | *Batas* | *Pesanan berisi tepat 1 item dengan jumlah 1* | *Total = harga item tersebut* | *[...]* | *Pass/Fail* |
-| *C02-UT03* | *`hitungTotal(): Decimal`* | *Negatif* | *Pesanan tanpa item* | *Total = 0 atau melempar kesalahan sesuai rancangan* | *[...]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| C22-UT01 | `tambahDataBookmark(id_pengguna_jasa, id_jasa)` | Normal | Tambahkan jasa aktif `'j2'` (memori) dan `'j1'` (mock DB) untuk pengguna `'u1'` | Menghasilkan objek `Bookmark` baru dengan `id_bookmark` | Objek `Bookmark` berhasil dibuat dan dikembalikan | Pass |
+| C22-UT02 | `tambahDataBookmark()` via `toggleBookmark()` | Batas | Simulasikan *race condition* double-click: cek awal belum ada, lalu insert melempar kode unik `23505` | Sistem otomatis memanggil `hapusDataBookmark` dan mengembalikan `{ action: 'removed', data: null }` | Mengembalikan `{ action: 'removed', data: null }` tanpa gagal | Pass |
+| C22-UT03 | `tambahDataBookmark(id_pengguna_jasa, id_jasa)` | Negatif | Tambahkan jasa yang sudah dibookmark (duplikat / `23505`), parameter kosong (`'   '`), atau jasa nonaktif/tidak ditemukan | Melempar `'Jasa sudah ada di dalam bookmark'`, `'Parameter input tidak valid'`, atau `'Data jasa tidak ditemukan'` | Error duplikasi, validasi input, dan jasa tidak ditemukan dilempar sesuai kasus | Pass |
+| C22-UT04 | `hapusDataBookmark(id_pengguna_jasa, id_jasa)` | Normal | Hapus bookmark milik `'u1'` berdasarkan `id_jasa` (`'j1'`) | Item terhapus dari daftar dan fungsi mengembalikan `true` | Item terhapus dan mengembalikan `true` | Pass |
+| C22-UT05 | `hapusDataBookmark(id_pengguna_jasa, undefined, id_bookmark)` | Batas | Hapus bookmark spesifik menggunakan parameter opsional `id_bookmark` (`'b2'`) saat `id_jasa` tidak dikirim | Hanya bookmark `'b2'` yang terhapus dan mengembalikan `true` | Hanya `'b2'` yang terhapus; bookmark lain tetap ada | Pass |
+| C22-UT06 | `hapusDataBookmark(id_pengguna_jasa, id_jasa)` | Negatif | Hapus bookmark yang tidak ada milik `'u1'` (`'j2'` di memori atau hasil delete DB `[]`) | Melempar `'Data bookmark tidak ditemukan'` | Error `'Data bookmark tidak ditemukan'` dilempar | Pass |
+| C22-UT07 | `ambilDaftarBookmarkPengguna(id_pengguna_jasa)` | Normal | Ambil daftar bookmark milik `'u1'` dengan 2 jasa aktif | Mengembalikan 2 bookmark aktif milik `'u1'` terurut terbaru (`['j3', 'j1']`) dengan detail jasa terpasang | Mengembalikan `['j3', 'j1']` dengan detail jasa | Pass |
+| C22-UT08 | `ambilDaftarBookmarkPengguna(id_pengguna_jasa)` | Batas | Panggil untuk pengguna baru `'u-baru'` (0 bookmark) serta pengguna dengan 1 jasa aktif dan 1 jasa nonaktif (`status_aktif: false`) | Pengguna baru mengembalikan `[]`; jasa nonaktif otomatis disaring sehingga hanya tersisa 1 jasa aktif | Mengembalikan `[]` untuk user baru dan menyaring jasa nonaktif | Pass |
+| C22-UT09 | `ambilDaftarBookmarkPengguna(id_pengguna_jasa)` | Negatif | Panggil dengan `id_pengguna_jasa` kosong/spasi (`''`, `'   '`) | Melempar `'Parameter input tidak valid'` | Error `'Parameter input tidak valid'` dilempar | Pass |
+| C22-UT10 | `toggleBookmark(id_pengguna_jasa, id_jasa)` & `/api/bookmark` | Normal | Panggil `toggleBookmark` saat belum ada lalu panggil lagi saat sudah ada | Panggilan pertama `{ action: 'added' }`, panggilan kedua `{ action: 'removed', data: null }` | Kedua panggilan mengembalikan aksi dan status sesuai harapan | Pass |
+| C22-UT11 | `GET /api/bookmark` | Batas | Akses `GET /api/bookmark` dengan sesi valid namun pengguna belum memiliki bookmark | Mengembalikan status `200 OK` dengan `data: []` | Status `200` dengan `data: []` dikembalikan | Pass |
+| C22-UT12 | `GET / POST / DELETE /api/bookmark` | Negatif | Akses non-mock tanpa sesi (`GET`), atau kirim `id_pengguna_jasa` milik pengguna lain (IDOR), atau JSON body rusak | Status `401 UNAUTHORIZED`, `403 FORBIDDEN`, dan `400 VALIDATION_ERROR` | Seluruh status kode dan `error_code` sesuai kontrak | Pass |
 
-Khusus kelas **Mendalam**:
-
-Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
+Tabel 4.2.1b. Ringkasan Cakupan Kelas C22 (`PengontrolBookmark`)
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL | *[op1(), op2(), ...]* |
-| Operasi yang diuji | *[op1(), op2(), ...]* |
-| ID Algoritma yang tercakup | *[Algo-001, ...]* |
-| Coverage (wajib ≥ 70%) | *[% baris / % cabang, alat dan bukti pada 4.6]* |
+| Daftar operasi public pada DPPL | `tambahDataBookmark()`, `hapusDataBookmark()`, `ambilDaftarBookmarkPengguna()` |
+| Operasi yang diuji | `tambahDataBookmark()`, `hapusDataBookmark()`, `ambilDaftarBookmarkPengguna()`, `toggleBookmark()`, `validasiInput()` (3 dari 3 operasi public pada DPPL) |
+| ID Algoritma yang tercakup | Algo-2201 (simpan bookmark), Algo-2202 (hapus bookmark), Algo-2203 (ambil daftar bookmark), Algo-2001–Algo-2003 (operasi data bookmark) |
+| Coverage (wajib ≥ 70%) | 100% line / 83,56% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
 
-### 4.2.2 Kelas [Nama Kelas 2]
+---
 
-*[Ulangi pola 4.2.1 untuk setiap kelas bertingkat Mendalam atau Sedang.]*
+### 4.2.2 Kelas LayananPesanInstan (C25)
+
+**ID Kelas:** C25  
+**Nama Kelas:** `LayananPesanInstan` (`ChatService` pada `src/services/chat.service.ts`)  
+**Tingkat:** Mendalam
+
+Tabel 4.2.2. Hasil Pengujian Unit Kelas C25 (`LayananPesanInstan`)
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C25-UT01 | `getDaftarChatroom(user_id)` | Normal | Panggil `ChatService.getDaftarChatroom('user-1')` dengan mock data 1 room | Mengembalikan daftar chatroom milik `'user-1'` beserta relasi `pengguna_jasa` dan `penyedia_jasa` | Daftar chatroom dikembalikan dengan properti relasi lengkap | Pass |
+| C25-UT02 | `getDaftarChatroom(user_id)` | Batas | Panggil untuk pengguna yang belum memiliki ruang obrolan sama sekali (`data: []`) | Mengembalikan array kosong `[]` | Mengembalikan `[]` | Pass |
+| C25-UT03 | `getDaftarChatroom(user_id)` | Negatif | Mock query Supabase mengembalikan error `'Database failure'` | Melempar error `'Gagal memuat daftar obrolan: Database failure'` | Error dilempar sesuai pesan yang diharapkan | Pass |
+| C25-UT04 | `getOrCreateChatroom(id_pengguna_jasa, id_penyedia_jasa)` | Normal | Panggil untuk pasangan `'u1'` dan `'p1'` yang belum memiliki room sebelumnya | Membuat room baru di tabel `chatroom` dan mengembalikan data room | Room baru berhasil dibuat via `insert` dan dikembalikan | Pass |
+| C25-UT05 | `getOrCreateChatroom(id_pengguna_jasa, id_penyedia_jasa)` | Batas | Panggil berulang untuk pasangan `'u1'` dan `'p1'` yang room-nya sudah ada | Mengembalikan room yang sudah ada tanpa melakukan `insert` ulang (*idempotent*) | Mengembalikan room lama tanpa `insert` duplikat | Pass |
+| C25-UT06 | `getOrCreateChatroom(id_pengguna_jasa, id_penyedia_jasa)` | Negatif | Panggil dengan `id_pengguna_jasa === id_penyedia_jasa` (`'user-1'`, `'user-1'`) atau gagal insert DB | Melempar `'Tidak dapat membuat ruang obrolan dengan diri sendiri.'` atau `'Gagal membuat ruang obrolan: ...'` | Error validasi dan gagal insert dilempar sesuai harapan | Pass |
+| C25-UT07 | `getRiwayatPesan(id_chatroom, user_id)` | Normal | Panggil `getRiwayatPesan('room-1', 'u1')` saat `'u1'` merupakan anggota room berisi pesan | Memvalidasi akses dan mengembalikan array riwayat pesan dari tabel `pesan_chat` | Riwayat pesan berhasil dikembalikan | Pass |
+| C25-UT08 | `getRiwayatPesan(id_chatroom, user_id)` | Batas | Panggil untuk room valid yang belum memiliki pesan sama sekali (`data: []`) | Memvalidasi akses dan mengembalikan array kosong `[]` | Mengembalikan `[]` | Pass |
+| C25-UT09 | `getRiwayatPesan(id_chatroom, user_id)` | Negatif | Panggil dengan room tidak ditemukan (`'room-invalid'`), pengguna bukan anggota (`'stranger-user'`), atau error query DB | Melempar `'Ruang obrolan tidak ditemukan.'`, `'Akses ditolak. Anda bukan peserta ruang obrolan ini.'`, atau `'Gagal memuat pesan: DB Error'` | Seluruh skenario penolakan akses dan galat DB melempar pesan tepat | Pass |
+| C25-UT10 | `kirimPesan(id_chatroom, user_id, isi_pesan, lampiran)` | Normal | Kirim pesan teks normal (`'Halo, apakah jasa ini tersedia?'`) oleh peserta room `'u1'` | Pesan tersimpan ke `pesan_chat` dan memicu `NotifikasiService.kirimNotifikasi` ke lawan bicara | Pesan tersimpan dan notifikasi dipicu sesuai target | Pass |
+| C25-UT11 | `kirimPesan(id_chatroom, user_id, isi_pesan, lampiran)` | Batas | Kirim pesan berupa lampiran saja tanpa teks (`isi_pesan = ''`, `lampiran = 'https://.../file.pdf'`) atau pesan teks `> 50` karakter | Lampiran memicu notifikasi `'Mengirimkan lampiran'`; teks `> 50` karakter dipotong menjadi 50 karakter + `'...'` | Kedua kondisi batas menghasilkan pesan dan preview notifikasi sesuai | Pass |
+| C25-UT12 | `kirimPesan(id_chatroom, user_id, isi_pesan, lampiran)` | Negatif | Kirim pesan spasi saja (`'   '`) tanpa lampiran (`null`), atau query `insert` ke `pesan_chat` gagal | Melempar `'Isi pesan tidak boleh kosong.'` atau `'Gagal mengirim pesan: Insert message failed'` tanpa memicu notifikasi | Error dilempar sesuai kasus dan notifikasi tidak dipicu | Pass |
+
+Tabel 4.2.2b. Ringkasan Cakupan Kelas C25 (`LayananPesanInstan`)
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `buatSesiChat()`, `validasiInputPesan()`, `kirimPesan()`, `simpanKeDatabase()`, `updateStatusBaca()` |
+| Operasi yang diuji | `getDaftarChatroom()`, `getOrCreateChatroom()`, `getRiwayatPesan()`, `kirimPesan()`, `validasiAksesChatroom()` (4 dari 4 operasi public yang diimplementasikan; `updateStatusBaca` tidak diimplementasikan sesuai Tabel B.1 M9) |
+| ID Algoritma yang tercakup | Algo-2501 (buat/ambil sesi chatroom), Algo-2502 (validasi input & akses pesan), Algo-2503 (kirim pesan & trigger notifikasi), Algo-2504 (simpan pesan ke database) |
+| Coverage (wajib ≥ 70%) | 100% line / 90,19% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
+
+---
+
+### 4.2.3 Kelas LayananNotifikasiChat (C26)
+
+**ID Kelas:** C26  
+**Nama Kelas:** `LayananNotifikasiChat` (`NotifikasiService` pada `src/services/notifikasi.service.ts`)  
+**Tingkat:** Mendalam
+
+Tabel 4.2.3. Hasil Pengujian Unit Kelas C26 (`LayananNotifikasiChat`)
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C26-UT01 | `kirimNotifikasi(payload)` | Normal | Kirim payload lengkap dengan `id_pengguna`, `judul`, `pesan_notifikasi`, `id_pesanan`, dan `id_referensi` | Insert ke tabel `notifikasi` dengan `is_read: false` dan mengembalikan `true` | Insert dipanggil dengan payload tepat dan mengembalikan `true` | Pass |
+| C26-UT02 | `kirimNotifikasi(payload)` | Batas | Kirim payload minimum tanpa field opsional `id_pesanan` dan `id_referensi` | Field opsional otomatis diisi `null` saat insert | `id_pesanan: null` dan `id_referensi: null` tercatat pada insert | Pass |
+| C26-UT03 | `kirimNotifikasi(payload)` | Negatif | Kirim `id_pengguna` kosong/spasi (`''`, `'   '`) atau insert DB gagal (`'Database insert failure'`) | `id_pengguna` kosong mengembalikan `false` tanpa memanggil DB; gagal insert dicatat ke `console.error` secara non-blocking (`true`) | Guard mengembalikan `false` dan error DB ditangani non-blocking | Pass |
+| C26-UT04 | `getNotifikasiUser(user_id)` | Normal | Panggil `getNotifikasiUser('user-123')` | Menjalankan 2 query paralel (`limit(20)` + `unread_count`) dan mengembalikan `{ notifikasi, unread_count: 3 }` | Mengembalikan daftar notifikasi dan `unread_count: 3` | Pass |
+| C26-UT05 | `getNotifikasiUser(user_id)` | Batas | Panggil dengan `user_id` kosong/spasi (`''`, `'   '`) | Mengembalikan `{ notifikasi: [], unread_count: 0 }` tanpa memanggil DB | Mengembalikan struktur kosong tanpa memanggil `createClient` | Pass |
+| C26-UT06 | `getNotifikasiUser(user_id)` | Negatif | Query daftar notifikasi gagal atau query hitung `unread_count` gagal | Melempar error `'Gagal memuat notifikasi: ...'` atau `'Gagal menghitung notifikasi belum dibaca: ...'` | Kedua kondisi galat melempar pesan error sesuai | Pass |
+| C26-UT07 | `tandaiSudahDibaca(user_id, id_notifikasi)` | Normal | Panggil dengan `id_notifikasi` spesifik (`'notif-99'`) | Memperbarui `is_read: true` khusus untuk `'notif-99'` dan mengembalikan `true` | Update berhasil pada target spesifik dan mengembalikan `true` | Pass |
+| C26-UT08 | `tandaiSudahDibaca(user_id)` | Batas | Panggil tanpa `id_notifikasi` untuk menandai seluruh notifikasi pengguna yang belum dibaca sekaligus | Memperbarui seluruh record `is_read = false` milik pengguna menjadi `true` dan mengembalikan `true` | Update massal berhasil dan mengembalikan `true` | Pass |
+| C26-UT09 | `tandaiSudahDibaca(user_id)` | Negatif | Update Supabase mengembalikan error `'Update error'` | Melempar `'Gagal memperbarui status notifikasi: Update error'` | Error dilempar sesuai rancangan | Pass |
+
+Tabel 4.2.3b. Ringkasan Cakupan Kelas C26 (`LayananNotifikasiChat`)
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `kirimNotifikasiPesan()`, `tampilkanPopUpNotifikasi()` |
+| Operasi yang diuji | `kirimNotifikasi()`, `getNotifikasiUser()`, `tandaiSudahDibaca()` (3 dari 3 operasi public pada `NotifikasiService`) |
+| ID Algoritma yang tercakup | Algo-2601 (kirim & simpan notifikasi), Algo-2602 (ambil daftar & perbarui status baca notifikasi) |
+| Coverage (wajib ≥ 70%) | 100% line / 92,30% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
 
 <br>
 
