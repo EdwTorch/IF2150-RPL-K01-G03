@@ -353,9 +353,9 @@ Tabel 4.2.13. Hasil Pengujian Unit Kelas [C41]
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | C41-UT01 | requestRevision() | Batas | deskripsi_revisi = '' atau ' ' | Sistem melempar error "Deskripsi revisi wajib diisi." | Sesuai Ekspektasi (Error dilempar) | Pass |
-| C41-UT02 | requestRevision() | Negatif | user_id tidak sesuai dengan id_pengguna_jasa pemilik pesanan (klien-lain) | Sistem melempar error otorisasi / penolakan akses | Sesuai Ekspektasi, akses ditolak | Pass |
+| C41-UT02 | requestRevision() | Negatif | user_id tidak sesuai dengan id_pengguna_jasa pemilik pesanan (klien-lain) | Sistem melempar error otorisasi / penolakan akses |  Muncul Error Akses ditolak | Pass |
 | C41-UT03 | requestRevision() | Batas | jumlah revisi habis(jml_revisi_tersedia=0) | Sistem melempar error "Kuota revisi untuk pesanan ini sudah habis." | Sesuai Ekspektasi (sistem melempar pesan error) | Pass |
-| C41-UT04 | requestRevision() | Negatif | Simulasi koneksi DB terputus saat proses update status pesanan | Sistem menangkap error DB & melempar pesan gagal memperbarui status pesanan | Sesuai ekspektasi, error DB tertangkap | Pass |
+| C41-UT04 | requestRevision() | Negatif | Simulasi koneksi DB terputus saat proses update status pesanan | Sistem menangkap error DB & melempar pesan gagal memperbarui status pesanan | error DB tertangkap | Pass |
 | C41-UT05 | requestRevision() | Batas | data revisi sebelumnya = null (pengajuan revisi pertama kali) | Pengajuan revisi berhasil diproses tanpa error | revisi pertama berhasil diproses | Pass |
 | C41-UT06 | requestRevision() | Positif | Input valid, kuota revisi > 0, DB normal | Berhasil insert revisi (mengembalikan id_revisi) dan NotifikasiService.kirimNotifikasi berhasil dipanggil untuk seller | revisi dibuat & notifikasi terkirim | Pass |
 | C41-UT07 | submitRevisionFix() | Negatif | permintaan insert produk akhir ke database gagal  | Menangkap Eror Database dan melempar pesan error insert produk perbaikan  | Error Ditangkap | Pass |
@@ -372,7 +372,7 @@ Tabel 4.2.13. Hasil Pengujian Unit Kelas [C41]
 
 Khusus kelas **Mendalam**:
 
-Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
+Tabel 4.2.1b. Ringkasan Cakupan Kelas [C41]
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -381,6 +381,44 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
 | ID Algoritma yang tercakup | Algo-4101, Algo-4102, Algo-4103, Algo-4104, Algo-4105, dan tambahan yang tidak tercata |
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c41) |
 
+### 4.2.14 Kelas LaporanHandler
+
+**ID Kelas:**   C45
+**Nama Kelas:** LaporanHandler
+**Tingkat:** Mendalam
+
+Tabel 4.2.14. Hasil Pengujian Unit Kelas [C45]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C45-UT01 | submitLaporan() | Batas | Deskripsi laporan tidak diisi (kosong)  atau kategori kosong | Sistem melempar error validasi deskripsi / minimal 1 kategori | error dilempar | Pass |
+| C45-UT02 | submitLaporan() | Batas | Batas lampiran bukti kosong atau lewat dari batas maksimal > 3 | Sistem melempar error batas minimal 1 dan maksimal 3 bukti lampiran | error dilempar | Pass |
+| C45-UT03 | submitLaporan() | Negatif | Format URL bukti mengandung `javascript:` atau path file | Sistem melempar error validasi format URL bukti tidak valid | URL ditolak | Pass |
+| C45-UT04 | submitLaporan() | Negatif | id_pesanan tidak ditemukan dalam database atau user_id bukan pelapor/terlapor pada pesanan tersebut | Sistem melempar error "Pesanan tidak ditemukan" / "Akses ditolak" | Akses ditolak | Pass |
+| C45-UT05 | submitLaporan() | Negatif | User masih memiliki tiket laporan berstatus `"Diproses"` untuk pesanan yang sama | Sistem melempar error tiket laporan masih sedang diproses |  duplikasi laporan ditolak | Pass |
+| C45-UT06 | submitLaporan() | Positif | Data laporan valid, pelapor adalah pemesan, dan terlapor adalah penyedia | Laporan berhasil disimpan ke Database dengan status "Diproses" dan mengembalikan id_tiket | tiket laporan berhasil dibuat | Pass |
+| C45-UT07 | validasiOwnerPesanan() | Positif | `user_id` merupakan penyedia jasa dari pesanan | Fungsi mengembalikan `true` |  validasi mengembalikan true | Pass |
+| C45-UT08 | validasiOwnerPesanan() | Negatif | id_pesanan tidak ada di database | melempar error *"Pesanan tidak ditemukan"* | error dilempar | Pass |
+| C45-UT09 | getTicketsByUser() | Positif  | user_id valid serta memiliki beberapa daftar tiket | Mengembalikan daftar tiket pelaporan pemilik tiket | daftar tiket dapat direturn | Pass |
+| C45-UT10 | getDetailTiket() | Negatif | user_id yang tidak terdaftar sebagai pelapor maupun terlapor | melempar error "Akses ditolak. Anda tidak memiliki izin melihat tiket ini." | Akses ditolak | Pass |
+| C45-UT11 | getDetailTiket() | Positif | user_id merupakan pelapor asli tiket | Mengembalikan objek detail data tiket laporan |  detail tiket dikembalikan | Pass |
+| C45-UT12 | getAllTicketsForAdmin() | Positif | Dipanggil oleh Admin | Mengembalikan seluruh daftar tiket laporan dari seluruh pengguna | seluruh tiket dikembalikan | Pass |
+| C45-UT13 | getDetailTiketAdmin() | Positif | id_tiket valid | Mengembalikan detail tiket laporan secara langsung tanpa batasan otorisasi pelapor |  detail tiket dikembalikan | Pass |
+| C45-UT14 | catatKeputusanTindakan() | Batas | jenis_tindakan kosong atau catatan_tanggapan kosong maupun hanya spasi| Sistem melempar error validasi pilihan tindakan / catatan wajib diisi | Error dilempar | Pass |
+| C45-UT15 | catatKeputusanTindakan() | Negatif | Tiket yang diproses sudah berstatus "Selesai" di database | Sistem melempar error "Tiket laporan ini sudah selesai ditangani sebelumnya." | Error penolakan | Pass |
+| C45-UT16 | catatKeputusanTindakan() | Positif | Admin memilih tindakan PERINGATAN / SUSPEND_AKUN dengan catatan valid | Berhasil menyimpan tanggapan, memanggil RPC admin_beri_sanksi, dan mengubah status tiket menjadi "Selesai" |  sanksi diproses & status tiket selesai | Pass |
+| C45-UT17 | catatKeputusanTindakan() | Positif | Admin memilih tindakan LAPORAN_DITOLAK dengan catatan valid | Berhasil menyimpan tanggapan dan mengubah status tiket menjadi "Selesai" tanpa memicu sanksi akun |  penolakan dicatat & status tiket selesai | Pass |
+
+Tabel 4.2.14b. Ringkasan Cakupan Kelas [C45]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | validasiFormatLaporan() --> Menjadi bagian dari fungsi submitLaporan() <br> kirimNotifAdmin() --> Menjadi bagian dari fungsi submitLaporan() <br> simpanData() --> Menjadi bagian dari fungsi submitLaporan() <br> banPengguna() --> Menjadi bagian dari fungsi catatKeputusanTindakan() <br> skorsPengguna() -->  Menjadi bagian dari fungsi catatKeputusanTindakan() <br> kirimTanggapan() -->  Menjadi bagian dari routing catatKeputusanTindakan() <br> saveTanggapan() -->  Menjadi bagian dari fungsi catatKeputusanTindakan() <br> saveLaporan() --> Menjadi bagian dari fungsi catatKeputusanTindakan() <br> updateStatusTiket() --> Menjadi bagian dari fungsi catatKeputusanTindakan() <br getDetailTiket() --> dipecah menjadi getDetailTiket() untuk pengguna dan getDetailTiketAdmin() untuk admin  |
+
+
+| Operasi yang diuji | <br>  submitLaporan(), validasiOwnerPesanan(), getTicketsByUser(), getDetailTiket(), getAllTicketsForAdmin(), getDetailTiketAdmin(), catatKeputusanTindakan() <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-4501 - Algo-4510, dan tambahan yang tidak tercatat dalam DPPL |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c45) |
 <br>
 
 ## 4.3 Pengujian Integrasi
@@ -464,6 +502,12 @@ Tabel 4.6. Bukti Hasil Pengujian
 | C41-UT07 - C41-UT12 | <img alt="Pengujian" src="../M10/assets/C41-T2_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T2_2.png" width="70%">|
 | C41-UT13 - C41-UT15 | <img alt="Pengujian" src="../M10/assets/C41-T3_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T3_2.png" width="70%"> |
 | <a id="bukti-c41"></a>C41 Coverage | <img alt="Pengujian" src="../M10/assets/C41-Coverage1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-Coverage2.png" width="70%"> |
+| C45-UT01 - C45-UT06 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T1.png" width="70%"> |
+| C45-UT07 - C45-U08 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T2.png" width="70%">|
+| C45-UT09 - C45-UT11 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T3.png" width="70%"> |
+| C45-UT12 - C45-UT13 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T4.png" width="70%"> |
+| C45-UT14 - C45-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T5.png" width="70%"> |
+| <a id="bukti-c45"></a>C45 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C45-Coverage.png" width="70%"> |
 
 
 
