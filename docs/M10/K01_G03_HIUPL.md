@@ -387,10 +387,10 @@ Lokasi file test: `src/test/`.
 ### 4.2.1 Kelas PengontrolBookmark (C22)
 
 **ID Kelas:** C22  
-**Nama Kelas:** `PengontrolBookmark` (`src/services/bookmark.service.ts`)  
+**Nama Kelas:** PengontrolBookmark (`src/services/bookmark.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.1. Hasil Pengujian Unit Kelas C22 (`PengontrolBookmark`)
+Tabel 4.2.1. Hasil Pengujian Unit Kelas C22 (PengontrolBookmark)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -407,7 +407,7 @@ Tabel 4.2.1. Hasil Pengujian Unit Kelas C22 (`PengontrolBookmark`)
 | C22-UT11 | `GET /api/bookmark` | Batas | Akses `GET /api/bookmark` dengan sesi valid namun pengguna belum memiliki bookmark | Mengembalikan status `200 OK` dengan `data: []` | Status `200` dengan `data: []` dikembalikan | Pass |
 | C22-UT12 | `GET / POST / DELETE /api/bookmark` | Negatif | Akses non-mock tanpa sesi (`GET`), atau kirim `id_pengguna_jasa` milik pengguna lain (IDOR), atau JSON body rusak | Status `401 UNAUTHORIZED`, `403 FORBIDDEN`, dan `400 VALIDATION_ERROR` | Seluruh status kode dan `error_code` sesuai kontrak | Pass |
 
-Tabel 4.2.1b. Ringkasan Cakupan Kelas C22 (`PengontrolBookmark`)
+Tabel 4.2.1b. Ringkasan Cakupan Kelas C22 (PengontrolBookmark)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -421,10 +421,10 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas C22 (`PengontrolBookmark`)
 ### 4.2.2 Kelas LayananPesanInstan (C25)
 
 **ID Kelas:** C25  
-**Nama Kelas:** `LayananPesanInstan` (`ChatService` pada `src/services/chat.service.ts`)  
+**Nama Kelas:** LayananPesanInstan (`ChatService` pada `src/services/chat.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.2. Hasil Pengujian Unit Kelas C25 (`LayananPesanInstan`)
+Tabel 4.2.2. Hasil Pengujian Unit Kelas C25 (LayananPesanInstan)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -441,7 +441,7 @@ Tabel 4.2.2. Hasil Pengujian Unit Kelas C25 (`LayananPesanInstan`)
 | C25-UT11 | `kirimPesan(id_chatroom, user_id, isi_pesan, lampiran)` | Batas | Kirim pesan berupa lampiran saja tanpa teks (`isi_pesan = ''`, `lampiran = 'https://.../file.pdf'`) atau pesan teks `> 50` karakter | Lampiran memicu notifikasi `'Mengirimkan lampiran'`; teks `> 50` karakter dipotong menjadi 50 karakter + `'...'` | Kedua kondisi batas menghasilkan pesan dan preview notifikasi sesuai | Pass |
 | C25-UT12 | `kirimPesan(id_chatroom, user_id, isi_pesan, lampiran)` | Negatif | Kirim pesan spasi saja (`'   '`) tanpa lampiran (`null`), atau query `insert` ke `pesan_chat` gagal | Melempar `'Isi pesan tidak boleh kosong.'` atau `'Gagal mengirim pesan: Insert message failed'` tanpa memicu notifikasi | Error dilempar sesuai kasus dan notifikasi tidak dipicu | Pass |
 
-Tabel 4.2.2b. Ringkasan Cakupan Kelas C25 (`LayananPesanInstan`)
+Tabel 4.2.2b. Ringkasan Cakupan Kelas C25 (LayananPesanInstan)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -455,10 +455,10 @@ Tabel 4.2.2b. Ringkasan Cakupan Kelas C25 (`LayananPesanInstan`)
 ### 4.2.3 Kelas LayananNotifikasiChat (C26)
 
 **ID Kelas:** C26  
-**Nama Kelas:** `LayananNotifikasiChat` (`NotifikasiService` pada `src/services/notifikasi.service.ts`)  
+**Nama Kelas:** LayananNotifikasiChat (`NotifikasiService` pada `src/services/notifikasi.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.3. Hasil Pengujian Unit Kelas C26 (`LayananNotifikasiChat`)
+Tabel 4.2.3. Hasil Pengujian Unit Kelas C26 (LayananNotifikasiChat)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -472,7 +472,7 @@ Tabel 4.2.3. Hasil Pengujian Unit Kelas C26 (`LayananNotifikasiChat`)
 | C26-UT08 | `tandaiSudahDibaca(user_id)` | Batas | Panggil tanpa `id_notifikasi` untuk menandai seluruh notifikasi pengguna yang belum dibaca sekaligus | Memperbarui seluruh record `is_read = false` milik pengguna menjadi `true` dan mengembalikan `true` | Update massal berhasil dan mengembalikan `true` | Pass |
 | C26-UT09 | `tandaiSudahDibaca(user_id)` | Negatif | Update Supabase mengembalikan error `'Update error'` | Melempar `'Gagal memperbarui status notifikasi: Update error'` | Error dilempar sesuai rancangan | Pass |
 
-Tabel 4.2.3b. Ringkasan Cakupan Kelas C26 (`LayananNotifikasiChat`)
+Tabel 4.2.3b. Ringkasan Cakupan Kelas C26 (LayananNotifikasiChat)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -480,6 +480,74 @@ Tabel 4.2.3b. Ringkasan Cakupan Kelas C26 (`LayananNotifikasiChat`)
 | Operasi yang diuji | `kirimNotifikasi()`, `getNotifikasiUser()`, `tandaiSudahDibaca()` (3 dari 3 operasi public pada `NotifikasiService`) |
 | ID Algoritma yang tercakup | Algo-2601 (kirim & simpan notifikasi), Algo-2602 (ambil daftar & perbarui status baca notifikasi) |
 | Coverage (wajib ≥ 70%) | 100% line / 92,30% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
+
+---
+
+### 4.2.4 Kelas PengontrolPesanan (C31)
+
+**ID Kelas:** C31  
+**Nama Kelas:** PengontrolPesanan (`PesananService` pada `src/services/pesanan.service.ts`)  
+**Tingkat:** Mendalam
+
+Tabel 4.2.4. Hasil Pengujian Unit Kelas C31 (PengontrolPesanan)
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C31-UT01 | `buatPesananBaru(id_pengguna_jasa, id_jasa, brief)` | Normal | Buat pesanan untuk jasa aktif `'j2'` (harga `150000`) oleh `'u1'` dengan brief `'  Tolong edit video durasi 45 detik  '` | Pesanan dibuat dengan status `MENUNGGU_PEMBAYARAN`, brief ter-*trim*, dan `total_biaya` terkunci (*snapshot* harga `150000`) | Pesanan dibuat dengan `total_biaya = 150000` (tetap meski harga jasa diubah setelahnya) | Pass |
+| C31-UT02 | `buatPesananBaru(id_pengguna_jasa, id_jasa, brief)` | Batas | Pengguna sudah memiliki tepat 2 pesanan aktif (`MAKS_PESANAN_AKTIF = 2`), mencoba membuat pesanan ke-3; lalu mencoba lagi setelah 1 pesanan berstatus terminal (`DITOLAK`) | Pesanan ke-3 ditolak (`'Batas maksimal 2 pesanan aktif telah tercapai'`), lalu diizinkan kembali setelah 1 pesanan selesai/ditolak | Batas maksimal 2 pesanan aktif ditegakkan di memori dan di mock DB | Pass |
+| C31-UT03 | `buatPesananBaru(id_pengguna_jasa, id_jasa, brief)` | Negatif | Brief kosong/spasi (`'   '`), parameter kosong, jasa tidak ditemukan/nonaktif (`'j4'`), atau memesan jasa milik sendiri (`'p1'` memesan `'j1'`) | Melempar `'Brief pemesanan wajib diisi'`, `'Parameter pemesanan tidak valid'`, `'Data jasa tidak ditemukan'`, atau `'Tidak dapat memesan jasa milik sendiri'` | Seluruh kondisi penolakan melempar pesan error sesuai rancangan | Pass |
+| C31-UT04 | `validasiTransisiStatus(status_awal, status_baru)` | Normal | Uji transisi maju standar: `MENUNGGU_PEMBAYARAN -> DIPROSES`, `DIPROSES -> MENUNGGU_KONFIRMASI_SELESAI`, `MENUNGGU_KONFIRMASI_SELESAI -> SELESAI` | Mengembalikan status tujuan ternormalisasi | Seluruh transisi maju mengembalikan status tujuan | Pass |
+| C31-UT05 | `validasiTransisiStatus(status_awal, status_baru)` | Batas | Uji transisi siklus revisi (`MENUNGGU_KONFIRMASI_SELESAI -> DIPROSES`) dan eskalasi komplain (`DIPROSES -> KOMPLAIN`) | Mengembalikan status tujuan ternormalisasi untuk siklus revisi dan komplain | Transisi revisi dan komplain diterima sesuai state machine | Pass |
+| C31-UT06 | `validasiTransisiStatus(status_awal, status_baru)` | Negatif | Uji transisi lompat atau dari status terminal: `MENUNGGU_PEMBAYARAN -> SELESAI`, `SELESAI -> DIPROSES`, `DITOLAK -> DIPROSES` | Melempar error `'Transisi status pesanan ... tidak valid'` | Seluruh transisi terlarang ditolak dengan error | Pass |
+| C31-UT07 | `konfirmasiPesanan(...)` & `respondOrder(...)` | Normal | Penyedia pemilik (`'p1'`) menerima (`'terima'` / `'Diterima'`) pesanan `'ord-1'` | Status pesanan berubah menjadi `'DIPROSES'` | `status_pesanan` menjadi `'DIPROSES'` | Pass |
+| C31-UT08 | `konfirmasiPesanan(...)` & `respondOrder(...)` | Batas | Penyedia pemilik (`'p1'`) menolak (`'tolak'`) pesanan `'ord-1'` yang berstatus pembayaran `'LUNAS'` | Status pesanan menjadi `'DITOLAK'` dan `status_pembayaran` otomatis menjadi `'DIKEMBALIKAN'` (*refund*) | `status_pesanan = 'DITOLAK'` dan `status_pembayaran = 'DIKEMBALIKAN'` | Pass |
+| C31-UT09 | `konfirmasiPesanan(...)` & `respondOrder(...)` | Negatif | Konfirmasi oleh penyedia lain (`'p2'`), pesanan sudah `'DIPROSES'`/`'SELESAI'`, atau tindakan tidak valid (`'pending'`/`'invalid'`) | Melempar `'Akses ditolak...'`, `'Pesanan ini sudah diproses sebelumnya'`, atau `'Tindakan konfirmasi tidak valid'` | Seluruh penolakan otorisasi, status, dan tindakan dilempar tepat | Pass |
+| C31-UT10 | `ambilDaftarPesanan(...)` & `ambilDetailPesanan(...)` | Normal | Ambil daftar pesanan untuk role `'pengguna_jasa'` & `'penyedia_jasa'` serta detail pesanan `'ord-1'` | Mengembalikan daftar pesanan milik masing-masing role terurut terbaru dan detail `'ord-1'` | Urutan daftar dan detail `'ord-1'` akurat | Pass |
+| C31-UT11 | `ambilDaftarPesanan(...)` | Batas | Filter daftar pesanan berdasarkan tab `'berjalan'` vs `'selesai'`, serta pengguna yang belum memiliki pesanan (`[]`) | Hanya mengembalikan pesanan sesuai tab aktif/selesai, dan `[]` jika belum ada pesanan | Filter tab dan empty list berjalan akurat | Pass |
+| C31-UT12 | `ambilDaftarPesanan(...)` & `ambilDetailPesanan(...)` | Negatif | `id_pengguna` / `id_pesanan` kosong (`''`), role tidak valid (`'admin'`), atau ID pesanan tidak ditemukan (`'ord-404'`) | Melempar `'ID pengguna tidak valid'`, `'ID pesanan tidak valid'`, `'Peran pengguna tidak valid'`, atau `'Pesanan tidak ditemukan'` | Seluruh error validasi dan not found dilempar sesuai | Pass |
+
+Tabel 4.2.4b. Ringkasan Cakupan Kelas C31 (PengontrolPesanan)
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `buatPesananBaru()`, `hitungTotalBiaya()`, `updateStatusPesanan()`, `getDetailPesanan()` |
+| Operasi yang diuji | `buatPesananBaru()`, `validasiTransisiStatus()`, `konfirmasiPesanan()`, `respondOrder()`, `ambilDaftarPesanan()`, `ambilDetailPesanan()` (4 dari 4 operasi public pada DPPL; `hitungTotalBiaya` terintegrasi sebagai *snapshot* harga pada `buatPesananBaru`) |
+| ID Algoritma yang tercakup | Algo-3101 (buat pesanan & snapshot biaya), Algo-3102 (validasi batas pesanan aktif), Algo-3103 (validasi transisi status pesanan), Algo-3104 (ambil detail & daftar pesanan), Algo-0205–Algo-0206 (konfirmasi terima/tolak pesanan penyedia) |
+| Coverage (wajib ≥ 70%) | 94,73% line / 84,09% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
+
+---
+
+### 4.2.5 Kelas PengontrolTransaksi (C32)
+
+**ID Kelas:** C32  
+**Nama Kelas:** PengontrolTransaksi (`src/services/transaksi.service.ts`)  
+**Tingkat:** Mendalam
+
+Tabel 4.2.5. Hasil Pengujian Unit Kelas C32 (PengontrolTransaksi)
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C32-UT01 | `ambilDaftarMetode()` & `dapatkanDetailMetode()` | Normal | Ambil daftar seluruh metode pembayaran dari mock DB dan detail metode `'VA_BCA'` | Mengembalikan daftar metode dan detail `'BCA Virtual Account'` (`8801081234567890`) | Daftar dan detail metode dikembalikan akurat | Pass |
+| C32-UT02 | `dapatkanDetailMetodeDiMemori(id_metode)` | Batas | Panggil pencarian kode metode dengan huruf kecil dan spasi berlebih (`'  va_bca  '`) | Kode metode dinormalisasi menjadi `'VA_BCA'` dan mengembalikan detail metode | Normalisasi berhasil dan detail `'VA_BCA'` dikembalikan | Pass |
+| C32-UT03 | `ambilDaftarMetode()` & `dapatkanDetailMetode()` | Negatif | ID metode spasi (`'   '`), metode tidak terdaftar (`'METODE_TIDAK_ADA'`), atau error DB pada `ambilDaftarMetode()` | Melempar `'ID metode pembayaran tidak valid'`, `'Metode pembayaran tidak ditemukan'`, atau pesan error DB | Seluruh kondisi error ditangani tepat | Pass |
+| C32-UT04 | `prosesPembayaranDummy(id_pesanan, id_metode, jumlah_bayar)` | Normal | Bayar `'ord-unpaid'` (`total_biaya = 250000`) dengan `'VA_BCA'` dan `jumlah_bayar = 250000` | `pesanan.status_pembayaran = 'LUNAS'`, `pesanan.status_pesanan = 'DIPROSES'`, dan `transaksi.status_transaksi = 'BERHASIL'` | Status pesanan dan catatan transaksi terbentuk sesuai rancangan | Pass |
+| C32-UT05 | `prosesPembayaranDummy(id_pesanan, id_metode, jumlah_bayar)` | Batas | Update status `pesanan` berhasil, namun insert ke `riwayat_transaksi` gagal (`error`) | Sistem melakukan *rollback* kompensasi tabel `pesanan` ke `MENUNGGU_PEMBAYARAN` & `id_metode_pembayaran: null`, lalu melempar error | `updateCalls` tercatat 2 kali; pemanggilan ke-2 mengembalikan status awal | Pass |
+| C32-UT06 | `prosesPembayaranDummy(...)` | Negatif | Pembayaran ganda (`'LUNAS'`), nominal tidak sama (`100000` vs `250000`) atau negatif (`-5000`), metode palsu, atau pesanan tidak ada | Melempar `'Pesanan tidak dalam status menunggu pembayaran'`, `'Nominal pembayaran tidak sesuai...'`, `'Nominal pembayaran tidak valid'`, atau `'Pesanan tidak ditemukan'` | Seluruh penolakan pembayaran ganda, nominal, dan data tidak valid berjalan tepat | Pass |
+| C32-UT07 | `ambilRiwayatTransaksi(id_pengguna, peran)` | Normal | Ambil riwayat transaksi untuk `'u1'` (`pengguna_jasa`) dan `'p1'` (`penyedia_jasa`) | Mengembalikan riwayat transaksi milik masing-masing role terurut terbaru dengan relasi `pesanan` & `metode_pembayaran` | Mengembalikan `'trx-1'` untuk `'u1'` dan `'trx-2'` untuk `'p1'` | Pass |
+| C32-UT08 | `ambilRiwayatTransaksi(id_pengguna, peran)` | Batas | Ambil riwayat untuk pengguna yang belum memiliki transaksi sama sekali (`data: []`) | Mengembalikan array kosong `[]` | Mengembalikan `[]` | Pass |
+| C32-UT09 | `ambilRiwayatTransaksi(id_pengguna, peran)` | Negatif | `id_pengguna` kosong (`''`), role tidak valid (`'admin'`), atau query Supabase gagal | Melempar `'ID pengguna tidak valid'`, `'Peran pengguna tidak valid'`, atau error query | Error validasi dan query dilempar sesuai | Pass |
+| C32-UT10 | `setPencairanDana(id_pesanan, selesai)` | Normal | Cairkan dana untuk pesanan `'LUNAS'` yang `status_pencairan = false` (`selesai = true`) | Mengubah `status_pencairan = true`, mengisi `waktu_pencairan`, dan mengembalikan `true` | Status pencairan menjadi `true` dan `waktu_pencairan` terisi | Pass |
+| C32-UT11 | `setPencairanDana(id_pesanan, selesai)` | Batas | Percobaan pencairan ulang pada pesanan yang sudah dicairkan (`status_pencairan = true` / update guard `.eq('status_pencairan', false)` mengembalikan `null`) | Guard menolak pencairan ganda dan melempar `'Dana untuk pesanan ini sudah dicairkan sebelumnya'` | Guard pencairan ganda berjalan tepat | Pass |
+| C32-UT12 | `setPencairanDana(id_pesanan, selesai)` | Negatif | `selesai = false`, pesanan belum `'LUNAS'` (`'ord-unpaid'`), atau `id_pesanan` kosong/tidak ditemukan | Melempar `'Pencairan dana hanya dapat dilakukan untuk pesanan selesai'`, `'...untuk pesanan yang sudah lunas'`, atau error not found | Seluruh guard pencairan dana berjalan tepat | Pass |
+
+Tabel 4.2.5b. Ringkasan Cakupan Kelas C32 (PengontrolTransaksi)
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | `prosesPembayaran()`, `validasiPembayaran()`, `setPencairanDana()`, `updateStatusPembayaran()`, `catatRiwayatTransaksi()` |
+| Operasi yang diuji | `ambilDaftarMetode()`, `dapatkanDetailMetode()`, `prosesPembayaranDummy()`, `ambilRiwayatTransaksi()`, `setPencairanDana()` (5 dari 5 operasi public pada DPPL) |
+| ID Algoritma yang tercakup | Algo-3201 (validasi metode & nominal), Algo-3202 (proses pembayaran dummy & rollback), Algo-3203 (update status pembayaran), Algo-3204 (catat riwayat transaksi), Algo-3205 (pencairan dana), Algo-3301 (daftar metode pembayaran), Algo-3401 (riwayat transaksi) |
+| Coverage (wajib ≥ 70%) | 97,82% line / 80,90% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
 
 <br>
 
