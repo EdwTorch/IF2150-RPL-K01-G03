@@ -60,8 +60,8 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
-| *B* |  |
+| Penambahan Test Case | Menambah Test Case Ulasan karena Kurang dari 70% coverage |
+| Penambahan Test Case | Menambah Test Case Deliverables dan Revisi karena Kurang dari 70% coverage |
 | *C* |  |
 | ... |  |
 
@@ -352,21 +352,37 @@ Tabel 4.2.13. Hasil Pengujian Unit Kelas [C41]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| C41-UT01 | requestRevision() | Batas | deskripsi_revisi = '' atau ' ' | Sistem melempar error "Deskripsi revisi wajib diisi." | Sesuai Ekspektasi (Error dilempar) | Pass |
-| C41-UT02 | requestRevision() | Negatif | user_id tidak sesuai dengan id_pengguna_jasa pemilik pesanan (klien-lain) | Sistem melempar error otorisasi / penolakan akses |  Muncul Error Akses ditolak | Pass |
-| C41-UT03 | requestRevision() | Batas | jumlah revisi habis(jml_revisi_tersedia=0) | Sistem melempar error "Kuota revisi untuk pesanan ini sudah habis." | Sesuai Ekspektasi (sistem melempar pesan error) | Pass |
-| C41-UT04 | requestRevision() | Negatif | Simulasi koneksi DB terputus saat proses update status pesanan | Sistem menangkap error DB & melempar pesan gagal memperbarui status pesanan | error DB tertangkap | Pass |
-| C41-UT05 | requestRevision() | Batas | data revisi sebelumnya = null (pengajuan revisi pertama kali) | Pengajuan revisi berhasil diproses tanpa error | revisi pertama berhasil diproses | Pass |
-| C41-UT06 | requestRevision() | Positif | Input valid, kuota revisi > 0, DB normal | Berhasil insert revisi (mengembalikan id_revisi) dan NotifikasiService.kirimNotifikasi berhasil dipanggil untuk seller | revisi dibuat & notifikasi terkirim | Pass |
-| C41-UT07 | submitRevisionFix() | Negatif | permintaan insert produk akhir ke database gagal  | Menangkap Eror Database dan melempar pesan error insert produk perbaikan  | Error Ditangkap | Pass |
-| C41-UT08 | submitRevisionFix() | Negatif | gagal mengupdate status pesanan setelah insert produk akhir berhasil ke dalam database | Melempar pesan error update ("status pesanan gagal diperbarui") | error update tertangkap | Pass |
-| C41-UT09 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
-| C41-UT10 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
-| C41-UT11 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
-| C41-UT12 | submitRevisionFix() | Positif | id_pesanan, deskripsi_produk, file_urls, dan user_id penyedia jasa valid | Berhasil insert produk perbaikan, mengubah status_pengerjaan menjadi "Revisi Dikumpulkan", dan memicu NotifikasiService.kirimNotifikasi ke klien | Revisi terkirim, status diperbarui, notifikasi terkirim | Pass |
-| C41-UT13 | getRevisionHistory() | Batas | id_pesanan valid, namun belum pernah ada riwayat revisi | Fungsi mengembalikan array kosong [] tanpa melempar error | array kosong dikembalikan | Pass |
-| C41-UT14 | getRevisionHistory() | Negatif  | kegagalan query database saat mengambil riwayat revisi | Sistem menangkap error DataBase & melempar pesan "Gagal mengambil riwayat revisi" | Error DataBase tertangkap | Pass |
-| C41-UT15 | getRevisionHistory() | Positif | id_pesanan dan user_id owner valid, terdapat data riwayat revisi di DB | Fungsi mengembalikan daftar/array data riwayat revisi yang sesuai| daftar riwayat berhasil diambil | Pass |
+| C41-UT01 | getRevisionHistory() | Negatif | Query riwayat revisi ke database Supabase gagal | Sistem melempar error *"Gagal mengambil riwayat revisi: DB Error History"* | error dilempar | Pass |
+| C41-UT02 | getRevisionHistory() | Batas | Pesanan belum pernah memiliki riwayat revisi | Fungsi mengembalikan array kosong  tanpa melempar error | array kosong dikembalikan | Pass |
+| C41-UT03 | getRevisionHistory() | Positif | Pesanan memiliki histori riwayat revisi di DB | Mengembalikan array daftar riwayat revisi pesanan | data riwayat dikembalikan | Pass |
+| C41-UT04 | getRevisionAttachments() | Negatif | Query lampiran revisi dari database mengalami error | Sistem melempar error *"Gagal mengambil hasil revisi: Query Lampiran Error"* | error dilempar | Pass |
+| C41-UT05 | getRevisionAttachments() | Positif | Berkas revisi berupa link HTTP/HTTPS langsung | Mengembalikan daftar berkas revisi dengan file_download_url direct link | data lampiran dikembalikan | Pass |
+| C41-UT06 | getRevisionAttachments() | Positif | Berkas revisi berupa path Storage Supabase | Mengembalikan daftar berkas revisi yang telah diubah menjadi signed URL | signed URL dikembalikan | Pass |
+| C41-UT07 | getRevisionAttachments() | Negatif | Pembuatan signed URL dari Storage Service gagal  | Sistem melempar error *"Gagal membuat URL hasil revisi: p-err"* | error dilempar | Pass |
+| C41-UT08 | getRevisionRequestAttachments() | Negatif | Query data pengajuan revisi ke database gagal | Sistem melempar error *"Gagal mengambil lampiran pengajuan revisi: Gagal fetch pengajuan"* | error dilempar | Pass |
+| C41-UT09 | getRevisionRequestAttachments() | Batas | Data pengajuan revisi bernilai null | Fungsi mengembalikan array kosong | array kosong dikembalikan | Pass |
+| C41-UT10 | getRevisionRequestAttachments() | Positif | Data lampiran berupa campuran array/string & link HTTP/storage path | Memilah nama file, mengonversi storage path ke signed URL, dan menyusun array lampiran | lampiran terurai & signed URL dibuat | Pass |
+| C41-UT11 | getRevisionRequestAttachments() | Negatif | Pembuatan signed URL lampiran pengajuan gagal | Sistem melempar error *"Gagal membuat URL lampiran revisi: fail.png"* | error dilempar | Pass |
+| C41-UT12 | requestRevision() | Batas / Negatif | deskripsi_revisi kosong atau berisi spasi saja | Sistem melempar error *"Deskripsi revisi wajib diisi."* | error dilempar | Pass |
+| C41-UT13 | requestRevision() | Negatif | validasiPenggunaJasa gagal (bukan pemilik pesanan) | Sistem melempar error *"Akses ditolak. Hanya pengguna jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C41-UT14 | requestRevision() | Negatif | Query data produk akhir di database mengalami error | Sistem melempar error *"Gagal memvalidasi hasil pekerjaan: Query error produk"* | error dilempar | Pass |
+| C41-UT15 | requestRevision() | Negatif | id_produk_akhir tidak cocok / tidak ada pada pesanan tersebut | Sistem melempar error *"Hasil pekerjaan tidak ditemukan pada pesanan ini."* | error dilempar | Pass |
+| C41-UT16 | requestRevision() | Negatif | Query pemeriksaan riwayat revisi mengalami error DB | Sistem melempar error *"Gagal memeriksa riwayat revisi: DB error revisi"* | error dilempar | Pass |
+| C41-UT17 | requestRevision() | Negatif | Revisi sebelumnya masih dalam status "Sedang Direvisi" | Sistem melempar error *"Revisi sebelumnya masih dikerjakan penyedia jasa."* | error dilempar | Pass |
+| C41-UT18 | requestRevision() | Negatif | Revisi sebelumnya belum berstatus "Revisi Dikumpulkan"  | Sistem melempar error *"Pengajuan revisi baru belum dapat dilakukan karena status..."* | error dilempar | Pass |
+| C41-UT19 | requestRevision() | Batas / Negatif | Kuota revisi pesanan sudah habis  | Sistem melempar error *"Kuota revisi untuk pesanan ini sudah habis."* | error dilempar | Pass |
+| C41-UT20 | requestRevision() | Negatif | insert pengajuan revisi ke database gagal | Sistem melempar error *"Gagal mengajukan revisi: Insert revisi fail"* | error dilempar | Pass |
+| C41-UT21 | requestRevision() | Negatif | insert pengajuan revisi berhasil tetapi mengembalikan data null | Sistem melempar error *"Data pengajuan revisi tidak berhasil disimpan."* | error dilempar | Pass |
+| C41-UT22 | requestRevision() | Negatif | insert revisi sukses, namun update status pesanan gagal | Sistem melempar error *"Revisi berhasil disimpan, tetapi gagal memperbarui status pesanan..."* | error update dilempar | Pass |
+| C41-UT23 | requestRevision() | Positif | Input valid, kuota revisi > 0, DB normal | Berhasil menyimpan pengajuan revisi, mengurangi kuota, & mengirim notifikasi ke seller | revisi diajukan & notifikasi terkirim | Pass |
+| C41-UT24 | submitRevisionFix() | Batas / Negatif | deskripsi_produk kosong atau hanya spasi  | Sistem melempar error *"Deskripsi hasil revisi wajib diisi."* | error dilempar | Pass |
+| C41-UT25 | submitRevisionFix() | Batas / Negatif | file_urls berbentuk array kosong  | Sistem melempar error *"Unggah berkas atau sertakan tautan hasil revisi."* | error dilempar | Pass |
+| C41-UT26 | submitRevisionFix() | Negatif | Query pemeriksaan pengajuan revisi terbaru mengalami error | Sistem melempar error *"Gagal memeriksa pengajuan revisi: DB Error Revision"* | error dilempar | Pass |
+| C41-UT27 | submitRevisionFix() | Negatif | Tidak ada pengajuan revisi aktif yang sedang dikerjakan  | Sistem melempar error *"Tidak ada pengajuan revisi yang sedang dikerjakan."* | error dilempar | Pass |
+| C41-UT28 | submitRevisionFix() | Negatif | insert produk akhir hasil perbaikan ke database gagal | Sistem melempar error *"Gagal menyimpan hasil revisi: Insert produk error"* | error dilempar | Pass |
+| C41-UT29 | submitRevisionFix() | Negatif | insert produk sukses, tetapi update status pengajuan revisi gagal | Sistem melempar error *"Gagal memperbarui status revisi: Update revisi fail"* | error dilempar | Pass |
+| C41-UT30 | submitRevisionFix() | Negatif | insert produk & update revisi sukses, namun update status pesanan gagal | Sistem melempar error *"Revisi berhasil disimpan, tetapi status pesanan gagal..."* | error update dilempar | Pass |
+| C41-UT31 | submitRevisionFix() | Positif | file_urls berisi beberapa file hasil perbaikan valid | Berhasil insert produk perbaikan, merubah status revisi & pesanan, serta memicu notifikasi | perbaikan dikirim & notifikasi terkirim | Pass |
 
 
 
@@ -376,8 +392,8 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas [C41]
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL | kirimRevisi() --> submitRevisionFix(), isRevisiRequestValid() --> X, sendNotifikasiRevisi() --> X, updateStatusPengerjaan() --> X |
-| Operasi yang diuji | requestRevision(),submitRevision(), getRevisionHistory() <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing|
+| Daftar operasi public pada DPPL | kirimRevisi() --> submitRevisionFix(), isRevisiRequestValid() --> bagian dari submitRevisionFix(), sendNotifikasiRevisi() --> bagian dari submitRevisionFix() dan requestRevision(), updateStatusPengerjaan() --> bagian dari submitRevisionFix() |
+| Operasi yang diuji | requestRevision(),submitRevision(), getRevisionHistory(), getRevisionAttachments(), getRevisionRequestAttachments()  <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing|
 | ID Algoritma yang tercakup | Algo-4101, Algo-4102, Algo-4103, Algo-4104, Algo-4105, dan tambahan yang tidak tercata |
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c41) |
 
@@ -599,10 +615,12 @@ Tabel 4.6. Bukti Hasil Pengujian
 | *UC01-TC01* | *[Sisipkan tangkapan layar UC01-TC01 sesuai prosedur pengujian]* |
 | *UC01-TC02* | *[Sisipkan tangkapan layar UC01-TC02 sesuai prosedur pengujian]* |
 | *KNF01-TC01* | *[Sisipkan bukti pengukuran parameter KNF01-TC01]* |
-| C41-UT01 - C41-UT06 |  <img alt="Pengujian" src="../M10/assets/C41-T1_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T1_2.png" width="70%"> |
-| C41-UT07 - C41-UT12 | <img alt="Pengujian" src="../M10/assets/C41-T2_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T2_2.png" width="70%">|
-| C41-UT13 - C41-UT15 | <img alt="Pengujian" src="../M10/assets/C41-T3_1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-T3_2.png" width="70%"> |
-| <a id="bukti-c41"></a>C41 Coverage | <img alt="Pengujian" src="../M10/assets/C41-Coverage1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/C41-Coverage2.png" width="70%"> |
+| C41-UT01 - C41-UT03 |  <br> <img alt="Pengujian" src="../M10/assets/C41-T1.png" width="70%"> |
+| C41-UT04 - C41-UT07 | <br> <img alt="Pengujian" src="../M10/assets/C41-T2.png" width="70%">|
+| C41-UT09 - C41-UT11 | <br> <img alt="Pengujian" src="../M10/assets/C41-T3.png" width="70%"> |
+| C41-UT12 - C41-UT23 |  <br> <img alt="Pengujian" src="../M10/assets/C41-T4.png" width="70%"> |
+| C41-UT24 - C41-UT31 |   <br> <img alt="Pengujian" src="../M10/assets/C41-T5.png" width="70%"> |
+| <a id="bukti-c41"></a>C41 Coverage |  <br> <img alt="Pengujian" src="../M10/assets/C41-Coverage.png" width="70%"> |
 | C45-UT01 - C45-UT06 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T1.png" width="70%"> |
 | C45-UT07 - C45-U08 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T2.png" width="70%">|
 | C45-UT09 - C45-UT11 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T3.png" width="70%"> |
