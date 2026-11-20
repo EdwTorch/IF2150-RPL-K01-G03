@@ -770,11 +770,16 @@ Tabel 4.3.1. Daftar Antarmuka Antarkomponen
 
 | ID Antarmuka | Komponen Asal | Komponen Tujuan | Jenis Batas | Test Case |
 | :--- | :--- | :--- | :--- | :--- |
-| *I-01* | *KeranjangController* | *Keranjang (Model)* | *Controller - Model* | *INT-TC01, INT-TC02* |
-| *I-02* | *Pesanan (Model)* | *Database* | *Aplikasi - Basis data* | *INT-TC03* |
-| *I-03* | *PaymentGatewayAdapter* | *Payment Gateway (dummy)* | *Aplikasi - Sistem eksternal* | *INT-TC04, INT-TC05* |
-| *[I-XX]* | *[Komponen asal]* | *[Komponen tujuan]* | *[Jenis batas]* | *[ID test case]* |
-| *...* | *...* | *...* | *...* | *...* |
+| I-01 | C04 HalamanRegistrasi | AuthService → Supabase Auth, tabel `pengguna`, `penyedia_jasa`/`pengguna_jasa` | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal | INT-TC01, INT-TC02, INT-TC03 |
+| I-02 | C06 HalamanLogin  | AuthService → Supabase Auth, tabel `pengguna` | Controller - Model, Aplikasi - Sistem eksternal | INT-TC04, INT-TC05, INT-TC06 |
+| I-03 | C08 HalamanPortofolio melalui API `POST /api/upload`, `GET/POST /api/portofolio` | PengontrolPortofolio → Supabase Storage, tabel `portofolio`, `penyedia_jasa` | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal | INT-TC07, INT-TC08 |
+| I-04 | C13 HalamanUploadJasa  | JasaController → Supabase Storage, tabel `jasa` | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal | INT-TC09, INT-TC10, INT-TC11 |
+| I-05 | C15 HalamanPencarian , C16 HasilPencarian  | LayananPencarian, PengontrolBookmark → tabel `jasa`, `bookmark` | Controller - Model, Aplikasi - Basis data | INT-TC12, INT-TC13, INT-TC14 |
+| I-06 | C19 HalamanDetailJasa  | JasaController, PenyediaJasaService, UlasanService, ChatService → tabel `jasa`, `penyedia_jasa`, `ulasan`, `chatroom` | Controller - Model, Aplikasi - Basis data | INT-TC15, INT-TC16, INT-TC17 |
+| I-07 | C21 HalamanBookmark  PengontrolBookmark → tabel `bookmark` | Controller - Model, Aplikasi - Basis data | INT-TC18, INT-TC19 |
+| I-08 | C24 HalamanChat  | ChatService → tabel `pesan_chat`, `chatroom`, Supabase Storage | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal | INT-TC20, INT-TC21, INT-TC22 |
+| I-09 | C28 HalamanPemesanan | PesananService → tabel `pesanan`, `jasa` | Controller - Model, Aplikasi - Basis data | INT-TC23, INT-TC24, INT-TC25 |
+| I-10 | C29 HalamanPembayaran  | PengontrolTransaksi → tabel `metode_pembayaran`, `riwayat_transaksi`, `pesanan` (gateway pembayaran *dummy*) | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal (*dummy*) | INT-TC26, INT-TC27, INT-TC28 |
 | I-11 | PesananService.ambilDaftarPesanan | Tabel pesanan | Aplikasi - Basis data | INT-TC11-1, INT-TC11-2 |
 | I-12 | PesananService.respondOrder | Tabel pesanan | Aplikasi - Basis data | INT-TC12-1, INT-TC12-2 |
 | I-13 | DeliverablesService.submitDeliverable | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC13-1, INT-TC13-2 |
