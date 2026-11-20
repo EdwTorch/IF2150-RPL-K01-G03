@@ -1595,6 +1595,11 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC10-TC03 | <br> <img alt="Pengujian UC10-TC03" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
 | UC10-TC04 | <br> <img alt="Pengujian UC10-TC04" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
 | KNF01-TC01 | Viewport 320 px (Smartphone) <br> <img alt="Pengujian viewport 320 px" src="../M10/assets/KNF01-320.png" width="100%"> <br><br> Viewport 768 px (Tablet) <br> <img alt="Pengujian viewport 768 px" src="../M10/assets/KNF01-768.png" width="100%"> <br><br> Viewport 1280 px (Laptop) <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/KNF01-1280.png" width="100%"> |
+| UC15-TC01 | <img alt="Pengujian UC15-TC01-1" src="../M10/assets/UC15-TC01-1.png" width="100%"> <br> <img alt="Pengujian UC15-TC01-2" src="../M10/assets/UC15-TC01-2.png" width="100%"> |
+| UC15-TC02 | <img alt="Pengujian UC15-TC02-1" src="../M10/assets/UC15-TC01-2.png" width="100%"> <br> <img alt="Pengujian UC15-TC02-2" src="../M10/assets/UC15-TC02-2.png" width="100%"> |
+| UC15-TC03 | <img alt="Pengujian UC15-TC03-1" src="../M10/assets/UC15-TC03-1.png" width="100%"> <br> <img alt="Pengujian UC15-TC03-2" src="../M10/assets/UC15-TC03-2.png" width="100%"> |
+| UC15-TC04 | <img alt="Pengujian UC15-TC04" src="../M10/assets/UC15-TC04.png" width="100%"> |
+| UC15-TC05 | <img alt="Pengujian UC15-TC05" src="../M10/assets/UC15-TC05.png" width="100%"> |
 <br>
 
 ---
