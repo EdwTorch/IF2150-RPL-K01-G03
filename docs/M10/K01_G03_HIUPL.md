@@ -1284,8 +1284,7 @@ Tabel 4.4.8. Hasil Pengujian Use Case [UC08]
 | UC08-TC05 | KF13, KF15, KF37 | Normal – Admin mengirim pesan kepada peserta mediasi | 1. Admin membuka ruang mediasi. 2. Admin mengirim pesan kepada peserta mediasi. 3. Peserta membuka ruang mediasi dan melihat pesan dari Admin. | Pesan teks dari Admin. | Pesan berhasil dikirim dan ditampilkan kepada peserta mediasi. | Pesan dari Admin ditampilkan dalam ruang mediasi. | Berhasil |
 | UC08-TC06 | KF13 | Alternatif 1 – Pengguna mengirim pesan kosong | 1. Pengguna membuka halaman chat. 2. Pengguna membiarkan kolom pesan kosong. 3. Pengguna mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Muncul pesan: "Pesan tidak boleh kosong." | Berhasil |
 | UC08-TC07 | KF13 | Alternatif 1 – Admin mengirim pesan kosong | 1. Admin membuka halaman chat. 2. Admin membiarkan kolom pesan kosong. 3. Admin mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Tombol kirim tidak dapat ditekan ketika kolom pesan kosong. | Berhasil |
-| UC08-TC08 | KF13 | Alternatif 1 – Admin mengirim pesan kosong | 1. Admin membuka halaman chat. 2. Admin membiarkan kolom pesan kosong. 3. Admin mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Tombol kirim tidak dapat ditekan ketika kolom pesan kosong. | Berhasil |
-| UC08-TC09 | KF13, KF14 | Alternatif 2 – Pengiriman pesan gagal oleh Pengguna | 1. Pengguna membuka halaman chat. 2. Pengguna memutus koneksi internet. 3. Pengguna mencoba mengirim pesan kepada Penyedia Jasa. | Pesan teks ketika koneksi internet terputus. | Sistem gagal mengirim pesan dan menampilkan indikator bahwa pesan tidak terkirim. | Sistem menampilkan indikator pesan belum terkirim. | Berhasil |
+| UC08-TC08 | KF13, KF14 | Alternatif 2 – Pengiriman pesan gagal oleh Pengguna | 1. Pengguna membuka halaman chat. 2. Pengguna memutus koneksi internet. 3. Pengguna mencoba mengirim pesan kepada Penyedia Jasa. | Pesan teks ketika koneksi internet terputus. | Sistem gagal mengirim pesan dan menampilkan indikator bahwa pesan tidak terkirim. | Sistem menampilkan indikator pesan belum terkirim. | Berhasil |
 
 ### 4.4.9 Use Case Melakukan Pemesanan Jasa
 
@@ -1311,7 +1310,7 @@ Tabel 4.4.10. Hasil Pengujian Use Case [UC10]
 
 | ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| UC10-TC01 | KF21 | Normal – Penyedia Jasa menerima notifikasi pesanan baru | 1. Pengguna Jasa membuat pesanan. 2. Penyedia Jasa membuka notifikasi pesanan baru. | Pesanan baru dari Pengguna Jasa. | Sistem mengirimkan notifikasi pesanan baru kepada Penyedia Jasa. | Notifikasi pesanan baru diterima dan ditampilkan pada akun Penyedia Jasa. | Berhasil |
+| UC10-TC01 | KF21 | Normal – Penyedia Jasa menerima notifikasi pesanan baru | 1. Pengguna Jasa membuat pesanan. 2. Penyedia Jasa membuka notifikasi pesanan baru. | Pesanan baru dari Pengguna Jasa. | Sistem mengirimkan notifikasi pesanan baru kepada Penyedia Jasa. | Notifikasi pesanan baru diterima dan ditampilkan pada akun Penyedia Jasa tapi pesan notifikasi tidak sesuai. | Belum sepenuhnya sesuai |
 | UC10-TC02 | KF21, KF22 | Normal – Penyedia Jasa melihat pesanan masuk | 1. Penyedia Jasa membuka halaman daftar pesanan masuk. 2. Penyedia Jasa memilih salah satu pesanan. | Data pesanan baru. | Sistem menampilkan daftar pesanan masuk beserta detail pesanan yang perlu dikonfirmasi. | Pesanan ditampilkan pada daftar pesanan masuk, tetapi statusnya langsung menjadi Diproses. | Tidak Sesuai |
 | UC10-TC03 | KF22 | Normal – Penyedia Jasa melakukan konfirmasi pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencari opsi untuk menerima atau menolak pesanan. | Pesanan dengan status Diproses. | Sistem menyediakan tombol Terima dan Tolak agar Penyedia Jasa dapat menentukan keputusan. | Tidak tersedia tombol Terima maupun Tolak pada halaman detail pesanan. | Tidak Berhasil |
 | UC10-TC04 | KF23 | Alternatif 1 – Penyedia Jasa menolak pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencoba melakukan penolakan pesanan. | Pesanan baru yang ingin ditolak. | Sistem memperbarui status pesanan menjadi ditolak dan memproses pengembalian dana kepada pembeli. | Penolakan pesanan tidak dapat dilakukan karena tidak tersedia fitur Tolak. | Tidak Dapat Diuji |
@@ -1393,6 +1392,23 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC07-TC04 | Pesan error saat guest mengklik ikon bookmark:<br>![UC07-TC04 Bookmark Tanpa Login](./assets/danesh/uc07-tc04.png) |
 | KNF02-TC01 | Output terminal pengukuran `performance.now()` pada 1.000 listing (20 percobaan, rata-rata 0,259 ms, maks 1,052 ms):<br>![KNF02-TC01 Pengukuran Response Time](./assets/danesh/knf02-tc01.png) |
 | KNF04-TC01 | Keluaran `npx vitest run test/transaksi.test.ts` (20/20 test passed, termasuk simulasi compensating rollback dan penolakan duplicate payment):<br>![KNF04-TC01 Pengujian Reliability Transaksi](./assets/danesh/knf04-tc01.png) |
+| UC08-TC01 | <br> <img alt="Pengujian UC08-TC01" src="../M10/assets/UC08-TC01.png" width="100%"> |
+| UC08-TC02 | <br> <img alt="Pengujian UC08-TC02" src="../M10/assets/UC08-TC02.png" width="100%"> |
+| UC08-TC03 | <br> <img alt="Pengujian UC08-TC03" src="../M10/assets/UC08-TC03.png" width="1000%"> |
+| UC08-TC04 | <br> <img alt="Pengujian UC08-TC04" src="../M10/assets/UC08-TC04.png" width="100%"> |
+| UC08-TC05 | <br> <img alt="Pengujian UC08-TC05" src="../M10/assets/UC08-TC05.png" width="100%"> |
+| UC08-TC06 | <br> <img alt="Pengujian UC08-TC06" src="../M10/assets/UC08-TC06.png" width="100%"> |
+| UC08-TC07 | <br> <img alt="Pengujian UC08-TC07" src="../M10/assets/UC08-TC07.png" width="100%"> |
+| UC08-TC08 | <br> <img alt="Pengujian UC08-TC08" src="../M10/assets/UC08-TC08.png" width="100%"> |
+| UC09-TC01 | <br> <img alt="Pengujian UC09-TC01" src="../M10/assets/UC09-TC01-1.png" width="100%"> <br> <img alt="Pengujian UC09-TC01" src="../M10/assets/UC09-TC01-2.png" width="100%"> |
+| UC09-TC02 | <br> <img alt="Pengujian UC09-TC02" src="../M10/assets/UC09-TC02-1.png" width="100%"> <br> <img alt="Pengujian UC09-TC02" src="../M10/assets/UC09-TC02-2.png" width="100%"> |
+| UC09-TC03 | <br> <img alt="Pengujian UC09-TC03" src="../M10/assets/UC09-TC03.png" width="100%"> |
+| UC09-TC04 | <br> <img alt="Pengujian UC09-TC04" src="../M10/assets/UC09-TC04.png" width="100%"> |
+| UC09-TC05 | <br> <img alt="Pengujian UC09-TC05" src="../M10/assets/UC09-TC05.png" width="100%"> |
+| UC10-TC01 | <br> <img alt="Pengujian UC10-TC01" src="../M10/assets/UC10-TC01-1.png" width="100%"> <br> <img alt="Pengujian UC10-TC01" src="../M10/assets/UC10-TC01-2.png" width="100%"> |
+| UC10-TC02 | <br> <img alt="Pengujian UC10-TC02" src="../M10/assets/UC10-TC02.png" width="100%"> |
+| UC10-TC03 | <br> <img alt="Pengujian UC10-TC03" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
+| UC10-TC04 | <br> <img alt="Pengujian UC10-TC04" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
 
 <br>
 
