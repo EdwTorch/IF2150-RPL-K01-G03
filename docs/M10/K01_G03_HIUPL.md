@@ -435,20 +435,20 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C38 | HalamanDeliverables | Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
 | C39 | PengajuanRevisi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C40 | HalamanRequestRevisi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C41 | RevisiHandler | Mendalam | Menguji Logika Bisnis, Validasi Revisi,  Aturan sesuai status, dan Algoritma | *[ID test case atau -]* |
+| C41 | RevisiHandler | Mendalam | Menguji Logika Bisnis, Validasi Revisi,  Aturan sesuai status, dan Algoritma | C41-TC01 - C41-TC31 |
 | C42 | PencairanDana | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C43 | TiketLaporan |  Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C44 | HalamanPelaporan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C45 | LaporanHandler | Mendalam | Menguji Logika Bisnis, Validasi input laporan,  Aturan sesuai status pengguna, dan Algoritma sesuai dengan role pengguna  |*[ID test case atau -]* |
+| C45 | LaporanHandler | Mendalam | Menguji Logika Bisnis, Validasi input laporan,  Aturan sesuai status pengguna, dan Algoritma sesuai dengan role pengguna  C45-TC01 - C45-TC17 |
 | C46 | Ulasan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C47 | HalamanUlasan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C48 | UlasanHandler | Mendalam | Menguji pembuatan Ulasan,  validasi input rating, formatting, CRUD terhadap data rating jasa dan rating penyediajasa | *[ID test case atau -]* |
+| C48 | UlasanHandler | Mendalam | Menguji pembuatan Ulasan,  validasi input rating, formatting, CRUD terhadap data rating jasa dan rating penyediajasa | C48-TC01 - C48-TC37 |
 | C49 | TanggapanLaporan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C50 | HalamanPengajuanMediasi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C51 | MediasiHandler | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
+| C51 | MediasiHandler | Mendalam | Memerlukan Eksekusi Mendalam | C51-TC01 - C51-TC17 |
 | C52 | Admin | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C53 | HalamanDashboardAdmin |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C54 | PengumpulanController | Mendalam | Berisi Logika Utama bisnis untuk pengumpulan deliverables | *[ID test case atau -]* |
+| C54 | PengumpulanController | Mendalam | Berisi Logika Utama bisnis untuk pengumpulan deliverables | C54-TC01 - C54-TC35 |
 | C55 | pesan_chat | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C56 | notifikasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C57 | sesi_mediasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
