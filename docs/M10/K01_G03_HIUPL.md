@@ -198,13 +198,13 @@ Tabel 3.1. Lingkungan Implementasi
 ### Revandra 
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| *Hardware* | Laptop Pongo 750 V2, 13th Gen Intel(R) Core(TM) i7-13620H, 16 GB RAM |
+| *Operating System* | Windows 11 Pro 25H2 |
+| *Bahasa Pemrograman* | Typescript, NodeJs v24.21.0 |
+| *Framework/Library* | Next.js v16.4.3, React 19.3.0, Supabase JS 2.118.0, Supabase SSR 0.12.7 |
+| *DBMS* | PostgreSQL dengan Supabase |
+| *Development Tools* | VSCode, Git 2.52.0, GitHub |
+| *Testing Tools* | Vitest |
 
 ### Danesh 
 | Aspek | Keterangan |
