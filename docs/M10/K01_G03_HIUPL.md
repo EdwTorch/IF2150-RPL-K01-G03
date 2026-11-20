@@ -242,13 +242,13 @@ Tabel 3.1. Lingkungan Implementasi
 ### Necia
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| *Hardware* | Laptop MSI Sword 16 HX B14VFKG, Intel Core i7-14700HX, NVIDIA GeForce RTX 4060 Laptop GPU 8GB, 16GB DDR5, SSD NVMe 1TB |
+| *Operating System* | Windows 11 Home Single Language 26H2 (build 26300.9818), 64-bit |
+| *Bahasa Pemrograman* | TypeScript 5.9.3 dengan Node.js |
+| *Framework/Library* | Next.js 16.4.3, React 19.3.0, Tailwind CSS 4.3.4, Supabase JS 2.119.0, @supabase/ssr 0.12.7 |
+| *DBMS* | PostgreSQL (Supabase) |
+| *Development Tools* | Visual Studio Code, Git, GitHub, GitHub Desktop, Supabase Dashboard (SQL Editor) |
+| *Testing Tools* | Vitest 5.1.0  |
 
 
 
