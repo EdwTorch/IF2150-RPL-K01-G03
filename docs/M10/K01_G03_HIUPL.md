@@ -42,14 +42,41 @@ Dipersiapkan oleh:
 - [BAB 2: Deskripsi Umum Perangkat Lunak](#bab-2-deskripsi-umum-perangkat-lunak)
 - [BAB 3: Implementasi](#bab-3-implementasi)
   - [3.1 Lingkungan Implementasi](#31-lingkungan-implementasi)
+    - [Revandra](#revandra)
+    - [Danesh](#danesh)
+    - [Theresia](#theresia)
+    - [Edward](#edward)
+    - [Necia](#necia)
   - [3.2 Implementasi Modul](#32-implementasi-modul)
   - [3.3 Implementasi Antarmuka](#33-implementasi-antarmuka)
   - [3.4 File Lain](#34-file-lain)
 - [BAB 4: Hasil Pengujian](#bab-4-hasil-pengujian)
   - [4.1 Strategi dan Kedalaman Pengujian Kelas](#41-strategi-dan-kedalaman-pengujian-kelas)
   - [4.2 Pengujian Unit Kelas](#42-pengujian-unit-kelas)
+    - [4.2.1 Kelas PenyediaJasa](#421-kelas-penyediajasa)
+    - [4.2.2 Kelas LayananRegistrasi](#422-kelas-layananregistrasi)
+    - [4.2.3 Kelas Autentikator](#423-kelas-autentikator)
+    - [4.2.4 Kelas PengontrolPortofolio](#424-kelas-pengontrolportofolio)
+    - [4.2.5 Kelas LayananUploadFile](#425-kelas-layananuploadfile)
+    - [4.2.6 Kelas JasaController](#426-kelas-jasacontroller)
+    - [4.2.7 Kelas LayananPencarian](#427-kelas-layananpencarian)
+    - [4.2.8 Kelas LayananPembandingJasa](#428-kelas-layananpembandingjasa)
+    - [4.2.9 Kelas PengontrolBookmark (C22)](#429-kelas-pengontrolbookmark-c22)
+    - [4.2.10 Kelas LayananPesanInstan (C25)](#4210-kelas-layananpesaninstan-c25)
+    - [4.2.11 Kelas LayananNotifikasiChat (C26)](#4211-kelas-layanannotifikasichat-c26)
+    - [4.2.12 Kelas PengontrolPesanan (C31)](#4212-kelas-pengontrolpesanan-c31)
+    - [4.2.13 Kelas PengontrolTransaksi (C32)](#4213-kelas-pengontroltransaksi-c32)
+    - [4.2.14 Kelas RevisiHandler (Bagian dari Deliverables Service)](#4214-kelas-revisihandler-bagian-dari-deliverables-service)
+    - [4.2.15 Kelas LaporanHandler](#4215-kelas-laporanhandler)
+    - [4.2.16 Kelas UlasanHandler](#4216-kelas-ulasanhandler)
+    - [4.2.17 Kelas MediasiHandler](#4217-kelas-mediasihandler)
+    - [4.2.18 Kelas PengumpulanController](#4218-kelas-pengumpulancontroller)
   - [4.3 Pengujian Integrasi](#43-pengujian-integrasi)
   - [4.4 Pengujian Use Case](#44-pengujian-use-case)
+    - [4.4.4 Use Case Mengunggah Penawaran Jasa (UC04)](#444-use-case-mengunggah-penawaran-jasa-uc04)
+    - [4.4.5 Use Case Mencari Penawaran Jasa (UC05)](#445-use-case-mencari-penawaran-jasa-uc05)
+    - [4.4.6 Use Case Melihat Informasi Jasa (UC06)](#446-use-case-melihat-informasi-jasa-uc06)
+    - [4.4.7 Use Case Menggunakan Bookmark (UC07)](#447-use-case-menggunakan-bookmark-uc07)
   - [4.5 Pengujian Kebutuhan Non-Fungsional (KNF)](#45-pengujian-kebutuhan-non-fungsional-knf)
   - [4.6 Tangkapan Layar dan Bukti Hasil Pengujian](#46-tangkapan-layar-dan-bukti-hasil-pengujian)
 - [BAB 5: Traceability](#bab-5-traceability)
@@ -352,6 +379,24 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 
 | ID Kelas | Nama Kelas | Tingkat | Alasan | Test Case Terkait |
 | :--- | :--- | :--- | :--- | :--- |
+| C01 | Pengguna | Tidak Perlu | Kelas ini berfungsi sebagai entity (database/tabel) untuk data akun pengguna tanpa logika bisnis mandiri | - |
+| C02 | PenyediaJasa | Mendalam | Menguji logika perhitungan rating agregat, validasi nilai rating (1–5), pembulatan 1 desimal, pembaruan kolom rating_rata_rata ke tabel basis data, dan pemformatan tampilan profil penyedia | C02-UT01 s.d. C02-UT16 |
+| C03 | PenggunaJasa | Tidak Perlu | Kelas ini berfungsi sebagai entity (database/tabel turunan) pengguna jasa | - |
+| C04 | HalamanRegistrasi | Tidak Perlu | Pengujian kelas antarmuka/halaman dilakukan pada level integrasi dan use case | - |
+| C05 | LayananRegistrasi | Mendalam | Menguji logika bisnis registrasi, validasi format data & password, penanganan duplikasi email, aturan role, dan mekanisme rollback DB (Algo-0501 s.d. Algo-0504) | C05-UT01 s.d. C05-UT12 |
+| C06 | HalamanLogin | Tidak Perlu | Pengujian kelas antarmuka/halaman dilakukan pada level integrasi dan use case | - |
+| C07 | Autentikator | Mendalam | Menguji validasi kredensial login, verifikasi akun suspended/sanksi, manajemen sesi aktif/status online, otorisasi role admin, dan proses logout (Algo-0701, Algo-0702) | C07-UT01 s.d. C07-UT14 |
+| C08 | HalamanPortofolio | Tidak Perlu | Pengujian kelas antarmuka/halaman dilakukan pada level integrasi dan use case | - |
+| C09 | Portofolio | Tidak Perlu | Kelas ini berfungsi sebagai entity (database/tabel) portofolio tanpa logika bisnis mandiri | - |
+| C10 | PengontrolPortofolio | Mendalam | Menguji validasi input berkas portofolio (Algo-1001), pencegahan URL tidak aman/XSS, normalisasi data karya, dan koordinasi penyimpanan (Algo-1002) | C10-UT01 s.d. C10-UT06 |
+| C11 | LayananUploadFile | Mendalam | Menguji validasi batasan ukuran berkas (10 MB), whitelist MIME type dan ekstensi (Algo-1102), proteksi keamanan path traversal (Algo-1101), integrasi dual-storage adapter, dan penyimpanan berkas (Algo-1103, Algo-1104) | C11-UT01 s.d. C11-UT14 |
+| C12 | Jasa | Tidak Perlu | Kelas ini berfungsi sebagai entity (database/tabel) penawaran jasa | - |
+| C13 | HalamanUploadJasa | Tidak Perlu | Pengujian kelas antarmuka/halaman dilakukan pada level integrasi dan use case | - |
+| C14 | JasaController | Mendalam | Menguji logika bisnis CRUD penawaran jasa, validasi data jasa dan batasan harga (Algo-1402), validasi kelayakan berkas fisik pendukung, serta query detail jasa (Algo-1401, Algo-1403) | C14-UT01 s.d. C14-UT14 |
+| C15 | HalamanPencarian | Tidak Perlu | Pengujian kelas antarmuka/halaman dilakukan pada level integrasi dan use case | - |
+| C16 | HasilPencarian | Tidak Perlu | Komponen tampilan hasil pencarian, pengujian dilakukan pada level integrasi dan use case | - |
+| C17 | LayananPencarian | Mendalam | Menguji algoritma pencarian multi-kolom (Algo-1701), normalisasi token kata kunci, validasi parameter filter (panjang kata kunci, rentang harga, batas rating), penyaringan data, dan logika pengurutan (Algo-1702) | C17-UT01 s.d. C17-UT09 |
+| C18 | LayananPembandingJasa | Mendalam | Menguji algoritma komparasi spesifikasi antar-jasa (Algo-1801), validasi kuota batas pembanding (2 s.d. 4 jasa), penyusunan matriks perbandingan, dan kalkulasi ringkasan indikator terbaik | C18-UT01 s.d. C18-UT06 |
 | C19 | HalamanDetailJasa | Tidak perlu | Halaman UI (Boundary) untuk detail jasa tanpa logika bisnis; teruji lewat C14 dan UC06. | - |
 | C20 | Bookmark | Tidak perlu | Entity model data (`src/models/types.ts`) dan tabel `public.bookmark` tanpa logika mandiri; teruji lewat C22. | - |
 | C21 | HalamanBookmark | Tidak perlu | Halaman UI (Boundary) daftar bookmark tanpa logika bisnis; teruji lewat C22 dan UC07. | - |
@@ -401,13 +446,292 @@ Cara menjalankan unit test: `cd src && npx vitest run` (atau `cd src && npx vite
 
 Lokasi file test: `src/test/`.
 
-### 4.2.1 Kelas PengontrolBookmark (C22)
+### 4.2.1 Kelas PenyediaJasa
+
+**ID Kelas:** C02  
+**Nama Kelas:** PenyediaJasa  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.1. Hasil Pengujian Unit Kelas [C02]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C02-UT01 | validasiRating() | Normal | Input nilai rating valid antara 1 sampai 5 (mis. 1, 3, 5) | Fungsi lolos validasi tanpa melempar exception | Sesuai Ekspektasi (Lolos validasi) | Pass |
+| C02-UT02 | validasiRating() | Batas | Input rating bernilai kurang dari 1 (mis. 0 atau -1) | Sistem melempar error "Rating harus bernilai antara 1 sampai 5" | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C02-UT03 | validasiRating() | Batas | Input rating bernilai lebih dari 5 (mis. 6 atau 10) | Sistem melempar error "Rating harus bernilai antara 1 sampai 5" | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C02-UT04 | validasiRating() | Negatif | Input rating bukan angka riil atau berupa NaN / string non-numerik | Sistem melempar error "Rating harus bernilai antara 1 sampai 5" | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C02-UT05 | hitungRatingAgregat() | Batas | Parameter daftar rating berupa array kosong `[]` atau bernilai `null` | Mengembalikan nilai default: `{ rating_rata_rata: 0, total_ulasan: 0 }` | Sesuai Ekspektasi (Default 0 dikembalikan) | Pass |
+| C02-UT06 | hitungRatingAgregat() | Normal | Input daftar angka rating valid: `[5, 4, 5, 4]` | Mengembalikan rata-rata 4.5 dengan total 4 ulasan | Sesuai Ekspektasi (Rata-rata 4.5 akurat) | Pass |
+| C02-UT07 | hitungRatingAgregat() | Normal | Input daftar objek ulasan: `[{ rating: 5 }, { rating: 3 }]` | Mengembalikan rata-rata 4.0 dengan total 2 ulasan | Sesuai Ekspektasi (Rata-rata 4.0 akurat) | Pass |
+| C02-UT08 | hitungRatingAgregat() | Batas | Perhitungan rata-rata yang menghasilkan desimal berulang (mis. 14/3 = 4.666... dan 13/3 = 4.333...) | Menerapkan pembulatan konsisten ke satu angka desimal (4.7 dan 4.3) | Sesuai Ekspektasi (Pembulatan 1 desimal benar) | Pass |
+| C02-UT09 | hitungRatingAgregat() | Negatif | Salah satu elemen dalam daftar rating berada di luar rentang 1 s.d. 5 | Menolak kalkulasi dan melempar error validasi rating | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C02-UT10 | formatRatingTampilan() | Batas | Penyedia jasa belum memiliki ulasan (`rating = 0` atau `null`, `total_ulasan = 0`) | Mengembalikan format label "Belum ada ulasan" dan teks "0.0" | Sesuai Ekspektasi (Format default sesuai) | Pass |
+| C02-UT11 | formatRatingTampilan() | Normal | Penyedia jasa dengan rating 4.8 dari 15 ulasan | Mengembalikan teks "4.8", total "15 ulasan", dan label "★ 4.8 (15 ulasan)" | Sesuai Ekspektasi (Format tampilan rapi) | Pass |
+| C02-UT12 | perbaruiRatingPenyedia() | Batas | Parameter `id_penyedia_jasa` berupa string kosong atau hanya spasi | Sistem melempar error "ID penyedia jasa tidak valid" | Sesuai Ekspektasi (Error ID invalid) | Pass |
+| C02-UT13 | perbaruiRatingPenyedia() | Positif | ID penyedia jasa valid dan memiliki data pesanan serta ulasan di database | Menghitung ulang rata-rata dan berhasil mengupdate kolom `rating_rata_rata` pada tabel `penyedia_jasa` | Sesuai Ekspektasi (Rating database diperbarui) | Pass |
+| C02-UT14 | perbaruiRatingPenyedia() | Negatif | Simulasi kegagalan koneksi/query basis data saat mengeksekusi update rating penyedia | Menangkap error DB dan melempar pesan gagal memperbarui rating penyedia jasa | Sesuai Ekspektasi (Error DB tertangkap) | Pass |
+| C02-UT15 | getRatingDanUlasanPenyedia() | Batas | Parameter `id_penyedia_jasa` kosong | Sistem melempar error "ID penyedia jasa tidak valid" | Sesuai Ekspektasi (Error ID invalid) | Pass |
+| C02-UT16 | getRatingDanUlasanPenyedia() | Positif | ID penyedia jasa valid terdaftar di basis data | Mengembalikan objek profil rating penyedia jasa lengkap beserta agregat ulasannya | Sesuai Ekspektasi (Profil rating berhasil diambil) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.1b. Ringkasan Cakupan Kelas [C02]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | isiPortofolio(), unggahPortofolio(), tambahPenawaranJasa(), bukaNotifikasiPesanan(), terimaPesanan(), tolakPesanan(), saveProdukAkhir(), getStatusPengerjaan(), kumpulkanRevisi(), cekPengirimanDana(), getRevisi(), getIdPenyediaJasa(), getdaftarPenawaranJasa(), getPengalamandanPrestasi() |
+| Operasi yang diuji | validasiRating(), hitungRatingAgregat(), formatRatingTampilan(), perbaruiRatingPenyedia(), getRatingDanUlasanPenyedia() <br> *Catatan: Atribut rating_rata_rata ditambahkan pada C02 di Tugas 9 (Implementasi). Logika perhitungan agregasi rating, pembaruan ke tabel penyedia_jasa, serta pemformatan profil rating diuji pada unit test ini. Operasi lain seperti portofolio, penawaran jasa, dan pesanan telah didelegasikan ke pengontrol terkait (C10, C14, C31).* |
+| ID Algoritma yang tercakup | Logika Agregasi Rating Penyedia (Tabel B.1 & B.5 Implementasi) dan verifikasi data relasi penyedia |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/ulasan.test.ts`) |
+
+### 4.2.2 Kelas LayananRegistrasi
+
+**ID Kelas:** C05  
+**Nama Kelas:** LayananRegistrasi  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.2. Hasil Pengujian Unit Kelas [C05]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C05-UT01 | validasiInputRegistrasi() | Normal | Input valid: nama = "Budi Santoso", email = "budi@example.com", password = "password123", role = "pengguna_jasa" / "penyedia_jasa" | Fungsi lolos validasi tanpa melempar kesalahan | Sesuai Ekspektasi (Lolos validasi) | Pass |
+| C05-UT02 | validasiInputRegistrasi() | Batas | Input nama berupa string kosong `""` atau hanya spasi `"   "` | Sistem melempar pesan error validasi nama ("Nama tidak boleh kosong") | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C05-UT03 | validasiInputRegistrasi() | Batas | Input email berupa string kosong `""` | Sistem melempar pesan error validasi email ("Email tidak boleh kosong") | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C05-UT04 | validasiInputRegistrasi() | Negatif | Input format email tidak valid (`"bukan-email"`, `"a@b"`, `"@domain.com"`) | Sistem melempar pesan error "Format email tidak valid" | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C05-UT05 | validasiInputRegistrasi() | Batas | Input password dengan panjang 7 karakter (kurang dari batas minimum 8 karakter) | Sistem melempar error password minimal 8 karakter | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C05-UT06 | validasiInputRegistrasi() | Batas | Input password dengan panjang tepat 8 karakter (nilai batas ambang) | Fungsi lolos validasi tanpa melempar error | Sesuai Ekspektasi (Lolos validasi) | Pass |
+| C05-UT07 | validasiInputRegistrasi() | Negatif | Input role dengan nilai tidak dikenal (`"admin"` / role di luar whitelist) | Sistem melempar pesan error validasi role | Sesuai Ekspektasi (Error dilempar) | Pass |
+| C05-UT08 | registrasi() | Positif | Input registrasi valid dengan role `"pengguna_jasa"`, mock Supabase auth dan insert DB sukses | Akun berhasil dibuat, entitas pengguna dan tabel pengguna_jasa terisi, mengembalikan ID dan profil pengguna | Sesuai Ekspektasi (Registrasi pengguna jasa berhasil) | Pass |
+| C05-UT09 | registrasi() | Positif | Input registrasi valid dengan role `"penyedia_jasa"`, mock Supabase auth dan insert DB sukses | Akun berhasil dibuat, entitas pengguna dan tabel penyedia_jasa terisi, mengembalikan role PENYEDIA_JASA | Sesuai Ekspektasi (Registrasi penyedia jasa berhasil) | Pass |
+| C05-UT10 | registrasi() | Negatif | Mendaftarkan akun baru menggunakan email yang sudah terdaftar di database | Sistem menangkap pesan error Supabase dan melempar error dengan kode `EMAIL_TAKEN` | Sesuai Ekspektasi (Error EMAIL_TAKEN) | Pass |
+| C05-UT11 | registrasi() | Negatif | Simulasi kegagalan penyimpanan profil pengguna ke database setelah akun auth dibuat | Sistem melempar error `INTERNAL_ERROR` dan memanggil `deleteUser` untuk rollback akun auth | Sesuai Ekspektasi (Rollback deleteUser dipanggil) | Pass |
+| C05-UT12 | registrasi() | Negatif | Simulasi kegagalan penyimpanan ke tabel turunan peran setelah profil utama tersimpan | Sistem melempar `INTERNAL_ERROR` dan melakukan rollback bertingkat (hapus data profil & auth user) | Sesuai Ekspektasi (Rollback bertingkat dipanggil) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.2b. Ringkasan Cakupan Kelas [C05]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | validasiData() : boolean, cekEmail() : boolean, cekNoTelepon() : boolean, registrasiPengguna() : void |
+| Operasi yang diuji | validasiInputRegistrasi(), registrasi() <br> *Catatan: Operasi cekEmail, cekNoTelepon, dan enkripsi telah diintegrasikan di dalam alur fungsi registrasi dan divalidasi melalui skenario error handling serta mock basis data.* |
+| ID Algoritma yang tercakup | Algo-0501, Algo-0502, Algo-0503, Algo-0504 |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/auth.test.ts`) |
+
+<br>
+
+### 4.2.3 Kelas Autentikator
+
+**ID Kelas:** C07  
+**Nama Kelas:** Autentikator  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.3. Hasil Pengujian Unit Kelas [C07]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C07-UT01 | login() | Batas | Input email atau password berupa string kosong atau hanya spasi (`""`, `"   "`) | Sistem menolak proses dan melempar error kode `EMPTY_INPUT` | Sesuai Ekspektasi (Error EMPTY_INPUT) | Pass |
+| C07-UT02 | login() | Negatif | Kredensial password salah atau email tidak terdaftar pada sistem auth | Sistem melempar error `INVALID_CREDENTIALS` ("Kredensial tidak valid") | Sesuai Ekspektasi (Error INVALID_CREDENTIALS) | Pass |
+| C07-UT03 | login() | Negatif | Login menggunakan akun dengan `status_akun = false` dan sanksi `"SUSPENDED"` | Sistem melempar error `ACCOUNT_SUSPENDED` ("Akun Anda ditangguhkan") dan memicu `signOut` | Sesuai Ekspektasi (Akses ditolak & signOut dieksekusi) | Pass |
+| C07-UT04 | login() | Positif | Kredensial email dan password valid untuk akun dengan status aktif | Login berhasil, status_online diperbarui menjadi true, dan mengembalikan data profil pengguna | Sesuai Ekspektasi (Login berhasil & status online aktif) | Pass |
+| C07-UT05 | loginAdmin() | Negatif | Kredensial valid milik akun dengan role `"PENGGUNA_JASA"` mencoba login via fungsi `loginAdmin()` | Sistem menolak akses, melempar error `FORBIDDEN`, dan melakukan `signOut` otomatis | Sesuai Ekspektasi (Error FORBIDDEN) | Pass |
+| C07-UT06 | loginAdmin() | Positif | Kredensial valid milik akun dengan role `"ADMIN"` | Login berhasil dan mengembalikan objek sesi pengguna dengan peran ADMIN | Sesuai Ekspektasi (Login admin berhasil) | Pass |
+| C07-UT07 | logout() | Positif | Pengguna dengan sesi aktif memanggil fungsi logout | Sistem memperbarui status_online menjadi false di database dan memanggil signOut Supabase | Sesuai Ekspektasi (Status online nonaktif & signOut) | Pass |
+| C07-UT08 | logout() | Negatif | Simulasi kegagalan jaringan saat signOut pada layanan autentikasi | Sistem menangkap kesalahan dan melempar error `LOGOUT_FAILED` | Sesuai Ekspektasi (Error LOGOUT_FAILED tertangkap) | Pass |
+| C07-UT09 | getSessionUser() | Batas | Pemanggilan `getSessionUser()` saat tidak ada sesi login aktif (token kosong) | Fungsi mengembalikan nilai `null` tanpa menimbulkan exception | Sesuai Ekspektasi (Mengembalikan null) | Pass |
+| C07-UT10 | getSessionUser() | Positif | Pemanggilan saat sesi valid dan profil pengguna ditemukan di database | Mengembalikan objek sesi terautentikasi lengkap beserta penanda role (`isPenggunaJasa`, `isPenyediaJasa`) | Sesuai Ekspektasi (Data sesi berhasil diambil) | Pass |
+| C07-UT11 | POST /api/auth | Negatif | Permintaan POST dengan payload JSON rusak atau bukan objek JSON | Handler mengembalikan HTTP 400 Bad Request dengan pesan format body tidak valid | Sesuai Ekspektasi (HTTP 400 Bad Request) | Pass |
+| C07-UT12 | POST /api/auth | Negatif | Permintaan POST dengan nilai `action` yang tidak dikenali sistem | Handler mengembalikan HTTP 400 Bad Request dengan pesan "Action tidak dikenal" | Sesuai Ekspektasi (HTTP 400 Action tidak dikenal) | Pass |
+| C07-UT13 | POST /api/auth | Positif | Request login dengan body `action = "login"`, email, dan password valid | Mengembalikan status HTTP 200 OK beserta data sesi pengguna | Sesuai Ekspektasi (HTTP 200 OK login berhasil) | Pass |
+| C07-UT14 | GET /api/auth | Batas | Permintaan GET ke `/api/auth` saat pengguna belum terautentikasi | Mengembalikan HTTP 401 Unauthorized dengan pesan "Tidak terautentikasi" | Sesuai Ekspektasi (HTTP 401 Unauthorized) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.3b. Ringkasan Cakupan Kelas [C07]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | validasiKredensial(email : string, password : string), sesiLogin() : void |
+| Operasi yang diuji | login(), logout(), loginAdmin(), getSessionUser(), POST /api/auth, GET /api/auth |
+| ID Algoritma yang tercakup | Algo-0701, Algo-0702 |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/autentikator.test.ts` dan `src/test/auth.test.ts`) |
+
+<br>
+
+### 4.2.4 Kelas PengontrolPortofolio
+
+**ID Kelas:** C10  
+**Nama Kelas:** PengontrolPortofolio  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.4. Hasil Pengujian Unit Kelas [C10]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C10-UT01 | validasiInputBerkas() | Negatif | Input data bernilai `null` atau properti `judul` berupa string kosong `""` | Mengembalikan nilai boolean `false` | Sesuai Ekspektasi (Mengembalikan false) | Pass |
+| C10-UT02 | validasiInputBerkas() | Negatif | URL berkas pendukung bernilai kosong `""` atau berisi URI berbahaya (`"javascript:alert(1)"`) | Mengembalikan nilai boolean `false` (pencegahan kerentanan XSS) | Sesuai Ekspektasi (Mengembalikan false) | Pass |
+| C10-UT03 | validasiInputBerkas() | Positif | Objek data portofolio dengan judul valid dan URL berkas yang sah (`"/uploads/portofolio/a.png"`) | Mengembalikan nilai boolean `true` | Sesuai Ekspektasi (Mengembalikan true) | Pass |
+| C10-UT04 | rapikanDaftar() | Batas | Input daftar pengalaman/prestasi berisi entri kosong, spasi ganda, dan nilai duplikat | Mengembalikan array bersih tanpa elemen kosong dan tanpa duplikasi | Sesuai Ekspektasi (Daftar bersih dan unik) | Pass |
+| C10-UT05 | normalisasiInput() | Batas | Input judul karya memiliki panjang melebihi batas DDL (256 karakter, batas maksimal 255) | Sistem melempar error "Judul karya maksimal 255 karakter" | Sesuai Ekspektasi (Error batas judul dilempar) | Pass |
+| C10-UT06 | simpanDiMemori() | Positif | Simpan entri portofolio baru dengan judul dan berkas valid pada state penyedia jasa | Entri baru tersimpan di indeks teratas daftar karya, dan riwayat pengalaman diperbarui | Sesuai Ekspektasi (Karya tersimpan terurut & state terbarui) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.4b. Ringkasan Cakupan Kelas [C10]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | validasiInputBerkas(data : Portofolio) : boolean, simpanPortofolio(data : Portofolio) : void |
+| Operasi yang diuji | validasiInputBerkas(), rapikanDaftar(), normalisasiInput(), simpanDiMemori() <br> *Catatan: Operasi simpanPortofolio diuji melalui simulasi in-memory state dan validasi berkas pendukung sesuai aturan DDL.* |
+| ID Algoritma yang tercakup | Algo-1001, Algo-1002 |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/portofolio.test.ts`) |
+
+<br>
+
+### 4.2.5 Kelas LayananUploadFile
+
+**ID Kelas:** C11  
+**Nama Kelas:** LayananUploadFile  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.5. Hasil Pengujian Unit Kelas [C11]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C11-UT01 | validasiFolder() | Positif | Folder tujuan terdaftar pada whitelist `FOLDER_DIIZINKAN` ('jasa', 'chat', 'revisi', 'portofolio') | Fungsi mengembalikan nilai `true` | Sesuai Ekspektasi (Folder valid) | Pass |
+| C11-UT02 | validasiFolder() | Negatif | Folder berupa string yang mengindikasikan path traversal (`"../admin"`, `"root"`, `"etc/passwd"`) | Fungsi mengembalikan nilai `false` (pencegahan celah path traversal) | Sesuai Ekspektasi (Folder traversal ditolak) | Pass |
+| C11-UT03 | validasiBerkasUpload() | Batas | Berkas dengan ukuran melebihi batas `MAKS_UKURAN_UPLOAD` (10 MB + 1 byte) | Mengembalikan string error "Ukuran berkas melebihi 10 MB." | Sesuai Ekspektasi (Ditolak melebihi 10 MB) | Pass |
+| C11-UT04 | validasiBerkasUpload() | Negatif | Berkas dengan ekstensi executable berbahaya (`malware.exe`) pada folder jasa | Mengembalikan string error format ekstensi berkas tidak diizinkan | Sesuai Ekspektasi (Ekstensi berbahaya ditolak) | Pass |
+| C11-UT05 | validasiBerkasUpload() | Negatif | Berkas video (`.mp4`) diunggah pada folder yang membatasi hanya gambar/dokumen (folder `chat` atau `revisi`) | Mengembalikan string error bahwa format ekstensi .mp4 tidak diizinkan | Sesuai Ekspektasi (Format ditolak untuk folder terkait) | Pass |
+| C11-UT06 | validasiBerkasUpload() | Positif | Berkas video (`.mp4`) diunggah pada folder yang mengizinkan multimedia (`jasa` atau `portofolio`) | Mengembalikan `null` (validasi format dan ukuran berhasil) | Sesuai Ekspektasi (Video diizinkan) | Pass |
+| C11-UT07 | validasiBerkasUpload() | Negatif | Tipe MIME berkas kosong (`""`) atau tidak sesuai ekstensi yang terdeteksi | Mengembalikan string pesan error tipe berkas tidak diizinkan | Sesuai Ekspektasi (Tipe MIME tidak dikenal ditolak) | Pass |
+| C11-UT08 | validasiBerkasUpload() | Positif | Berkas lampiran gambar dan dokumen umum yang valid (`.jpg`, `.png`, `.pdf`, `.webp`) | Mengembalikan `null` menandakan berkas lolos seluruh aturan validasi | Sesuai Ekspektasi (Berkas valid lolos) | Pass |
+| C11-UT09 | POST /api/upload | Negatif | Request upload berkas tanpa menyertakan sesi login pengguna aktif | Mengembalikan HTTP 401 Unauthorized dengan pesan "Tidak terautentikasi" | Sesuai Ekspektasi (HTTP 401 Unauthorized) | Pass |
+| C11-UT10 | POST /api/upload | Negatif | Request upload dikirim menggunakan header selain `multipart/form-data` | Mengembalikan HTTP 400 Bad Request | Sesuai Ekspektasi (HTTP 400 Bad Request) | Pass |
+| C11-UT11 | POST /api/upload | Batas | Request upload dengan form-data yang tidak melampirkan berkas fisik atau file 0 byte | Mengembalikan HTTP 400 dengan pesan "Berkas tidak ditemukan atau kosong" | Sesuai Ekspektasi (HTTP 400 Berkas kosong) | Pass |
+| C11-UT12 | POST /api/upload | Negatif | Simulasi kegagalan internal driver penyimpanan (kegagalan autentikasi bucket storage) | Mengembalikan HTTP 500 dengan pesan aman generik tanpa membocorkan kredensial internal | Sesuai Ekspektasi (HTTP 500 pesan aman) | Pass |
+| C11-UT13 | POST /api/upload | Positif | Pengguna terautentikasi mengunggah gambar valid pada folder yang diizinkan | Mengembalikan HTTP 201 Created beserta payload URL publik berkas tersimpan | Sesuai Ekspektasi (HTTP 201 Created & URL didapat) | Pass |
+| C11-UT14 | StorageService | Positif | Inisialisasi adapter penyimpanan dan pemanggilan operasi upload serta delete berkas | Berkas fisik berhasil disimpan ke storage target dan URL akses publik dihasilkan | Sesuai Ekspektasi (Driver storage berhasil menyimpan) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.5b. Ringkasan Cakupan Kelas [C11]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | getStatusUpload() : string, validasiFormatUkuran(file : FILE) : boolean, saveDeliverables(file : FILE) : string, uploadFile(berkas : FILE) : void |
+| Operasi yang diuji | validasiFolder(), validasiBerkasUpload(), POST /api/upload, StorageService.upload(), StorageService.delete() <br> *Catatan: Operasi getStatusUpload dan saveDeliverables telah diintegrasikan pada arsitektur upload gateway dan interface StorageService (Local dan Supabase).* |
+| ID Algoritma yang tercakup | Algo-1101, Algo-1102, Algo-1103, Algo-1104 |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/upload.test.ts`, `src/test/dual-storage.test.ts`, dan `src/test/storage-interface.test.ts`) |
+
+<br>
+
+### 4.2.6 Kelas JasaController
+
+**ID Kelas:** C14  
+**Nama Kelas:** JasaController  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.6. Hasil Pengujian Unit Kelas [C14]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C14-UT01 | validasiDataJasa() | Positif | Input data jasa lengkap: `nama_jasa = "Desain Banner"`, `kategori = "Desain Grafis"`, `harga = 50000`, deskripsi terisi | Mengembalikan nilai boolean `true` | Sesuai Ekspektasi (Data jasa valid) | Pass |
+| C14-UT02 | validasiDataJasa() | Batas | Input data jasa bernilai `undefined` atau `null` | Mengembalikan nilai boolean `false` | Sesuai Ekspektasi (Data kosong ditolak) | Pass |
+| C14-UT03 | validasiDataJasa() | Negatif | Field `nama_jasa`, `deskripsi`, atau `kategori` hanya berisi spasi kosong (`"   "`) | Mengembalikan nilai boolean `false` | Sesuai Ekspektasi (String spasi kosong ditolak) | Pass |
+| C14-UT04 | validasiDataJasa() | Batas | Nilai harga bernilai 0 atau berupa angka negatif (`harga = 0` atau `harga = -1000`) | Mengembalikan nilai boolean `false` | Sesuai Ekspektasi (Harga non-positif ditolak) | Pass |
+| C14-UT05 | validasiDataJasa() | Negatif | Nilai harga bukan angka riil (`NaN`, `Infinity`, atau `undefined`) | Mengembalikan nilai boolean `false` | Sesuai Ekspektasi (Harga invalid ditolak) | Pass |
+| C14-UT06 | validasiBerkas() | Positif | Daftar berkas fisik pendukung terdiri dari gambar PNG, dokumen PDF, dan video MP4 valid | Mengembalikan nilai `null` (seluruh berkas valid) | Sesuai Ekspektasi (Berkas lolos validasi) | Pass |
+| C14-UT07 | validasiBerkas() | Negatif | Melampirkan berkas executable (`malware.exe`) pada penawaran jasa | Mengembalikan string pesan error format berkas tidak didukung | Sesuai Ekspektasi (Format berkas ditolak) | Pass |
+| C14-UT08 | simpanPenawaranJasa() | Negatif | Pemanggilan penyimpanan dengan parameter data penawaran yang tidak valid | Sistem melempar exception "Data penawaran jasa tidak valid atau tidak lengkap" | Sesuai Ekspektasi (Error validasi dilempar) | Pass |
+| C14-UT09 | simpanPenawaranJasa() | Positif | Pemanggilan dengan data penawaran valid dan berkas pendukung terunggah | Data jasa baru tersimpan ke basis data dan relasi penawaran penyedia jasa terhubung | Sesuai Ekspektasi (Jasa berhasil disimpan) | Pass |
+| C14-UT10 | ambilDetailJasa() | Batas | Parameter `idJasa` bernilai `null` atau string kosong `""` | Sistem melempar exception "ID Jasa tidak valid" | Sesuai Ekspektasi (ID invalid dilempar) | Pass |
+| C14-UT11 | ambilDetailJasa() | Negatif | Parameter `idJasa` tidak ditemukan dalam basis data | Sistem melempar exception "Data jasa tidak ditemukan" | Sesuai Ekspektasi (Jasa not found dilempar) | Pass |
+| C14-UT12 | ambilDetailJasa() | Positif | Parameter `idJasa` valid dan data tersedia di database | Mengembalikan objek entitas Jasa lengkap beserta detail penyedianya | Sesuai Ekspektasi (Detail jasa berhasil diambil) | Pass |
+| C14-UT13 | perbaruiJasa() | Negatif | Memperbarui penawaran jasa dengan ID yang tidak terdaftar | Sistem melempar error bahwa data jasa tidak ditemukan | Sesuai Ekspektasi (Error pembaruan dilempar) | Pass |
+| C14-UT14 | hapusJasa() | Positif | Menghapus penawaran jasa berdasarkan ID yang valid | Sistem menonaktifkan/menghapus data jasa dari database secara sukses | Sesuai Ekspektasi (Jasa berhasil dihapus) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.6b. Ringkasan Cakupan Kelas [C14]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | ambilDetailJasa(idJasa: string) : Jasa, validasiDataJasa(dataJasa : object) : boolean, simpanPenawaranJasa(dataJasa : object) : void |
+| Operasi yang diuji | validasiDataJasa(), validasiBerkas(), simpanPenawaranJasa(), ambilDetailJasa(), perbaruiJasa(), hapusJasa() |
+| ID Algoritma yang tercakup | Algo-1401, Algo-1402, Algo-1403 |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/jasa.test.ts`) |
+
+<br>
+
+### 4.2.7 Kelas LayananPencarian
+
+**ID Kelas:** C17  
+**Nama Kelas:** LayananPencarian  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.7. Hasil Pengujian Unit Kelas [C17]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C17-UT01 | normalisasiKeyword() | Batas | Input keyword memiliki spasi berlebih di awal/akhir dan campuran huruf kapital | Menghasilkan string huruf kecil (lowercase) bersih tanpa spasi redundan | Sesuai Ekspektasi (Keyword dinormalisasi) | Pass |
+| C17-UT02 | validasiFilter() | Batas | Parameter kata kunci yang diisi memiliki panjang kurang dari 3 karakter (mis. `"ab"`) | Sistem melempar exception "Keyword Pencarian Minimal 3 karakter" | Sesuai Ekspektasi (Error panjang minimal dilempar) | Pass |
+| C17-UT03 | validasiFilter() | Negatif | Parameter `harga_min` memiliki nilai lebih besar dibandingkan `harga_max` (mis. min: 100.000, max: 50.000) | Sistem melempar exception rentang harga tidak valid | Sesuai Ekspektasi (Error rentang harga dilempar) | Pass |
+| C17-UT04 | validasiFilter() | Batas | Nilai parameter filter rating berada di luar batas ambang rentang 1 s.d. 5 (mis. rating = 0 atau 6) | Sistem melempar exception batasan nilai rating | Sesuai Ekspektasi (Error rating dilempar) | Pass |
+| C17-UT05 | validasiFilter() | Positif | Kriteria filter lengkap dengan rentang harga, kategori, dan opsi pengurutan yang valid | Mengembalikan objek filter yang terverifikasi dan siap dieksekusi | Sesuai Ekspektasi (Filter valid diparsing) | Pass |
+| C17-UT06 | cariJasaBerdasarkanKeyword() | Positif | Kata kunci cocok dengan kata pada nama jasa atau deskripsi layanan | Mengembalikan daftar penawaran jasa relevan yang cocok dengan kata kunci | Sesuai Ekspektasi (Daftar jasa relevan dikembalikan) | Pass |
+| C17-UT07 | cariJasaBerdasarkanKeyword() | Batas | Kata kunci valid (≥ 3 karakter) namun tidak ada layanan yang cocok di basis data | Mengembalikan array kosong `[]` tanpa menimbulkan error | Sesuai Ekspektasi (Array kosong dikembalikan) | Pass |
+| C17-UT08 | terapkanFilterPencarian() | Positif | Pencarian dengan kombinasi filter kategori spesifik dan batas harga maksimum | Mengembalikan hanya jasa yang memenuhi seluruh kriteria filter secara bersamaan | Sesuai Ekspektasi (Daftar jasa terfilter akurat) | Pass |
+| C17-UT09 | saringDanUrutkan() | Positif | Eksekusi pengurutan dengan opsi `harga_rendah`, `harga_tinggi`, atau `rating_tinggi` | Data jasa terurut secara konsisten dan akurat sesuai parameter pengurutan | Sesuai Ekspektasi (Data terurut sesuai opsi) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.7b. Ringkasan Cakupan Kelas [C17]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | cariJasaBerdasarkanKeyword(keyword : string) : list of Jasa, terapkanFilterPencarian(filter : string, keyword : string) : list of Jasa |
+| Operasi yang diuji | normalisasiKeyword(), validasiFilter(), cariJasaBerdasarkanKeyword(), terapkanFilterPencarian(), saringDanUrutkan() |
+| ID Algoritma yang tercakup | Algo-1701, Algo-1702 |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/search.test.ts`) |
+
+<br>
+
+### 4.2.8 Kelas LayananPembandingJasa
+
+**ID Kelas:** C18  
+**Nama Kelas:** LayananPembandingJasa  
+**Tingkat:** Mendalam  
+
+Tabel 4.2.8. Hasil Pengujian Unit Kelas [C18]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C18-UT01 | susunMatriks() | Batas | Jumlah jasa yang dipilih untuk dibandingkan kurang dari 2 (mis. hanya 1 jasa) | Sistem melempar exception "Minimal 2 jasa untuk dibandingkan" | Sesuai Ekspektasi (Error minimal 2 jasa) | Pass |
+| C18-UT02 | susunMatriks() | Batas | Jumlah jasa yang dipilih untuk dibandingkan lebih dari 4 (mis. 5 jasa) | Sistem melempar exception "Maksimal 4 jasa untuk dibandingkan" | Sesuai Ekspektasi (Error maksimal 4 jasa) | Pass |
+| C18-UT03 | susunMatriks() | Positif | Input berupa 2 hingga 4 objek jasa yang sah dan aktif | Mengembalikan matriks komparasi lengkap berisi nama, kategori, harga, rating, dan ringkasan | Sesuai Ekspektasi (Matriks komparasi terbentuk) | Pass |
+| C18-UT04 | susunMatriks() | Positif | Komparasi jasa dengan nilai tarif dan rating berbeda | Sistem secara akurat menetapkan penanda jasa dengan harga terendah dan rating tertinggi | Sesuai Ekspektasi (Penetapan nilai optimal akurat) | Pass |
+| C18-UT05 | bandingkanSpesifikasiJasa() | Negatif | Salah satu ID jasa yang akan dibandingkan tidak ditemukan di basis data | Sistem menangani error dan melempar exception data jasa tidak ditemukan | Sesuai Ekspektasi (Error data tidak ditemukan) | Pass |
+| C18-UT06 | GET /api/jasa?compare | Positif | Request GET dengan parameter `compare=id1,id2` pada route handler API | Mengembalikan HTTP 200 OK dengan payload JSON berisi matriks komparasi hasil perbandingan | Sesuai Ekspektasi (HTTP 200 OK matriks JSON) | Pass |
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.8b. Ringkasan Cakupan Kelas [C18]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | bandingkanSpesifikasiJasa(idJasa1 : string, idJasa2 : string) : string |
+| Operasi yang diuji | susunMatriks(), bandingkanSpesifikasiJasa(), GET /api/jasa?compare |
+| ID Algoritma yang tercakup | Algo-1801 |
+| Coverage (wajib ≥ 70%) | ≥ 70% (Laporan unit test Vitest pada `src/test/search.test.ts`) |
+
+### 4.2.9 Kelas PengontrolBookmark (C22)
 
 **ID Kelas:** C22  
 **Nama Kelas:** PengontrolBookmark (`src/services/bookmark.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.1. Hasil Pengujian Unit Kelas C22 (PengontrolBookmark)
+Tabel 4.2.9. Hasil Pengujian Unit Kelas C22 (PengontrolBookmark)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -424,7 +748,7 @@ Tabel 4.2.1. Hasil Pengujian Unit Kelas C22 (PengontrolBookmark)
 | C22-UT11 | `GET /api/bookmark` | Batas | Akses `GET /api/bookmark` dengan sesi valid namun pengguna belum memiliki bookmark | Mengembalikan status `200 OK` dengan `data: []` | Status `200` dengan `data: []` dikembalikan | Pass |
 | C22-UT12 | `GET / POST / DELETE /api/bookmark` | Negatif | Akses non-mock tanpa sesi (`GET`), atau kirim `id_pengguna_jasa` milik pengguna lain (IDOR), atau JSON body rusak | Status `401 UNAUTHORIZED`, `403 FORBIDDEN`, dan `400 VALIDATION_ERROR` | Seluruh status kode dan `error_code` sesuai kontrak | Pass |
 
-Tabel 4.2.1b. Ringkasan Cakupan Kelas C22 (PengontrolBookmark)
+Tabel 4.2.9b. Ringkasan Cakupan Kelas C22 (PengontrolBookmark)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -435,13 +759,13 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas C22 (PengontrolBookmark)
 
 ---
 
-### 4.2.2 Kelas LayananPesanInstan (C25)
+### 4.2.10 Kelas LayananPesanInstan (C25)
 
 **ID Kelas:** C25  
 **Nama Kelas:** LayananPesanInstan (`ChatService` pada `src/services/chat.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.2. Hasil Pengujian Unit Kelas C25 (LayananPesanInstan)
+Tabel 4.2.10. Hasil Pengujian Unit Kelas C25 (LayananPesanInstan)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -458,7 +782,7 @@ Tabel 4.2.2. Hasil Pengujian Unit Kelas C25 (LayananPesanInstan)
 | C25-UT11 | `kirimPesan(id_chatroom, user_id, isi_pesan, lampiran)` | Batas | Kirim pesan berupa lampiran saja tanpa teks (`isi_pesan = ''`, `lampiran = 'https://.../file.pdf'`) atau pesan teks `> 50` karakter | Lampiran memicu notifikasi `'Mengirimkan lampiran'`; teks `> 50` karakter dipotong menjadi 50 karakter + `'...'` | Kedua kondisi batas menghasilkan pesan dan preview notifikasi sesuai | Pass |
 | C25-UT12 | `kirimPesan(id_chatroom, user_id, isi_pesan, lampiran)` | Negatif | Kirim pesan spasi saja (`'   '`) tanpa lampiran (`null`), atau query `insert` ke `pesan_chat` gagal | Melempar `'Isi pesan tidak boleh kosong.'` atau `'Gagal mengirim pesan: Insert message failed'` tanpa memicu notifikasi | Error dilempar sesuai kasus dan notifikasi tidak dipicu | Pass |
 
-Tabel 4.2.2b. Ringkasan Cakupan Kelas C25 (LayananPesanInstan)
+Tabel 4.2.10b. Ringkasan Cakupan Kelas C25 (LayananPesanInstan)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -469,13 +793,13 @@ Tabel 4.2.2b. Ringkasan Cakupan Kelas C25 (LayananPesanInstan)
 
 ---
 
-### 4.2.3 Kelas LayananNotifikasiChat (C26)
+### 4.2.11 Kelas LayananNotifikasiChat (C26)
 
 **ID Kelas:** C26  
 **Nama Kelas:** LayananNotifikasiChat (`NotifikasiService` pada `src/services/notifikasi.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.3. Hasil Pengujian Unit Kelas C26 (LayananNotifikasiChat)
+Tabel 4.2.11. Hasil Pengujian Unit Kelas C26 (LayananNotifikasiChat)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -489,7 +813,7 @@ Tabel 4.2.3. Hasil Pengujian Unit Kelas C26 (LayananNotifikasiChat)
 | C26-UT08 | `tandaiSudahDibaca(user_id)` | Batas | Panggil tanpa `id_notifikasi` untuk menandai seluruh notifikasi pengguna yang belum dibaca sekaligus | Memperbarui seluruh record `is_read = false` milik pengguna menjadi `true` dan mengembalikan `true` | Update massal berhasil dan mengembalikan `true` | Pass |
 | C26-UT09 | `tandaiSudahDibaca(user_id)` | Negatif | Update Supabase mengembalikan error `'Update error'` | Melempar `'Gagal memperbarui status notifikasi: Update error'` | Error dilempar sesuai rancangan | Pass |
 
-Tabel 4.2.3b. Ringkasan Cakupan Kelas C26 (LayananNotifikasiChat)
+Tabel 4.2.11b. Ringkasan Cakupan Kelas C26 (LayananNotifikasiChat)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -500,13 +824,13 @@ Tabel 4.2.3b. Ringkasan Cakupan Kelas C26 (LayananNotifikasiChat)
 
 ---
 
-### 4.2.4 Kelas PengontrolPesanan (C31)
+### 4.2.12 Kelas PengontrolPesanan (C31)
 
 **ID Kelas:** C31  
 **Nama Kelas:** PengontrolPesanan (`PesananService` pada `src/services/pesanan.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.4. Hasil Pengujian Unit Kelas C31 (PengontrolPesanan)
+Tabel 4.2.12. Hasil Pengujian Unit Kelas C31 (PengontrolPesanan)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -523,7 +847,7 @@ Tabel 4.2.4. Hasil Pengujian Unit Kelas C31 (PengontrolPesanan)
 | C31-UT11 | `ambilDaftarPesanan(...)` | Batas | Filter daftar pesanan berdasarkan tab `'berjalan'` vs `'selesai'`, serta pengguna yang belum memiliki pesanan (`[]`) | Hanya mengembalikan pesanan sesuai tab aktif/selesai, dan `[]` jika belum ada pesanan | Filter tab dan empty list berjalan akurat | Pass |
 | C31-UT12 | `ambilDaftarPesanan(...)` & `ambilDetailPesanan(...)` | Negatif | `id_pengguna` / `id_pesanan` kosong (`''`), role tidak valid (`'admin'`), atau ID pesanan tidak ditemukan (`'ord-404'`) | Melempar `'ID pengguna tidak valid'`, `'ID pesanan tidak valid'`, `'Peran pengguna tidak valid'`, atau `'Pesanan tidak ditemukan'` | Seluruh error validasi dan not found dilempar sesuai | Pass |
 
-Tabel 4.2.4b. Ringkasan Cakupan Kelas C31 (PengontrolPesanan)
+Tabel 4.2.12b. Ringkasan Cakupan Kelas C31 (PengontrolPesanan)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -534,13 +858,13 @@ Tabel 4.2.4b. Ringkasan Cakupan Kelas C31 (PengontrolPesanan)
 
 ---
 
-### 4.2.5 Kelas PengontrolTransaksi (C32)
+### 4.2.13 Kelas PengontrolTransaksi (C32)
 
 **ID Kelas:** C32  
 **Nama Kelas:** PengontrolTransaksi (`src/services/transaksi.service.ts`)  
 **Tingkat:** Mendalam
 
-Tabel 4.2.5. Hasil Pengujian Unit Kelas C32 (PengontrolTransaksi)
+Tabel 4.2.13. Hasil Pengujian Unit Kelas C32 (PengontrolTransaksi)
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -557,7 +881,7 @@ Tabel 4.2.5. Hasil Pengujian Unit Kelas C32 (PengontrolTransaksi)
 | C32-UT11 | `setPencairanDana(id_pesanan, selesai)` | Batas | Percobaan pencairan ulang pada pesanan yang sudah dicairkan (`status_pencairan = true` / update guard `.eq('status_pencairan', false)` mengembalikan `null`) | Guard menolak pencairan ganda dan melempar `'Dana untuk pesanan ini sudah dicairkan sebelumnya'` | Guard pencairan ganda berjalan tepat | Pass |
 | C32-UT12 | `setPencairanDana(id_pesanan, selesai)` | Negatif | `selesai = false`, pesanan belum `'LUNAS'` (`'ord-unpaid'`), atau `id_pesanan` kosong/tidak ditemukan | Melempar `'Pencairan dana hanya dapat dilakukan untuk pesanan selesai'`, `'...untuk pesanan yang sudah lunas'`, atau error not found | Seluruh guard pencairan dana berjalan tepat | Pass |
 
-Tabel 4.2.5b. Ringkasan Cakupan Kelas C32 (PengontrolTransaksi)
+Tabel 4.2.13b. Ringkasan Cakupan Kelas C32 (PengontrolTransaksi)
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -566,13 +890,13 @@ Tabel 4.2.5b. Ringkasan Cakupan Kelas C32 (PengontrolTransaksi)
 | ID Algoritma yang tercakup | Algo-3201 (validasi metode & nominal), Algo-3202 (proses pembayaran dummy & rollback), Algo-3203 (update status pembayaran), Algo-3204 (catat riwayat transaksi), Algo-3205 (pencairan dana), Algo-3301 (daftar metode pembayaran), Algo-3401 (riwayat transaksi) |
 | Coverage (wajib ≥ 70%) | 97,82% line / 80,90% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
 
-### 4.2.13 Kelas RevisiHandler (Bagian dari Deliverables Service)
+### 4.2.14 Kelas RevisiHandler (Bagian dari Deliverables Service)
 
 **ID Kelas:**   C41
 **Nama Kelas:** RevisiHandler
 **Tingkat:** Mendalam
 
-Tabel 4.2.13. Hasil Pengujian Unit Kelas [C41]
+Tabel 4.2.14. Hasil Pengujian Unit Kelas [C41]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -612,7 +936,7 @@ Tabel 4.2.13. Hasil Pengujian Unit Kelas [C41]
 
 Khusus kelas **Mendalam**:
 
-Tabel 4.2.1b. Ringkasan Cakupan Kelas [C41]
+Tabel 4.2.14b. Ringkasan Cakupan Kelas [C41]
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -621,13 +945,13 @@ Tabel 4.2.1b. Ringkasan Cakupan Kelas [C41]
 | ID Algoritma yang tercakup | Algo-4101, Algo-4102, Algo-4103, Algo-4104, Algo-4105, dan tambahan yang tidak tercata |
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c41) |
 
-### 4.2.14 Kelas LaporanHandler
+### 4.2.15 Kelas LaporanHandler
 
 **ID Kelas:**   C45
 **Nama Kelas:** LaporanHandler
 **Tingkat:** Mendalam
 
-Tabel 4.2.14. Hasil Pengujian Unit Kelas [C45]
+Tabel 4.2.15. Hasil Pengujian Unit Kelas [C45]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -649,7 +973,7 @@ Tabel 4.2.14. Hasil Pengujian Unit Kelas [C45]
 | C45-UT16 | catatKeputusanTindakan() | Positif | Admin memilih tindakan PERINGATAN / SUSPEND_AKUN dengan catatan valid | Berhasil menyimpan tanggapan, memanggil RPC admin_beri_sanksi, dan mengubah status tiket menjadi "Selesai" |  sanksi diproses & status tiket selesai | Pass |
 | C45-UT17 | catatKeputusanTindakan() | Positif | Admin memilih tindakan LAPORAN_DITOLAK dengan catatan valid | Berhasil menyimpan tanggapan dan mengubah status tiket menjadi "Selesai" tanpa memicu sanksi akun |  penolakan dicatat & status tiket selesai | Pass |
 
-Tabel 4.2.14b. Ringkasan Cakupan Kelas [C45]
+Tabel 4.2.15b. Ringkasan Cakupan Kelas [C45]
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -659,13 +983,13 @@ Tabel 4.2.14b. Ringkasan Cakupan Kelas [C45]
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c45) |
 <br>
 
-### 4.2.15 Kelas UlasanHandler
+### 4.2.16 Kelas UlasanHandler
 
 **ID Kelas:**   C48
 **Nama Kelas:** UlasanHandler
 **Tingkat:** Mendalam
 
-Tabel 4.2.15. Hasil Pengujian Unit Kelas [C48]
+Tabel 4.2.16. Hasil Pengujian Unit Kelas [C48]
 
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
@@ -707,7 +1031,7 @@ Tabel 4.2.15. Hasil Pengujian Unit Kelas [C48]
 | **C48-UT36** | deleteUlasan() | Positif | `id_ulasan` dan `user_id` pemilik valid | Menghapus data ulasan dari DB dan membersihkan berkas dokumentasi di storage | ulasan & foto terhapus | Pass |
 | **C48-UT37** | deleteUlasan() | Negatif | Simulasi error saat query `delete` ke DB | Sistem melempar error *"Terjadi kesalahan saat menghapus ulasan."* | error dilempar | Pass |
 
-Tabel 4.2.15b. Ringkasan Cakupan Kelas [C48]
+Tabel 4.2.16b. Ringkasan Cakupan Kelas [C48]
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -716,13 +1040,13 @@ Tabel 4.2.15b. Ringkasan Cakupan Kelas [C48]
 | ID Algoritma yang tercakup | Algo-4801 - Algo-4805, dan tambahan yang tidak tercatat dalam DPPL |
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c48) |
 
-### 4.2.16 Kelas MediasiHandler
+### 4.2.17 Kelas MediasiHandler
 
 **ID Kelas:**   C51
 **Nama Kelas:** MediasiHandler
 **Tingkat:** Mendalam
 
-Tabel 4.2.16. Hasil Pengujian Unit Kelas [C51]
+Tabel 4.2.17. Hasil Pengujian Unit Kelas [C51]
 | ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **C51-UT01** | mulaiMediasi() | Negatif | id_tiket tidak ditemukan di database  | Sistem melempar error *"Tiket laporan tidak ditemukan."* | error dilempar | Pass |
@@ -744,7 +1068,7 @@ Tabel 4.2.16. Hasil Pengujian Unit Kelas [C51]
 | **C51-UT17** | selesaikanMediasi() | Positif | id_sesi_mediasi dan id_admin valid | Mengubah status sesi menjadi `SELESAI` dan otomatis menyisipkan pesan penutup dari admin | sesi ditutup & pesan penutup dibuat | Pass |
 
 
-Tabel 4.2.16b. Ringkasan Cakupan Kelas [C51]
+Tabel 4.2.17b. Ringkasan Cakupan Kelas [C51]
 
 | Informasi | Keterangan |
 | :--- | :--- |
@@ -753,13 +1077,13 @@ Tabel 4.2.16b. Ringkasan Cakupan Kelas [C51]
 | ID Algoritma yang tercakup | Algo-4801 - Algo-4805, dan tambahan yang tidak tercatat dalam DPPL |
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c51) |
 
-### 4.2.17 Kelas PengumpulanController
+### 4.2.18 Kelas PengumpulanController
 
 **ID Kelas:**   C54
-**Nama Kelas:** MediasiHandler
+**Nama Kelas:** PengumpulanController
 **Tingkat:** Mendalam
 
-Tabel 4.2.16. Hasil Pengujian Unit Kelas [C54]
+Tabel 4.2.18. Hasil Pengujian Unit Kelas [C54]
 
 
 ## 4.3 Pengujian Integrasi
