@@ -524,18 +524,64 @@ Tabel 4.2.16b. Ringkasan Cakupan Kelas [C51]
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL |  |
-| Operasi yang diuji | <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
-| ID Algoritma yang tercakup | Algo-4801 - Algo-4805, dan tambahan yang tidak tercatat dalam DPPL |
+| Daftar operasi public pada DPPL | inputTindakan() --> bagian dari LaporanHandler bukan mediasi, akhiriMediasi() --> selesaikanMediasi(), tampilkanPesanError() --> bagian error handling di setiap fungsi, tampilkanNotifikasiSelesai() --> bagian dari setiap tindakan di mediasi,  UpdateStatusTiket() --> bagian dari LaporanHandler() |
+| Operasi yang diuji | mulaiMediasi(), kirimPesanMediasi(), getDaftarMediasiUser(),  getDetailDanPesanMediasi(), selesaikanMediasi()<br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-5101 - Algo-5105, dan tambahan yang tidak tercatat dalam DPPL |
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c51) |
 
-### 4.2.17 Kelas PengumpulanController
+### 4.2.17 Kelas PengumpulanController bagian dari DeliverablesService
 
 **ID Kelas:**   C54
 **Nama Kelas:** MediasiHandler
 **Tingkat:** Mendalam
 
 Tabel 4.2.16. Hasil Pengujian Unit Kelas [C54]
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C52-UT01 | validasiOwnerPesanan() | Positif | user_id adalah id_pengguna_jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C52-UT02 | validasiOwnerPesanan() | Positif | user_id adalah id_penyedia_jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C52-UT03 | validasiOwnerPesanan() | Negatif | Simulasi error query pada Supabase | Sistem melempar error *"Gagal memvalidasi pesanan: DB Error Validasi"* | error dilempar | Pass |
+| C52-UT04 | validasiOwnerPesanan() | Negatif | id_pesanan tidak ditemukan di database  | Sistem melempar error *"Pesanan tidak ditemukan."* | error dilempar | Pass |
+| C52-UT05 | validasiOwnerPesanan() | Negatif | user_id bukan pemesan maupun penyedia  | Sistem melempar error *"Akses ditolak. Pesanan ini bukan milik Anda."* | akses ditolak | Pass |
+| C52-UT06 | validasiPenggunaJasa() | Positif | user_id adalah pengguna jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C52-UT07 | validasiPenggunaJasa() | Negatif | Simulasi koneksi database terputus | Sistem melempar error *"Gagal memvalidasi pesanan: Koneksi terputus"* | error dilempar | Pass |
+| C52-UT08 | validasiPenggunaJasa() | Negatif | id_pesanan tidak ditemukan di database  | Sistem melempar error *"Pesanan tidak ditemukan."* | error dilempar | Pass |
+| C52-UT09 | validasiPenggunaJasa() | Negatif | user_id bukan pemilik pesanan  | Sistem melempar error *"Akses ditolak. Hanya pengguna jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C52-UT10 | validasiPenyediaJasa() | Positif | user_id adalah penyedia jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C52-UT11 | validasiPenyediaJasa() | Negatif | Simulasi query database mengalami timeout | Sistem melempar error *"Gagal memvalidasi pesanan: Timeout"* | error dilempar | Pass |
+| C52-UT12 | validasiPenyediaJasa() | Negatif | id_pesanan tidak ditemukan di database  | Sistem melempar error *"Pesanan tidak ditemukan."* | error dilempar | Pass |
+| C52-UT13 | validasiPenyediaJasa() | Negatif | user_id bukan penyedia jasa pesanan  | Sistem melempar error *"Akses ditolak. Hanya penyedia jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C52-UT14 | submitDeliverable() | Batas / Negatif | deskripsi_produk kosong | Sistem melempar error *"Deskripsi hasil pekerjaan tidak boleh kosong."* | error dilempar | Pass |
+| C52-UT15 | submitDeliverable() | Batas / Negatif | file_url dan output_path keduanya tidak diisi  | Sistem melempar error *"Unggah berkas atau sertakan tautan hasil pekerjaan."* | error dilempar | Pass |
+| C52-UT16 | submitDeliverable() | Negatif | Simulasi insert data produk_akhir ke database gagal | Sistem melempar error *"Gagal menyimpan hasil pekerjaan: Insert error"* | error dilempar | Pass |
+| C52-UT17 | submitDeliverable() | Negatif | Simulasi update status pesanan di database gagal | Sistem melempar error *"Gagal memperbarui status pesanan: DB Error Pesanan"* | error dilempar | Pass |
+| C52-UT18 | submitDeliverable() | Positif | Data pekerjaan valid dan data pengguna jasa tersedia | Berhasil menyimpan produk akhir, mengubah status pesanan, & memicu notifikasi | ulasan disimpan & notifikasi terkirim | Pass |
+| C52-UT19 | submitDeliverable() | Positif / Batas | Data pekerjaan valid, namun data pengguna jasa  | Berhasil menyimpan produk akhir tanpa memicu pengiriman notifikasi | produk disimpan tanpa notifikasi | Pass |
+| C52-UT20 | getDeliverableByPesanan() | Negatif | Simulasi query produk_akhir di database gagal | Sistem melempar error query dari DB | error dilempar | Pass |
+| C52-UT21 | getDeliverableByPesanan() | Batas | Produk akhir belum dikumpulkan oleh penyedia jasa | Fungsi mengembalikan nilai null | nilai null dikembalikan | Pass |
+| C52-UT22 | getDeliverableByPesanan() | Positif | file_url berupa link HTTP/HTTPS langsung | Mengembalikan data produk akhir beserta file_download_url direct link | data deliverable dikembalikan | Pass |
+| C52-UT23 | getDeliverableByPesanan() | Positif | file_url berupa path Storage Supabase | Mengembalikan data produk akhir dengan file_url & file_download_url bertipe signed URL | signed URL dikembalikan | Pass |
+| C52-UT24 | getDeliverableByPesanan() | Negatif | Pembuatan signed URL dari Storage Service gagal | Sistem melempar error *"Gagal membuat URL hasil pekerjaan."* | error dilempar | Pass |
+| C52-UT25 | getDeliverableByProdukAkhir() | Negatif | id_produk_akhir tidak ditemukan di DB  | Sistem melempar error *"Hasil pekerjaan tidak ditemukan."* | error dilempar | Pass |
+| C52-UT26 | getDeliverableByProdukAkhir() | Positif | id_produk_akhir valid dan user_id merupakan owner pesanan | Mengembalikan detail data produk akhir dan memverifikasi otorisasi owner | data produk akhir dikembalikan | Pass |
+| C52-UT27 | confirmOrderComplete() | Negatif | user_id bukan pengguna jasa pemilik pesanan  | Sistem melempar error *"Akses ditolak. Hanya pengguna jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C52-UT28 | confirmOrderComplete() | Negatif | Query data pesanan gagal atau pesanan tidak ditemukan | Sistem melempar error *"Pesanan tidak ditemukan: Pesanan fail"* | error dilempar | Pass |
+| C52-UT29 | confirmOrderComplete() | Negatif | Eksekusi RPC DB konfirmasi_pesanan_selesai mengalami kegagalan | Sistem melempar error *"Gagal mengonfirmasi pesanan dan mencairkan dana: RPC DB Fail"* | error RPC dilempar | Pass |
+| C52-UT30 | confirmOrderComplete() | Positif | id_pesanan dan user_id pengguna jasa valid | Berhasil mengeksekusi RPC konfirmasi_pesanan_selesai & mengirim notifikasi ke seller | RPC dipanggil & notifikasi terkirim | Pass |
+| C52-UT31 | unggahBerkasDeliverable() | Batas / Negatif | Ukuran berkas melebihi batas 50 MB  | Sistem melempar error *"Ukuran berkas melebihi batas maksimum 50 MB"* | error dilempar | Pass |
+| C52-UT32 | unggahBerkasDeliverable() | Negatif | Berkas dengan ekstensi yang dilarang  | Sistem melempar error *"Tipe berkas application/x-msdownload tidak diizinkan..."* | error dilempar | Pass |
+| C52-UT33 | unggahBerkasDeliverable() | Negatif | Storage Service mengembalikan pesan galat (*Storage driver full*) | Sistem melempar error driver storage | error dilempar | Pass |
+| C52-UT34 | unggahBerkasDeliverable() | Negatif | Storage Service mengembalikan URL kosong tanpa pesan galat | Sistem melempar error *"Gagal mengunggah berkas deliverable."* | error dilempar | Pass |
+| C52-UT35 | unggahBerkasDeliverable() | Positif | Berkas valid (test.png, image/png) | Berhasil mengunggah berkas ke folder deliverable dan mengembalikan URL storage | unggah sukses & URL dikembalikan | Pass |
+
+Tabel 4.2.17b. Ringkasan Cakupan Kelas [C54]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | validasiPengumpulan(), validasiDeskripsi() |
+| Operasi yang diuji | validasiOwnerPesanan(), validasiPenggunaJasa(), validasiPenyediaJasa(), submitDeliverable(), getDeliverableByPesanan(), getDeliverableByProdukAkhir(), confirmOrderComplete(), unggahBerkasDeliverable() <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-5101 - Algo-5105, dan tambahan yang tidak tercatat dalam DPPL |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c54) |
 
 
 ## 4.3 Pengujian Integrasi
@@ -644,7 +690,15 @@ Tabel 4.6. Bukti Hasil Pengujian
 | C51-UT14 - C51-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T4.png" width="70%"> |
 | C51-UT16 - C51-UT17 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T5.png" width="70%"> |
 | <a id="bukti-c51"></a>C51 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C51-Coverage.png" width="70%"> |
-
+| C54-UT01 - C54-UT05 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T1.png" width="70%"> |
+| C54-UT06 - C54-U09 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T2.png" width="70%">|
+| C54-UT10 - C54-UT13 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T3.png" width="70%"> |
+| C54-UT14 - C54-UT19 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T4.png" width="70%"> |
+| C54-UT20 - C54-UT24 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T5.png" width="70%"> |
+| C54-UT25 - C54-UT26 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T6.png" width="70%"> |
+| C54-UT27 - C54-UT30 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T7.png" width="70%"> |
+| C54-UT31 - C54-UT35 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T8.png" width="70%"> |
+| <a id="bukti-c54"></a>C54 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C41-Coverage.png" width="70%"> |
 
 <br>
 
