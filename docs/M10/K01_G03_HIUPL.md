@@ -60,8 +60,8 @@ Dipersiapkan oleh:
 
 | Revisi | Deskripsi |
 | :--- | :--- |
-| *A* | *Deskripsikan perubahan yang dilakukan dari dokumen sebelumnya pada dokumen ini. Jika tidak terdapat perubahan, harap kosongkan tabel.* |
-| *B* |  |
+| Penambahan Test Case | Menambah Test Case Ulasan karena Kurang dari 70% coverage |
+| Penambahan Test Case | Menambah Test Case Deliverables dan Revisi karena Kurang dari 70% coverage |
 | *C* |  |
 | ... |  |
 
@@ -142,16 +142,13 @@ Dokumen ini ditulis dengan pembagian 5 bab, yaitu pendahuluan, deskripsi umum pe
 ---
 
 # BAB 2: Deskripsi Umum Perangkat Lunak
-
-Bagian ini diisi dengan *System Overview*, dalam bentuk gambar dan narasi yang memberikan gambaran tentang aplikasi dan konteksnya. **Batasan dan keterkaitan** antara sistem yang dibangun dengan sistem lain di luarnya harus jelas. Deskripsi umum sistem perlu dilengkapi dengan pemodelan kasus yang dihadapi, seperti *use case diagram*. Berikan narasi yang jelas untuk setiap gambar yang ditampilkan.
-
-Bagian ini dapat menyalin atau meringkas dari dokumen SKPL atau DPPL.
+CariJasa adalah perangkat lunak berbasis web responsif yang dirancang untuk memfasilitasi transaksi jasa digital di Indonesia, seperti pemrograman, penyuntingan video, desain grafis, copywriting, dll. Platform ini melibatkan tiga aktor utama, yaitu Pengguna Jasa, Penyedia Jasa, dan Admin Sistem. Alur sistem dimulai dari pendaftaran akun dan pemilihan peran oleh pengguna. Pengguna Jasa dapat mencari jasa berdasarkan kategori serta berdiskusi dengan Penyedia Jasa melalui fitur live chat sebelum membuat pesanan. Setelah pemesanan dilakukan, Penyedia Jasa menerima notifikasi dan mengonfirmasi ketersediaan untuk memproses pekerjaan. Selanjutnya, hasil pekerjaan diserahkan melalui platform untuk ditinjau oleh Pengguna Jasa, baik untuk pengajuan revisi maupun konfirmasi penyelesaian proyek. Alur diakhiri dengan penerusan dana pembayaran kepada Penyedia Jasa oleh sistem. Dalam hal ini, Admin bertindak sebagai pihak yang menangani kendala layanan yang dialami oleh pengguna dan menindaklanjuti laporan yang diberikan. CariJasa difokuskan untuk membantu ekosistem dan pasar lokal sehingga lebih ramah dan relevan terhadap pengguna jasa di Indonesia.
 
 <p align="center">
-<img alt="System Overview / Use Case Diagram" src="./assets/contoh-uc-diagram.webp" width="90%">
+<img alt="System Overview / Use Case Diagram" src="./assets/diagram/diagram use case.png" width="90%">
 </p>
 <p align="center">
-<i>Gambar 2.1. Use Case Diagram [Nama P/L]</i>
+<i>Gambar 2.1. Use Case Diagram CariJasa</i>
 </p>
 
 <br>
@@ -193,13 +190,13 @@ Tabel 3.1. Lingkungan Implementasi
 ### Theresia 
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| Hardware | Laptop MSI Modern 14 B11SB, prosesor 11th Gen Intel(R) Core(TM) i5-1155G7 @ 2.50 GHz, 4 Core  |
+| Operating System | Microsoft Windows 11 Home Single Language |
+| Bahasa Pemrograman | TypeScript|
+| Framework/Library | Next.js 16.4.3, React, Tailwind CSS, dan Supabase JavaScript Client.  |
+| DBMS | PostgreSQL melalui Supabase. |
+| Development Tools | VSCode, Git, Github |
+| Testing Tools |  |
 
 ### Edward 
 | Aspek | Keterangan |
@@ -374,6 +371,27 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C35 | HalamanKonfirmasi | Tidak perlu | Halaman UI (Boundary) konfirmasi pesanan penyedia; teruji lewat C31 dan UC10. | - |
 | C36 | ProdukAkhir | Tidak perlu | Entity model data (`ProdukAkhir`) dan tabel `public.produk_akhir` tanpa logika mandiri; teruji lewat C54 (`DeliverablesService`), UC11, dan UC12. | - |
 | C37 | HalamanPengumpulan | Tidak perlu | Halaman UI (Boundary) upload hasil kerja penyedia; teruji lewat C54 dan UC11. | - |
+| C38 | HalamanDeliverables | Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C39 | PengajuanRevisi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C40 | HalamanRequestRevisi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C41 | RevisiHandler | Mendalam | Menguji Logika Bisnis, Validasi Revisi,  Aturan sesuai status, dan Algoritma | *[ID test case atau -]* |
+| C42 | PencairanDana | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C43 | TiketLaporan |  Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C44 | HalamanPelaporan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C45 | LaporanHandler | Mendalam | Menguji Logika Bisnis, Validasi input laporan,  Aturan sesuai status pengguna, dan Algoritma sesuai dengan role pengguna  |*[ID test case atau -]* |
+| C46 | Ulasan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C47 | HalamanUlasan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C48 | UlasanHandler | Mendalam | Menguji pembuatan Ulasan,  validasi input rating, formatting, CRUD terhadap data rating jasa dan rating penyediajasa | *[ID test case atau -]* |
+| C49 | TanggapanLaporan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C50 | HalamanPengajuanMediasi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C51 | MediasiHandler | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
+| C52 | Admin | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C53 | HalamanDashboardAdmin |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
+| C54 | PengumpulanController | Mendalam | Berisi Logika Utama bisnis untuk pengumpulan deliverables | *[ID test case atau -]* |
+| C55 | pesan_chat | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C56 | notifikasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C57 | sesi_mediasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
+| C58 | pesan_mediasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 
 ## 4.2 Pengujian Unit Kelas
 
@@ -548,7 +566,201 @@ Tabel 4.2.5b. Ringkasan Cakupan Kelas C32 (PengontrolTransaksi)
 | ID Algoritma yang tercakup | Algo-3201 (validasi metode & nominal), Algo-3202 (proses pembayaran dummy & rollback), Algo-3203 (update status pembayaran), Algo-3204 (catat riwayat transaksi), Algo-3205 (pencairan dana), Algo-3301 (daftar metode pembayaran), Algo-3401 (riwayat transaksi) |
 | Coverage (wajib ≥ 70%) | 97,82% line / 80,90% branch, tool: Vitest (v8), bukti pada Subbab 4.6 |
 
+### 4.2.13 Kelas RevisiHandler (Bagian dari Deliverables Service)
+
+**ID Kelas:**   C41
+**Nama Kelas:** RevisiHandler
+**Tingkat:** Mendalam
+
+Tabel 4.2.13. Hasil Pengujian Unit Kelas [C41]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C41-UT01 | getRevisionHistory() | Negatif | Query riwayat revisi ke database Supabase gagal | Sistem melempar error *"Gagal mengambil riwayat revisi: DB Error History"* | error dilempar | Pass |
+| C41-UT02 | getRevisionHistory() | Batas | Pesanan belum pernah memiliki riwayat revisi | Fungsi mengembalikan array kosong  tanpa melempar error | array kosong dikembalikan | Pass |
+| C41-UT03 | getRevisionHistory() | Positif | Pesanan memiliki histori riwayat revisi di DB | Mengembalikan array daftar riwayat revisi pesanan | data riwayat dikembalikan | Pass |
+| C41-UT04 | getRevisionAttachments() | Negatif | Query lampiran revisi dari database mengalami error | Sistem melempar error *"Gagal mengambil hasil revisi: Query Lampiran Error"* | error dilempar | Pass |
+| C41-UT05 | getRevisionAttachments() | Positif | Berkas revisi berupa link HTTP/HTTPS langsung | Mengembalikan daftar berkas revisi dengan file_download_url direct link | data lampiran dikembalikan | Pass |
+| C41-UT06 | getRevisionAttachments() | Positif | Berkas revisi berupa path Storage Supabase | Mengembalikan daftar berkas revisi yang telah diubah menjadi signed URL | signed URL dikembalikan | Pass |
+| C41-UT07 | getRevisionAttachments() | Negatif | Pembuatan signed URL dari Storage Service gagal  | Sistem melempar error *"Gagal membuat URL hasil revisi: p-err"* | error dilempar | Pass |
+| C41-UT08 | getRevisionRequestAttachments() | Negatif | Query data pengajuan revisi ke database gagal | Sistem melempar error *"Gagal mengambil lampiran pengajuan revisi: Gagal fetch pengajuan"* | error dilempar | Pass |
+| C41-UT09 | getRevisionRequestAttachments() | Batas | Data pengajuan revisi bernilai null | Fungsi mengembalikan array kosong | array kosong dikembalikan | Pass |
+| C41-UT10 | getRevisionRequestAttachments() | Positif | Data lampiran berupa campuran array/string & link HTTP/storage path | Memilah nama file, mengonversi storage path ke signed URL, dan menyusun array lampiran | lampiran terurai & signed URL dibuat | Pass |
+| C41-UT11 | getRevisionRequestAttachments() | Negatif | Pembuatan signed URL lampiran pengajuan gagal | Sistem melempar error *"Gagal membuat URL lampiran revisi: fail.png"* | error dilempar | Pass |
+| C41-UT12 | requestRevision() | Batas / Negatif | deskripsi_revisi kosong atau berisi spasi saja | Sistem melempar error *"Deskripsi revisi wajib diisi."* | error dilempar | Pass |
+| C41-UT13 | requestRevision() | Negatif | validasiPenggunaJasa gagal (bukan pemilik pesanan) | Sistem melempar error *"Akses ditolak. Hanya pengguna jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C41-UT14 | requestRevision() | Negatif | Query data produk akhir di database mengalami error | Sistem melempar error *"Gagal memvalidasi hasil pekerjaan: Query error produk"* | error dilempar | Pass |
+| C41-UT15 | requestRevision() | Negatif | id_produk_akhir tidak cocok / tidak ada pada pesanan tersebut | Sistem melempar error *"Hasil pekerjaan tidak ditemukan pada pesanan ini."* | error dilempar | Pass |
+| C41-UT16 | requestRevision() | Negatif | Query pemeriksaan riwayat revisi mengalami error DB | Sistem melempar error *"Gagal memeriksa riwayat revisi: DB error revisi"* | error dilempar | Pass |
+| C41-UT17 | requestRevision() | Negatif | Revisi sebelumnya masih dalam status "Sedang Direvisi" | Sistem melempar error *"Revisi sebelumnya masih dikerjakan penyedia jasa."* | error dilempar | Pass |
+| C41-UT18 | requestRevision() | Negatif | Revisi sebelumnya belum berstatus "Revisi Dikumpulkan"  | Sistem melempar error *"Pengajuan revisi baru belum dapat dilakukan karena status..."* | error dilempar | Pass |
+| C41-UT19 | requestRevision() | Batas / Negatif | Kuota revisi pesanan sudah habis  | Sistem melempar error *"Kuota revisi untuk pesanan ini sudah habis."* | error dilempar | Pass |
+| C41-UT20 | requestRevision() | Negatif | insert pengajuan revisi ke database gagal | Sistem melempar error *"Gagal mengajukan revisi: Insert revisi fail"* | error dilempar | Pass |
+| C41-UT21 | requestRevision() | Negatif | insert pengajuan revisi berhasil tetapi mengembalikan data null | Sistem melempar error *"Data pengajuan revisi tidak berhasil disimpan."* | error dilempar | Pass |
+| C41-UT22 | requestRevision() | Negatif | insert revisi sukses, namun update status pesanan gagal | Sistem melempar error *"Revisi berhasil disimpan, tetapi gagal memperbarui status pesanan..."* | error update dilempar | Pass |
+| C41-UT23 | requestRevision() | Positif | Input valid, kuota revisi > 0, DB normal | Berhasil menyimpan pengajuan revisi, mengurangi kuota, & mengirim notifikasi ke seller | revisi diajukan & notifikasi terkirim | Pass |
+| C41-UT24 | submitRevisionFix() | Batas / Negatif | deskripsi_produk kosong atau hanya spasi  | Sistem melempar error *"Deskripsi hasil revisi wajib diisi."* | error dilempar | Pass |
+| C41-UT25 | submitRevisionFix() | Batas / Negatif | file_urls berbentuk array kosong  | Sistem melempar error *"Unggah berkas atau sertakan tautan hasil revisi."* | error dilempar | Pass |
+| C41-UT26 | submitRevisionFix() | Negatif | Query pemeriksaan pengajuan revisi terbaru mengalami error | Sistem melempar error *"Gagal memeriksa pengajuan revisi: DB Error Revision"* | error dilempar | Pass |
+| C41-UT27 | submitRevisionFix() | Negatif | Tidak ada pengajuan revisi aktif yang sedang dikerjakan  | Sistem melempar error *"Tidak ada pengajuan revisi yang sedang dikerjakan."* | error dilempar | Pass |
+| C41-UT28 | submitRevisionFix() | Negatif | insert produk akhir hasil perbaikan ke database gagal | Sistem melempar error *"Gagal menyimpan hasil revisi: Insert produk error"* | error dilempar | Pass |
+| C41-UT29 | submitRevisionFix() | Negatif | insert produk sukses, tetapi update status pengajuan revisi gagal | Sistem melempar error *"Gagal memperbarui status revisi: Update revisi fail"* | error dilempar | Pass |
+| C41-UT30 | submitRevisionFix() | Negatif | insert produk & update revisi sukses, namun update status pesanan gagal | Sistem melempar error *"Revisi berhasil disimpan, tetapi status pesanan gagal..."* | error update dilempar | Pass |
+| C41-UT31 | submitRevisionFix() | Positif | file_urls berisi beberapa file hasil perbaikan valid | Berhasil insert produk perbaikan, merubah status revisi & pesanan, serta memicu notifikasi | perbaikan dikirim & notifikasi terkirim | Pass |
+
+
+
+Khusus kelas **Mendalam**:
+
+Tabel 4.2.1b. Ringkasan Cakupan Kelas [C41]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | kirimRevisi() --> submitRevisionFix(), isRevisiRequestValid() --> bagian dari submitRevisionFix(), sendNotifikasiRevisi() --> bagian dari submitRevisionFix() dan requestRevision(), updateStatusPengerjaan() --> bagian dari submitRevisionFix() |
+| Operasi yang diuji | requestRevision(),submitRevision(), getRevisionHistory(), getRevisionAttachments(), getRevisionRequestAttachments()  <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing|
+| ID Algoritma yang tercakup | Algo-4101, Algo-4102, Algo-4103, Algo-4104, Algo-4105, dan tambahan yang tidak tercata |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c41) |
+
+### 4.2.14 Kelas LaporanHandler
+
+**ID Kelas:**   C45
+**Nama Kelas:** LaporanHandler
+**Tingkat:** Mendalam
+
+Tabel 4.2.14. Hasil Pengujian Unit Kelas [C45]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C45-UT01 | submitLaporan() | Batas | Deskripsi laporan tidak diisi (kosong)  atau kategori kosong | Sistem melempar error validasi deskripsi / minimal 1 kategori | error dilempar | Pass |
+| C45-UT02 | submitLaporan() | Batas | Batas lampiran bukti kosong atau lewat dari batas maksimal > 3 | Sistem melempar error batas minimal 1 dan maksimal 3 bukti lampiran | error dilempar | Pass |
+| C45-UT03 | submitLaporan() | Negatif | Format URL bukti mengandung `javascript:` atau path file | Sistem melempar error validasi format URL bukti tidak valid | URL ditolak | Pass |
+| C45-UT04 | submitLaporan() | Negatif | id_pesanan tidak ditemukan dalam database atau user_id bukan pelapor/terlapor pada pesanan tersebut | Sistem melempar error "Pesanan tidak ditemukan" / "Akses ditolak" | Akses ditolak | Pass |
+| C45-UT05 | submitLaporan() | Negatif | User masih memiliki tiket laporan berstatus `"Diproses"` untuk pesanan yang sama | Sistem melempar error tiket laporan masih sedang diproses |  duplikasi laporan ditolak | Pass |
+| C45-UT06 | submitLaporan() | Positif | Data laporan valid, pelapor adalah pemesan, dan terlapor adalah penyedia | Laporan berhasil disimpan ke Database dengan status "Diproses" dan mengembalikan id_tiket | tiket laporan berhasil dibuat | Pass |
+| C45-UT07 | validasiOwnerPesanan() | Positif | `user_id` merupakan penyedia jasa dari pesanan | Fungsi mengembalikan `true` |  validasi mengembalikan true | Pass |
+| C45-UT08 | validasiOwnerPesanan() | Negatif | id_pesanan tidak ada di database | melempar error *"Pesanan tidak ditemukan"* | error dilempar | Pass |
+| C45-UT09 | getTicketsByUser() | Positif  | user_id valid serta memiliki beberapa daftar tiket | Mengembalikan daftar tiket pelaporan pemilik tiket | daftar tiket dapat direturn | Pass |
+| C45-UT10 | getDetailTiket() | Negatif | user_id yang tidak terdaftar sebagai pelapor maupun terlapor | melempar error "Akses ditolak. Anda tidak memiliki izin melihat tiket ini." | Akses ditolak | Pass |
+| C45-UT11 | getDetailTiket() | Positif | user_id merupakan pelapor asli tiket | Mengembalikan objek detail data tiket laporan |  detail tiket dikembalikan | Pass |
+| C45-UT12 | getAllTicketsForAdmin() | Positif | Dipanggil oleh Admin | Mengembalikan seluruh daftar tiket laporan dari seluruh pengguna | seluruh tiket dikembalikan | Pass |
+| C45-UT13 | getDetailTiketAdmin() | Positif | id_tiket valid | Mengembalikan detail tiket laporan secara langsung tanpa batasan otorisasi pelapor |  detail tiket dikembalikan | Pass |
+| C45-UT14 | catatKeputusanTindakan() | Batas | jenis_tindakan kosong atau catatan_tanggapan kosong maupun hanya spasi| Sistem melempar error validasi pilihan tindakan / catatan wajib diisi | Error dilempar | Pass |
+| C45-UT15 | catatKeputusanTindakan() | Negatif | Tiket yang diproses sudah berstatus "Selesai" di database | Sistem melempar error "Tiket laporan ini sudah selesai ditangani sebelumnya." | Error penolakan | Pass |
+| C45-UT16 | catatKeputusanTindakan() | Positif | Admin memilih tindakan PERINGATAN / SUSPEND_AKUN dengan catatan valid | Berhasil menyimpan tanggapan, memanggil RPC admin_beri_sanksi, dan mengubah status tiket menjadi "Selesai" |  sanksi diproses & status tiket selesai | Pass |
+| C45-UT17 | catatKeputusanTindakan() | Positif | Admin memilih tindakan LAPORAN_DITOLAK dengan catatan valid | Berhasil menyimpan tanggapan dan mengubah status tiket menjadi "Selesai" tanpa memicu sanksi akun |  penolakan dicatat & status tiket selesai | Pass |
+
+Tabel 4.2.14b. Ringkasan Cakupan Kelas [C45]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | validasiFormatLaporan() --> Menjadi bagian dari fungsi submitLaporan() <br> kirimNotifAdmin() --> Menjadi bagian dari fungsi submitLaporan() <br> simpanData() --> Menjadi bagian dari fungsi submitLaporan() <br> banPengguna() --> Menjadi bagian dari fungsi catatKeputusanTindakan() <br> skorsPengguna() -->  Menjadi bagian dari fungsi catatKeputusanTindakan() <br> kirimTanggapan() -->  Menjadi bagian dari routing catatKeputusanTindakan() <br> saveTanggapan() -->  Menjadi bagian dari fungsi catatKeputusanTindakan() <br> saveLaporan() --> Menjadi bagian dari fungsi catatKeputusanTindakan() <br> updateStatusTiket() --> Menjadi bagian dari fungsi catatKeputusanTindakan() <br getDetailTiket() --> dipecah menjadi getDetailTiket() untuk pengguna dan getDetailTiketAdmin() untuk admin  |
+| Operasi yang diuji | <br>  submitLaporan(), validasiOwnerPesanan(), getTicketsByUser(), getDetailTiket(), getAllTicketsForAdmin(), getDetailTiketAdmin(), catatKeputusanTindakan() <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-4501 - Algo-4510, dan tambahan yang tidak tercatat dalam DPPL |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c45) |
 <br>
+
+### 4.2.15 Kelas UlasanHandler
+
+**ID Kelas:**   C48
+**Nama Kelas:** UlasanHandler
+**Tingkat:** Mendalam
+
+Tabel 4.2.15. Hasil Pengujian Unit Kelas [C48]
+
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **C48-UT01** | validasiRating() | Batas dan Positif | rating bernilai 1, 3, dan 5 | Fungsi berhasil memvalidasi tanpa melempar error | validasi sukses | Pass |
+| **C48-UT02** | validasiRating() | Batas / Negatif | rating bernilai kurang dari 1 (`0` dan `-1`) | Sistem melempar error *"Rating harus bernilai antara 1 sampai 5"* | error dilempar | Pass |
+| **C48-UT03** | validasiRating() | Batas / Negatif | rating bernilai lebih dari 5 (`6` dan `10`) | Sistem melempar error *"Rating harus bernilai antara 1 sampai 5"* | error dilempar | Pass |
+| **C48-UT04** | validasiRating() | Negatif | rating bernilai non-angka atau `NaN` (misal: `"5"` string) | Sistem melempar error *"Rating harus bernilai antara 1 sampai 5"* | error dilempar | Pass |
+| **C48-UT05** | validasiDokumentasi() | Batas / Positif | Berkas valid (`1024` byte, tipe `image/jpeg`) | Fungsi berhasil memvalidasi tanpa melempar error | validasi sukses | Pass |
+| **C48-UT06** | validasiDokumentasi() | Batas | Jumlah berkas melebihi batas maksimal (`4` berkas) | Sistem melempar error *"Dokumentasi ulasan maksimal 3 berkas."* | error dilempar | Pass |
+| **C48-UT07** | validasiDokumentasi() | Negatif | Format/MIME type berkas tidak didukung (`skrip.exe` atau mismatch MIME) | Sistem melempar error format berkas tidak didukung | error dilempar | Pass |
+| **C48-UT08** | validasiDokumentasi() | Batas / Negatif | Berkas kosong (`ukuran <= 0` byte) | Sistem melempar error *"Berkas [nama] kosong atau tidak valid."* | error dilempar | Pass |
+| **C48-UT09** | validasiDokumentasi() | Batas / Negatif | Ukuran berkas melebihi batas maksimal (`11 MB`) | Sistem melempar error *"Ukuran berkas [nama] maksimal 10 MB."* | error dilempar | Pass |
+| **C48-UT10** | hitungRatingAgregat() | Batas | Daftar ulasan kosong (`[]`) atau `null` | Mengembalikan nilai default `{ rating_rata_rata: 0, total_ulasan: 0 }` | default 0 dikembalikan | Pass |
+| **C48-UT11** | hitungRatingAgregat() | Positif | Daftar rating berupa array angka (`[5, 4, 5, 4]`) atau objek (`[{ rating: 5 }, { rating: 3 }]`) | Menghitung rata-rata dengan benar beserta total ulasannya | kalkulasi rata-rata akurat | Pass |
+| **C48-UT12** | hitungRatingAgregat() | Batas | Menghitung rata-rata dengan hasil desimal berulang (misal: `14/3` dan `13/3`) | Menerapkan pembulatan konsisten 1 angka desimal (`4.7` untuk bulat atas, `4.3` untuk bulat bawah, `4.0` untuk pas) | pembulatan konsisten | Pass |
+| **C48-UT13** | hitungRatingAgregat() | Negatif | Salah satu elemen rating dalam daftar di luar rentang 1-5 (`[5, 6]` atau `[5, 0]`) | Sistem melempar error *"Rating harus bernilai antara 1 sampai 5"* | error dilempar | Pass |
+| **C48-UT14** | formatRatingTampilan() | Batas | Penyedia tanpa ulasan (`rating` = `0` atau `null`, `total_ulasan` = `0`) | Mengembalikan format teks default (`"0.0"`, `"0 ulasan"`, dan label `"Belum ada ulasan"`) | label default dikembalikan | Pass |
+| **C48-UT15** | formatRatingTampilan() | Positif | `rating` = `4.8`, `total_ulasan` = `15` | Mengembalikan teks formatted rapi (`"4.8"`, `"15 ulasan"`, dan label `"★ 4.8 (15 ulasan)"`) | teks formatted sesuai | Pass |
+| **C48-UT16** | perbaruiRatingPenyedia() & perbaruiRatingJasa() | Negatif | `id_penyedia_jasa` atau `id_jasa` kosong (`""` atau `"   "`) | Sistem melempar error *"ID penyedia jasa tidak valid"* / *"ID jasa tidak valid"* | error dilempar | Pass |
+| **C48-UT17** | perbaruiRatingPenyedia() | Positif | `id_penyedia_jasa` valid yang memiliki pesanan & ulasan | Menghitung ulang ulasan, memperbarui tabel `penyedia_jasa`, dan mengembalikan rata-rata (`5`, `total: 1`) | database diperbarui | Pass |
+| **C48-UT18** | perbaruiRatingJasa() | Positif | `id_jasa` valid yang memiliki pesanan & ulasan | Menghitung ulang ulasan, memperbarui tabel `jasa`, dan mengembalikan rata-rata (`4`, `total: 1`) | database diperbarui | Pass |
+| **C48-UT19** | perbaruiRatingPenyedia() & perbaruiRatingJasa() | Negatif | Simulasi kegagalan database saat melakukan `update` rating | Sistem melempar error *"Gagal memperbarui rata-rata rating penyedia jasa / jasa."* | error DB tertangkap | Pass |
+| **C48-UT20** | getRatingDanUlasanPenyedia() | Negatif | `id_penyedia_jasa` kosong | Sistem melempar error *"ID penyedia jasa tidak valid"* | error dilempar | Pass |
+| **C48-UT21** | getRatingDanUlasanPenyedia() | Positif | `id_penyedia_jasa` valid | Mengembalikan objek rating rata-rata (`4.8`) dan total ulasan | profil rating dikembalikan | Pass |
+| **C48-UT22** | getRatingDanUlasanPenyedia() | Negatif | Simulasi error query database penyedia jasa | Sistem melempar error DB yang sesuai | error dilempar | Pass |
+| **C48-UT23** | getUlasanbyJasa() | Batas | `id_jasa` tanpa histori pesanan | Mengembalikan array ulasan kosong dan total 0 (`{ ulasan: [], total: 0 }`) | array kosong dikembalikan | Pass |
+| **C48-UT24** | getUlasanbyJasa() | Negatif | Simulasi query pesanan atau ulasan gagal di DB | Sistem melempar error query dari DB | error dilempar | Pass |
+| **C48-UT25** | getUlasanJasaById() | Negatif | Simulasi error umum saat pengadaan data ulasan | Sistem melempar error *"Terjadi kesalahan saat mengambil data ulasan."* | error dilempar | Pass |
+| **C48-UT26** | simpanUlasan() | Negatif | `id_pesanan` kosong (`""`) | Sistem melempar error *"ID pesanan tidak valid."* | error dilempar | Pass |
+| **C48-UT27** | simpanUlasan() | Negatif | `id_pengguna_jasa` tidak sesuai dengan pemilik pesanan (`user-lain`) | Sistem melempar error *"Kamu tidak memiliki akses untuk mengulas pesanan ini."* | akses ditolak | Pass |
+| **C48-UT28** | simpanUlasan() | Negatif | Status pesanan belum selesai (`status_pesanan` = `"PROSES"`) | Sistem melempar error *"Pesanan harus selesai sebelum dapat diberi ulasan."* | error dilempar | Pass |
+| **C48-UT29** | simpanUlasan() | Negatif | Pesanan sudah pernah diulas sebelumnya | Sistem melempar error *"Pesanan ini sudah memiliki ulasan."* | duplikasi ulasan ditolak | Pass |
+| **C48-UT30** | simpanUlasan() | Positif | Data ulasan valid dengan berkas dokumentasi (`foto.jpg`) | Mengunggah berkas ke storage, menyimpan ulasan ke DB, dan memicu `perbaruiRatingPenyedia` | ulasan disimpan & storage terisi | Pass |
+| **C48-UT31** | simpanUlasan() | Negatif / Rollback | Berkas berhasil diunggah ke storage, tetapi transaksi `insert` DB gagal | Sistem melempar error DB dan melakukan *rollback* (menghapus berkas yang terunggah di storage) | rollback storage berhasil | Pass |
+| **C48-UT32** | updateUlasan() | Batas / Negatif | `dokumentasi_path` baru melebihi limit (`4` URL) | Sistem melempar error *"Dokumentasi ulasan maksimal 3 berkas."* | error dilempar | Pass |
+| **C48-UT33** | updateUlasan() | Negatif | `dokumentasi_path` berisi URL asing yang tidak ada pada ulasan lama | Sistem melempar error *"Dokumentasi yang diperbarui tidak valid."* | URL asing ditolak | Pass |
+| **C48-UT34** | updateUlasan() | Positif | Menghapus salah satu foto lama dari ulasan saat update | Mengubah data di DB dan menghapus foto yang dibuang dari storage | ulasan diperbarui & foto dibuang | Pass |
+| **C48-UT35** | updateUlasan() | Negatif | Simulasi error saat query `update` ke DB | Sistem melempar error *"Terjadi kesalahan saat memperbarui ulasan."* | error dilempar | Pass |
+| **C48-UT36** | deleteUlasan() | Positif | `id_ulasan` dan `user_id` pemilik valid | Menghapus data ulasan dari DB dan membersihkan berkas dokumentasi di storage | ulasan & foto terhapus | Pass |
+| **C48-UT37** | deleteUlasan() | Negatif | Simulasi error saat query `delete` ke DB | Sistem melempar error *"Terjadi kesalahan saat menghapus ulasan."* | error dilempar | Pass |
+
+Tabel 4.2.15b. Ringkasan Cakupan Kelas [C48]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | (validasiKelengkapanRating(), validasiFormatBerkas(), validasiPanjangKomentar()) --> Bagian dari simpanUlasan() <br> prosesUlasan() --> simpanUlasan(), perbaruiRating() --> Bagian dari updateUlasan() dan simpanUlasan() |
+| Operasi yang diuji | <br>  validasiRating() <br> validasiDokumentasi()  <br> hitungRatingAgregat() <br>  formatRatingTampilan() <br> perbaruiRatingPenyedia() <br> perbaruiRatingJasa() <br> getRatingDanUlasanPenyedia() <br> getStatistikUlasanJasa()  <br> getUlasanJasaById() <br> getUlasanbyJasa() <br> simpanUlasan() <br> validasiOwnerUlasan() <br> updateUlasan() <br> deleteUlasan() <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-4801 - Algo-4805, dan tambahan yang tidak tercatat dalam DPPL |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c48) |
+
+### 4.2.16 Kelas MediasiHandler
+
+**ID Kelas:**   C51
+**Nama Kelas:** MediasiHandler
+**Tingkat:** Mendalam
+
+Tabel 4.2.16. Hasil Pengujian Unit Kelas [C51]
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **C51-UT01** | mulaiMediasi() | Negatif | id_tiket tidak ditemukan di database  | Sistem melempar error *"Tiket laporan tidak ditemukan."* | error dilempar | Pass |
+| **C51-UT02** | mulaiMediasi() | Batas / Negatif | Tiket laporan tidak memiliki id_terlapor  | Sistem melempar error *"Tiket laporan ini tidak memiliki pihak terlapor untuk dimediasi."* | error dilempar | Pass |
+| **C51-UT03** | mulaiMediasi() | Negatif | id_admin tidak valid atau bukan admin yang terdaftar | Sistem melempar error *"Akses ditolak: User bukan admin yang valid."* | error dilempar | Pass |
+| **C51-UT04** | mulaiMediasi() | Batas | Sesi mediasi untuk tiket sudah ada dan berstatus `BERLANGSUNG` | Mengembalikan sesi yang sudah ada tanpa membuat data baru di DB | mengembalikan sesi lama | Pass |
+| **C51-UT05** | mulaiMediasi() | Negatif  | Pembuatan sesi mediasi berhasil, namun pembuatan pesan awal mediasi gagal | Sistem melempar error dan memanggil delete (rollback) untuk menghapus sesi mediasi yang sempat dibuat | rollback sesi berhasil | Pass |
+| **C51-UT06** | mulaiMediasi() | Positif | id_tiket dan id_admin valid, belum ada sesi mediasi aktif | Berhasil membuat sesi mediasi baru, membuat pesan awal, dan memicu 2 kali pengiriman notifikasi | sesi mediasi baru dibuat & notifikasi terkirim | Pass |
+| **C51-UT07** | kirimPesanMediasi() | Batas / Negatif | isi_pesan kosong atau hanya spasi (`'   '`) | Sistem melempar error *"Isi pesan tidak boleh kosong."* | error dilempar | Pass |
+| **C51-UT08** | kirimPesanMediasi() | Negatif | id_sesi_mediasi tidak ditemukan di database | Sistem melempar error *"Sesi mediasi tidak ditemukan."* | error dilempar | Pass |
+| **C51-UT09** | kirimPesanMediasi() | Batas / Negatif | Sesi mediasi sudah berstatus `SELESAI` | Sistem melempar error *"Sesi mediasi telah selesai. Tidak dapat mengirim pesan lagi."* | error dilempar | Pass |
+| **C51-UT10** | kirimPesanMediasi() | Negatif | Pengirim bukan salah satu peserta sah (bukan admin, pelapor, atau terlapor) | Sistem melempar error *"Akses ditolak: Anda bukan peserta dalam sesi mediasi ini."* | akses ditolak | Pass |
+| **C51-UT11** | kirimPesanMediasi() | Positif / Batas | Mengirim pesan dengan panjang lebih dari 80 karakter  | Berhasil menyimpan pesan dan memotong preview notifikasi menjadi 80 karakter diikuti `"..."` | pesan terkirim & preview notifikasi dipotong | Pass |
+| **C51-UT12** | getDaftarMediasiUser() | Positif | user_id valid yang terdaftar sebagai peserta pada beberapa sesi mediasi | Memfilter sesi mediasi sesuai peserta dan mengurutkan pesan terakhir secara rinci | daftar sesi terfilter & terurut | Pass |
+| **C51-UT13** | getDaftarMediasiUser() | Negatif | Simulasi kegagalan query database saat mengambil daftar mediasi | Sistem melempar error *"Gagal mengambil daftar sesi mediasi: Fetch error"* | error DB tertangkap | Pass |
+| **C51-UT14** | getDetailDanPesanMediasi() | Negatif | user_id yang mengakses bukan peserta dalam sesi mediasi  | Sistem melempar error *"Akses ditolak: Anda tidak memiliki akses ke ruang mediasi ini."* | akses ditolak | Pass |
+| **C51-UT15** | getDetailDanPesanMediasi() | Positif | id_sesi_mediasi dan user_id peserta valid | Mengembalikan detail sesi dan memformat peran_di_mediasi untuk setiap pesan (`ADMIN`, `PELAPOR`, `TERLAPOR`) | detail & peran pesan diformat sesuai | Pass |
+| **C51-UT16** | selesaikanMediasi() | Negatif | Simulasi kegagalan update status sesi DB atau sesi sudah berstatus selesai | Sistem melempar error *"Gagal menutup sesi mediasi atau sesi sudah selesai."* | error dilempar | Pass |
+| **C51-UT17** | selesaikanMediasi() | Positif | id_sesi_mediasi dan id_admin valid | Mengubah status sesi menjadi `SELESAI` dan otomatis menyisipkan pesan penutup dari admin | sesi ditutup & pesan penutup dibuat | Pass |
+
+
+Tabel 4.2.16b. Ringkasan Cakupan Kelas [C51]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL |  |
+| Operasi yang diuji | <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-4801 - Algo-4805, dan tambahan yang tidak tercatat dalam DPPL |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c51) |
+
+### 4.2.17 Kelas PengumpulanController
+
+**ID Kelas:**   C54
+**Nama Kelas:** MediasiHandler
+**Tingkat:** Mendalam
+
+Tabel 4.2.16. Hasil Pengujian Unit Kelas [C54]
+
 
 ## 4.3 Pengujian Integrasi
 
@@ -563,6 +775,15 @@ Tabel 4.3.1. Daftar Antarmuka Antarkomponen
 | *I-03* | *PaymentGatewayAdapter* | *Payment Gateway (dummy)* | *Aplikasi - Sistem eksternal* | *INT-TC04, INT-TC05* |
 | *[I-XX]* | *[Komponen asal]* | *[Komponen tujuan]* | *[Jenis batas]* | *[ID test case]* |
 | *...* | *...* | *...* | *...* | *...* |
+| I-11 | PesananService.ambilDaftarPesanan | Tabel pesanan | Aplikasi - Basis data | INT-TC11-1, INT-TC11-2 |
+| I-12 | PesananService.respondOrder | Tabel pesanan | Aplikasi - Basis data | INT-TC12-1, INT-TC12-2 |
+| I-13 | DeliverablesService.submitDeliverable | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC13-1, INT-TC13-2 |
+| I-14 | DeliverablesService.confirmOrderComplete, getDeliverableByPesanan | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC14-1, INT-TC14-2 |
+| I-15 | DeliverablesService.requestRevision | Tabel pengajuan_revisi, pesanan | Aplikasi - Basis data | INT-TC15-1, INT-TC15-2 |
+| I-16 | PelaporanService.submitLaporan | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC16-1, INT-TC16-2 |
+| I-17 | UlasanService.simpanUlasan | Tabel ulasan, penyedia_jasa, jasa | Aplikasi - Basis data | INT-TC17-1, INT-TC17-2 |
+| I-18 | TanggapanLaporanService.catatKeputusanTindakan, MediasiService.mulaiMediasi | Tabel tanggapan_laporan, tiket_laporan, sesi_mediasi, pesan_mediasi | Aplikasi - Basis data | INT-TC18-1, INT-TC18-2, INT-TC18-3 |
+| I-19 | TanggapanLaporanService.getAllTicketsForAdmin, getDetailTiketAdmin | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC19-1, INT-TC19-2 |
 
 Tabel 4.3.2. Hasil Pengujian Integrasi
 
@@ -572,6 +793,25 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 | *INT-TC03* | *I-02* | *Normal: simpan pesanan* | *Buat pesanan, lalu baca ulang langsung dari basis data* | *Baris pesanan ada dengan nilai total dan status yang sama* | *[...]* | *Pass/Fail* |
 | *INT-TC05* | *I-03* | *Gagal: gateway mengembalikan status gagal* | *Kirim otorisasi dengan saldo dummy tidak cukup* | *Status pesanan tidak berubah menjadi "Lunas", pesan gagal diteruskan ke pengguna* | *[...]* | *Pass/Fail* |
 | *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| INT-TC11-1 | I-11 | Normal: mengambil daftar pesanan pengguna | Memanggil `ambilDaftarPesanan()` dengan ID pengguna dan peran `pengguna_jasa` yang valid | Menghasilkan seluruh pesanan milik pengguna beserta status dan informasi ulasan | Menghasilkan 2 pesanan dengan status DIPROSES dan SELESAI serta informasi ulasan yang sesuai | Pass |
+| INT-TC11-2 | I-11 | Normal: pengguna belum memiliki pesanan | Memanggil `ambilDaftarPesanan()` untuk pengguna yang belum memiliki pesanan | Menghasilkan daftar pesanan kosong | Menghasilkan array kosong | Pass |
+| INT-TC12-1 | I-12 | Normal: menerima pesanan | Memanggil `respondOrder()` dengan ID pesanan, ID penyedia, dan tindakan `Diterima` yang valid | Status pesanan diperbarui menjadi DIPROSES | Menghasilkan pesanan dengan status DIPROSES dan menjalankan operasi update satu kali | Pass |
+| INT-TC12-2 | I-12 | Gagal: menerima pesanan yang sudah diproses | Memanggil `respondOrder()` untuk pesanan dengan status DIPROSES | Sistem menolak tindakan dan tidak memperbarui data pesanan | Sistem menghasilkan error "Pesanan ini sudah diproses sebelumnya" dan tidak menjalankan update | Pass |
+| INT-TC13-1 | I-13 | Normal: mengumpulkan hasil pekerjaan | Memanggil `submitDeliverable()` dengan ID pesanan, deskripsi, dan URL berkas valid | Data produk akhir tersimpan dan status pesanan diperbarui | Data produk akhir tersimpan dengan deskripsi yang telah di-trim dan status pemeriksaan false; status pesanan diperbarui | Pass |
+| INT-TC13-2 | I-13 | Gagal: berkas dan tautan hasil pekerjaan kosong | Memanggil `submitDeliverable()` tanpa berkas dan tanpa tautan | Sistem menolak pengumpulan dan tidak menyimpan data | Sistem menghasilkan error "Unggah berkas atau sertakan tautan hasil pekerjaan." dan tidak menjalankan insert maupun update | Pass |
+| INT-TC14-1 | I-14 | Normal: mengonfirmasi pesanan selesai | Memanggil `confirmOrderComplete()` dengan ID pesanan dan ID pengguna valid | Pesanan dikonfirmasi selesai dan RPC pencairan dana dipanggil | Proses berhasil dan RPC `konfirmasi_pesanan_selesai` dipanggil dengan ID pesanan yang sesuai | Pass |
+| INT-TC14-2 | I-14 | Normal: deliverable belum tersedia | Memanggil `getDeliverableByPesanan()` untuk pesanan yang belum memiliki hasil pekerjaan | Sistem mengembalikan nilai null | Menghasilkan null | Pass |
+| INT-TC15-1 | I-15 | Normal: mengajukan revisi | Memanggil `requestRevision()` dengan data pesanan, produk akhir, deskripsi revisi, dan pengguna valid | Pengajuan revisi tersimpan dan kuota revisi berkurang menjadi 2 | Data revisi berhasil disimpan dengan kuota tersisa 2 dan status Sedang Direvisi | Pass |
+| INT-TC15-2 | I-15 | Gagal: kuota revisi habis | Memanggil `requestRevision()` pada pesanan dengan kuota revisi 0 | Sistem menolak pengajuan revisi dan tidak menyimpan pengajuan baru | Sistem menghasilkan error "Kuota revisi untuk pesanan ini sudah habis." dan tidak menjalankan insert | Pass |
+| INT-TC16-1 | I-16 | Normal: mengirim laporan | Memanggil `submitLaporan()` dengan ID pesanan, ID pelapor, kategori, deskripsi, dan bukti valid | Tiket laporan tersimpan dengan identitas terlapor berdasarkan data pesanan | Tiket laporan berhasil disimpan dengan ID terlapor sesuai penyedia jasa pada pesanan | Pass |
+| INT-TC16-2 | I-16 | Gagal: bukti laporan kosong | Memanggil `submitLaporan()` dengan daftar URL bukti kosong | Sistem menolak laporan dan tidak melakukan koneksi ke database | Sistem menghasilkan error "Minimal sertakan 1 tautan atau lampiran bukti." dan tidak memanggil `createClient()` | Pass |
+| INT-TC17-1 | I-17 | Normal: menyimpan ulasan | Memanggil `simpanUlasan()` dengan pesanan selesai dan rating 5 | Ulasan tersimpan dan rating penyedia serta jasa diperbarui | Ulasan tersimpan; mock memverifikasi operasi pembaruan rating penyedia dan jasa dengan nilai 5 | Pass |
+| INT-TC17-2 | I-17 | Gagal: rating tidak valid | Memanggil `simpanUlasan()` dengan rating 0 | Sistem menolak ulasan dan tidak melakukan operasi database | Sistem menghasilkan error "Rating harus bernilai antara 1 sampai 5." dan tidak memanggil client Supabase | Pass |
+| INT-TC18-1 | I-18 | Normal: mencatat keputusan tindakan admin | Memanggil `catatKeputusanTindakan()` dengan ID tiket, ID admin, jenis tindakan PERINGATAN, dan catatan valid | Tanggapan tersimpan, status tiket diperbarui menjadi Selesai, dan RPC pemberian sanksi dipanggil | Tanggapan tersimpan, operasi update tiket dan RPC `admin_beri_sanksi` terverifikasi | Pass |
+| INT-TC18-2 | I-18 | Normal: memulai sesi mediasi baru | Memanggil `mulaiMediasi()` pada tiket yang belum memiliki sesi aktif | Sesi mediasi dan pesan pembuka dibuat serta notifikasi dikirim kepada kedua pihak | Sesi dan pesan pembuka berhasil dibuat; dua notifikasi dikirim kepada pelapor dan terlapor | Pass |
+| INT-TC18-3 | I-18 | Normal: menggunakan sesi mediasi aktif | Memanggil `mulaiMediasi()` pada tiket yang sudah memiliki sesi mediasi aktif | Sistem menggunakan sesi yang tersedia tanpa membuat sesi baru | Sesi aktif dikembalikan tanpa insert pesan baru maupun pengiriman notifikasi | Pass |
+| INT-TC19-1 | I-19 | Normal: mengambil seluruh tiket laporan | Memanggil `getAllTicketsForAdmin()` | Menghasilkan daftar tiket laporan yang diurutkan berdasarkan waktu pembuatan terbaru | Menghasilkan daftar tiket dan memverifikasi pengurutan `created_at` secara descending | Pass |
+| INT-TC19-2 | I-19 | Normal: mengambil detail tiket laporan | Memanggil `getDetailTiketAdmin()` dengan ID tiket valid | Menghasilkan detail tiket beserta tanggapan dan informasi pesanan | Detail tiket, tanggapan, dan informasi pesanan berhasil diperoleh | Pass |
 
 <br>
 
@@ -656,6 +896,44 @@ Tabel 4.6. Bukti Hasil Pengujian
 | ID Pengujian | Bukti Hasil Pengujian |
 | :--- | :--- |
 | C22-UT01 – C22-UT12,<br>C25-UT01 – C25-UT12,<br>C26-UT01 – C26-UT09,<br>C31-UT01 – C31-UT12,<br>C32-UT01 – C32-UT12,<br>serta C22, C25, C26, C31, C32 (coverage) | Keluaran Vitest v5.1.0 (`20 passed (20)`, `678 passed (678)`) dan laporan `@vitest/coverage-v8` (`bookmark.service.ts` 100% line / 83,56% branch; `chat.service.ts` 100% line / 90,19% branch; `notifikasi.service.ts` 100% line / 92,30% branch; `pesanan.service.ts` 94,73% line / 84,09% branch; `transaksi.service.ts` 97,82% line / 80,90% branch):<br>![Output Vitest dan Coverage](./assets/danesh/vitest-coverage.png) |
+| C41-UT01 - C41-UT03 |  <br> <img alt="Pengujian" src="../M10/assets/C41-T1.png" width="70%"> |
+| C41-UT04 - C41-UT07 | <br> <img alt="Pengujian" src="../M10/assets/C41-T2.png" width="70%">|
+| C41-UT09 - C41-UT11 | <br> <img alt="Pengujian" src="../M10/assets/C41-T3.png" width="70%"> |
+| C41-UT12 - C41-UT23 |  <br> <img alt="Pengujian" src="../M10/assets/C41-T4.png" width="70%"> |
+| C41-UT24 - C41-UT31 |   <br> <img alt="Pengujian" src="../M10/assets/C41-T5.png" width="70%"> |
+| <a id="bukti-c41"></a>C41 Coverage |  <br> <img alt="Pengujian" src="../M10/assets/C41-Coverage.png" width="70%"> |
+| C45-UT01 - C45-UT06 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T1.png" width="70%"> |
+| C45-UT07 - C45-U08 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T2.png" width="70%">|
+| C45-UT09 - C45-UT11 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T3.png" width="70%"> |
+| C45-UT12 - C45-UT13 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T4.png" width="70%"> |
+| C45-UT14 - C45-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C45-T5.png" width="70%"> |
+| <a id="bukti-c45"></a>C45 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C45-Coverage.png" width="70%"> |
+| C48-UT01 - C48-UT04 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T1.png" width="70%"> |
+| C48-UT05 - C48-U09 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T2.png" width="70%">|
+| C48-UT10 - C48-UT13 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T3.png" width="70%"> |
+| C48-UT14 - C48-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T4.png" width="70%"> |
+| C48-UT16 - C48-UT19 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T5.png" width="70%"> |
+| C48-UT20 - C48-UT22 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T6.png" width="70%"> |
+| C48-UT23 - C48-U25 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T7.png" width="70%">|
+| C48-UT26 - C48-UT31 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T8.png" width="70%"> |
+| C48-UT33 - C48-UT35 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T9.png" width="70%"> |
+| C48-UT36 - C48-UT37 |  <br> <img alt="Pengujian" src="../M10/assets/C48-T10.png" width="70%"> |
+| <a id="bukti-c48"></a>C48 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C48-Coverage.png" width="70%"> |
+| C51-UT01 - C51-UT06 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T1.png" width="70%"> |
+| C51-UT07 - C51-U011 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T2.png" width="70%">|
+| C51-UT12 - C51-UT13 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T3.png" width="70%"> |
+| C51-UT14 - C51-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T4.png" width="70%"> |
+| C51-UT16 - C51-UT17 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T5.png" width="70%"> |
+| <a id="bukti-c51"></a>C51 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C51-Coverage.png" width="70%"> |
+| INT-TC11-1 – INT-TC11-2 | <img alt="Bukti Pengujian Integrasi I-11" src="../M10/assets/I11.png" width="70%"> |
+| INT-TC12-1 – INT-TC12-2 | <img alt="Bukti Pengujian Integrasi I-12" src="../M10/assets/I12.png" width="70%"> |
+| INT-TC13-1 – INT-TC13-2 | <img alt="Bukti Pengujian Integrasi I-13" src="../M10/assets/I13.png" width="70%"> |
+| INT-TC14-1 – INT-TC14-2 | <img alt="Bukti Pengujian Integrasi I-14" src="../M10/assets/I14.png" width="70%"> |
+| INT-TC15-1 – INT-TC15-2 | <img alt="Bukti Pengujian Integrasi I-15" src="../M10/assets/I15.png" width="70%"> |
+| INT-TC16-1 – INT-TC16-2 | <img alt="Bukti Pengujian Integrasi I-16" src="../M10/assets/I16.png" width="70%"> |
+| INT-TC17-1 – INT-TC17-2 | <img alt="Bukti Pengujian Integrasi I-17" src="../M10/assets/I17.png" width="70%"> |
+| INT-TC18-1 – INT-TC18-3 | <img alt="Bukti Pengujian Integrasi I-18" src="../M10/assets/I18.png" width="70%"> |
+| INT-TC19-1 – INT-TC19-2 | <img alt="Bukti Pengujian Integrasi I-19" src="../M10/assets/I19.png" width="70%"> |
 | UC04-TC01 | Notifikasi sukses unggah jasa pada `/penyedia/upload-jasa`:<br>![UC04-TC01 Sukses Unggah Jasa](./assets/danesh/uc04-tc01.png) |
 | UC04-TC02 | Validasi error pada field wajib dan form `/penyedia/upload-jasa`:<br>![UC04-TC02 Validasi Bagian Atas](./assets/danesh/uc04-tc02-1.png)<br>![UC04-TC02 Validasi Berkas](./assets/danesh/uc04-tc02-2.png) |
 | UC05-TC01 | Pencarian berdasarkan keyword pada `/pengguna/pencarian`:<br>![UC05-TC01 Pencarian Logo](./assets/danesh/uc05-tc01-1.png)<br>![UC05-TC01 Pencarian Banner](./assets/danesh/uc05-tc01-2.png) |
