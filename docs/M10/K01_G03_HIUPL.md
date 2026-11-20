@@ -1471,7 +1471,7 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| KNF01-TC01 | KNF01 | Portability | Tampilan adaptif pada viewport 320 px, 768 px, dan 1280 px tanpa horizontal scrollbar | Pengujian menggunakan Chrome DevTools pada viewport 320 px, 768 px, dan 1280 px | 320 px: terdapat elemen yang saling bertumpuk; 768 px: beberapa elemen masih mengalami tumpang tindih; 1280 px: tampilan berjalan dengan baik | Belum sepenuhnya sesuai |
+| KNF01-TC01 | KNF01 | Portability | Tampilan adaptif pada viewport 320 px, 768 px, dan 1280 px tanpa horizontal scrollbar | Pengujian menggunakan Chrome DevTools pada viewport 320 px, 768 px, dan 1280 px | 320 px: terdapat elemen yang saling bertumpuk; 768 px: beberapa elemen masih mengalami tumpang tindih; 1280 px: tampilan berjalan dengan baik, ukuran 1920x1080  berjalan dengan baik| Belum sepenuhnya sesuai |
 | KNF02-TC01 | KNF02 | *Response time* | Response time pencarian dan filter pada 1.000 listing jasa <= 3 detik (3.000 ms) untuk minimal 95% percobaan | Pengukuran `performance.now()` di Node.js v24.19.0 (20 kali pengulangan pada 1.000 listing dengan filter keyword, kategori, rentang harga, rating minimum, dan limit 20) pada logika filter dan sort pencarian (ekuivalen `LayananPencarian.saringDanUrutkan`) | Rata-rata waktu proses 0,259 ms (min 0,093 ms, maks 1,052 ms); 20 dari 20 percobaan (100%) selesai jauh di bawah 3.000 ms | Pass |
 | KNF03-TC01 | KNF03 | *Ergonomy* | Alur pemesanan hingga pembayaran selesai dalam ≤ 5 menit (300 detik) pada percobaan, dengan jumlah langkah yang dapat diikuti tanpa panduan eksternal | Uji dilakukan pada pengguna baru: tidak membuka kode, dokumentasi, maupun panduan, hanya mengikuti label dan tombol di layar. Alur dimulai dari halaman Cari Jasa (sudah login sebagai pemesan tanpa pesanan aktif) dan berhenti saat tampil "Pembayaran berhasil!". waktu diukur dengan *stopwatch* | Waktu melakukan pemesanan < 40 detik | Pass |
 | KNF04-TC01 | KNF04 | *Reliability* | 100% transaksi yang mengalami kegagalan di tengah proses di-rollback ke state awal (`MENUNGGU_PEMBAYARAN`) dengan 0 data integrity loss dan 0 duplicate transaction | Simulasi gagal insert `riwayat_transaksi` di tengah `PengontrolTransaksi.prosesPembayaranDummy()`, pengecekan guard `.neq('status_pembayaran', 'LUNAS')`, serta mekanisme `AbortController` timeout di `src/lib/api.ts` lewat Vitest (`src/test/transaksi.test.ts`) | Saat insert `riwayat_transaksi` gagal setelah `pesanan` sempat ter-update, compensating rollback mengembalikan `pesanan` ke `MENUNGGU_PEMBAYARAN` (`id_metode_pembayaran: null`); guard menolak 100% duplicate payment request | Pass |
@@ -1588,7 +1588,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC10-TC02 | <br> <img alt="Pengujian UC10-TC02" src="../M10/assets/UC10-TC02.png" width="100%"> |
 | UC10-TC03 | <br> <img alt="Pengujian UC10-TC03" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
 | UC10-TC04 | <br> <img alt="Pengujian UC10-TC04" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
-| KNF01-TC01 | Viewport 320 px (Smartphone) <br> <img alt="Pengujian viewport 320 px" src="../M10/assets/KNF01-320.png" width="100%"> <br><br> Viewport 768 px (Tablet) <br> <img alt="Pengujian viewport 768 px" src="../M10/assets/KNF01-768.png" width="100%"> <br><br> Viewport 1280 px (Laptop) <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/KNF01-1280.png" width="100%"> |
+| KNF01-TC01 | Viewport 320 px (Smartphone) <br> <img alt="Pengujian viewport 320 px" src="../M10/assets/KNF01-320.png" width="100%"> <br><br> Viewport 768 px (Tablet) <br> <img alt="Pengujian viewport 768 px" src="../M10/assets/KNF01-768.png" width="100%"> <br><br> Viewport 1280 px (Laptop) <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/KNF01-1280.png" width="100%"> <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/1920x1080.png" width="100%"> |
 | UC15-TC01 | <img alt="Pengujian UC15-TC01-1" src="../M10/assets/UC15-TC01-1.png" width="100%"> <br> <img alt="Pengujian UC15-TC01-2" src="../M10/assets/UC15-TC01-2.png" width="100%"> |
 | UC15-TC02 | <img alt="Pengujian UC15-TC02-1" src="../M10/assets/UC15-TC01-2.png" width="100%"> <br> <img alt="Pengujian UC15-TC02-2" src="../M10/assets/UC15-TC02-2.png" width="100%"> |
 | UC15-TC03 | <img alt="Pengujian UC15-TC03-1" src="../M10/assets/UC15-TC03-1.png" width="100%"> <br> <img alt="Pengujian UC15-TC03-2" src="../M10/assets/UC15-TC03-2.png" width="100%"> |
@@ -1648,4 +1648,9 @@ Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 | ID KNF | Parameter | KF/UC Terkait | Test Case |
 | :--- | :--- | :--- | :--- |
 | KNF01 | Portability | KF13–KF15, KF17–KF24, KF37 / UC08, UC09, UC10 (dan seluruh KF yang mencantumkan KNF01) | KNF01-TC01 |
-| KNF06 | Security | KF02 / UC02| KNF06-TC01 |
+| KNF02 | Response Time| KF06, KF07, UC05 |  KNF02-TC01 |
+| KNF03 | Ergonomy | KF13,14,15,37,38 / UC08 | KNF03-TC01| 
+| KNF04 | Reliability |KF17, KF18, KF19, KF20, KF21, KF22, KF23, KF24, KF26, KF27, KF28, KF30, KF31 / UC09 |(Tidak Bisa ditest) karena menggunakan data dummy| 
+| KNF05 | Security | Keseluruhan | KNF05-TC01 | 
+| KNF06 | Security | KF02 / UC02 | KNF06-TC01 |
+| KNF07 | Availability | - | (Tidak Bisa ditest) |
