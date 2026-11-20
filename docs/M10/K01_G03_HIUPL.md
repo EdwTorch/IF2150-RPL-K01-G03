@@ -1107,15 +1107,15 @@ Tabel 4.3.1. Daftar Antarmuka Antarkomponen
 | I-08 | C24 HalamanChat  | ChatService → tabel `pesan_chat`, `chatroom`, Supabase Storage | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal | INT-TC20, INT-TC21, INT-TC22 |
 | I-09 | C28 HalamanPemesanan | PesananService → tabel `pesanan`, `jasa` | Controller - Model, Aplikasi - Basis data | INT-TC23, INT-TC24, INT-TC25 |
 | I-10 | C29 HalamanPembayaran  | PengontrolTransaksi → tabel `metode_pembayaran`, `riwayat_transaksi`, `pesanan` (gateway pembayaran *dummy*) | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal (*dummy*) | INT-TC26, INT-TC27, INT-TC28 |
-| I-11 | PesananService.ambilDaftarPesanan | Tabel pesanan | Aplikasi - Basis data | INT-TC11-1, INT-TC11-2 |
-| I-12 | PesananService.respondOrder | Tabel pesanan | Aplikasi - Basis data | INT-TC12-1, INT-TC12-2 |
-| I-13 | DeliverablesService.submitDeliverable | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC13-1, INT-TC13-2 |
-| I-14 | DeliverablesService.confirmOrderComplete, getDeliverableByPesanan | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC14-1, INT-TC14-2 |
-| I-15 | DeliverablesService.requestRevision | Tabel pengajuan_revisi, pesanan | Aplikasi - Basis data | INT-TC15-1, INT-TC15-2 |
-| I-16 | PelaporanService.submitLaporan | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC16-1, INT-TC16-2 |
-| I-17 | UlasanService.simpanUlasan | Tabel ulasan, penyedia_jasa, jasa | Aplikasi - Basis data | INT-TC17-1, INT-TC17-2 |
-| I-18 | TanggapanLaporanService.catatKeputusanTindakan, MediasiService.mulaiMediasi | Tabel tanggapan_laporan, tiket_laporan, sesi_mediasi, pesan_mediasi | Aplikasi - Basis data | INT-TC18-1, INT-TC18-2, INT-TC18-3 |
-| I-19 | TanggapanLaporanService.getAllTicketsForAdmin, getDetailTiketAdmin | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC19-1, INT-TC19-2 |
+| I-11 | PesananService.ambilDaftarPesanan | Tabel pesanan | Aplikasi - Basis data | INT-TC29, INT-TC30 |
+| I-12 | PesananService.respondOrder | Tabel pesanan | Aplikasi - Basis data | INT-TC31, INT-TC32 |
+| I-13 | DeliverablesService.submitDeliverable | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC33, INT-TC34 |
+| I-14 | DeliverablesService.confirmOrderComplete, getDeliverableByPesanan | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC35, INT-TC36 |
+| I-15 | DeliverablesService.requestRevision | Tabel pengajuan_revisi, pesanan | Aplikasi - Basis data | INT-TC37, INT-TC38 |
+| I-16 | PelaporanService.submitLaporan | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC39, INT-TC40 |
+| I-17 | UlasanService.simpanUlasan | Tabel ulasan, penyedia_jasa, jasa | Aplikasi - Basis data | INT-TC41, INT-TC42 |
+| I-18 | TanggapanLaporanService.catatKeputusanTindakan, MediasiService.mulaiMediasi | Tabel tanggapan_laporan, tiket_laporan, sesi_mediasi, pesan_mediasi | Aplikasi - Basis data | INT-TC43, INT-TC44, INT-TC45 |
+| I-19 | TanggapanLaporanService.getAllTicketsForAdmin, getDetailTiketAdmin | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC46, INT-TC47 |
 
 Tabel 4.3.2. Hasil Pengujian Integrasi
 
@@ -1164,10 +1164,10 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 | INT-TC41 | I-17 | Normal: menyimpan ulasan | Memanggil `simpanUlasan()` dengan pesanan selesai dan rating 5 | Ulasan tersimpan dan rating penyedia serta jasa diperbarui | Ulasan tersimpan; mock memverifikasi operasi pembaruan rating penyedia dan jasa dengan nilai 5 | Pass |
 | INT-TC42 | I-17 | Gagal: rating tidak valid | Memanggil `simpanUlasan()` dengan rating 0 | Sistem menolak ulasan dan tidak melakukan operasi database | Sistem menghasilkan error "Rating harus bernilai antara 1 sampai 5." dan tidak memanggil client Supabase | Pass |
 | INT-TC43 | I-18 | Normal: mencatat keputusan tindakan admin | Memanggil `catatKeputusanTindakan()` dengan ID tiket, ID admin, jenis tindakan PERINGATAN, dan catatan valid | Tanggapan tersimpan, status tiket diperbarui menjadi Selesai, dan RPC pemberian sanksi dipanggil | Tanggapan tersimpan, operasi update tiket dan RPC `admin_beri_sanksi` terverifikasi | Pass |
-| INT-TC43 | I-18 | Normal: memulai sesi mediasi baru | Memanggil `mulaiMediasi()` pada tiket yang belum memiliki sesi aktif | Sesi mediasi dan pesan pembuka dibuat serta notifikasi dikirim kepada kedua pihak | Sesi dan pesan pembuka berhasil dibuat; dua notifikasi dikirim kepada pelapor dan terlapor | Pass |
-| INT-TC44 | I-18 | Normal: menggunakan sesi mediasi aktif | Memanggil `mulaiMediasi()` pada tiket yang sudah memiliki sesi mediasi aktif | Sistem menggunakan sesi yang tersedia tanpa membuat sesi baru | Sesi aktif dikembalikan tanpa insert pesan baru maupun pengiriman notifikasi | Pass |
-| INT-TC45 | I-19 | Normal: mengambil seluruh tiket laporan | Memanggil `getAllTicketsForAdmin()` | Menghasilkan daftar tiket laporan yang diurutkan berdasarkan waktu pembuatan terbaru | Menghasilkan daftar tiket dan memverifikasi pengurutan `created_at` secara descending | Pass |
-| INT-TC46 | I-19 | Normal: mengambil detail tiket laporan | Memanggil `getDetailTiketAdmin()` dengan ID tiket valid | Menghasilkan detail tiket beserta tanggapan dan informasi pesanan | Detail tiket, tanggapan, dan informasi pesanan berhasil diperoleh | Pass |
+| INT-TC44 | I-18 | Normal: memulai sesi mediasi baru | Memanggil `mulaiMediasi()` pada tiket yang belum memiliki sesi aktif | Sesi mediasi dan pesan pembuka dibuat serta notifikasi dikirim kepada kedua pihak | Sesi dan pesan pembuka berhasil dibuat; dua notifikasi dikirim kepada pelapor dan terlapor | Pass |
+| INT-TC45 | I-18 | Normal: menggunakan sesi mediasi aktif | Memanggil `mulaiMediasi()` pada tiket yang sudah memiliki sesi mediasi aktif | Sistem menggunakan sesi yang tersedia tanpa membuat sesi baru | Sesi aktif dikembalikan tanpa insert pesan baru maupun pengiriman notifikasi | Pass |
+| INT-TC46 | I-19 | Normal: mengambil seluruh tiket laporan | Memanggil `getAllTicketsForAdmin()` | Menghasilkan daftar tiket laporan yang diurutkan berdasarkan waktu pembuatan terbaru | Menghasilkan daftar tiket dan memverifikasi pengurutan `created_at` secara descending | Pass |
+| INT-TC47 | I-19 | Normal: mengambil detail tiket laporan | Memanggil `getDetailTiketAdmin()` dengan ID tiket valid | Menghasilkan detail tiket beserta tanggapan dan informasi pesanan | Detail tiket, tanggapan, dan informasi pesanan berhasil diperoleh | Pass |
 
 <br>
 
@@ -1378,8 +1378,8 @@ Tabel 4.6. Bukti Hasil Pengujian
 | INT-TC37 – INT-TC38 | <img alt="Bukti Pengujian Integrasi I-15" src="../M10/assets/I15.png" width="70%"> |
 | INT-TC39 – INT-TC40 | <img alt="Bukti Pengujian Integrasi I-16" src="../M10/assets/I16.png" width="70%"> |
 | INT-TC41 – INT-TC42 | <img alt="Bukti Pengujian Integrasi I-17" src="../M10/assets/I17.png" width="70%"> |
-| INT-TC43 – INT-TC44 | <img alt="Bukti Pengujian Integrasi I-18" src="../M10/assets/I18.png" width="70%"> |
-| INT-TC45 – INT-TC46 | <img alt="Bukti Pengujian Integrasi I-19" src="../M10/assets/I19.png" width="70%"> |
+| INT-TC43 – INT-TC45 | <img alt="Bukti Pengujian Integrasi I-18" src="../M10/assets/I18.png" width="70%"> |
+| INT-TC46 – INT-TC47 | <img alt="Bukti Pengujian Integrasi I-19" src="../M10/assets/I19.png" width="70%"> |
 | UC04-TC01 | Notifikasi sukses unggah jasa pada `/penyedia/upload-jasa`:<br>![UC04-TC01 Sukses Unggah Jasa](./assets/danesh/uc04-tc01.png) |
 | UC04-TC02 | Validasi error pada field wajib dan form `/penyedia/upload-jasa`:<br>![UC04-TC02 Validasi Bagian Atas](./assets/danesh/uc04-tc02-1.png)<br>![UC04-TC02 Validasi Berkas](./assets/danesh/uc04-tc02-2.png) |
 | UC05-TC01 | Pencarian berdasarkan keyword pada `/pengguna/pencarian`:<br>![UC05-TC01 Pencarian Logo](./assets/danesh/uc05-tc01-1.png)<br>![UC05-TC01 Pencarian Banner](./assets/danesh/uc05-tc01-2.png) |
@@ -1445,10 +1445,21 @@ Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 | KF22 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C35 - HalamanKonfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | - | C31-UT07, C31-UT09 |
 | KF23 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C35 - HalamanKonfirmasi | `src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | - | C31-UT08, C31-UT09 |
 | KF24 | KNF01 | UC09, UC10 | C27 - Pesanan<br>C30 - HalamanRiwayatTransaksi<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C34 - RiwayatTransaksi | `src/app/pengguna/riwayat-transaksi/page.tsx`<br>`src/app/penyedia/pesanan/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/services/transaksi.service.ts`<br>`src/app/api/pesanan/route.ts`<br>`src/app/api/transaksi/route.ts` | - | C31-UT10–C31-UT12, C32-UT07–C32-UT09 |
+| KF13 | KNF01 | UC08 | C23 - ChatRoom<br>C24 - HalamanChat<br>C25 - LayananPesanInstan | `src/app/chat/page.tsx`<br>`src/services/chat.service.ts`<br>`src/app/api/chat/route.ts`<br>`src/app/api/chat/[id_chatroom]/route.ts` | UC08-TC01 – UC08-TC07, UC08-TC09 | C25-UT04–C25-UT06, C25-UT10–C25-UT12, KNF01-TC01 |
+| KF14 | KNF01 | UC08 | C25 - LayananPesanInstan<br>C26 - LayananNotifikasiChat<br>C56 - notifikasi | `src/services/chat.service.ts`<br>`src/services/notifikasi.service.ts`<br>`src/app/api/notifikasi/route.ts`<br>`src/components/ui/notifikasi.tsx` | UC08-TC01, UC08-TC02, UC08-TC09 | C25-UT10, C25-UT11, C26-UT01–C26-UT09, KNF01-TC01 |
+| KF15 | KNF01 | UC08 | C23 - ChatRoom<br>C24 - HalamanChat<br>C25 - LayananPesanInstan<br>C55 - pesan_chat | `src/app/chat/page.tsx`<br>`src/services/chat.service.ts`<br>`src/app/api/chat/route.ts`<br>`src/app/api/chat/[id_chatroom]/route.ts` | UC08-TC01 – UC08-TC05 | C25-UT01–C25-UT03, C25-UT07–C25-UT09, KNF01-TC01 |
+| KF37 | KNF01 | UC08 | C23 - ChatRoom<br>C24 - HalamanChat<br>C51 - MediasiHandler<br>C57 - sesi_mediasi<br>C58 - pesan_mediasi | `src/app/mediasi/[id]/page.tsx`<br>`src/services/mediasi.service.ts`<br>`src/app/api/mediasi/route.ts`<br>`src/app/api/mediasi/[id_sesi_mediasi]/route.ts`<br>`src/app/api/mediasi/[id_sesi_mediasi]/pesan/route.ts` | UC08-TC03, UC08-TC04, UC08-TC05 | C51-UT07–C51-UT15, KNF01-TC01 |
+| KF17 | KNF01, KNF03 | UC09 | C27 - Pesanan<br>C28 - HalamanPemesanan<br>C31 - PengontrolPesanan | `src/app/pesanan/[id]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/route.ts` | UC09-TC01, UC09-TC04 | C31-UT01–C31-UT03, INT-TC23–INT-TC25, KNF01-TC01 |
+| KF18 | KNF01, KNF03 | UC09 | C27 - Pesanan<br>C28 - HalamanPemesanan<br>C31 - PengontrolPesanan | `src/app/pesanan/[id]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/route.ts` | UC09-TC01, UC09-TC02, UC09-TC04 | C31-UT04–C31-UT06, INT-TC23–INT-TC25, KNF01-TC01 |
+| KF19 | KNF01, KNF03, KNF04, KNF05 | UC09 | C29 - HalamanPembayaran<br>C32 - PengontrolTransaksi<br>C33 - MetodePembayaran | `src/app/pesanan/checkout/[id]/page.tsx`<br>`src/services/transaksi.service.ts`<br>`src/app/api/transaksi/route.ts` | UC09-TC02 | C32-UT01–C32-UT03, INT-TC26, KNF01-TC01 |
+| KF20 | KNF01, KNF03, KNF04, KNF05 | UC09 | C27 - Pesanan<br>C29 - HalamanPembayaran<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C34 - RiwayatTransaksi | `src/app/pesanan/checkout/[id]/page.tsx`<br>`src/services/transaksi.service.ts`<br>`src/app/api/transaksi/dummy/route.ts` | UC09-TC03, UC09-TC05 | C32-UT04–C32-UT06, INT-TC27, INT-TC28, KNF04-TC01, KNF01-TC01 |
+| KF21 | KNF01 | UC10 | C26 - LayananNotifikasiChat<br>C27 - Pesanan<br>C35 - HalamanKonfirmasi<br>C56 - notifikasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/notifikasi.service.ts` | UC10-TC01, UC10-TC02 | C26-UT01, C26-UT04, C31-UT10, KNF01-TC01 |
+| KF22 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C35 - HalamanKonfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | UC10-TC02, UC10-TC03 | C31-UT07, C31-UT09, INT-TC31, INT-TC32, KNF01-TC01 |
+| KF23 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C35 - HalamanKonfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | UC10-TC04 | C31-UT08, C31-UT09, KNF01-TC01 |
+| KF24 | KNF01 | UC09, UC10 | C27 - Pesanan<br>C30 - HalamanRiwayatTransaksi<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C34 - RiwayatTransaksi | `src/app/pengguna/riwayat-transaksi/page.tsx`<br>`src/app/penyedia/pesanan/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/services/transaksi.service.ts`<br>`src/app/api/pesanan/route.ts`<br>`src/app/api/transaksi/route.ts` | - | C31-UT10–C31-UT12, C32-UT07–C32-UT09, INT-TC29, INT-TC30, KNF01-TC01 |
 
 Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 
 | ID KNF | Parameter | KF/UC Terkait | Test Case |
 | :--- | :--- | :--- | :--- |
-| KNF02 | *Response time* | KF06, KF07 / UC05 | KNF02-TC01 |
-| KNF04 | *Reliability* | KF19, KF20 / UC09 | KNF04-TC01 |
+| KNF01 | Portability | KF13–KF15, KF17–KF24, KF37 / UC08, UC09, UC10 (dan seluruh KF yang mencantumkan KNF01) | KNF01-TC01 |
