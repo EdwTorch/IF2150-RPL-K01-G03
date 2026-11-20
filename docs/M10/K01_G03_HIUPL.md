@@ -1170,7 +1170,50 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 
 ## 4.4 Pengujian Use Case
 
-Pengujian use case dilakukan pada seluruh skenario normal dan alternatif sesuai Subbab 4.4 SKPL, dengan minimal satu test case untuk setiap skenario. Kolom ID KF menunjukkan KF yang diverifikasi oleh test case tersebut.
+### 4.4.1 Use Case UC01
+ 
+**ID Use Case:** UC01  
+**Nama Use Case:** Melakukan Registrasi Akun
+ 
+Catatan: pada implementasi, form registrasi berisi pilihan peran (Pengguna Jasa / Penyedia Jasa), nama, email, dan kata sandi. Field nomor telepon pada skenario SKPL tidak diimplementasikan; pengecekan duplikasi dilakukan berdasarkan email (lihat Tabel B.1 Dokumen Implementasi).
+ 
+Tabel 4.4.1. Hasil Pengujian Use Case UC01
+ 
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC01-TC01 | KF01 | Normal | 1. Buka halaman `/register`.<br>2. Pilih "Daftar sebagai" Penyedia Jasa.<br>3. Isi nama, email, dan kata sandi.<br>4. Klik tombol "Daftar". | Peran: Penyedia Jasa<br>Nama: Uji Penyedia UC01<br>Email: uc01.penyedia@contoh.com<br>Kata sandi: RahasiaUji123 | Akun berhasil dibuat; pengguna diarahkan ke halaman login yang menampilkan pesan "Registrasi berhasil. Silakan masuk dengan akun Anda." | *[hasil aktual]* | *[Pass/Fail]* |
+| UC01-TC02 | KF01 | Normal (peran Pengguna Jasa) | 1. Buka halaman `/register`.<br>2. Pilih "Daftar sebagai" Pengguna Jasa.<br>3. Isi nama, email, dan kata sandi.<br>4. Klik tombol "Daftar". | Peran: Pengguna Jasa<br>Nama: Uji Pengguna UC01<br>Email: uc01.pengguna@contoh.com<br>Kata sandi: RahasiaUji123 | Akun berhasil dibuat; pengguna diarahkan ke halaman login dengan pesan registrasi berhasil | *[hasil aktual]* | *[Pass/Fail]* |
+| UC01-TC03 | KF01 | Alternatif 1: Data Registrasi Tidak Valid | 1. Buka halaman `/register`.<br>2. Isi email dengan format salah dan kata sandi kurang dari 8 karakter, kosongkan nama.<br>3. Klik "Daftar".<br>4. Perbaiki seluruh data, lalu klik "Daftar" kembali. | Nama: (kosong)<br>Email: uc01-salah<br>Kata sandi: 1234567<br>Perbaikan: Nama "Uji Valid UC01", email uc01.valid@contoh.com, kata sandi RahasiaUji123 | Percobaan pertama: muncul pesan "Nama wajib diisi", "Format email tidak valid", dan "Kata sandi minimal 8 karakter"; akun tidak dibuat. Setelah diperbaiki, registrasi berhasil dan diarahkan ke halaman login | *[hasil aktual]* | *[Pass/Fail]* |
+| UC01-TC04 | KF01 | Alternatif 2: Email Sudah Terdaftar | 1. Buka halaman `/register`.<br>2. Isi data dengan email akun uji yang sudah terdaftar.<br>3. Klik "Daftar".<br>4. Ganti email dengan email baru, lalu klik "Daftar" kembali. | Email: penyedia.uji@contoh.com (akun uji yang sudah terdaftar)<br>Perbaikan email: uc01.penyedia2@contoh.com | Percobaan pertama: muncul pesan "Email telah terdaftar. Silakan menggunakan email lain atau melakukan login." dan keterangan "Email sudah terdaftar" pada field email. Setelah email diganti, registrasi berhasil | Akun berhasil didaftarkan | Pass |
+ 
+### 4.4.2 Use Case UC02
+ 
+**ID Use Case:** UC02  
+**Nama Use Case:** Melakukan *Login*
+ 
+Pengujian memakai akun uji pada README repositori: Penyedia Jasa `penyedia.uji@contoh.com` / `Bujank123` dan Pemesan `klien.uji@contoh.com` / `Another123!`.
+ 
+Tabel 4.4.2. Hasil Pengujian Use Case UC02
+ 
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC02-TC01 | KF02 | Normal (Penyedia Jasa) | 1. Buka halaman `/login`.<br>2. Masukkan email dan kata sandi akun penyedia.<br>3. Klik tombol "Masuk". | Email: penyedia.uji@contoh.com<br>Kata sandi: Bujank123 | Sesi login dibuat; pengguna diarahkan ke halaman awal penyedia (Portofolio Saya) dan nama akun tampil di navbar | *[hasil aktual]* | *[Pass/Fail]* |
+| UC02-TC02 | KF02 | Normal (Pengguna Jasa) | 1. Buka halaman `/login`.<br>2. Masukkan email dan kata sandi akun pengguna jasa.<br>3. Klik "Masuk". | Email: klien.uji@contoh.com<br>Kata sandi: Another123! | Sesi login dibuat; pengguna diarahkan ke halaman Cari Jasa dan nama akun tampil di navbar | *[hasil aktual]* | *[Pass/Fail]* |
+| UC02-TC03 | KF02 | Alternatif 1: Email atau Password Salah | 1. Buka halaman `/login`.<br>2. Masukkan email benar dengan kata sandi salah.<br>3. Klik "Masuk".<br>4. Perbaiki kata sandi, lalu klik "Masuk" kembali. | Email: penyedia.uji@contoh.com<br>Kata sandi: SalahSekali1<br>Perbaikan: Bujank123 | Percobaan pertama: muncul pesan "Email atau kata sandi salah" dan pengguna tetap di halaman login. Setelah diperbaiki, login berhasil dan diarahkan ke halaman awal | *[hasil aktual]* | *[Pass/Fail]* |
+| UC02-TC04 | KF02 | Alternatif 2: Data Login Tidak Lengkap | 1. Buka halaman `/login`.<br>2. Kosongkan email dan kata sandi.<br>3. Klik "Masuk".<br>4. Lengkapi kedua field, lalu klik "Masuk" kembali. | Email: (kosong)<br>Kata sandi: (kosong)<br>Perbaikan: klien.uji@contoh.com / Another123! | Percobaan pertama: muncul pesan "Email wajib diisi" dan "Kata sandi wajib diisi"; permintaan login tidak dikirim. Setelah dilengkapi, login berhasil | Login berhasil dan pengguna masuk ke halaman pencarian | Pass |
+ 
+### 4.4.3 Use Case UC03
+ 
+**ID Use Case:** UC03  
+**Nama Use Case:** Mengisi Portofolio
+ 
+Tabel 4.4.3. Hasil Pengujian Use Case UC03
+ 
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC03-TC01 | KF03, KF04 | Normal | 1. Login sebagai penyedia jasa (penyedia.uji@contoh.com / Bujank123).<br>2. Pilih menu "Portofolio" pada navbar.<br>3. Isi judul karya, deskripsi, pengalaman, dan prestasi, lalu unggah 1 berkas gambar.<br>4. Klik "Simpan Portofolio". | Judul: Logo Kedai Kopi<br>Deskripsi: Desain logo untuk kedai kopi lokal<br>Pengalaman: Desainer grafis 2 tahun<br>Prestasi: Juara 1 Lomba Logo 2025<br>Berkas: logo-kopi.png (< 10 MB) | Muncul pesan "Portofolio berhasil disimpan."; karya baru tampil pada bagian "Karya yang sudah diunggah" beserta pengalaman dan prestasi, dan tetap tampil setelah halaman dimuat ulang | *[hasil aktual]* | *[Pass/Fail]* |
+| UC03-TC02 | KF03 | Alternatif 1: Data Portofolio Tidak Lengkap | 1. Login sebagai penyedia.uji@contoh.com, buka halaman Portofolio.<br>2. Kosongkan judul karya dan jangan unggah berkas.<br>3. Klik "Simpan Portofolio".<br>4. Lengkapi judul dan berkas, lalu klik "Simpan Portofolio" kembali. | Judul: (kosong)<br>Berkas: (tidak ada)<br>Perbaikan: judul "Poster Acara Kampus", berkas poster.png | Percobaan pertama: muncul pesan "Judul karya wajib diisi" dan "Berkas pendukung wajib diunggah"; data tidak disimpan. Setelah dilengkapi, muncul "Portofolio berhasil disimpan." dan karya tampil di daftar | *[hasil aktual]* | *[Pass/Fail]* |
+| UC03-TC03 | KF03 | Alternatif 1: Berkas tidak sesuai ketentuan | 1. Login sebagai penyedia.uji@contoh.com, buka halaman Portofolio.<br>2. Isi judul, lalu pilih berkas dengan format yang tidak diizinkan.<br>3. Ganti dengan berkas yang sesuai, lalu klik "Simpan Portofolio". | Judul: Desain Kemasan<br>Berkas: dokumen.docx<br>Perbaikan berkas: kemasan.pdf | Berkas .docx ditolak oleh kotak unggah dengan keterangan format yang diizinkan (JPG, JPEG, PNG, PDF; maks. 10 MB). Setelah diganti dengan PDF, portofolio berhasil disimpan | Portofolio dapat terisi dan terunggah di halaman detail jasa | Pass |
 
 ### 4.4.4 Use Case Mengunggah Penawaran Jasa (UC04)
 
@@ -1224,6 +1267,53 @@ Tabel 4.4.7. Hasil Pengujian Use Case UC07
 | UC07-TC02 | KF11 | Normal: Melihat Daftar Jasa Tersimpan | 1. Buka halaman `/pengguna/bookmark` (I-07) sebagai Pengguna Jasa yang sudah login. | Pengguna login | Menampilkan seluruh kartu jasa aktif yang telah disimpan pengguna beserta jumlahnya (atau empty state "Belum ada jasa tersimpan" jika kosong). | Halaman `/pengguna/bookmark` menampilkan daftar kartu jasa aktif yang sudah di-bookmark pengguna. | Pass |
 | UC07-TC03 | KF12 | Normal: Menghapus Jasa dari Bookmark | 1. Pada `/pengguna/bookmark` (I-07), klik tombol "Hapus dari bookmark" atau ikon bookmark aktif pada kartu jasa. | Pengguna login + `id_jasa` tersimpan | Bookmark terhapus dari database, kartu jasa hilang dari daftar pada layar, dan muncul notifikasi penghapusan. | Kartu jasa langsung hilang dari daftar pada `/pengguna/bookmark` dan muncul notifikasi `"<nama jasa>" dihapus dari bookmark.`. | Pass |
 | UC07-TC04 | KF09, KF10 | Eksepsi: Pengguna Belum Login (Guest) | 1. Buka `/jasa/[id]` (I-06) tanpa login (guest).<br>2. Klik tombol ikon bookmark. | Sesi null (guest) | Aksi dibatalkan dan UI menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Aksi tidak menyimpan data dan layar menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Pass |
+
+### 4.4.8 Use Case Melakukan Komunikasi
+
+**ID Use Case:** UC08  
+**Nama Use Case:** Melakukan Komunikasi
+
+Tabel 4.4.8. Hasil Pengujian Use Case [UC08]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC08-TC01 | KF13, KF14, KF15 | Normal – Pengguna Jasa mengirim pesan kepada Penyedia Jasa | 1. Pengguna Jasa membuka halaman chat dengan Penyedia Jasa. 2. Pengguna Jasa mengirim pesan. 3. Penyedia Jasa membuka percakapan dan melihat pesan yang diterima. | Pesan teks dari Pengguna Jasa. | Pesan berhasil dikirim dan ditampilkan pada riwayat percakapan. Penerima memperoleh notifikasi pesan baru. | Halaman chat menampilkan percakapan antara Pengguna Jasa dan Penyedia Jasa. | Berhasil |
+| UC08-TC02 | KF13, KF14, KF15 | Normal – Penyedia Jasa mengirim pesan kepada Pengguna Jasa | 1. Penyedia Jasa membuka halaman chat dengan Pengguna Jasa. 2. Penyedia Jasa mengirim pesan. 3. Pengguna Jasa membuka percakapan dan melihat pesan yang diterima. | Pesan teks dari Penyedia Jasa. | Pesan berhasil dikirim dan ditampilkan pada riwayat percakapan. Penerima memperoleh notifikasi pesan baru. | Halaman chat menampilkan percakapan antara Pengguna Jasa dan Penyedia Jasa. | Berhasil |
+| UC08-TC03 | KF13, KF15, KF37 | Normal – Pengguna Jasa berkomunikasi dengan Admin | 1. Pengguna Jasa membuka ruang mediasi. 2. Pengguna Jasa mengirim pesan kepada Admin. 3. Admin membuka ruang mediasi dan melihat pesan. | Pesan teks dari Pengguna Jasa/Pelapor. | Pesan berhasil dikirim dan ditampilkan dalam ruang mediasi sehingga dapat dibaca oleh Admin. | Percakapan antara Pelapor dan Admin ditampilkan dalam ruang mediasi. | Berhasil |
+| UC08-TC04 | KF13, KF15, KF37 | Normal – Penyedia Jasa berkomunikasi dengan Admin | 1. Penyedia Jasa membuka ruang mediasi. 2. Penyedia Jasa mengirim pesan kepada Admin. 3. Admin membuka ruang mediasi dan melihat pesan. | Pesan teks dari Penyedia Jasa/Terlapor. | Pesan berhasil dikirim dan ditampilkan dalam ruang mediasi sehingga dapat dibaca oleh Admin. | Percakapan antara Terlapor dan Admin ditampilkan dalam ruang mediasi. | Berhasil |
+| UC08-TC05 | KF13, KF15, KF37 | Normal – Admin mengirim pesan kepada peserta mediasi | 1. Admin membuka ruang mediasi. 2. Admin mengirim pesan kepada peserta mediasi. 3. Peserta membuka ruang mediasi dan melihat pesan dari Admin. | Pesan teks dari Admin. | Pesan berhasil dikirim dan ditampilkan kepada peserta mediasi. | Pesan dari Admin ditampilkan dalam ruang mediasi. | Berhasil |
+| UC08-TC06 | KF13 | Alternatif 1 – Pengguna mengirim pesan kosong | 1. Pengguna membuka halaman chat. 2. Pengguna membiarkan kolom pesan kosong. 3. Pengguna mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Muncul pesan: "Pesan tidak boleh kosong." | Berhasil |
+| UC08-TC07 | KF13 | Alternatif 1 – Admin mengirim pesan kosong | 1. Admin membuka halaman chat. 2. Admin membiarkan kolom pesan kosong. 3. Admin mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Tombol kirim tidak dapat ditekan ketika kolom pesan kosong. | Berhasil |
+| UC08-TC08 | KF13, KF14 | Alternatif 2 – Pengiriman pesan gagal oleh Pengguna | 1. Pengguna membuka halaman chat. 2. Pengguna memutus koneksi internet. 3. Pengguna mencoba mengirim pesan kepada Penyedia Jasa. | Pesan teks ketika koneksi internet terputus. | Sistem gagal mengirim pesan dan menampilkan indikator bahwa pesan tidak terkirim. | Sistem menampilkan indikator pesan belum terkirim. | Berhasil |
+
+### 4.4.9 Use Case Melakukan Pemesanan Jasa
+
+**ID Use Case:** UC09  
+**Nama Use Case:** Melakukan Pemesanan Jasa
+
+Tabel 4.4.9. Hasil Pengujian Use Case [UC09]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC09-TC01 | KF17, KF18 | Normal – Memilih jasa dan mengisi formulir pemesanan | 1. Pengguna Jasa memilih salah satu jasa. 2. Pengguna Jasa menekan tombol pesan. 3. Sistem menampilkan formulir pemesanan. 4. Pengguna Jasa mengisi formulir dengan data valid dan mengirimkannya. | Jasa yang dipilih dan data formulir pemesanan yang valid. | Sistem menerima data pemesanan dan membuat pesanan baru. | Formulir pemesanan berhasil dikirim dan sistem melanjutkan proses pemesanan. | Berhasil |
+| UC09-TC02 | KF18, KF19 | Normal – Memilih metode pembayaran | 1. Pengguna Jasa diarahkan ke halaman pembayaran. 2. Pengguna Jasa melihat detail pesanan dan metode pembayaran yang tersedia. 3. Pengguna Jasa memilih salah satu metode pembayaran. | Metode pembayaran yang dipilih. | Sistem menampilkan detail pembayaran dan menyediakan pilihan metode pembayaran digital. | Halaman pembayaran menampilkan detail pesanan dan pilihan metode pembayaran. | Berhasil |
+| UC09-TC03 | KF20 | Normal – Pembayaran berhasil | 1. Pengguna Jasa melakukan pembayaran menggunakan metode yang dipilih. 2. Sistem memvalidasi status transaksi pembayaran. | Konfirmasi pembayaran berhasil. | Sistem memvalidasi pembayaran dan menampilkan notifikasi bahwa pembayaran berhasil. | Sistem menampilkan informasi bahwa pembayaran berhasil. | Berhasil |
+| UC09-TC04 | KF17, KF18 | Alternatif 1 – Formulir pemesanan tidak lengkap | 1. Pengguna Jasa memilih jasa dan membuka formulir pemesanan. 2. Pengguna Jasa mengosongkan salah satu atau beberapa kolom wajib. 3. Pengguna Jasa mencoba mengirim formulir. | Formulir pemesanan dengan data wajib yang belum lengkap. | Sistem menolak pengiriman formulir dan menampilkan pesan validasi pada kolom yang wajib diisi. | Sistem menampilkan pesan validasi ketika formulir dikirim dengan data yang tidak lengkap. | Berhasil |
+| UC09-TC05 | KF20 | Alternatif 2 – Pembayaran gagal | 1. Pengguna Jasa membuka halaman pembayaran. 2. Pengguna Jasa memilih metode pembayaran. 3. Pengguna Jasa melakukan pembayaran dengan kondisi transaksi gagal. | Transaksi pembayaran dengan status gagal. | Sistem mendeteksi kegagalan transaksi dan menampilkan pesan bahwa pembayaran gagal. | Sistem menampilkan informasi kegagalan pembayaran. | Berhasil |
+
+### 4.4.10 Use Case Melakukan Konfirmasi Pesanan
+
+**ID Use Case:** UC10
+**Nama Use Case:** Melakukan Konfirmasi Pesanan
+
+Tabel 4.4.10. Hasil Pengujian Use Case [UC10]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC10-TC01 | KF21 | Normal – Penyedia Jasa menerima notifikasi pesanan baru | 1. Pengguna Jasa membuat pesanan. 2. Penyedia Jasa membuka notifikasi pesanan baru. | Pesanan baru dari Pengguna Jasa. | Sistem mengirimkan notifikasi pesanan baru kepada Penyedia Jasa. | Notifikasi pesanan baru diterima dan ditampilkan pada akun Penyedia Jasa tapi pesan notifikasi tidak sesuai. | Belum sepenuhnya sesuai |
+| UC10-TC02 | KF21, KF22 | Normal – Penyedia Jasa melihat pesanan masuk | 1. Penyedia Jasa membuka halaman daftar pesanan masuk. 2. Penyedia Jasa memilih salah satu pesanan. | Data pesanan baru. | Sistem menampilkan daftar pesanan masuk beserta detail pesanan yang perlu dikonfirmasi. | Pesanan ditampilkan pada daftar pesanan masuk, tetapi statusnya langsung menjadi Diproses. | Tidak Sesuai |
+| UC10-TC03 | KF22 | Normal – Penyedia Jasa melakukan konfirmasi pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencari opsi untuk menerima atau menolak pesanan. | Pesanan dengan status Diproses. | Sistem menyediakan tombol Terima dan Tolak agar Penyedia Jasa dapat menentukan keputusan. | Tidak tersedia tombol Terima maupun Tolak pada halaman detail pesanan. | Tidak Berhasil |
+| UC10-TC04 | KF23 | Alternatif 1 – Penyedia Jasa menolak pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencoba melakukan penolakan pesanan. | Pesanan baru yang ingin ditolak. | Sistem memperbarui status pesanan menjadi ditolak dan memproses pengembalian dana kepada pembeli. | Penolakan pesanan tidak dapat dilakukan karena tidak tersedia fitur Tolak. | Tidak Dapat Diuji |
 
 <br>
 
@@ -1302,6 +1392,23 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC07-TC04 | Pesan error saat guest mengklik ikon bookmark:<br>![UC07-TC04 Bookmark Tanpa Login](./assets/danesh/uc07-tc04.png) |
 | KNF02-TC01 | Output terminal pengukuran `performance.now()` pada 1.000 listing (20 percobaan, rata-rata 0,259 ms, maks 1,052 ms):<br>![KNF02-TC01 Pengukuran Response Time](./assets/danesh/knf02-tc01.png) |
 | KNF04-TC01 | Keluaran `npx vitest run test/transaksi.test.ts` (20/20 test passed, termasuk simulasi compensating rollback dan penolakan duplicate payment):<br>![KNF04-TC01 Pengujian Reliability Transaksi](./assets/danesh/knf04-tc01.png) |
+| UC08-TC01 | <br> <img alt="Pengujian UC08-TC01" src="../M10/assets/UC08-TC01.png" width="100%"> |
+| UC08-TC02 | <br> <img alt="Pengujian UC08-TC02" src="../M10/assets/UC08-TC02.png" width="100%"> |
+| UC08-TC03 | <br> <img alt="Pengujian UC08-TC03" src="../M10/assets/UC08-TC03.png" width="1000%"> |
+| UC08-TC04 | <br> <img alt="Pengujian UC08-TC04" src="../M10/assets/UC08-TC04.png" width="100%"> |
+| UC08-TC05 | <br> <img alt="Pengujian UC08-TC05" src="../M10/assets/UC08-TC05.png" width="100%"> |
+| UC08-TC06 | <br> <img alt="Pengujian UC08-TC06" src="../M10/assets/UC08-TC06.png" width="100%"> |
+| UC08-TC07 | <br> <img alt="Pengujian UC08-TC07" src="../M10/assets/UC08-TC07.png" width="100%"> |
+| UC08-TC08 | <br> <img alt="Pengujian UC08-TC08" src="../M10/assets/UC08-TC08.png" width="100%"> |
+| UC09-TC01 | <br> <img alt="Pengujian UC09-TC01" src="../M10/assets/UC09-TC01-1.png" width="100%"> <br> <img alt="Pengujian UC09-TC01" src="../M10/assets/UC09-TC01-2.png" width="100%"> |
+| UC09-TC02 | <br> <img alt="Pengujian UC09-TC02" src="../M10/assets/UC09-TC02-1.png" width="100%"> <br> <img alt="Pengujian UC09-TC02" src="../M10/assets/UC09-TC02-2.png" width="100%"> |
+| UC09-TC03 | <br> <img alt="Pengujian UC09-TC03" src="../M10/assets/UC09-TC03.png" width="100%"> |
+| UC09-TC04 | <br> <img alt="Pengujian UC09-TC04" src="../M10/assets/UC09-TC04.png" width="100%"> |
+| UC09-TC05 | <br> <img alt="Pengujian UC09-TC05" src="../M10/assets/UC09-TC05.png" width="100%"> |
+| UC10-TC01 | <br> <img alt="Pengujian UC10-TC01" src="../M10/assets/UC10-TC01-1.png" width="100%"> <br> <img alt="Pengujian UC10-TC01" src="../M10/assets/UC10-TC01-2.png" width="100%"> |
+| UC10-TC02 | <br> <img alt="Pengujian UC10-TC02" src="../M10/assets/UC10-TC02.png" width="100%"> |
+| UC10-TC03 | <br> <img alt="Pengujian UC10-TC03" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
+| UC10-TC04 | <br> <img alt="Pengujian UC10-TC04" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
 
 <br>
 
