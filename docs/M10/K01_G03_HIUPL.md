@@ -1329,6 +1329,7 @@ Tabel 4.5. Hasil Pengujian KNF
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | KNF02-TC01 | KNF02 | *Response time* | Response time pencarian dan filter pada 1.000 listing jasa <= 3 detik (3.000 ms) untuk minimal 95% percobaan | Pengukuran `performance.now()` di Node.js v24.19.0 (20 kali pengulangan pada 1.000 listing dengan filter keyword, kategori, rentang harga, rating minimum, dan limit 20) pada logika filter dan sort pencarian (ekuivalen `LayananPencarian.saringDanUrutkan`) | Rata-rata waktu proses 0,259 ms (min 0,093 ms, maks 1,052 ms); 20 dari 20 percobaan (100%) selesai jauh di bawah 3.000 ms | Pass |
 | KNF04-TC01 | KNF04 | *Reliability* | 100% transaksi yang mengalami kegagalan di tengah proses di-rollback ke state awal (`MENUNGGU_PEMBAYARAN`) dengan 0 data integrity loss dan 0 duplicate transaction | Simulasi gagal insert `riwayat_transaksi` di tengah `PengontrolTransaksi.prosesPembayaranDummy()`, pengecekan guard `.neq('status_pembayaran', 'LUNAS')`, serta mekanisme `AbortController` timeout di `src/lib/api.ts` lewat Vitest (`src/test/transaksi.test.ts`) | Saat insert `riwayat_transaksi` gagal setelah `pesanan` sempat ter-update, compensating rollback mengembalikan `pesanan` ke `MENUNGGU_PEMBAYARAN` (`id_metode_pembayaran: null`); guard menolak 100% duplicate payment request | Pass |
+| KNF01-TC01 | KNF01 | Portability | Tampilan adaptif pada viewport 320 px, 768 px, dan 1280 px tanpa horizontal scrollbar | Pengujian menggunakan Chrome DevTools pada viewport 320 px, 768 px, dan 1280 px | 320 px: terdapat elemen yang saling bertumpuk; 768 px: beberapa elemen masih mengalami tumpang tindih; 1280 px: tampilan berjalan dengan baik | Belum sepenuhnya sesuai |
 
 <br>
 
@@ -1411,7 +1412,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC10-TC02 | <br> <img alt="Pengujian UC10-TC02" src="../M10/assets/UC10-TC02.png" width="100%"> |
 | UC10-TC03 | <br> <img alt="Pengujian UC10-TC03" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
 | UC10-TC04 | <br> <img alt="Pengujian UC10-TC04" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
-
+| KNF01-TC01 | Viewport 320 px (Smartphone) <br> <img alt="Pengujian viewport 320 px" src="../M10/assets/KNF01-320.png" width="100%"> <br><br> Viewport 768 px (Tablet) <br> <img alt="Pengujian viewport 768 px" src="../M10/assets/KNF01-768.png" width="100%"> <br><br> Viewport 1280 px (Laptop) <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/KNF01-1280.png" width="100%"> |
 <br>
 
 ---
