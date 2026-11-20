@@ -26,11 +26,11 @@
 
 | Catatan |
 | --- |
-| 1. *\[Berikan catatan hasil asistensi\]*  |
-| 2. ... |
-| 3. ... |
-| 4. ... |
-
+| 1. Bab 1 = Tujuan, lingkup, istilah, aturan penomoran (termasuk ID pengujian baru), referensi, ikhtisar  |
+| 2. Bab 2 = System overview + use case diagram |
+| 3. Bab 3 = Lingkungan implementasi, daftar modul, antarmuka, dan file lain  |
+| 4. Bab 4 = Unit Test, Use Case Test, KNF Test, dan Buktinya |
+| 5. Bab 5 = Traceability |
 **Notes for this section:**  
 *Catatan dapat dituliskan dalam bentuk paragraf atau poin-poin, disesuaikan saja.* 
 
@@ -38,7 +38,7 @@
 
 <!-- ![](./assets/foto-asistensi.jpg) -->
 <p align="center">
-  <img src="./assets/foto-asistensi.jpg" width="100%">
+  <img src="./assets/Asistensi.png" width="100%">
 </p>
 
 <p align="center">

@@ -121,6 +121,9 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | :--- | :--- | :--- | :--- |
 | Chat GPT | Membuat Pengujian dengan Vitest | Bagaimana cara membuat kode pengujian untuk kasus ini? Apakah kode pengujian ini sudah benar?  | Saya (There) memeriksa kembali kode pengujian yang dihasilkan AI, mencocokkan test case dengan kebutuhan, memperbaiki bagian yang kurang tepat, dan memastikan hasilnya sesuai dengan yang diharapkan.  |
 | Chat GPT | Membuat Pengujian dengan Vitest |Bagaimana melakukan pengujian Vitest?  | Mencoba untuk melakukan pengujian, memvalidasi apakah langkah yang disebutkan tepat, dan memastikan pengujian sesuai dengan kebutuhan.  |
+| Gemini | Membuat Pengujian Vitest Tambahan | Tolong bantu saya, mendiscover ada yang kurang dari source code ini, lalu berikan kode pengujian yang baru untuk meningkatkan coverage| Saya (Edward) Mencoba melakukan pengujian, memvalidasi coverage yang diinginkan, dan memastikan pengujian sesuai dengan kebutuhan. |
+| Gemini | Membantu memperapih laporan | Tolong bantu saya merapihkan format laporan yang telah saya buat| Saya (Edward) melakukan pengecekan dan memilah mana yang perlu digunakan maupun diperbaiki |
+
 
 ### Pernyataan Integritas dan Persetujuan
 
