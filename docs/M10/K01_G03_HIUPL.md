@@ -1380,6 +1380,13 @@ Tabel 4.6. Bukti Hasil Pengujian
 | INT-TC41 – INT-TC42 | <img alt="Bukti Pengujian Integrasi I-17" src="../M10/assets/I17.png" width="70%"> |
 | INT-TC43 – INT-TC45 | <img alt="Bukti Pengujian Integrasi I-18" src="../M10/assets/I18.png" width="70%"> |
 | INT-TC46 – INT-TC47 | <img alt="Bukti Pengujian Integrasi I-19" src="../M10/assets/I19.png" width="70%"> |
+| UC01-TC01 | <br> <img alt="Pengujian UC01-TC01" src="../M10/assets/UC01-TC01.png" width="100%"> <br> <img alt="Pengujian UC01-TC01" src="../M10/assets/zRegisBerhasil.png" width="100%">|
+| UC01-TC02 | <br> <img alt="Pengujian UC01-TC02" src="../M10/assets/UC01-TC02.png" width="100%"> <br> <img alt="Pengujian UC01-TC01" src="../M10/assets/zRegisBerhasil.png" width="100%">|
+| UC01-TC03 | <br> <img alt="Pengujian UC01-TC03" src="../M10/assets/UC01-TC03.png" width="100%"> |
+| UC02-TC01 | <br> <img alt="Pengujian UC02-TC01" src="../M10/assets/UC02-TC01.png" width="100%"> <br> <img alt="Pengujian UC02-TC01" src="../M10/assets/UC02-TC01-1.png" width="100%">|
+| UC02-TC02 | <br> <img alt="Pengujian UC02-TC02" src="../M10/assets/UC02-TC02.png" width="100%"> <br> <img alt="Pengujian UC02-TC01" src="../M10/assets/UC02-TC02-1.png" width="100%">|
+| UC02-TC03 | <br> <img alt="Pengujian UC02-TC03" src="../M10/assets/UC02-TC03.png" width="100%"> |
+| UC02-TC04 | <br> <img alt="Pengujian UC02-TC04" src="../M10/assets/UC02-TC04.png" width="100%"> |
 | UC04-TC01 | Notifikasi sukses unggah jasa pada `/penyedia/upload-jasa`:<br>![UC04-TC01 Sukses Unggah Jasa](./assets/danesh/uc04-tc01.png) |
 | UC04-TC02 | Validasi error pada field wajib dan form `/penyedia/upload-jasa`:<br>![UC04-TC02 Validasi Bagian Atas](./assets/danesh/uc04-tc02-1.png)<br>![UC04-TC02 Validasi Berkas](./assets/danesh/uc04-tc02-2.png) |
 | UC05-TC01 | Pencarian berdasarkan keyword pada `/pengguna/pencarian`:<br>![UC05-TC01 Pencarian Logo](./assets/danesh/uc05-tc01-1.png)<br>![UC05-TC01 Pencarian Banner](./assets/danesh/uc05-tc01-2.png) |
