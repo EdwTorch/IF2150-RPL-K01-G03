@@ -73,13 +73,18 @@ Dipersiapkan oleh:
     - [4.2.18 Kelas PengumpulanController](#4218-kelas-pengumpulancontroller)
   - [4.3 Pengujian Integrasi](#43-pengujian-integrasi)
   - [4.4 Pengujian Use Case](#44-pengujian-use-case)
+    - [4.4.1 Use Case UC01](#441-use-case-uc01)
+    - [4.4.2 Use Case UC02](#442-use-case-uc02)
+    - [4.4.3 Use Case UC03](#443-use-case-uc03)
     - [4.4.4 Use Case Mengunggah Penawaran Jasa (UC04)](#444-use-case-mengunggah-penawaran-jasa-uc04)
     - [4.4.5 Use Case Mencari Penawaran Jasa (UC05)](#445-use-case-mencari-penawaran-jasa-uc05)
     - [4.4.6 Use Case Melihat Informasi Jasa (UC06)](#446-use-case-melihat-informasi-jasa-uc06)
     - [4.4.7 Use Case Menggunakan Bookmark (UC07)](#447-use-case-menggunakan-bookmark-uc07)
     - [4.4.8 Use Case Melakukan Komunikasi (UC08)](#448-use-case-melakukan-komunikasi-uc08)
     - [4.4.9 Use Case Melakukan Pemesanan Jasa (UC09)](#449-use-case-melakukan-pemesanan-jasa-uc09)
-    - [4.4.10 Use Case Melakukan Konfirmasi Pesanan (UC10)](#4410-use-case-melakukan-pemesanan-jasa-uc010)    
+    - [4.4.10 Use Case Melakukan Konfirmasi Pesanan (UC10)](#4410-use-case-melakukan-konfirmasi-pesanan-uc10)
+    - [4.4.15 Use Case Memproses Laporan](#4415-use-case-memproses-laporan)
+  - [| UC15-TC05 | KF33, KF37 | Alternatif 2 – Membuka ruang mediasi ketika bukti memerlukan klarifikasi lanjutan | 1. Buka halaman detail tiket laporan `/admin/tiket/[idTiket]`.2. Klik tombol "Mulai mediasi" untuk menyelesaikan sengketa antara pelapor dan terlapor. | Klik tombol "Mulai mediasi" pada tiket sengketa | Sistem membuat sesi mediasi baru (atau membuka sesi mediasi yang sedang aktif), menghubungkan pelapor dan terlapor, lalu mengarahkan Admin ke ruang mediasi `/mediasi/[idSesi]`. | Admin berhasil diarahkan ke ruang mediasi tiga pihak di `/mediasi/[idSesi]`. | Pass |](#-uc15-tc05--kf33-kf37--alternatif-2--membuka-ruang-mediasi-ketika-bukti-memerlukan-klarifikasi-lanjutan--1-buka-halaman-detail-tiket-laporan-admintiketidtiket2-klik-tombol-mulai-mediasi-untuk-menyelesaikan-sengketa-antara-pelapor-dan-terlapor--klik-tombol-mulai-mediasi-pada-tiket-sengketa--sistem-membuat-sesi-mediasi-baru-atau-membuka-sesi-mediasi-yang-sedang-aktif-menghubungkan-pelapor-dan-terlapor-lalu-mengarahkan-admin-ke-ruang-mediasi-mediasiidsesi--admin-berhasil-diarahkan-ke-ruang-mediasi-tiga-pihak-di-mediasiidsesi--pass-)
   - [4.5 Pengujian Kebutuhan Non-Fungsional (KNF)](#45-pengujian-kebutuhan-non-fungsional-knf)
   - [4.6 Tangkapan Layar dan Bukti Hasil Pengujian](#46-tangkapan-layar-dan-bukti-hasil-pengujian)
 - [BAB 5: Traceability](#bab-5-traceability)
@@ -1316,6 +1321,22 @@ Tabel 4.4.10. Hasil Pengujian Use Case [UC10]
 | UC10-TC02 | KF21, KF22 | Normal – Penyedia Jasa melihat pesanan masuk | 1. Penyedia Jasa membuka halaman daftar pesanan masuk. 2. Penyedia Jasa memilih salah satu pesanan. | Data pesanan baru. | Sistem menampilkan daftar pesanan masuk beserta detail pesanan yang perlu dikonfirmasi. | Pesanan ditampilkan pada daftar pesanan masuk, tetapi statusnya langsung menjadi Diproses. | Tidak Sesuai |
 | UC10-TC03 | KF22 | Normal – Penyedia Jasa melakukan konfirmasi pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencari opsi untuk menerima atau menolak pesanan. | Pesanan dengan status Diproses. | Sistem menyediakan tombol Terima dan Tolak agar Penyedia Jasa dapat menentukan keputusan. | Tidak tersedia tombol Terima maupun Tolak pada halaman detail pesanan. | Tidak Berhasil |
 | UC10-TC04 | KF23 | Alternatif 1 – Penyedia Jasa menolak pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencoba melakukan penolakan pesanan. | Pesanan baru yang ingin ditolak. | Sistem memperbarui status pesanan menjadi ditolak dan memproses pengembalian dana kepada pembeli. | Penolakan pesanan tidak dapat dilakukan karena tidak tersedia fitur Tolak. | Tidak Dapat Diuji |
+
+### 4.4.15 Use Case Memproses Laporan
+
+**ID Use Case:** UC15  
+**Nama Use Case:** Memproses Laporan  
+
+Tabel 4.4.15. Hasil Pengujian Use Case [UC15]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC15-TC01 | KF32, KF33 | Normal – Admin melihat daftar dan detail tiket laporan | 1. Buka halaman login admin (`/admin`) dan masuk dengan akun admin.<br>2. Buka menu tiket laporan (`/admin/tiket`).<br>3. Klik salah satu tiket berstatus `Diproses` untuk membuka halaman detail (`/admin/tiket/[idTiket]`). | Kredensial admin: `admin@carijasa.id` / `admin123`<br>ID Tiket laporan aktif | Sistem menampilkan seluruh daftar tiket pada tabel dashboard; halaman detail menampilkan kategori pelanggaran, deskripsi keluhan, data pelapor, data pihak terlapor, serta tautan berkas bukti pendukung. | Tabel tiket laporan dan rincian lengkap beserta bukti lampiran berhasil dimuat tanpa kendala. | Pass |
+| UC15-TC02 | KF32, KF34, KF35 | Normal – Memberikan keputusan tindakan sanksi (Peringatan / Suspend Akun) | 1. Pada detail tiket laporan `/admin/tiket/[idTiket]`, pilih opsi tindakan `Peringatan` atau `Suspend akun` pada dropdown tindakan.<br>2. Tulis catatan tanggapan admin pada kolom catatan.<br>3. Klik tombol "Kirim Keputusan". | Jenis tindakan: `PERINGATAN` / `SUSPEND_AKUN`<br>Catatan: "Terlapor terbukti melakukan pelanggaran kesepakatan pengerjaan sesuai bukti lampiran." | Tanggapan berhasil disimpan ke database, prosedur sanksi akun terlapor diproses oleh sistem, status tiket otomatis berubah menjadi "Selesai", dan muncul alert "Keputusan admin berhasil disimpan.". | Keputusan dan sanksi berhasil dicatat, status tiket berubah menjadi "Selesai", dan form tindakan dinonaktifkan. | Pass |
+| UC15-TC03 | KF32, KF36 | Normal – Memberikan keputusan penolakan laporan (Laporan Ditolak) | 1. Pada detail tiket laporan, pilih tindakan `Laporan ditolak`.<br>2. Masukkan alasan penolakan pada kolom catatan tanggapan.<br>3. Klik tombol "Kirim Keputusan". | Jenis tindakan: `LAPORAN_DITOLAK`<br>Catatan: "Bukti yang dilampirkan tidak membuktikan adanya pelanggaran pada pesanan terkait." | Tanggapan penolakan tersimpan, status tiket laporan diperbarui menjadi "Selesai" tanpa mengubah status operasional akun terlapor. | Keputusan penolakan tercatat dan tiket berstatus "Selesai" tanpa penerapan sanksi akun. | Pass |
+| UC15-TC04 | KF32 | Alternatif 1 – Formulir keputusan admin tidak lengkap | 1. Buka detail tiket laporan berstatus `Diproses`.<br>2. Kosongkan pilihan tindakan pada dropdown atau biarkan catatan tanggapan kosong/spasi.<br>3. Klik tombol "Kirim Keputusan". | Tindakan: `""` (belum dipilih) dan/atau Catatan: `"   "` (hanya spasi) | Sistem memblokir pengiriman formulir dan menampilkan pesan peringatan validasi: "Pilih tindakan admin." dan/atau "Catatan tanggapan wajib diisi.". | Formulir tidak dikirim dan pesan peringatan validasi muncul di bawah kolom yang bersangkutan. | Pass |
+| UC15-TC05 | KF33, KF37 | Alternatif 2 – Membuka ruang mediasi ketika bukti memerlukan klarifikasi lanjutan | 1. Buka halaman detail tiket laporan `/admin/tiket/[idTiket]`.<br>2. Klik tombol "Mulai mediasi" untuk menyelesaikan sengketa antara pelapor dan terlapor. | Klik tombol "Mulai mediasi" pada tiket sengketa | Sistem membuat sesi mediasi baru (atau membuka sesi mediasi yang sedang aktif), menghubungkan pelapor dan terlapor, lalu mengarahkan Admin ke ruang mediasi `/mediasi/[idSesi]`. | Admin berhasil diarahkan ke ruang mediasi tiga pihak di `/mediasi/[idSesi]`. | Pass |
+---
 
 <br>
 
