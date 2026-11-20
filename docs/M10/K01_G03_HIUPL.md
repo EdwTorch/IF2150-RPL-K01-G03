@@ -374,7 +374,6 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C35 | HalamanKonfirmasi | Tidak perlu | Halaman UI (Boundary) konfirmasi pesanan penyedia; teruji lewat C31 dan UC10. | - |
 | C36 | ProdukAkhir | Tidak perlu | Entity model data (`ProdukAkhir`) dan tabel `public.produk_akhir` tanpa logika mandiri; teruji lewat C54 (`DeliverablesService`), UC11, dan UC12. | - |
 | C37 | HalamanPengumpulan | Tidak perlu | Halaman UI (Boundary) upload hasil kerja penyedia; teruji lewat C54 dan UC11. | - |
-| C38–C58 | *[Diisi oleh Edward: C38–C58]* | *...* | *...* | *...* |
 
 ## 4.2 Pengujian Unit Kelas
 
@@ -580,22 +579,58 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 
 Pengujian use case dilakukan pada seluruh skenario normal dan alternatif sesuai Subbab 4.4 SKPL, dengan minimal satu test case untuk setiap skenario. Kolom ID KF menunjukkan KF yang diverifikasi oleh test case tersebut.
 
-### 4.4.1 Use Case [Nama Use Case 1]
+### 4.4.4 Use Case Mengunggah Penawaran Jasa (UC04)
 
-**ID Use Case:** *[UC01 sesuai SKPL]*  
-**Nama Use Case:** *[Nama use case sesuai SKPL]*
+**ID Use Case:** UC04  
+**Nama Use Case:** Mengunggah Penawaran Jasa
 
-Tabel 4.4.1. Hasil Pengujian Use Case [UC01]
+Tabel 4.4.4. Hasil Pengujian Use Case UC04
 
 | ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *UC01-TC01* | *KF01* | *Normal* | *1. Buka halaman login.<br>2. Masukkan kredensial.<br>3. Klik tombol "Login".* | *User: rpl@gmail.com<br>Pass: 123456* | *Pengguna diarahkan ke Halaman Dashboard.* | *Pengguna diarahkan ke Halaman Dashboard sesuai hasil yang diharapkan.* | *Pass* |
-| *UC01-TC02* | *KF01* | *Alternatif 1: [Nama skenario]* | *[Langkah-langkah pengujian]* | *[Data masukan]* | *[Hasil yang diharapkan]* | *[Hasil aktual]* | *[Pass/Fail. Jika Fail: penjelasan dan solusi]* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| UC04-TC01 | KF05 | Normal | 1. Buka halaman `/penyedia/upload-jasa` (I-04) sebagai Penyedia Jasa.<br>2. Isi nama jasa, pilih kategori, masukkan harga, isi deskripsi, dan unggah berkas contoh valid.<br>3. Klik tombol "Unggah Jasa". | Nama: "Desain Logo"<br>Kategori: "Desain Grafis"<br>Harga: 150000<br>Deskripsi: "Logo profesional"<br>Berkas: contoh.png (`image/png`, `< 10 MB`) | Data penawaran jasa dan tautan berkas tersimpan, form direset, dan muncul notifikasi "Penawaran jasa berhasil diunggah dan sudah tampil di pencarian.". | Penawaran jasa beserta tautan berkas tersimpan, notifikasi "Penawaran jasa berhasil diunggah dan sudah tampil di pencarian." tampil di atas form, dan isian form otomatis direset. | Pass |
+| UC04-TC02 | KF05 | Alternatif: Data atau Format Berkas Tidak Valid | 1. Buka `/penyedia/upload-jasa` (I-04).<br>2. Kosongkan kolom wajib, masukkan harga `0`, atau pilih berkas tidak didukung (mis. `.exe` atau ukuran `> 10 MB`).<br>3. Klik "Unggah Jasa". | Kasus A: nama jasa kosong, harga `0`<br>Kasus B: `malware.exe` atau berkas `11 MB` | Proses unggah ditolak dan muncul pesan peringatan validasi pada field/form tanpa menyimpan data. | Penyimpanan ditolak dan muncul pesan error umum "Data belum lengkap atau format berkas tidak didukung. Periksa kembali isian yang ditandai." beserta pesan error di tiap field wajib yang kosong. | Pass |
 
-### 4.4.2 Use Case [Nama Use Case 2]
+### 4.4.5 Use Case Mencari Penawaran Jasa (UC05)
 
-*[Lanjutkan untuk seluruh use case dengan pola yang sama, hingga 4.4.N.]*
+**ID Use Case:** UC05  
+**Nama Use Case:** Mencari Penawaran Jasa
+
+Tabel 4.4.5. Hasil Pengujian Use Case UC05
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC05-TC01 | KF06 | Normal: Pencarian Kata Kunci | 1. Buka `/pengguna/pencarian` (I-05).<br>2. Masukkan kata kunci pada search bar dan klik tombol "Cari". | keyword: "Logo" | Sistem menampilkan daftar kartu jasa aktif yang relevan dengan kata kunci (prioritas kecocokan nama jasa sebelum deskripsi). | Daftar kartu jasa aktif yang cocok tampil terurut dengan kecocokan nama jasa di urutan teratas. | Pass |
+| UC05-TC02 | KF07 | Normal: Penerapan Filter Harga & Rating | 1. Pada `/pengguna/pencarian` (I-05), isi kolom "Rp minimum" dan "Rp maksimum" lalu tekan Enter atau klik di luar input.<br>2. Pilih chip rating (`★ 4+`). | `harga_min`: 100000, `harga_max`: 200000, `rating_min`: 4 | Daftar hasil diperbarui hanya menampilkan jasa aktif yang memenuhi rentang harga dan rating minimum tersebut. | Daftar kartu jasa tersaring sesuai rentang harga (`100000`–`200000`) dan rating (`>= 4`). | Pass |
+| UC05-TC03 | KF16 | Normal: Komparasi Spesifikasi Jasa | 1. Kirim permintaan perbandingan 2–4 jasa melalui endpoint `GET /api/jasa?compare=j1,j2`. | `compare`: `j1,j2` | Sistem mengembalikan matriks perbandingan berisi daftar jasa beserta ringkasan `id_termurah`, `id_termahal`, `selisih_harga`, dan `id_rating_tertinggi`. | Endpoint `GET /api/jasa?compare=j1,j2` mengembalikan respons JSON matriks perbandingan dan ringkasan harga/rating dengan akurat. *(Catatan: tombol UI komparasi terpisah pada `/pengguna/pencarian` belum ada).* | Pass *(Level API)* |
+| UC05-TC04 | KF06 | Alternatif: Hasil Pencarian Tidak Ditemukan | 1. Masukkan kata kunci yang tidak cocok dengan jasa aktif mana pun pada search bar, lalu klik "Cari". | keyword: "tidakada" | Sistem menampilkan pesan status kosong "Jasa tidak ditemukan" beserta saran mengubah kata kunci/filter. | UI menampilkan alert "Jasa tidak ditemukan." dan kotak status kosong bertuliskan "Jasa tidak ditemukan" dengan teks "Coba kata kunci lain atau ubah filter.". | Pass |
+| UC05-TC05 | KF06 | Alternatif: Kata Kunci Kurang dari 3 Karakter | 1. Masukkan kata kunci `< 3` karakter pada search bar lalu klik "Cari". | keyword: "ab" | Sistem menolak pencarian dan menampilkan pesan "Kata kunci minimal 3 karakter.". | Pencarian tidak dijalankan dan UI menampilkan pesan peringatan "Kata kunci minimal 3 karakter.". | Pass |
+
+### 4.4.6 Use Case Melihat Informasi Jasa (UC06)
+
+**ID Use Case:** UC06  
+**Nama Use Case:** Melihat Informasi Jasa
+
+Tabel 4.4.6. Hasil Pengujian Use Case UC06
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC06-TC01 | KF08 | Normal | 1. Klik salah satu kartu jasa pada halaman pencarian menuju `/jasa/[id]` (I-06). | `id_jasa` aktif yang valid | Halaman detail menampilkan galeri gambar, kategori, judul, rating, deskripsi lengkap, profil penyedia, harga, ulasan, dan tombol aksi ("Pesan Jasa", "Chat Penyedia", "Bookmark"). | Seluruh informasi jasa, profil penyedia, riwayat ulasan, dan tombol aksi tampil lengkap pada layar `/jasa/[id]`. | Pass |
+| UC06-TC02 | KF08 | Alternatif: Jasa Tidak Ditemukan | 1. Akses rute `/jasa/[id]` dengan ID yang tidak terdaftar atau sudah dihapus. | `id_jasa`: "unknown-id" | Sistem menampilkan halaman status "Jasa tidak ditemukan" dengan tombol "Kembali ke pencarian". | Layar menampilkan pesan "Jasa tidak ditemukan" beserta tombol kembali ke halaman pencarian. | Pass |
+
+### 4.4.7 Use Case Menggunakan Bookmark (UC07)
+
+**ID Use Case:** UC07  
+**Nama Use Case:** Menggunakan Bookmark
+
+Tabel 4.4.7. Hasil Pengujian Use Case UC07
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC07-TC01 | KF09, KF10 | Normal: Menyimpan Jasa ke Bookmark | 1. Login sebagai Pengguna Jasa.<br>2. Klik ikon bookmark pada kartu jasa di I-05 atau panel aksi di I-06. | Pengguna login + `id_jasa` aktif | Bookmark tersimpan ke database, ikon bookmark berubah menjadi aktif, dan muncul notifikasi "Bookmark berhasil disimpan". | Ikon bookmark berubah menjadi aktif dan notifikasi "Bookmark berhasil disimpan" tampil di layar. | Pass |
+| UC07-TC02 | KF11 | Normal: Melihat Daftar Jasa Tersimpan | 1. Buka halaman `/pengguna/bookmark` (I-07) sebagai Pengguna Jasa yang sudah login. | Pengguna login | Menampilkan seluruh kartu jasa aktif yang telah disimpan pengguna beserta jumlahnya (atau empty state "Belum ada jasa tersimpan" jika kosong). | Halaman `/pengguna/bookmark` menampilkan daftar kartu jasa aktif yang sudah di-bookmark pengguna. | Pass |
+| UC07-TC03 | KF12 | Normal: Menghapus Jasa dari Bookmark | 1. Pada `/pengguna/bookmark` (I-07), klik tombol "Hapus dari bookmark" atau ikon bookmark aktif pada kartu jasa. | Pengguna login + `id_jasa` tersimpan | Bookmark terhapus dari database, kartu jasa hilang dari daftar pada layar, dan muncul notifikasi penghapusan. | Kartu jasa langsung hilang dari daftar pada `/pengguna/bookmark` dan muncul notifikasi `"<nama jasa>" dihapus dari bookmark.`. | Pass |
+| UC07-TC04 | KF09, KF10 | Eksepsi: Pengguna Belum Login (Guest) | 1. Buka `/jasa/[id]` (I-06) tanpa login (guest).<br>2. Klik tombol ikon bookmark. | Sesi null (guest) | Aksi dibatalkan dan UI menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Aksi tidak menyimpan data dan layar menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Pass |
 
 <br>
 
@@ -607,10 +642,6 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| *KNF01-TC01* | *KNF01* | *Reliability* | *Tidak ada data hilang/ganda saat jaringan putus di tengah transaksi* | *Simulasi putus koneksi saat bayar, lalu cek status di DB* | *[Hasil aktual]* | *Pass/Fail* |
-| *KNF02-TC01* | *KNF02* | *Security* | *Password tersimpan sebagai hash, bukan plain-text* | *Inspeksi tabel pengguna di DB* | *[...]* | *Pass/Fail* |
-| *KNFXX-TC01* | *KNFXX* | *Response time* | *Halaman tampil ≤ 4 detik* | *Chrome DevTools, 5 kali ukur, ambil rata-rata* | *[Rata-rata ... detik, maks ... detik]* | *Pass/Fail* |
-| *...* | *...* | *...* | *...* | *...* | *...* | *...* |
 
 <br>
 
