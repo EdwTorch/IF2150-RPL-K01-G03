@@ -29,6 +29,8 @@
 * [Milestone 6](#milestone-6)
 * [Milestone 7](#milestone-7)
 * [Milestone 8](#milestone-8)
+* [Milestone 9](#milestone-9)
+* [Milestone 10](#milestone-10)
 
 
 ---
@@ -113,6 +115,12 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Claude & ChatGPT | Necia | Tolong bantu integrasikan FE dan BE pada bagian berikut ...  | AI Memberikan bantuan integrasi, saya (Necia) melakukan review dan testing integrasi yang telah dibuat |
 | Claude & ChatGPT | There | Tolong bantu buatkan FE dengan instrumen sebagai berikut ...  | AI memberi kode program FE, saya (There) melakukan review, membaca kode yang diberikan dan menyesuaikan dengan spesifikasi mockup yang sudah pernah dibuat |
 | Claude & ChatGPT | There | Tolong bantu integrasikan FE dan BE pada bagian berikut ...  | AI Memberikan bantuan integrasi, saya (There) melakukan review dan testing integrasi yang telah dibuat |
+
+## Milestone 10
+| Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
+| :--- | :--- | :--- | :--- |
+| Chat GPT | Membuat Pengujian dengan Vitest | Bagaimana cara membuat kode pengujian untuk kasus ini? Apakah kode pengujian ini sudah benar?  | Saya (There) memeriksa kembali kode pengujian yang dihasilkan AI, mencocokkan test case dengan kebutuhan, memperbaiki bagian yang kurang tepat, dan memastikan hasilnya sesuai dengan yang diharapkan.  |
+| Chat GPT | Membuat Pengujian dengan Vitest |Bagaimana melakukan pengujian Vitest?  | Mencoba untuk melakukan pengujian, memvalidasi apakah langkah yang disebutkan tepat, dan memastikan pengujian sesuai dengan kebutuhan.  |
 
 ### Pernyataan Integritas dan Persetujuan
 

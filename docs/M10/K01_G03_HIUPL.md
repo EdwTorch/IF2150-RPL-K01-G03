@@ -70,7 +70,7 @@ Dipersiapkan oleh:
     - [4.2.15 Kelas LaporanHandler](#4215-kelas-laporanhandler)
     - [4.2.16 Kelas UlasanHandler](#4216-kelas-ulasanhandler)
     - [4.2.17 Kelas MediasiHandler](#4217-kelas-mediasihandler)
-    - [4.2.18 Kelas PengumpulanController](#4218-kelas-pengumpulancontroller)
+    - [4.2.18 Kelas PengumpulanController bagian dari DeliverablesService](#4218-kelas-pengumpulancontroller-bagian-dari-deliverablesservice)
   - [4.3 Pengujian Integrasi](#43-pengujian-integrasi)
   - [4.4 Pengujian Use Case](#44-pengujian-use-case)
     - [4.4.1 Use Case UC01](#441-use-case-uc01)
@@ -83,6 +83,12 @@ Dipersiapkan oleh:
     - [4.4.8 Use Case Melakukan Komunikasi (UC08)](#448-use-case-melakukan-komunikasi-uc08)
     - [4.4.9 Use Case Melakukan Pemesanan Jasa (UC09)](#449-use-case-melakukan-pemesanan-jasa-uc09)
     - [4.4.10 Use Case Melakukan Konfirmasi Pesanan (UC10)](#4410-use-case-melakukan-konfirmasi-pesanan-uc10)
+    - [4.4.11 Use Case Menyerahkan Hasil Pekerjaan](#4411-use-case-menyerahkan-hasil-pekerjaan)
+    - [4.4.12 Use Case Mengonfirmasi Hasil Pekerjaan](#4412-use-case-mengonfirmasi-hasil-pekerjaan)
+    - [4.4.13 Use Case Melaporkan Pengguna Lain](#4413-use-case-melaporkan-pengguna-lain)
+  - [| UC13-TC02 | KF29 | Alternatif 1: Field Laporan (Deskripsi/Kategori/Bukti Tak Lengkap) | Asumsikan Pengguna Jasa Sudah Login  1. Masuk ke dalam Halaman Pengumpulan  2. Menekan Tombol Laporkan Penyedia Jasa  3. Masuk ke dalam formulir pengisian Laporan  4. Pengguna Tidak Mengisi Field Laporan   5. Pengguna Menekan Tombol Kirim Laporan  6. Muncul Error  |  Prasyarat : Login, dan sudah memiliki jasa yang sudah memiliki deliverables/pengumpulan. Tidak mengisi field laporan namun mengirim | Muncul Pesan Error | Berhasil memunculkan pesan error | Pass |](#-uc13-tc02--kf29--alternatif-1-field-laporan-deskripsikategoribukti-tak-lengkap--asumsikan-pengguna-jasa-sudah-login--1-masuk-ke-dalam-halaman-pengumpulan--2-menekan-tombol-laporkan-penyedia-jasa--3-masuk-ke-dalam-formulir-pengisian-laporan--4-pengguna-tidak-mengisi-field-laporan---5-pengguna-menekan-tombol-kirim-laporan--6-muncul-error----prasyarat--login-dan-sudah-memiliki-jasa-yang-sudah-memiliki-deliverablespengumpulan-tidak-mengisi-field-laporan-namun-mengirim--muncul-pesan-error--berhasil-memunculkan-pesan-error--pass-)
+    - [4.4.14 Use Case Memberikan Ulasan terhadap Jasa yang Dipesan](#4414-use-case-memberikan-ulasan-terhadap-jasa-yang-dipesan)
+  - [| UC14-TC02 | KF30, KF31 | Alternatif 1: Ulasan Gagal Dibuat karena field tidak lengkap | 1. Menekan Tombol Buat Ulasan dari Halaman Pengumpulan  2. Muncul Form pengisian Ulasan  3. Mengosongkan Form Pengisian  4. tekan kirim ulasan  5. Muncul Error | Prasyarat : sudah login, dan sudah ada pesanan yang dianggap selesai  menekan tombol ulasan dan tidak mengisi form ulasan | Muncul error | Muncul error | Pass |](#-uc14-tc02--kf30-kf31--alternatif-1-ulasan-gagal-dibuat-karena-field-tidak-lengkap--1-menekan-tombol-buat-ulasan-dari-halaman-pengumpulan--2-muncul-form-pengisian-ulasan--3-mengosongkan-form-pengisian--4-tekan-kirim-ulasan--5-muncul-error--prasyarat--sudah-login-dan-sudah-ada-pesanan-yang-dianggap-selesai--menekan-tombol-ulasan-dan-tidak-mengisi-form-ulasan--muncul-error--muncul-error--pass-)
     - [4.4.15 Use Case Memproses Laporan](#4415-use-case-memproses-laporan)
   - [| UC15-TC05 | KF33, KF37 | Alternatif 2 – Membuka ruang mediasi ketika bukti memerlukan klarifikasi lanjutan | 1. Buka halaman detail tiket laporan `/admin/tiket/[idTiket]`.2. Klik tombol "Mulai mediasi" untuk menyelesaikan sengketa antara pelapor dan terlapor. | Klik tombol "Mulai mediasi" pada tiket sengketa | Sistem membuat sesi mediasi baru (atau membuka sesi mediasi yang sedang aktif), menghubungkan pelapor dan terlapor, lalu mengarahkan Admin ke ruang mediasi `/mediasi/[idSesi]`. | Admin berhasil diarahkan ke ruang mediasi tiga pihak di `/mediasi/[idSesi]`. | Pass |](#-uc15-tc05--kf33-kf37--alternatif-2--membuka-ruang-mediasi-ketika-bukti-memerlukan-klarifikasi-lanjutan--1-buka-halaman-detail-tiket-laporan-admintiketidtiket2-klik-tombol-mulai-mediasi-untuk-menyelesaikan-sengketa-antara-pelapor-dan-terlapor--klik-tombol-mulai-mediasi-pada-tiket-sengketa--sistem-membuat-sesi-mediasi-baru-atau-membuka-sesi-mediasi-yang-sedang-aktif-menghubungkan-pelapor-dan-terlapor-lalu-mengarahkan-admin-ke-ruang-mediasi-mediasiidsesi--admin-berhasil-diarahkan-ke-ruang-mediasi-tiga-pihak-di-mediasiidsesi--pass-)
   - [4.5 Pengujian Kebutuhan Non-Fungsional (KNF)](#45-pengujian-kebutuhan-non-fungsional-knf)
@@ -227,11 +233,11 @@ Tabel 3.1. Lingkungan Implementasi
 | :--- | :--- |
 | Hardware | Laptop MSI Modern 14 B11SB, prosesor 11th Gen Intel(R) Core(TM) i5-1155G7 @ 2.50 GHz, 4 Core  |
 | Operating System | Microsoft Windows 11 Home Single Language |
-| Bahasa Pemrograman | TypeScript|
-| Framework/Library | Next.js 16.4.3, React, Tailwind CSS, dan Supabase JavaScript Client.  |
-| DBMS | PostgreSQL melalui Supabase. |
-| Development Tools | VSCode, Git, Github |
-| Testing Tools |  |
+| Bahasa Pemrograman | TypeScript 5.9.3, Node.js 24.19.0 |
+| Framework/Library | Next.js 16.4.3, React 19.3.0, Tailwind CSS 4.3.4, Supabase JS 2.119.0, Supabase SSR 0.12.7 |
+| DBMS | PostgreSQL melalui Supabase |
+| Development Tools | VsCode, Git 2.36.1, GitHub |
+| Testing Tools | Vitest 5.1.0, React Testing Library 16.3.3, Jest DOM 7.0.1 |
 
 ### Edward 
 | Aspek | Keterangan |
@@ -247,13 +253,13 @@ Tabel 3.1. Lingkungan Implementasi
 ### Necia
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| *Hardware* | Laptop MSI Sword 16 HX B14VFKG, Intel Core i7-14700HX, NVIDIA GeForce RTX 4060 Laptop GPU 8GB, 16GB DDR5, SSD NVMe 1TB |
+| *Operating System* | Windows 11 Home Single Language 26H2 (build 26300.9818), 64-bit |
+| *Bahasa Pemrograman* | TypeScript 5.9.3 dengan Node.js |
+| *Framework/Library* | Next.js 16.4.3, React 19.3.0, Tailwind CSS 4.3.4, Supabase JS 2.119.0, @supabase/ssr 0.12.7 |
+| *DBMS* | PostgreSQL (Supabase) |
+| *Development Tools* | Visual Studio Code, Git, GitHub, GitHub Desktop, Supabase Dashboard (SQL Editor) |
+| *Testing Tools* | Vitest 5.1.0  |
 
 
 
@@ -321,6 +327,29 @@ Tabel 3.2. Implementasi Modul
 | 56 | C56 | notifikasi *(Tambahan M9)* | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `notifikasi`)* | - |
 | 57 | C57 | sesi_mediasi *(Tambahan M9)* | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `sesi_mediasi`)* | - |
 | 58 | C58 | pesan_mediasi *(Tambahan M9)* | `src/supabase/migrations/20261103060624_create_carijasa_schema.sql` *(tabel `pesan_mediasi`)* | - |
+
+| C38 | HalamanDeliverables  | Komponen Halaman (page) | src/components/ui/HalamanDeliverables.tsx - HalamanDeliverables <br> src/app/pengguna/hasil/[idPesanan]/page.tsx (sisi Pengguna Jasa) <br> src/app/penyedia/pengumpulan/[idPesanan]/hasil/page.tsx (sisi Penyedia Jasa) | Satu komponen dipakai dua sisi lewat prop peran. State hasil, error, sedangMemproses, konfirmasiBerhasil, pesananDitolak. Operasi konfirmasi memanggil konfirmasiSelesai (PATCH .../deliverables/route.ts); data dimuat lewat getHasil dari .../deliverables/route.ts dan .../deliverables/revisi/route.ts |
+| C39 | PengajuanRevisi  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambahkan atribut id_revisi dan id_pesanan |
+| C40 | HalamanRequestRevisi  | Komponen Halaman (page) | src/app/pengguna/revisi/[idPesanan]/page.tsx - HalamanRequestRevisi | State detail, pesan, files, kuota, errorDetail, errorUmum. Operasi kirimRevisi memanggil ajukanRevisi (src/lib/layanan.ts) ke POST src/app/api/pesanan/[id_pesanan]/deliverables/revisi/route.ts. Kuota dimuat lewat muatKuota |
+| C41 | RevisiHandler  | Fungsi, Kelas, dan Routing | src\services\deliverables.service.ts - DeliverablesService <br> src\test\deliverable.test.ts <br> src\app\api\pesanan\[id_pesanan]\deliverables\revisi\route.ts  | Class ini Digabung dengan RevisiHandler dan Sebagian PesananHandler. Fungsi yang relevan antara lain : getRevisionHistory, requestRevision, submitRevisionFix, confirmOrderComplete |
+| C42 | PencairanDana  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
+| C43 | TiketLaporan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
+| C44 | HalamanPelaporan | Komponen Halaman (page) | src/app/pengguna/pelaporan/page.tsx - HalamanPelaporan | idPesanan diambil dari query URL. State nama, kat, desk, files, tiket, e. Operasi kirim memanggil kirimLaporan (src/lib/layanan.ts) ke POST src/app/api/pesanan/[id_pesanan]/laporan/route.ts; tiket yang dikembalikan ditampilkan sebagai nomor tiket, status, dan tanggapan admin |
+| C45 | LaporanHandler | Fungsi, Kelas dan Routing | src\services\pelaporan.service.ts <br> src\app\api\pesanan\[id_pesanan]\laporan\route.ts <br> src\app\api\admin\laporan\[id_tiket]\route.ts <br> src\app\api\admin\laporan\[id_tiket]\tanggapan\route.ts - PelaporanService dan TanggapanLaporanService | fungsi yang terkait PelaporanService : submitLaporan, validasiOwnerPesanan, validateUrlBukti, getTicketsByUser. fungsi yang terkait TanggapanLaporanService : getAllTicketsForAdmin, getDetailTiketAdmin, catatKeputusanTindakan |
+| C46 | Ulasan | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | |
+| C47 | HalamanUlasan  | Komponen Halaman (page) | src/app/pengguna/ulasan/[idPesanan]/page.tsx - HalamanUlasan | State n (rating), kom (komentar), files (dokumentasi), done. Operasi kirim memanggil kirimUlasan (src/lib/layanan.ts) ke POST src/app/api/ulasan/route.ts. Rating wajib diisi sebelum dikirim |
+| C48 | UlasanHandler  | Fungsi, Kelas, dan Routing | src\services\ulasan.service.ts <br> src\app\api\ulasan\route.ts| Class UlasanService, validasiRating, hitungRatingAgregat, perbaruiRatingPenyedia, getRatingDanUlasanPenyedia, geStatistikUlasanJasa, getUlasanJasaById, simpanUlasan, getUlasanbyJasa,updateUlasan, deleteUlasan |
+| C49 | TanggapanLaporan  | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | - |
+| C50 | HalamanPengajuanMediasi | Komponen Halaman (page) | src/app/admin/tiket/[idTiket]/page.tsx - HalamanPengajuanMediasi <br> src/app/mediasi/[id]/page.tsx (ruang mediasi) | Detail tiket untuk admin, dengan operasi kirim (tanggapan dan jenis sanksi) ke src/app/api/admin/laporan/[id_tiket]/tanggapan/route.ts, dan mediasi (mulai mediasi) ke src/app/api/mediasi/[id_sesi_mediasi]/route.ts (POST) |
+| C51 | MediasiHandler | Fungsi, Kelas, dan Routing | src/app/deliverables/mediasi.service.ts - MediasiService <br> src/app/api/admin/mediasi/[id_sesi_mediasi]/selesai <br> src/app/api/admin/mediasi/route.ts <br> src/app/api/mediasi/route.ts <br> src/app/api/mediasi/[id_sesi_mediasi]/route.ts <br> src/app/api/mediasi/[id_sesi_mediasi]/pesan/route.ts | fungsi yang disediakan : mulaiMediasi, kirimPesanMediasi, getDaftarMediasiUser, getDetalDanPesanMediasi, selesaikanMediasi. |
+| C52 | Admin  | Tabel Basis Data | src/app/supabase/20261103060624_create_carijasa_schema.sql  | Penggunaan id_admin pada rancangan berasal atribut id pengguna (inheritance), tetapi dengan role pengguna berupa 'ADMIN'|
+| C53 | HalamanDashboardAdmin | Komponen Halaman (page) | src/app/admin/tiket/page.tsx - HalamanDashboardAdmin | Daftar tiket laporan (state d, err) dari getTiketList (src/lib/layanan.ts) ke src/app/api/admin/laporan/route.ts. Ada keadaan memuat, error, dan kosong. Tombol Detail menuju src/app/admin/tiket/[idTiket]/page.tsx |
+| C54 | PengumpulanController | Fungsi, Kelas, dan Routing | src/app/service/deliverable.service.ts - DeliverablesService <br> src/app/api/pesanan/route.ts src/app/api/pesanan/[id_pesanan]/route.ts <br> | Class ini Digabung dengan RevisiHandler dan Sebagian PesananHandler. Fungsi yang relevan antara lain : submitDeliverable, getDeliverablebyPesanan, getDeliverableByProdukAkhir, confirmOrderComplete |
+| C55 | pesan_chat | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | Menambah Class Baru untuk pesan dalam chat |
+| C56 | notifikasi | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambah tabel data notifikasi |
+| C57 | sesi_mediasi | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambah tabel data sesi_mediasi (mirip roomchat tapi bertiga) |
+| C58 | pesan_mediasi | Tabel Basis Data | src/app/supabase/migrations/20261103060624_create_carijasa_schema.sql | menambah tabel data pesan dalam sesi_mediasi |
+
 
 ## 3.3 Implementasi Antarmuka
 
@@ -1080,18 +1109,64 @@ Tabel 4.2.17b. Ringkasan Cakupan Kelas [C51]
 
 | Informasi | Keterangan |
 | :--- | :--- |
-| Daftar operasi public pada DPPL |  |
-| Operasi yang diuji | <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
-| ID Algoritma yang tercakup | Algo-4801 - Algo-4805, dan tambahan yang tidak tercatat dalam DPPL |
+| Daftar operasi public pada DPPL | inputTindakan() --> bagian dari LaporanHandler bukan mediasi, akhiriMediasi() --> selesaikanMediasi(), tampilkanPesanError() --> bagian error handling di setiap fungsi, tampilkanNotifikasiSelesai() --> bagian dari setiap tindakan di mediasi,  UpdateStatusTiket() --> bagian dari LaporanHandler() |
+| Operasi yang diuji | mulaiMediasi(), kirimPesanMediasi(), getDaftarMediasiUser(),  getDetailDanPesanMediasi(), selesaikanMediasi()<br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-5101 - Algo-5105, dan tambahan yang tidak tercatat dalam DPPL |
 | Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c51) |
 
-### 4.2.18 Kelas PengumpulanController
+### 4.2.18 Kelas PengumpulanController bagian dari DeliverablesService
 
 **ID Kelas:**   C54
 **Nama Kelas:** PengumpulanController
 **Tingkat:** Mendalam
 
-Tabel 4.2.18. Hasil Pengujian Unit Kelas [C54]
+Tabel 4.2.16. Hasil Pengujian Unit Kelas [C54]
+| ID Pengujian | Operasi yang Diuji | Jenis Kasus | Prosedur/Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| C54-UT01 | validasiOwnerPesanan() | Positif | user_id adalah id_pengguna_jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C54-UT02 | validasiOwnerPesanan() | Positif | user_id adalah id_penyedia_jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C54-UT03 | validasiOwnerPesanan() | Negatif | Simulasi error query pada Supabase | Sistem melempar error *"Gagal memvalidasi pesanan: DB Error Validasi"* | error dilempar | Pass |
+| C54-UT04 | validasiOwnerPesanan() | Negatif | id_pesanan tidak ditemukan di database  | Sistem melempar error *"Pesanan tidak ditemukan."* | error dilempar | Pass |
+| C54-UT05 | validasiOwnerPesanan() | Negatif | user_id bukan pemesan maupun penyedia  | Sistem melempar error *"Akses ditolak. Pesanan ini bukan milik Anda."* | akses ditolak | Pass |
+| C54-UT06 | validasiPenggunaJasa() | Positif | user_id adalah pengguna jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C54-UT07 | validasiPenggunaJasa() | Negatif | Simulasi koneksi database terputus | Sistem melempar error *"Gagal memvalidasi pesanan: Koneksi terputus"* | error dilempar | Pass |
+| C54-UT08 | validasiPenggunaJasa() | Negatif | id_pesanan tidak ditemukan di database  | Sistem melempar error *"Pesanan tidak ditemukan."* | error dilempar | Pass |
+| C54-UT09 | validasiPenggunaJasa() | Negatif | user_id bukan pemilik pesanan  | Sistem melempar error *"Akses ditolak. Hanya pengguna jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C54-UT10 | validasiPenyediaJasa() | Positif | user_id adalah penyedia jasa pemilik pesanan | Fungsi mengembalikan nilai true | validasi sukses | Pass |
+| C54-UT11 | validasiPenyediaJasa() | Negatif | Simulasi query database mengalami timeout | Sistem melempar error *"Gagal memvalidasi pesanan: Timeout"* | error dilempar | Pass |
+| C54-UT12 | validasiPenyediaJasa() | Negatif | id_pesanan tidak ditemukan di database  | Sistem melempar error *"Pesanan tidak ditemukan."* | error dilempar | Pass |
+| C54-UT13 | validasiPenyediaJasa() | Negatif | user_id bukan penyedia jasa pesanan  | Sistem melempar error *"Akses ditolak. Hanya penyedia jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C54-UT14 | submitDeliverable() | Batas / Negatif | deskripsi_produk kosong | Sistem melempar error *"Deskripsi hasil pekerjaan tidak boleh kosong."* | error dilempar | Pass |
+| C54-UT15 | submitDeliverable() | Batas / Negatif | file_url dan output_path keduanya tidak diisi  | Sistem melempar error *"Unggah berkas atau sertakan tautan hasil pekerjaan."* | error dilempar | Pass |
+| C54-UT16 | submitDeliverable() | Negatif | Simulasi insert data produk_akhir ke database gagal | Sistem melempar error *"Gagal menyimpan hasil pekerjaan: Insert error"* | error dilempar | Pass |
+| C54-UT17 | submitDeliverable() | Negatif | Simulasi update status pesanan di database gagal | Sistem melempar error *"Gagal memperbarui status pesanan: DB Error Pesanan"* | error dilempar | Pass |
+| C54-UT18 | submitDeliverable() | Positif | Data pekerjaan valid dan data pengguna jasa tersedia | Berhasil menyimpan produk akhir, mengubah status pesanan, & memicu notifikasi | ulasan disimpan & notifikasi terkirim | Pass |
+| C54-UT19 | submitDeliverable() | Positif / Batas | Data pekerjaan valid, namun data pengguna jasa  | Berhasil menyimpan produk akhir tanpa memicu pengiriman notifikasi | produk disimpan tanpa notifikasi | Pass |
+| C54-UT20 | getDeliverableByPesanan() | Negatif | Simulasi query produk_akhir di database gagal | Sistem melempar error query dari DB | error dilempar | Pass |
+| C54-UT21 | getDeliverableByPesanan() | Batas | Produk akhir belum dikumpulkan oleh penyedia jasa | Fungsi mengembalikan nilai null | nilai null dikembalikan | Pass |
+| C54-UT22 | getDeliverableByPesanan() | Positif | file_url berupa link HTTP/HTTPS langsung | Mengembalikan data produk akhir beserta file_download_url direct link | data deliverable dikembalikan | Pass |
+| C54-UT23 | getDeliverableByPesanan() | Positif | file_url berupa path Storage Supabase | Mengembalikan data produk akhir dengan file_url & file_download_url bertipe signed URL | signed URL dikembalikan | Pass |
+| C54-UT24 | getDeliverableByPesanan() | Negatif | Pembuatan signed URL dari Storage Service gagal | Sistem melempar error *"Gagal membuat URL hasil pekerjaan."* | error dilempar | Pass |
+| C54-UT25 | getDeliverableByProdukAkhir() | Negatif | id_produk_akhir tidak ditemukan di DB  | Sistem melempar error *"Hasil pekerjaan tidak ditemukan."* | error dilempar | Pass |
+| C54-UT26 | getDeliverableByProdukAkhir() | Positif | id_produk_akhir valid dan user_id merupakan owner pesanan | Mengembalikan detail data produk akhir dan memverifikasi otorisasi owner | data produk akhir dikembalikan | Pass |
+| C54-UT27 | confirmOrderComplete() | Negatif | user_id bukan pengguna jasa pemilik pesanan  | Sistem melempar error *"Akses ditolak. Hanya pengguna jasa pemilik pesanan..."* | akses ditolak | Pass |
+| C54-UT28 | confirmOrderComplete() | Negatif | Query data pesanan gagal atau pesanan tidak ditemukan | Sistem melempar error *"Pesanan tidak ditemukan: Pesanan fail"* | error dilempar | Pass |
+| C54-UT29 | confirmOrderComplete() | Negatif | Eksekusi RPC DB konfirmasi_pesanan_selesai mengalami kegagalan | Sistem melempar error *"Gagal mengonfirmasi pesanan dan mencairkan dana: RPC DB Fail"* | error RPC dilempar | Pass |
+| C54-UT30 | confirmOrderComplete() | Positif | id_pesanan dan user_id pengguna jasa valid | Berhasil mengeksekusi RPC konfirmasi_pesanan_selesai & mengirim notifikasi ke seller | RPC dipanggil & notifikasi terkirim | Pass |
+| C54-UT31 | unggahBerkasDeliverable() | Batas / Negatif | Ukuran berkas melebihi batas 50 MB  | Sistem melempar error *"Ukuran berkas melebihi batas maksimum 50 MB"* | error dilempar | Pass |
+| C54-UT32 | unggahBerkasDeliverable() | Negatif | Berkas dengan ekstensi yang dilarang  | Sistem melempar error *"Tipe berkas application/x-msdownload tidak diizinkan..."* | error dilempar | Pass |
+| C54-UT33 | unggahBerkasDeliverable() | Negatif | Storage Service mengembalikan pesan galat (*Storage driver full*) | Sistem melempar error driver storage | error dilempar | Pass |
+| C54-UT34 | unggahBerkasDeliverable() | Negatif | Storage Service mengembalikan URL kosong tanpa pesan galat | Sistem melempar error *"Gagal mengunggah berkas deliverable."* | error dilempar | Pass |
+| C54-UT35 | unggahBerkasDeliverable() | Positif | Berkas valid (test.png, image/png) | Berhasil mengunggah berkas ke folder deliverable dan mengembalikan URL storage | unggah sukses & URL dikembalikan | Pass |
+
+Tabel 4.2.18b. Ringkasan Cakupan Kelas [C54]
+
+| Informasi | Keterangan |
+| :--- | :--- |
+| Daftar operasi public pada DPPL | validasiPengumpulan(), validasiDeskripsi() |
+| Operasi yang diuji | validasiOwnerPesanan(), validasiPenggunaJasa(), validasiPenyediaJasa(), submitDeliverable(), getDeliverableByPesanan(), getDeliverableByProdukAkhir(), confirmOrderComplete(), unggahBerkasDeliverable() <br> Note : fungsi yang tidak diimplementasikan sudah dimasukkan ke dalam tubuh fungsi lain yang diuji baik dalam bentuk query maupun routing |
+| ID Algoritma yang tercakup | Algo-5101 - Algo-5105, dan tambahan yang tidak tercatat dalam DPPL |
+| Coverage (wajib ≥ 70%) | [Lihat Hasil Pengujian](#bukti-c54) |
 
 
 ## 4.3 Pengujian Integrasi
@@ -1112,15 +1187,15 @@ Tabel 4.3.1. Daftar Antarmuka Antarkomponen
 | I-08 | C24 HalamanChat  | ChatService → tabel `pesan_chat`, `chatroom`, Supabase Storage | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal | INT-TC20, INT-TC21, INT-TC22 |
 | I-09 | C28 HalamanPemesanan | PesananService → tabel `pesanan`, `jasa` | Controller - Model, Aplikasi - Basis data | INT-TC23, INT-TC24, INT-TC25 |
 | I-10 | C29 HalamanPembayaran  | PengontrolTransaksi → tabel `metode_pembayaran`, `riwayat_transaksi`, `pesanan` (gateway pembayaran *dummy*) | Controller - Model, Aplikasi - Basis data, Aplikasi - Sistem eksternal (*dummy*) | INT-TC26, INT-TC27, INT-TC28 |
-| I-11 | PesananService.ambilDaftarPesanan | Tabel pesanan | Aplikasi - Basis data | INT-TC11-1, INT-TC11-2 |
-| I-12 | PesananService.respondOrder | Tabel pesanan | Aplikasi - Basis data | INT-TC12-1, INT-TC12-2 |
-| I-13 | DeliverablesService.submitDeliverable | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC13-1, INT-TC13-2 |
-| I-14 | DeliverablesService.confirmOrderComplete, getDeliverableByPesanan | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC14-1, INT-TC14-2 |
-| I-15 | DeliverablesService.requestRevision | Tabel pengajuan_revisi, pesanan | Aplikasi - Basis data | INT-TC15-1, INT-TC15-2 |
-| I-16 | PelaporanService.submitLaporan | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC16-1, INT-TC16-2 |
-| I-17 | UlasanService.simpanUlasan | Tabel ulasan, penyedia_jasa, jasa | Aplikasi - Basis data | INT-TC17-1, INT-TC17-2 |
-| I-18 | TanggapanLaporanService.catatKeputusanTindakan, MediasiService.mulaiMediasi | Tabel tanggapan_laporan, tiket_laporan, sesi_mediasi, pesan_mediasi | Aplikasi - Basis data | INT-TC18-1, INT-TC18-2, INT-TC18-3 |
-| I-19 | TanggapanLaporanService.getAllTicketsForAdmin, getDetailTiketAdmin | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC19-1, INT-TC19-2 |
+| I-11 | PesananService.ambilDaftarPesanan | Tabel pesanan | Aplikasi - Basis data | INT-TC29, INT-TC30 |
+| I-12 | PesananService.respondOrder | Tabel pesanan | Aplikasi - Basis data | INT-TC31, INT-TC32 |
+| I-13 | DeliverablesService.submitDeliverable | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC33, INT-TC34 |
+| I-14 | DeliverablesService.confirmOrderComplete, getDeliverableByPesanan | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC35, INT-TC36 |
+| I-15 | DeliverablesService.requestRevision | Tabel pengajuan_revisi, pesanan | Aplikasi - Basis data | INT-TC37, INT-TC38 |
+| I-16 | PelaporanService.submitLaporan | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC39, INT-TC40 |
+| I-17 | UlasanService.simpanUlasan | Tabel ulasan, penyedia_jasa, jasa | Aplikasi - Basis data | INT-TC41, INT-TC42 |
+| I-18 | TanggapanLaporanService.catatKeputusanTindakan, MediasiService.mulaiMediasi | Tabel tanggapan_laporan, tiket_laporan, sesi_mediasi, pesan_mediasi | Aplikasi - Basis data | INT-TC43, INT-TC44, INT-TC45 |
+| I-19 | TanggapanLaporanService.getAllTicketsForAdmin, getDetailTiketAdmin | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC46, INT-TC47 |
 
 Tabel 4.3.2. Hasil Pengujian Integrasi
 
@@ -1154,25 +1229,25 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 | INT-TC26 | I-10 | Normal: daftar metode | `GET /api/transaksi?type=metode`, bandingkan dengan tabel `metode_pembayaran` | Status 200; daftar `id_metode` sama dengan isi tabel | Status 200; daftar `id_metode` sama dengan isi tabel `metode_pembayaran` | Pass |
 | INT-TC27 | I-10 | Normal: bayar pesanan | `POST /api/transaksi/dummy` `{id_pesanan INT-TC23, id_metode, jumlah_bayar 100000}`; baca `riwayat_transaksi` dan `pesanan` | Status 201; 1 baris `riwayat_transaksi` dengan metode dan nominal yang sama; `pesanan.status_pembayaran` = LUNAS dan status tidak lagi MENUNGGU_PEMBAYARAN | Status 201; 1 baris `riwayat_transaksi` dengan metode dan nominal yang sama; `pesanan.status_pembayaran` = LUNAS dan status tidak lagi MENUNGGU_PEMBAYARAN | Pass |
 | INT-TC28 | I-10 | Gagal: bayar ulang | Kirim ulang `POST /api/transaksi/dummy` untuk pesanan yang sama | Status 400, pesan "Pesanan tidak dalam status menunggu pembayaran"; baris `riwayat_transaksi` tetap 1 | Status 400 "Pesanan tidak dalam status menunggu pembayaran"; baris `riwayat_transaksi` tetap 1 | Pass |
-| INT-TC11-1 | I-11 | Normal: mengambil daftar pesanan pengguna | Memanggil `ambilDaftarPesanan()` dengan ID pengguna dan peran `pengguna_jasa` yang valid | Menghasilkan seluruh pesanan milik pengguna beserta status dan informasi ulasan | Menghasilkan 2 pesanan dengan status DIPROSES dan SELESAI serta informasi ulasan yang sesuai | Pass |
-| INT-TC11-2 | I-11 | Normal: pengguna belum memiliki pesanan | Memanggil `ambilDaftarPesanan()` untuk pengguna yang belum memiliki pesanan | Menghasilkan daftar pesanan kosong | Menghasilkan array kosong | Pass |
-| INT-TC12-1 | I-12 | Normal: menerima pesanan | Memanggil `respondOrder()` dengan ID pesanan, ID penyedia, dan tindakan `Diterima` yang valid | Status pesanan diperbarui menjadi DIPROSES | Menghasilkan pesanan dengan status DIPROSES dan menjalankan operasi update satu kali | Pass |
-| INT-TC12-2 | I-12 | Gagal: menerima pesanan yang sudah diproses | Memanggil `respondOrder()` untuk pesanan dengan status DIPROSES | Sistem menolak tindakan dan tidak memperbarui data pesanan | Sistem menghasilkan error "Pesanan ini sudah diproses sebelumnya" dan tidak menjalankan update | Pass |
-| INT-TC13-1 | I-13 | Normal: mengumpulkan hasil pekerjaan | Memanggil `submitDeliverable()` dengan ID pesanan, deskripsi, dan URL berkas valid | Data produk akhir tersimpan dan status pesanan diperbarui | Data produk akhir tersimpan dengan deskripsi yang telah di-trim dan status pemeriksaan false; status pesanan diperbarui | Pass |
-| INT-TC13-2 | I-13 | Gagal: berkas dan tautan hasil pekerjaan kosong | Memanggil `submitDeliverable()` tanpa berkas dan tanpa tautan | Sistem menolak pengumpulan dan tidak menyimpan data | Sistem menghasilkan error "Unggah berkas atau sertakan tautan hasil pekerjaan." dan tidak menjalankan insert maupun update | Pass |
-| INT-TC14-1 | I-14 | Normal: mengonfirmasi pesanan selesai | Memanggil `confirmOrderComplete()` dengan ID pesanan dan ID pengguna valid | Pesanan dikonfirmasi selesai dan RPC pencairan dana dipanggil | Proses berhasil dan RPC `konfirmasi_pesanan_selesai` dipanggil dengan ID pesanan yang sesuai | Pass |
-| INT-TC14-2 | I-14 | Normal: deliverable belum tersedia | Memanggil `getDeliverableByPesanan()` untuk pesanan yang belum memiliki hasil pekerjaan | Sistem mengembalikan nilai null | Menghasilkan null | Pass |
-| INT-TC15-1 | I-15 | Normal: mengajukan revisi | Memanggil `requestRevision()` dengan data pesanan, produk akhir, deskripsi revisi, dan pengguna valid | Pengajuan revisi tersimpan dan kuota revisi berkurang menjadi 2 | Data revisi berhasil disimpan dengan kuota tersisa 2 dan status Sedang Direvisi | Pass |
-| INT-TC15-2 | I-15 | Gagal: kuota revisi habis | Memanggil `requestRevision()` pada pesanan dengan kuota revisi 0 | Sistem menolak pengajuan revisi dan tidak menyimpan pengajuan baru | Sistem menghasilkan error "Kuota revisi untuk pesanan ini sudah habis." dan tidak menjalankan insert | Pass |
-| INT-TC16-1 | I-16 | Normal: mengirim laporan | Memanggil `submitLaporan()` dengan ID pesanan, ID pelapor, kategori, deskripsi, dan bukti valid | Tiket laporan tersimpan dengan identitas terlapor berdasarkan data pesanan | Tiket laporan berhasil disimpan dengan ID terlapor sesuai penyedia jasa pada pesanan | Pass |
-| INT-TC16-2 | I-16 | Gagal: bukti laporan kosong | Memanggil `submitLaporan()` dengan daftar URL bukti kosong | Sistem menolak laporan dan tidak melakukan koneksi ke database | Sistem menghasilkan error "Minimal sertakan 1 tautan atau lampiran bukti." dan tidak memanggil `createClient()` | Pass |
-| INT-TC17-1 | I-17 | Normal: menyimpan ulasan | Memanggil `simpanUlasan()` dengan pesanan selesai dan rating 5 | Ulasan tersimpan dan rating penyedia serta jasa diperbarui | Ulasan tersimpan; mock memverifikasi operasi pembaruan rating penyedia dan jasa dengan nilai 5 | Pass |
-| INT-TC17-2 | I-17 | Gagal: rating tidak valid | Memanggil `simpanUlasan()` dengan rating 0 | Sistem menolak ulasan dan tidak melakukan operasi database | Sistem menghasilkan error "Rating harus bernilai antara 1 sampai 5." dan tidak memanggil client Supabase | Pass |
-| INT-TC18-1 | I-18 | Normal: mencatat keputusan tindakan admin | Memanggil `catatKeputusanTindakan()` dengan ID tiket, ID admin, jenis tindakan PERINGATAN, dan catatan valid | Tanggapan tersimpan, status tiket diperbarui menjadi Selesai, dan RPC pemberian sanksi dipanggil | Tanggapan tersimpan, operasi update tiket dan RPC `admin_beri_sanksi` terverifikasi | Pass |
-| INT-TC18-2 | I-18 | Normal: memulai sesi mediasi baru | Memanggil `mulaiMediasi()` pada tiket yang belum memiliki sesi aktif | Sesi mediasi dan pesan pembuka dibuat serta notifikasi dikirim kepada kedua pihak | Sesi dan pesan pembuka berhasil dibuat; dua notifikasi dikirim kepada pelapor dan terlapor | Pass |
-| INT-TC18-3 | I-18 | Normal: menggunakan sesi mediasi aktif | Memanggil `mulaiMediasi()` pada tiket yang sudah memiliki sesi mediasi aktif | Sistem menggunakan sesi yang tersedia tanpa membuat sesi baru | Sesi aktif dikembalikan tanpa insert pesan baru maupun pengiriman notifikasi | Pass |
-| INT-TC19-1 | I-19 | Normal: mengambil seluruh tiket laporan | Memanggil `getAllTicketsForAdmin()` | Menghasilkan daftar tiket laporan yang diurutkan berdasarkan waktu pembuatan terbaru | Menghasilkan daftar tiket dan memverifikasi pengurutan `created_at` secara descending | Pass |
-| INT-TC19-2 | I-19 | Normal: mengambil detail tiket laporan | Memanggil `getDetailTiketAdmin()` dengan ID tiket valid | Menghasilkan detail tiket beserta tanggapan dan informasi pesanan | Detail tiket, tanggapan, dan informasi pesanan berhasil diperoleh | Pass |
+| INT-TC29 | I-11 | Normal: mengambil daftar pesanan pengguna | Memanggil `ambilDaftarPesanan()` dengan ID pengguna dan peran `pengguna_jasa` yang valid | Menghasilkan seluruh pesanan milik pengguna beserta status dan informasi ulasan | Menghasilkan 2 pesanan dengan status DIPROSES dan SELESAI serta informasi ulasan yang sesuai | Pass |
+| INT-TC30 | I-11 | Normal: pengguna belum memiliki pesanan | Memanggil `ambilDaftarPesanan()` untuk pengguna yang belum memiliki pesanan | Menghasilkan daftar pesanan kosong | Menghasilkan array kosong | Pass |
+| INT-TC31 | I-12 | Normal: menerima pesanan | Memanggil `respondOrder()` dengan ID pesanan, ID penyedia, dan tindakan `Diterima` yang valid | Status pesanan diperbarui menjadi DIPROSES | Menghasilkan pesanan dengan status DIPROSES dan menjalankan operasi update satu kali | Pass |
+| INT-TC32 | I-12 | Gagal: menerima pesanan yang sudah diproses | Memanggil `respondOrder()` untuk pesanan dengan status DIPROSES | Sistem menolak tindakan dan tidak memperbarui data pesanan | Sistem menghasilkan error "Pesanan ini sudah diproses sebelumnya" dan tidak menjalankan update | Pass |
+| INT-TC33 | I-13 | Normal: mengumpulkan hasil pekerjaan | Memanggil `submitDeliverable()` dengan ID pesanan, deskripsi, dan URL berkas valid | Data produk akhir tersimpan dan status pesanan diperbarui | Data produk akhir tersimpan dengan deskripsi yang telah di-trim dan status pemeriksaan false; status pesanan diperbarui | Pass |
+| INT-TC34 | I-13 | Gagal: berkas dan tautan hasil pekerjaan kosong | Memanggil `submitDeliverable()` tanpa berkas dan tanpa tautan | Sistem menolak pengumpulan dan tidak menyimpan data | Sistem menghasilkan error "Unggah berkas atau sertakan tautan hasil pekerjaan." dan tidak menjalankan insert maupun update | Pass |
+| INT-TC35 | I-14 | Normal: mengonfirmasi pesanan selesai | Memanggil `confirmOrderComplete()` dengan ID pesanan dan ID pengguna valid | Pesanan dikonfirmasi selesai dan RPC pencairan dana dipanggil | Proses berhasil dan RPC `konfirmasi_pesanan_selesai` dipanggil dengan ID pesanan yang sesuai | Pass |
+| INT-TC36 | I-14 | Normal: deliverable belum tersedia | Memanggil `getDeliverableByPesanan()` untuk pesanan yang belum memiliki hasil pekerjaan | Sistem mengembalikan nilai null | Menghasilkan null | Pass |
+| INT-TC37 | I-15 | Normal: mengajukan revisi | Memanggil `requestRevision()` dengan data pesanan, produk akhir, deskripsi revisi, dan pengguna valid | Pengajuan revisi tersimpan dan kuota revisi berkurang menjadi 2 | Data revisi berhasil disimpan dengan kuota tersisa 2 dan status Sedang Direvisi | Pass |
+| INT-TC38 | I-15 | Gagal: kuota revisi habis | Memanggil `requestRevision()` pada pesanan dengan kuota revisi 0 | Sistem menolak pengajuan revisi dan tidak menyimpan pengajuan baru | Sistem menghasilkan error "Kuota revisi untuk pesanan ini sudah habis." dan tidak menjalankan insert | Pass |
+| INT-TC39 | I-16 | Normal: mengirim laporan | Memanggil `submitLaporan()` dengan ID pesanan, ID pelapor, kategori, deskripsi, dan bukti valid | Tiket laporan tersimpan dengan identitas terlapor berdasarkan data pesanan | Tiket laporan berhasil disimpan dengan ID terlapor sesuai penyedia jasa pada pesanan | Pass |
+| INT-TC40 | I-16 | Gagal: bukti laporan kosong | Memanggil `submitLaporan()` dengan daftar URL bukti kosong | Sistem menolak laporan dan tidak melakukan koneksi ke database | Sistem menghasilkan error "Minimal sertakan 1 tautan atau lampiran bukti." dan tidak memanggil `createClient()` | Pass |
+| INT-TC41 | I-17 | Normal: menyimpan ulasan | Memanggil `simpanUlasan()` dengan pesanan selesai dan rating 5 | Ulasan tersimpan dan rating penyedia serta jasa diperbarui | Ulasan tersimpan; mock memverifikasi operasi pembaruan rating penyedia dan jasa dengan nilai 5 | Pass |
+| INT-TC42 | I-17 | Gagal: rating tidak valid | Memanggil `simpanUlasan()` dengan rating 0 | Sistem menolak ulasan dan tidak melakukan operasi database | Sistem menghasilkan error "Rating harus bernilai antara 1 sampai 5." dan tidak memanggil client Supabase | Pass |
+| INT-TC43 | I-18 | Normal: mencatat keputusan tindakan admin | Memanggil `catatKeputusanTindakan()` dengan ID tiket, ID admin, jenis tindakan PERINGATAN, dan catatan valid | Tanggapan tersimpan, status tiket diperbarui menjadi Selesai, dan RPC pemberian sanksi dipanggil | Tanggapan tersimpan, operasi update tiket dan RPC `admin_beri_sanksi` terverifikasi | Pass |
+| INT-TC44 | I-18 | Normal: memulai sesi mediasi baru | Memanggil `mulaiMediasi()` pada tiket yang belum memiliki sesi aktif | Sesi mediasi dan pesan pembuka dibuat serta notifikasi dikirim kepada kedua pihak | Sesi dan pesan pembuka berhasil dibuat; dua notifikasi dikirim kepada pelapor dan terlapor | Pass |
+| INT-TC45 | I-18 | Normal: menggunakan sesi mediasi aktif | Memanggil `mulaiMediasi()` pada tiket yang sudah memiliki sesi mediasi aktif | Sistem menggunakan sesi yang tersedia tanpa membuat sesi baru | Sesi aktif dikembalikan tanpa insert pesan baru maupun pengiriman notifikasi | Pass |
+| INT-TC46 | I-19 | Normal: mengambil seluruh tiket laporan | Memanggil `getAllTicketsForAdmin()` | Menghasilkan daftar tiket laporan yang diurutkan berdasarkan waktu pembuatan terbaru | Menghasilkan daftar tiket dan memverifikasi pengurutan `created_at` secara descending | Pass |
+| INT-TC47 | I-19 | Normal: mengambil detail tiket laporan | Memanggil `getDetailTiketAdmin()` dengan ID tiket valid | Menghasilkan detail tiket beserta tanggapan dan informasi pesanan | Detail tiket, tanggapan, dan informasi pesanan berhasil diperoleh | Pass |
 
 <br>
 
@@ -1322,6 +1397,60 @@ Tabel 4.4.10. Hasil Pengujian Use Case [UC10]
 | UC10-TC03 | KF22 | Normal – Penyedia Jasa melakukan konfirmasi pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencari opsi untuk menerima atau menolak pesanan. | Pesanan dengan status Diproses. | Sistem menyediakan tombol Terima dan Tolak agar Penyedia Jasa dapat menentukan keputusan. | Tidak tersedia tombol Terima maupun Tolak pada halaman detail pesanan. | Tidak Berhasil |
 | UC10-TC04 | KF23 | Alternatif 1 – Penyedia Jasa menolak pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencoba melakukan penolakan pesanan. | Pesanan baru yang ingin ditolak. | Sistem memperbarui status pesanan menjadi ditolak dan memproses pengembalian dana kepada pembeli. | Penolakan pesanan tidak dapat dilakukan karena tidak tersedia fitur Tolak. | Tidak Dapat Diuji |
 
+### 4.4.11 Use Case Menyerahkan Hasil Pekerjaan
+
+**ID Use Case:** UC11
+**Nama Use Case:** Menyerahkan Hasil Pekerjaan
+
+Tabel 4.4.11. Hasil Pengujian Use Case [UC11]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC11-TC01 | KF25 | Normal | Asumsikan Sudah Login <br> 1. Buka Halaman Pengumpulan <br> 2. Tekan Tombol Kumpulkan Hasil <br> 3. Memunculkan Form Pengumpulan <br> 4. Tuliskan Deskripsi Hasil, Unggah Berkas dan/atau Lampiran <br> 5. Tekan Tombol Kumpulkan <br> 6. Deliverables Berhasil dikumpulkan <br> Note : Ini juga berlaku untuk revisi | Deskripsi dan Link serta gambar |1. Halaman Pengumpulan Terbuka dengan Nama Jasa, dan brief yang ada <br> 2. Tombol berhasil membuka form pengumpulan <br> 3. Penyedia Jasa Dapat Mengunggah Jasa Melalui link atau gambar <br> 4. Tombol Kirim Mentrigger penguploadan dan upload dan memberi notif selesai ke penyedia jasa | Alur pengerjaan sudah sesuai, namun brief hilang dari tampilan halaman pengumpulan awal, notif tidak terkirim | Pass dengan masalah UI kurang lengkap, fail pengiriman notif (untuk pertama kali kirim) |
+| UC11-TC02 | KF25 | Alternatif (File dan Link Kosong) | *Asumsikan Sudah Login <br> 1. Buka Halaman Pengumpulan <br> 2. Tekan Tombol Kumpulkan Hasil <br> 3. Memunculkan Form Pengumpulan <br> 4. Tuliskan Deskripsi Hasil, Tanpa Unggah Berkas dan/atau Lampiran <br> 5. Tekan Tombol Kumpulkan <br> 6. Menampilkan Pesan Error | Deskripsi Deliverables saja | Menampilkan Pesan Error | Berhasil Menampilkan Pesan Error | Pass |
+| UC11-TC03 | KF25 | Alternatif (File Terlalu Besar)  | *Asumsikan Sudah Login <br> 1. Buka Halaman Pengumpulan <br> 2. Tekan Tombol Kumpulkan Hasil <br> 3. Memunculkan Form Pengumpulan <br> 4. Tuliskan Deskripsi Hasil, Tanpa Unggah Berkas dan/atau Lampiran <br> 5. Tekan Tombol Kumpulkan <br> 6. Menampilkan Pesan Error | Deskripsi Deliverables dan File > 10MB | Menampilkan Pesan Error | Berhasil Menampilkan Pesan Error | Pass |
+
+### 4.4.12 Use Case Mengonfirmasi Hasil Pekerjaan
+
+**ID Use Case:** UC12
+**Nama Use Case:** Mengonfirmasi Hasil Pekerjaan
+
+Tabel 4.4.12. Hasil Pengujian Use Case [UC12]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC12-TC01 | KF26, KF27, KF28 | Normal | Asumsikan Sudah Login dan Memiliki Pesanan <br> 1. Buka Halaman Pesanan Saya <br> 2. Tekan Konfirmasi Selesai <br> 3. Pembayaran Diproses dan Dikirim Ke Penyedia Jasa <br> 4. Muncul Riwayat Transaksi <br> 5. Kembali Ke Daftar Pesanan Saya | Prasyarat : sudah login, dan sudah ada pesanan yang ingin diselesaikan | Pesanan ditandai selesai dan bisa dibuka lagi, pembayaran dilaksanakan, dan notif selesai ke penyedia jasa | Pesan ditandai selesai, notif terkirim, tapi pesanan tidak dapat dibuka lagi | Pass untuk penyelesaiannya, namun fail untuk membuka pesanan nya lagi karena lupa meletakkan lihat pesanan untuk bisa ditrigger di daftar pesanan saya |
+| UC12-TC02 | KF26, KF27, KF28 | Normal | Asumsikan Sudah Login dan Memiliki Pesanan <br> 1. Buka Halaman Pesanan Saya <br> 2. Tekan Ajukan Revisi <br> 3. Mengisi Form Pengajuan Revisi (Kuota Revisi Masih Tersedia) <br> Mengisi Deskripsi, Lampiran, Maupun Pesan <br> 4. Status Pesanan Diedit menjadi menunggu revisi dan kuota revisi berkurang |  Prasyarat : Login, dan sudah memiliki jasa yang sudah memiliki deliverables/pengumpulan <br> Mengisi Form Revisi dan Memiliki Kuota Revisi Terseda | Status Pesanan berubah, dan Penyedia Jasa diminta untuk mengumpulkan revisi dan memberi notif selesai ke penyedia jasa | Berhasil seesuai hasil yang diharapkan | Pass |
+| UC12-TC03 | KF26, KF27, KF28 | Alternatif (Kuota Revisi Habis) | Asumsikan Sudah Login dan Memiliki Pesanan <br> 1. Buka Halaman Pesanan Saya <br> 2. Tekan Ajukan Revisi <br> 3. Muncul Pesan Penolakan <br> 4. Meminta Untuk konfirmasi sebagai selesai | sudah login, dan sudah ada pesanan yang dianggap selesai | Mengeluarkan Pesan Error atau  tidak bisa mengajukan revisi | Hanya tidak bisa mengajukan revisi (tidak ada pesan error) | Pass |
+| UC12-TC03 | KF26, KF27, KF28 | Alternatif (Revisi Sudah Lewat) | Asumsikan Sudah Login dan Memiliki Pesanan <br> 1. Buka Halaman Pesanan Saya <br> 2. Tekan Ajukan Revisi <br> 3. Muncul Pesan Penolakan Karena <br> 4. Meminta Untuk konfirmasi sebagai selesai | sudah login, dan sudah ada pesanan yang ingin direvisi | Mengeluarkan Pesan Error atau  tidak bisa mengajukan revisi | Tidak diimplementasikan | Fail : Kelewatan Untuk Diimplementasikan |
+
+
+### 4.4.13 Use Case Melaporkan Pengguna Lain
+
+**ID Use Case:** UC13
+**Nama Use Case:** Melaporkan Pengguna Lain
+
+Tabel 4.4.13. Hasil Pengujian Use Case [UC13]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC13-TC01 | KF29 | Normal | Asumsikan Pengguna Jasa Sudah Login <br> 1. Masuk ke dalam Halaman Pengumpulan <br> 2. Menekan Tombol Laporkan Penyedia Jasa <br> 3. Masuk ke dalam formulir pengisian Laporan <br> 4. Pengguna Mengisi Field Laporan dengan Lengkap <br> 5. Pengguna Menekan Tombol Kirim Laporan <br> 6. Menampilkan Halaman Tiket Laporan | Prasyarat : Login, dan sudah memiliki jasa yang sudah memiliki deliverables/pengumpulan. Mengisi Form Laporan, mulai dari bukti hingga deskripsi | Tiket Berhasil dibuat dan menampilkan tiket | Tiket Berhasil dibuat  | Pass |
+| UC13-TC02 | KF29 | Alternatif 1: Field Laporan (Deskripsi/Kategori/Bukti Tak Lengkap) | Asumsikan Pengguna Jasa Sudah Login <br> 1. Masuk ke dalam Halaman Pengumpulan <br> 2. Menekan Tombol Laporkan Penyedia Jasa <br> 3. Masuk ke dalam formulir pengisian Laporan <br> 4. Pengguna Tidak Mengisi Field Laporan  <br> 5. Pengguna Menekan Tombol Kirim Laporan <br> 6. Muncul Error  |  Prasyarat : Login, dan sudah memiliki jasa yang sudah memiliki deliverables/pengumpulan. Tidak mengisi field laporan namun mengirim | Muncul Pesan Error | Berhasil memunculkan pesan error | Pass |
+---
+
+### 4.4.14 Use Case Memberikan Ulasan terhadap Jasa yang Dipesan
+
+**ID Use Case:** UC14
+**Nama Use Case:** Memberikan Ulasan terhadap Jasa yang Dipesan
+
+Tabel 4.4.13. Hasil Pengujian Use Case [UC14]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC14-TC01 | KF30, KF31 | Normal | 1. Menekan Tombol Buat Ulasan dari Halaman Pengumpulan <br> 2. Muncul Form pengisian Ulasan <br> 3. Mengisi Ulasan Sesuai Field yang disediakan (Minimal mengirimkan rating), komentar opsional <br> 4. tekan kirim ulasan <br> 5. Hasil rating muncul  | Prasyarat : sudah login, dan sudah ada pesanan yang dianggap selesai <br> menekan tombol ulasan dan mengisi form ulasan | Ulasan Pengguna terupdate  | Pass |
+| UC14-TC02 | KF30, KF31 | Alternatif 1: Ulasan Gagal Dibuat karena field tidak lengkap | 1. Menekan Tombol Buat Ulasan dari Halaman Pengumpulan <br> 2. Muncul Form pengisian Ulasan <br> 3. Mengosongkan Form Pengisian <br> 4. tekan kirim ulasan <br> 5. Muncul Error | Prasyarat : sudah login, dan sudah ada pesanan yang dianggap selesai <br> menekan tombol ulasan dan tidak mengisi form ulasan | Muncul error | Muncul error | Pass |
+---
+
 ### 4.4.15 Use Case Memproses Laporan
 
 **ID Use Case:** UC15  
@@ -1348,10 +1477,11 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| KNF02-TC01 | KNF02 | *Response time* | Response time pencarian dan filter pada 1.000 listing jasa <= 3 detik (3.000 ms) untuk minimal 95% percobaan | Pengukuran `performance.now()` di Node.js v24.19.0 (20 kali pengulangan pada 1.000 listing dengan filter keyword, kategori, rentang harga, rating minimum, dan limit 20) pada logika filter dan sort pencarian (ekuivalen `LayananPencarian.saringDanUrutkan`) | Rata-rata waktu proses 0,259 ms (min 0,093 ms, maks 1,052 ms); 20 dari 20 percobaan (100%) selesai jauh di bawah 3.000 ms | Pass |
-| KNF03-TC01 | KNF03 | *Ergonomy* | Pengguna baru menyelesaikan alur pemesanan hingga pembayaran tanpa panduan eksternal dalam waktu ≤ 5 menit (300 detik)  |  Pengguna diperintahkan untuk membuat pesanan hingga melakukan pembayaran | Pengguna dapat melakukan pemesanan dan pembayaran < 40 detik | Pass|
-| KNF04-TC01 | KNF04 | *Reliability* | 100% transaksi yang mengalami kegagalan di tengah proses di-rollback ke state awal (`MENUNGGU_PEMBAYARAN`) dengan 0 data integrity loss dan 0 duplicate transaction | Simulasi gagal insert `riwayat_transaksi` di tengah `PengontrolTransaksi.prosesPembayaranDummy()`, pengecekan guard `.neq('status_pembayaran', 'LUNAS')`, serta mekanisme `AbortController` timeout di `src/lib/api.ts` lewat Vitest (`src/test/transaksi.test.ts`) | Saat insert `riwayat_transaksi` gagal setelah `pesanan` sempat ter-update, compensating rollback mengembalikan `pesanan` ke `MENUNGGU_PEMBAYARAN` (`id_metode_pembayaran: null`); guard menolak 100% duplicate payment request | Pass |
 | KNF01-TC01 | KNF01 | Portability | Tampilan adaptif pada viewport 320 px, 768 px, dan 1280 px tanpa horizontal scrollbar | Pengujian menggunakan Chrome DevTools pada viewport 320 px, 768 px, dan 1280 px | 320 px: terdapat elemen yang saling bertumpuk; 768 px: beberapa elemen masih mengalami tumpang tindih; 1280 px: tampilan berjalan dengan baik | Belum sepenuhnya sesuai |
+| KNF02-TC01 | KNF02 | *Response time* | Response time pencarian dan filter pada 1.000 listing jasa <= 3 detik (3.000 ms) untuk minimal 95% percobaan | Pengukuran `performance.now()` di Node.js v24.19.0 (20 kali pengulangan pada 1.000 listing dengan filter keyword, kategori, rentang harga, rating minimum, dan limit 20) pada logika filter dan sort pencarian (ekuivalen `LayananPencarian.saringDanUrutkan`) | Rata-rata waktu proses 0,259 ms (min 0,093 ms, maks 1,052 ms); 20 dari 20 percobaan (100%) selesai jauh di bawah 3.000 ms | Pass |
+| KNF03-TC01 | KNF03 | *Ergonomy* | Alur pemesanan hingga pembayaran selesai dalam ≤ 5 menit (300 detik) pada percobaan, dengan jumlah langkah yang dapat diikuti tanpa panduan eksternal | Uji dilakukan pada pengguna baru: tidak membuka kode, dokumentasi, maupun panduan, hanya mengikuti label dan tombol di layar. Alur dimulai dari halaman Cari Jasa (sudah login sebagai pemesan tanpa pesanan aktif) dan berhenti saat tampil "Pembayaran berhasil!". waktu diukur dengan *stopwatch* | Waktu melakukan pemesanan < 40 detik | Pass |
+| KNF04-TC01 | KNF04 | *Reliability* | 100% transaksi yang mengalami kegagalan di tengah proses di-rollback ke state awal (`MENUNGGU_PEMBAYARAN`) dengan 0 data integrity loss dan 0 duplicate transaction | Simulasi gagal insert `riwayat_transaksi` di tengah `PengontrolTransaksi.prosesPembayaranDummy()`, pengecekan guard `.neq('status_pembayaran', 'LUNAS')`, serta mekanisme `AbortController` timeout di `src/lib/api.ts` lewat Vitest (`src/test/transaksi.test.ts`) | Saat insert `riwayat_transaksi` gagal setelah `pesanan` sempat ter-update, compensating rollback mengembalikan `pesanan` ke `MENUNGGU_PEMBAYARAN` (`id_metode_pembayaran: null`); guard menolak 100% duplicate payment request | Pass |
+| KNF06-TC01 | KNF06 | Security | Password tersimpan sebagai hash, bukan plain-text | Inspeksi melalui tabel auth.user dengan query sql di table editor supabase | Password tersimpan sebagai hash | Pass |
 
 <br>
 
@@ -1393,16 +1523,45 @@ Tabel 4.6. Bukti Hasil Pengujian
 | C51-UT14 - C51-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T4.png" width="70%"> |
 | C51-UT16 - C51-UT17 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T5.png" width="70%"> |
 | <a id="bukti-c51"></a>C51 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C51-Coverage.png" width="70%"> |
-| INT-TC01 – INT-TC28 | <img alt="Bukti Pengujian Integrasi I-01 - I-10" src="../M10/assets/INT-TC01_INT-TC28.png" width="70%"> |
-| INT-TC11-1 – INT-TC11-2 | <img alt="Bukti Pengujian Integrasi I-11" src="../M10/assets/I11.png" width="70%"> |
-| INT-TC12-1 – INT-TC12-2 | <img alt="Bukti Pengujian Integrasi I-12" src="../M10/assets/I12.png" width="70%"> |
-| INT-TC13-1 – INT-TC13-2 | <img alt="Bukti Pengujian Integrasi I-13" src="../M10/assets/I13.png" width="70%"> |
-| INT-TC14-1 – INT-TC14-2 | <img alt="Bukti Pengujian Integrasi I-14" src="../M10/assets/I14.png" width="70%"> |
-| INT-TC15-1 – INT-TC15-2 | <img alt="Bukti Pengujian Integrasi I-15" src="../M10/assets/I15.png" width="70%"> |
-| INT-TC16-1 – INT-TC16-2 | <img alt="Bukti Pengujian Integrasi I-16" src="../M10/assets/I16.png" width="70%"> |
-| INT-TC17-1 – INT-TC17-2 | <img alt="Bukti Pengujian Integrasi I-17" src="../M10/assets/I17.png" width="70%"> |
-| INT-TC18-1 – INT-TC18-3 | <img alt="Bukti Pengujian Integrasi I-18" src="../M10/assets/I18.png" width="70%"> |
-| INT-TC19-1 – INT-TC19-2 | <img alt="Bukti Pengujian Integrasi I-19" src="../M10/assets/I19.png" width="70%"> |
+| C54-UT01 - C54-UT05 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T1.png" width="70%"> |
+| C54-UT06 - C54-U09 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T2.png" width="70%">|
+| C54-UT10 - C54-UT13 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T3.png" width="70%"> |
+| C54-UT14 - C54-UT19 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T4.png" width="70%"> |
+| C54-UT20 - C54-UT24 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T5.png" width="70%"> |
+| C54-UT25 - C54-UT26 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T6.png" width="70%"> |
+| C54-UT27 - C54-UT30 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T7.png" width="70%"> |
+| C54-UT31 - C54-UT35 |  <br> <img alt="Pengujian" src="../M10/assets/C54-T8.png" width="70%"> |
+| <a id="bukti-c54"></a>C54 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C41-Coverage.png" width="70%"> |
+| UC11-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC11-T1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T4.png" width="70%"> <br> Sisi Pengguna : <br> <img alt="Pengujian" src="../M10/assets/UC11-Hasil.png" width="70%"> <br> Pengumpulan Revisi <br> <img alt="Pengujian" src="../M10/assets/UC11-T4.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12_2_3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-HasilRevisi.png" width="70%">|
+| UC11-T02 | <br> <img alt="Pengujian" src="../M10/assets/UC11-T1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T3-1.png" width="70%">  |
+| UC11-T03 | <br> <img alt="Pengujian" src="../M10/assets/UC11-T1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC11-Kebesaran.png" width="70%"> |
+| UC12-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-Init.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Cair.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Selesai1.png" <br>  |
+| UC12-T02 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-FormRevisi.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-2_2.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12_2_3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-.png"  width="70%"> <br> Penangan Error <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-T2.png"  width="70%"> |
+| UC12-T03 | <br> <img alt="Pengujian" src="../M10/assets/UC12-RevisiAbis.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-Init.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Cair.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Selesai1.png"  width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-.png"  width="70%"> |
+| UC13-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC13-4.png" width="70%">  |
+| UC13-T02 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC13-2.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC13-3.png" width="70%">  |
+| UC14-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC14-Init.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-Awal.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-T1-2.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-T1-3.png" width="70%">   |
+| UC14-T02 | <br> <img alt="Pengujian" src="../M10/assets/UC14-Init.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-Awal.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-UC14-GagalTanpaBIntang.png" width="70%"> |
+| KNF06-TC01 | <img alt="Pengujian" src="../M10/assets/KNF06-T1.png" width="70%"> |
+| INT-TC29 – INT-TC30 | <img alt="Bukti Pengujian Integrasi I-11" src="../M10/assets/I11.png" width="70%"> |
+| INT-TC31 – INT-TC32 | <img alt="Bukti Pengujian Integrasi I-12" src="../M10/assets/I12.png" width="70%"> |
+| INT-TC33 – INT-TC34 | <img alt="Bukti Pengujian Integrasi I-13" src="../M10/assets/I13.png" width="70%"> |
+| INT-TC35 – INT-TC36 | <img alt="Bukti Pengujian Integrasi I-14" src="../M10/assets/I14.png" width="70%"> |
+| INT-TC37 – INT-TC38 | <img alt="Bukti Pengujian Integrasi I-15" src="../M10/assets/I15.png" width="70%"> |
+| INT-TC39 – INT-TC40 | <img alt="Bukti Pengujian Integrasi I-16" src="../M10/assets/I16.png" width="70%"> |
+| INT-TC41 – INT-TC42 | <img alt="Bukti Pengujian Integrasi I-17" src="../M10/assets/I17.png" width="70%"> |
+| INT-TC43 – INT-TC45 | <img alt="Bukti Pengujian Integrasi I-18" src="../M10/assets/I18.png" width="70%"> |
+| INT-TC46 – INT-TC47 | <img alt="Bukti Pengujian Integrasi I-19" src="../M10/assets/I19.png" width="70%"> |
+| UC01-TC01 | <br> <img alt="Pengujian UC01-TC01" src="../M10/assets/UC01-TC01.png" width="100%"> <br> <img alt="Pengujian UC01-TC01" src="../M10/assets/zRegisBerhasil.png" width="100%">|
+| UC01-TC02 | <br> <img alt="Pengujian UC01-TC02" src="../M10/assets/UC01-TC02.png" width="100%"> <br> <img alt="Pengujian UC01-TC01" src="../M10/assets/zRegisBerhasil.png" width="100%">|
+| UC01-TC03 | <br> <img alt="Pengujian UC01-TC03" src="../M10/assets/UC01-TC03.png" width="100%"> |
+| UC02-TC01 | <br> <img alt="Pengujian UC02-TC01" src="../M10/assets/UC02-TC01.png" width="100%"> <br> <img alt="Pengujian UC02-TC01" src="../M10/assets/UC02-TC01-1.png" width="100%">|
+| UC02-TC02 | <br> <img alt="Pengujian UC02-TC02" src="../M10/assets/UC02-TC02.png" width="100%"> <br> <img alt="Pengujian UC02-TC01" src="../M10/assets/UC02-TC02-1.png" width="100%">|
+| UC02-TC03 | <br> <img alt="Pengujian UC02-TC03" src="../M10/assets/UC02-TC03.png" width="100%"> |
+| UC02-TC04 | <br> <img alt="Pengujian UC02-TC04" src="../M10/assets/UC02-TC04.png" width="100%"> |
+| UC03-TC01| <br> <img alt="Pengujian UC03-TC01" src="../M10/assets/UC03-TC01.png" width="100%"> |
+| UC03-TC02| <br> <img alt="Pengujian UC03-TC02" src="../M10/assets/UC03-TC02.png" width="100%"> |
+| UC03-TC03| <br> <img alt="Pengujian UC03-TC03" src="../M10/assets/UC03-TC03.png" width="100%"> |
 | UC04-TC01 | Notifikasi sukses unggah jasa pada `/penyedia/upload-jasa`:<br>![UC04-TC01 Sukses Unggah Jasa](./assets/danesh/uc04-tc01.png) |
 | UC04-TC02 | Validasi error pada field wajib dan form `/penyedia/upload-jasa`:<br>![UC04-TC02 Validasi Bagian Atas](./assets/danesh/uc04-tc02-1.png)<br>![UC04-TC02 Validasi Berkas](./assets/danesh/uc04-tc02-2.png) |
 | UC05-TC01 | Pencarian berdasarkan keyword pada `/pengguna/pencarian`:<br>![UC05-TC01 Pencarian Logo](./assets/danesh/uc05-tc01-1.png)<br>![UC05-TC01 Pencarian Banner](./assets/danesh/uc05-tc01-2.png) |
@@ -1448,6 +1607,10 @@ Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 
 | KF ID | KNF Terkait | Use Case ID | Kelas Terkait | Implementasi File Terkait | Test Case (UC) | Test Case (Unit/Integrasi/KNF) |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| KF01 | KNF01, KNF06 | UC01 | C01 - Pengguna<br>C02 - PenyediaJasa<br>C03 - PenggunaJasa<br>C04 - HalamanRegistrasi<br>C05 - LayananRegistrasi | `src/app/(auth)/register/page.tsx`<br>`src/lib/client/auth.ts`<br>`src/app/api/auth/route.ts`<br>`src/services/auth.service.ts` | UC01-TC01, UC01-TC02, UC01-TC03, UC01-TC04 | C05-UT01–C05-UT12, INT-TC01, INT-TC02, INT-TC03, KNF06-TC01 |
+| KF02 | KNF01, KNF06 | UC02 | C01 - Pengguna<br>C06 - HalamanLogin<br>C07 - Autentikator | `src/app/(auth)/login/page.tsx`<br>`src/app/admin/page.tsx`<br>`src/lib/client/auth.ts`<br>`src/app/api/auth/route.ts`<br>`src/services/auth.service.ts`<br>`src/lib/supabase/middleware.ts`<br>`src/middleware.ts` | UC02-TC01, UC02-TC02, UC02-TC03, UC02-TC04 | C07-UT01–C07-UT14, INT-TC04, INT-TC05, INT-TC06 |
+| KF03 | KNF01 | UC03 | C02 - PenyediaJasa<br>C08 - HalamanPortofolio<br>C09 - Portofolio<br>C10 - PengontrolPortofolio<br>C11 - LayananUploadFile | `src/app/penyedia/portofolio/page.tsx`<br>`src/lib/client/portofolio.ts`<br>`src/lib/client/upload.ts`<br>`src/app/api/portofolio/route.ts`<br>`src/app/api/upload/route.ts`<br>`src/services/portofolio.service.ts`<br>`src/lib/upload.config.ts`<br>`src/services/storage/*` | UC03-TC01, UC03-TC02, UC03-TC03 | C10-UT01–C10-UT06, C11-UT01–C11-UT14, INT-TC07, INT-TC08 |
+| KF04 | KNF01 | UC03 | C02 - PenyediaJasa<br>C08 - HalamanPortofolio<br>C09 - Portofolio<br>C10 - PengontrolPortofolio | `src/app/penyedia/portofolio/page.tsx`<br>`src/lib/client/portofolio.ts`<br>`src/app/api/portofolio/route.ts`<br>`src/services/portofolio.service.ts`<br>`src/app/api/penyedia/[id]/route.ts`<br>`src/services/penyedia.service.ts`<br>`src/app/jasa/[id]/page.tsx` | UC03-TC01 | C10-UT01–C10-UT06, INT-TC07, INT-TC15 |
 | KF05 | KNF01 | UC04 | C02 - PenyediaJasa<br>C11 - LayananUploadFile<br>C12 - Jasa<br>C13 - HalamanUploadJasa<br>C14 - JasaController | `src/app/penyedia/upload-jasa/page.tsx`<br>`src/app/jasa/tambah/page.tsx`<br>`src/services/jasa.service.ts`<br>`src/app/api/jasa/route.ts`<br>`src/app/api/jasa/helper.ts`<br>`src/services/storage/*` | UC04-TC01, UC04-TC02 | - |
 | KF06 | KNF01, KNF02 | UC05 | C03 - PenggunaJasa<br>C12 - Jasa<br>C15 - HalamanPencarian<br>C16 - HasilPencarian<br>C17 - LayananPencarian | `src/app/pengguna/pencarian/page.tsx`<br>`src/app/jasa/page.tsx`<br>`src/components/elemen/CardJasa.tsx`<br>`src/services/pencarian.service.ts`<br>`src/app/api/jasa/route.ts` | UC05-TC01, UC05-TC04, UC05-TC05 | KNF02-TC01 |
 | KF07 | KNF01, KNF02 | UC05 | C03 - PenggunaJasa<br>C12 - Jasa<br>C15 - HalamanPencarian<br>C16 - HasilPencarian<br>C17 - LayananPencarian | `src/app/pengguna/pencarian/page.tsx`<br>`src/services/pencarian.service.ts`<br>`src/app/api/jasa/route.ts` | UC05-TC02 | KNF02-TC01 |
@@ -1468,10 +1631,21 @@ Tabel 5.1. Matriks Kerunutan KF terhadap Implementasi dan Pengujian
 | KF22 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C35 - HalamanKonfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | - | C31-UT07, C31-UT09 |
 | KF23 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C35 - HalamanKonfirmasi | `src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | - | C31-UT08, C31-UT09 |
 | KF24 | KNF01 | UC09, UC10 | C27 - Pesanan<br>C30 - HalamanRiwayatTransaksi<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C34 - RiwayatTransaksi | `src/app/pengguna/riwayat-transaksi/page.tsx`<br>`src/app/penyedia/pesanan/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/services/transaksi.service.ts`<br>`src/app/api/pesanan/route.ts`<br>`src/app/api/transaksi/route.ts` | - | C31-UT10–C31-UT12, C32-UT07–C32-UT09 |
+| KF13 | KNF01 | UC08 | C23 - ChatRoom<br>C24 - HalamanChat<br>C25 - LayananPesanInstan | `src/app/chat/page.tsx`<br>`src/services/chat.service.ts`<br>`src/app/api/chat/route.ts`<br>`src/app/api/chat/[id_chatroom]/route.ts` | UC08-TC01 – UC08-TC07, UC08-TC09 | C25-UT04–C25-UT06, C25-UT10–C25-UT12, KNF01-TC01 |
+| KF14 | KNF01 | UC08 | C25 - LayananPesanInstan<br>C26 - LayananNotifikasiChat<br>C56 - notifikasi | `src/services/chat.service.ts`<br>`src/services/notifikasi.service.ts`<br>`src/app/api/notifikasi/route.ts`<br>`src/components/ui/notifikasi.tsx` | UC08-TC01, UC08-TC02, UC08-TC09 | C25-UT10, C25-UT11, C26-UT01–C26-UT09, KNF01-TC01 |
+| KF15 | KNF01 | UC08 | C23 - ChatRoom<br>C24 - HalamanChat<br>C25 - LayananPesanInstan<br>C55 - pesan_chat | `src/app/chat/page.tsx`<br>`src/services/chat.service.ts`<br>`src/app/api/chat/route.ts`<br>`src/app/api/chat/[id_chatroom]/route.ts` | UC08-TC01 – UC08-TC05 | C25-UT01–C25-UT03, C25-UT07–C25-UT09, KNF01-TC01 |
+| KF37 | KNF01 | UC08 | C23 - ChatRoom<br>C24 - HalamanChat<br>C51 - MediasiHandler<br>C57 - sesi_mediasi<br>C58 - pesan_mediasi | `src/app/mediasi/[id]/page.tsx`<br>`src/services/mediasi.service.ts`<br>`src/app/api/mediasi/route.ts`<br>`src/app/api/mediasi/[id_sesi_mediasi]/route.ts`<br>`src/app/api/mediasi/[id_sesi_mediasi]/pesan/route.ts` | UC08-TC03, UC08-TC04, UC08-TC05 | C51-UT07–C51-UT15, KNF01-TC01 |
+| KF17 | KNF01, KNF03 | UC09 | C27 - Pesanan<br>C28 - HalamanPemesanan<br>C31 - PengontrolPesanan | `src/app/pesanan/[id]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/route.ts` | UC09-TC01, UC09-TC04 | C31-UT01–C31-UT03, INT-TC23–INT-TC25, KNF01-TC01 |
+| KF18 | KNF01, KNF03 | UC09 | C27 - Pesanan<br>C28 - HalamanPemesanan<br>C31 - PengontrolPesanan | `src/app/pesanan/[id]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/route.ts` | UC09-TC01, UC09-TC02, UC09-TC04 | C31-UT04–C31-UT06, INT-TC23–INT-TC25, KNF01-TC01 |
+| KF19 | KNF01, KNF03, KNF04, KNF05 | UC09 | C29 - HalamanPembayaran<br>C32 - PengontrolTransaksi<br>C33 - MetodePembayaran | `src/app/pesanan/checkout/[id]/page.tsx`<br>`src/services/transaksi.service.ts`<br>`src/app/api/transaksi/route.ts` | UC09-TC02 | C32-UT01–C32-UT03, INT-TC26, KNF01-TC01 |
+| KF20 | KNF01, KNF03, KNF04, KNF05 | UC09 | C27 - Pesanan<br>C29 - HalamanPembayaran<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C34 - RiwayatTransaksi | `src/app/pesanan/checkout/[id]/page.tsx`<br>`src/services/transaksi.service.ts`<br>`src/app/api/transaksi/dummy/route.ts` | UC09-TC03, UC09-TC05 | C32-UT04–C32-UT06, INT-TC27, INT-TC28, KNF04-TC01, KNF01-TC01 |
+| KF21 | KNF01 | UC10 | C26 - LayananNotifikasiChat<br>C27 - Pesanan<br>C35 - HalamanKonfirmasi<br>C56 - notifikasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/notifikasi.service.ts` | UC10-TC01, UC10-TC02 | C26-UT01, C26-UT04, C31-UT10, KNF01-TC01 |
+| KF22 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C35 - HalamanKonfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | UC10-TC02, UC10-TC03 | C31-UT07, C31-UT09, INT-TC31, INT-TC32, KNF01-TC01 |
+| KF23 | KNF01 | UC10 | C27 - Pesanan<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C35 - HalamanKonfirmasi | `src/app/penyedia/konfirmasi/[idPesanan]/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/app/api/pesanan/[id_pesanan]/route.ts` | UC10-TC04 | C31-UT08, C31-UT09, KNF01-TC01 |
+| KF24 | KNF01 | UC09, UC10 | C27 - Pesanan<br>C30 - HalamanRiwayatTransaksi<br>C31 - PengontrolPesanan<br>C32 - PengontrolTransaksi<br>C34 - RiwayatTransaksi | `src/app/pengguna/riwayat-transaksi/page.tsx`<br>`src/app/penyedia/pesanan/page.tsx`<br>`src/services/pesanan.service.ts`<br>`src/services/transaksi.service.ts`<br>`src/app/api/pesanan/route.ts`<br>`src/app/api/transaksi/route.ts` | - | C31-UT10–C31-UT12, C32-UT07–C32-UT09, INT-TC29, INT-TC30, KNF01-TC01 |
 
 Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 
 | ID KNF | Parameter | KF/UC Terkait | Test Case |
 | :--- | :--- | :--- | :--- |
-| KNF02 | *Response time* | KF06, KF07 / UC05 | KNF02-TC01 |
-| KNF04 | *Reliability* | KF19, KF20 / UC09 | KNF04-TC01 |
+| KNF01 | Portability | KF13–KF15, KF17–KF24, KF37 / UC08, UC09, UC10 (dan seluruh KF yang mencantumkan KNF01) | KNF01-TC01 |
