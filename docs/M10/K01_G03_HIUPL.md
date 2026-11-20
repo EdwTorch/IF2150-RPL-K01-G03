@@ -222,11 +222,11 @@ Tabel 3.1. Lingkungan Implementasi
 | :--- | :--- |
 | Hardware | Laptop MSI Modern 14 B11SB, prosesor 11th Gen Intel(R) Core(TM) i5-1155G7 @ 2.50 GHz, 4 Core  |
 | Operating System | Microsoft Windows 11 Home Single Language |
-| Bahasa Pemrograman | TypeScript|
-| Framework/Library | Next.js 16.4.3, React, Tailwind CSS, dan Supabase JavaScript Client.  |
-| DBMS | PostgreSQL melalui Supabase. |
-| Development Tools | VSCode, Git, Github |
-| Testing Tools | Vitest |
+| Bahasa Pemrograman | TypeScript 5.9.3, Node.js 24.19.0 |
+| Framework/Library | Next.js 16.4.3, React 19.3.0, Tailwind CSS 4.3.4, Supabase JS 2.119.0, Supabase SSR 0.12.7 |
+| DBMS | PostgreSQL melalui Supabase |
+| Development Tools | VsCode, Git 2.36.1, GitHub |
+| Testing Tools | Vitest 5.1.0, React Testing Library 16.3.3, Jest DOM 7.0.1 |
 
 ### Edward 
 | Aspek | Keterangan |
