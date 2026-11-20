@@ -642,6 +642,8 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| KNF02-TC01 | KNF02 | *Response time* | Response time pencarian dan filter pada 1.000 listing jasa <= 3 detik (3.000 ms) untuk minimal 95% percobaan | Pengukuran `performance.now()` di Node.js v24.19.0 (20 kali pengulangan pada 1.000 listing dengan filter keyword, kategori, rentang harga, rating minimum, dan limit 20) pada logika filter dan sort pencarian (ekuivalen `LayananPencarian.saringDanUrutkan`) | Rata-rata waktu proses 0,259 ms (min 0,093 ms, maks 1,052 ms); 20 dari 20 percobaan (100%) selesai jauh di bawah 3.000 ms | Pass |
+| KNF04-TC01 | KNF04 | *Reliability* | 100% transaksi yang mengalami kegagalan di tengah proses di-rollback ke state awal (`MENUNGGU_PEMBAYARAN`) dengan 0 data integrity loss dan 0 duplicate transaction | Simulasi gagal insert `riwayat_transaksi` di tengah `PengontrolTransaksi.prosesPembayaranDummy()`, pengecekan guard `.neq('status_pembayaran', 'LUNAS')`, serta mekanisme `AbortController` timeout di `src/lib/api.ts` lewat Vitest (`src/test/transaksi.test.ts`) | Saat insert `riwayat_transaksi` gagal setelah `pesanan` sempat ter-update, compensating rollback mengembalikan `pesanan` ke `MENUNGGU_PEMBAYARAN` (`id_metode_pembayaran: null`); guard menolak 100% duplicate payment request | Pass |
 
 <br>
 
