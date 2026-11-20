@@ -212,8 +212,7 @@
 | *17-11-2026* | Danesh | Mengerjakan Tabel 3.1 bagian pribadi dan menyalin 3.2–3.4 dari dokumen implementasi M9 | ~0,5 jam | Selesai | - |
 | *18-11-2026* | Danesh | Mengerjakan Tabel 4.1.1 (C19–C37) serta pengujian unit C22, C25, dan C26 pada 4.2 | ~3 jam | Selesai | - |
 | *19-11-2026* | Danesh | Melengkapi pengujian unit C31 dan C32 pada 4.2 | ~1 jam | Selesai | - |
-| *20-11-2026* | Danesh | Menguji langsung dan mengerjakan 4.4 (UC04–UC07), 4.5 (KNF02, KNF04), melampirkan *screenshot* di 4.6, mengerjakan Bab 5 (KF05–KF24), serta merapikan *conflict* | ~4,5 jam | Selesai | - |
-| *20-11-2026* | Danesh | Melengkapi kembali KNF02 dan KNF04 pada Tabel 5.2 serta mengisi logbook M10 | < 1 jam | Selesai | - |
+| *20-11-2026* | Danesh | Menguji langsung dan mengerjakan 4.4 (UC04–UC07), 4.5 (KNF02, KNF04), melampirkan *screenshot* di 4.6, mengerjakan Bab 5 (KF05–KF24), merapikan *conflict*, serta mengisi Logbook | ~4,5 jam & 15 menit | Selesai | - |
 
 **Catatan/Evaluasi Milestone 10:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
