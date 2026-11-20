@@ -77,6 +77,9 @@ Dipersiapkan oleh:
     - [4.4.5 Use Case Mencari Penawaran Jasa (UC05)](#445-use-case-mencari-penawaran-jasa-uc05)
     - [4.4.6 Use Case Melihat Informasi Jasa (UC06)](#446-use-case-melihat-informasi-jasa-uc06)
     - [4.4.7 Use Case Menggunakan Bookmark (UC07)](#447-use-case-menggunakan-bookmark-uc07)
+    - [4.4.8 Use Case Melakukan Komunikasi (UC08)](#448-use-case-melakukan-komunikasi-uc08)
+    - [4.4.9 Use Case Melakukan Pemesanan Jasa (UC09)](#449-use-case-melakukan-pemesanan-jasa-uc09)
+    - [4.4.10 Use Case Melakukan Konfirmasi Pesanan (UC10)](#4410-use-case-melakukan-pemesanan-jasa-uc010)    
   - [4.5 Pengujian Kebutuhan Non-Fungsional (KNF)](#45-pengujian-kebutuhan-non-fungsional-knf)
   - [4.6 Tangkapan Layar dan Bukti Hasil Pengujian](#46-tangkapan-layar-dan-bukti-hasil-pengujian)
 - [BAB 5: Traceability](#bab-5-traceability)
@@ -1268,7 +1271,7 @@ Tabel 4.4.7. Hasil Pengujian Use Case UC07
 | UC07-TC03 | KF12 | Normal: Menghapus Jasa dari Bookmark | 1. Pada `/pengguna/bookmark` (I-07), klik tombol "Hapus dari bookmark" atau ikon bookmark aktif pada kartu jasa. | Pengguna login + `id_jasa` tersimpan | Bookmark terhapus dari database, kartu jasa hilang dari daftar pada layar, dan muncul notifikasi penghapusan. | Kartu jasa langsung hilang dari daftar pada `/pengguna/bookmark` dan muncul notifikasi `"<nama jasa>" dihapus dari bookmark.`. | Pass |
 | UC07-TC04 | KF09, KF10 | Eksepsi: Pengguna Belum Login (Guest) | 1. Buka `/jasa/[id]` (I-06) tanpa login (guest).<br>2. Klik tombol ikon bookmark. | Sesi null (guest) | Aksi dibatalkan dan UI menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Aksi tidak menyimpan data dan layar menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Pass |
 
-### 4.4.8 Use Case Melakukan Komunikasi
+### 4.4.8 Use Case Melakukan Komunikasi (UC08)
 
 **ID Use Case:** UC08  
 **Nama Use Case:** Melakukan Komunikasi
@@ -1286,7 +1289,7 @@ Tabel 4.4.8. Hasil Pengujian Use Case [UC08]
 | UC08-TC07 | KF13 | Alternatif 1 – Admin mengirim pesan kosong | 1. Admin membuka halaman chat. 2. Admin membiarkan kolom pesan kosong. 3. Admin mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Tombol kirim tidak dapat ditekan ketika kolom pesan kosong. | Berhasil |
 | UC08-TC08 | KF13, KF14 | Alternatif 2 – Pengiriman pesan gagal oleh Pengguna | 1. Pengguna membuka halaman chat. 2. Pengguna memutus koneksi internet. 3. Pengguna mencoba mengirim pesan kepada Penyedia Jasa. | Pesan teks ketika koneksi internet terputus. | Sistem gagal mengirim pesan dan menampilkan indikator bahwa pesan tidak terkirim. | Sistem menampilkan indikator pesan belum terkirim. | Berhasil |
 
-### 4.4.9 Use Case Melakukan Pemesanan Jasa
+### 4.4.9 Use Case Melakukan Pemesanan Jasa (UC09)
 
 **ID Use Case:** UC09  
 **Nama Use Case:** Melakukan Pemesanan Jasa
@@ -1301,7 +1304,7 @@ Tabel 4.4.9. Hasil Pengujian Use Case [UC09]
 | UC09-TC04 | KF17, KF18 | Alternatif 1 – Formulir pemesanan tidak lengkap | 1. Pengguna Jasa memilih jasa dan membuka formulir pemesanan. 2. Pengguna Jasa mengosongkan salah satu atau beberapa kolom wajib. 3. Pengguna Jasa mencoba mengirim formulir. | Formulir pemesanan dengan data wajib yang belum lengkap. | Sistem menolak pengiriman formulir dan menampilkan pesan validasi pada kolom yang wajib diisi. | Sistem menampilkan pesan validasi ketika formulir dikirim dengan data yang tidak lengkap. | Berhasil |
 | UC09-TC05 | KF20 | Alternatif 2 – Pembayaran gagal | 1. Pengguna Jasa membuka halaman pembayaran. 2. Pengguna Jasa memilih metode pembayaran. 3. Pengguna Jasa melakukan pembayaran dengan kondisi transaksi gagal. | Transaksi pembayaran dengan status gagal. | Sistem mendeteksi kegagalan transaksi dan menampilkan pesan bahwa pembayaran gagal. | Sistem menampilkan informasi kegagalan pembayaran. | Berhasil |
 
-### 4.4.10 Use Case Melakukan Konfirmasi Pesanan
+### 4.4.10 Use Case Melakukan Konfirmasi Pesanan (UC10)
 
 **ID Use Case:** UC10
 **Nama Use Case:** Melakukan Konfirmasi Pesanan
