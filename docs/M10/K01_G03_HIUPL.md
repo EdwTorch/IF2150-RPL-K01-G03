@@ -435,20 +435,20 @@ Tabel 4.1.1. Identifikasi Tingkat Pengujian Kelas
 | C38 | HalamanDeliverables | Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
 | C39 | PengajuanRevisi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C40 | HalamanRequestRevisi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C41 | RevisiHandler | Mendalam | Menguji Logika Bisnis, Validasi Revisi,  Aturan sesuai status, dan Algoritma | *[ID test case atau -]* |
+| C41 | RevisiHandler | Mendalam | Menguji Logika Bisnis, Validasi Revisi,  Aturan sesuai status, dan Algoritma | C41-TC01 - C41-TC31 |
 | C42 | PencairanDana | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C43 | TiketLaporan |  Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C44 | HalamanPelaporan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C45 | LaporanHandler | Mendalam | Menguji Logika Bisnis, Validasi input laporan,  Aturan sesuai status pengguna, dan Algoritma sesuai dengan role pengguna  |*[ID test case atau -]* |
+| C45 | LaporanHandler | Mendalam | Menguji Logika Bisnis, Validasi input laporan,  Aturan sesuai status pengguna, dan Algoritma sesuai dengan role pengguna  C45-TC01 - C45-TC17 |
 | C46 | Ulasan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C47 | HalamanUlasan |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C48 | UlasanHandler | Mendalam | Menguji pembuatan Ulasan,  validasi input rating, formatting, CRUD terhadap data rating jasa dan rating penyediajasa | *[ID test case atau -]* |
+| C48 | UlasanHandler | Mendalam | Menguji pembuatan Ulasan,  validasi input rating, formatting, CRUD terhadap data rating jasa dan rating penyediajasa | C48-TC01 - C48-TC37 |
 | C49 | TanggapanLaporan | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C50 | HalamanPengajuanMediasi |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C51 | MediasiHandler | *[Mendalam/Sedang/Tidak perlu]* | *[Alasan penentuan tingkat pengujian]* | *[ID test case atau -]* |
+| C51 | MediasiHandler | Mendalam | Memerlukan Eksekusi Mendalam | C51-TC01 - C51-TC17 |
 | C52 | Admin | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C53 | HalamanDashboardAdmin |  Tidak Perlu | Pengujian Kelas Halaman dilakukan pada test integrasi | - |
-| C54 | PengumpulanController | Mendalam | Berisi Logika Utama bisnis untuk pengumpulan deliverables | *[ID test case atau -]* |
+| C54 | PengumpulanController | Mendalam | Berisi Logika Utama bisnis untuk pengumpulan deliverables | C54-TC01 - C54-TC35 |
 | C55 | pesan_chat | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C56 | notifikasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
 | C57 | sesi_mediasi | Tidak Perlu | Kelas ini berfungsi sebagai entity (database) | - |
@@ -1471,7 +1471,7 @@ Tabel 4.5. Hasil Pengujian KNF
 
 | ID Pengujian | ID KNF | Parameter | Target Terukur | Metode dan Alat | Hasil Aktual | Kesimpulan |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| KNF01-TC01 | KNF01 | Portability | Tampilan adaptif pada viewport 320 px, 768 px, dan 1280 px tanpa horizontal scrollbar | Pengujian menggunakan Chrome DevTools pada viewport 320 px, 768 px, dan 1280 px | 320 px: terdapat elemen yang saling bertumpuk; 768 px: beberapa elemen masih mengalami tumpang tindih; 1280 px: tampilan berjalan dengan baik | Belum sepenuhnya sesuai |
+| KNF01-TC01 | KNF01 | Portability | Tampilan adaptif pada viewport 320 px, 768 px, dan 1280 px tanpa horizontal scrollbar | Pengujian menggunakan Chrome DevTools pada viewport 320 px, 768 px, dan 1280 px | 320 px: terdapat elemen yang saling bertumpuk; 768 px: beberapa elemen masih mengalami tumpang tindih; 1280 px: tampilan berjalan dengan baik, ukuran 1920x1080  berjalan dengan baik| Belum sepenuhnya sesuai |
 | KNF02-TC01 | KNF02 | *Response time* | Response time pencarian dan filter pada 1.000 listing jasa <= 3 detik (3.000 ms) untuk minimal 95% percobaan | Pengukuran `performance.now()` di Node.js v24.19.0 (20 kali pengulangan pada 1.000 listing dengan filter keyword, kategori, rentang harga, rating minimum, dan limit 20) pada logika filter dan sort pencarian (ekuivalen `LayananPencarian.saringDanUrutkan`) | Rata-rata waktu proses 0,259 ms (min 0,093 ms, maks 1,052 ms); 20 dari 20 percobaan (100%) selesai jauh di bawah 3.000 ms | Pass |
 | KNF03-TC01 | KNF03 | *Ergonomy* | Alur pemesanan hingga pembayaran selesai dalam ≤ 5 menit (300 detik) pada percobaan, dengan jumlah langkah yang dapat diikuti tanpa panduan eksternal | Uji dilakukan pada pengguna baru: tidak membuka kode, dokumentasi, maupun panduan, hanya mengikuti label dan tombol di layar. Alur dimulai dari halaman Cari Jasa (sudah login sebagai pemesan tanpa pesanan aktif) dan berhenti saat tampil "Pembayaran berhasil!". waktu diukur dengan *stopwatch* | Waktu melakukan pemesanan < 40 detik | Pass |
 | KNF04-TC01 | KNF04 | *Reliability* | 100% transaksi yang mengalami kegagalan di tengah proses di-rollback ke state awal (`MENUNGGU_PEMBAYARAN`) dengan 0 data integrity loss dan 0 duplicate transaction | Simulasi gagal insert `riwayat_transaksi` di tengah `PengontrolTransaksi.prosesPembayaranDummy()`, pengecekan guard `.neq('status_pembayaran', 'LUNAS')`, serta mekanisme `AbortController` timeout di `src/lib/api.ts` lewat Vitest (`src/test/transaksi.test.ts`) | Saat insert `riwayat_transaksi` gagal setelah `pesanan` sempat ter-update, compensating rollback mengembalikan `pesanan` ke `MENUNGGU_PEMBAYARAN` (`id_metode_pembayaran: null`); guard menolak 100% duplicate payment request | Pass |
@@ -1487,7 +1487,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 
 | ID Pengujian | Bukti Hasil Pengujian |
 | :--- | :--- |
-| C22-UT01 – C22-UT12,<br>C25-UT01 – C25-UT12,<br>C26-UT01 – C26-UT09,<br>C31-UT01 – C31-UT12,<br>C32-UT01 – C32-UT12,<br>serta C22, C25, C26, C31, C32 (coverage) | Keluaran Vitest v5.1.0 (`20 passed (20)`, `678 passed (678)`) dan laporan `@vitest/coverage-v8` (`bookmark.service.ts` 100% line / 83,56% branch; `chat.service.ts` 100% line / 90,19% branch; `notifikasi.service.ts` 100% line / 92,30% branch; `pesanan.service.ts` 94,73% line / 84,09% branch; `transaksi.service.ts` 97,82% line / 80,90% branch):<br>![Output Vitest dan Coverage](./assets/danesh/vitest-coverage.png) |
+| C22-UT01 – C22-UT12,<br>C25-UT01 – C25-UT12,<br>C26-UT01 – C26-UT09,<br>C31-UT01 – C31-UT12,<br>C32-UT01 – C32-UT12,<br>serta C22, C25, C26, C31, C32 (coverage) | Keluaran Vitest v5.1.0 (`21 passed (20)`, `748 passed (748)`) dan laporan `@vitest/coverage-v8` (`bookmark.service.ts` 100% line / 83,56% branch; `chat.service.ts` 100% line / 90,19% branch; `notifikasi.service.ts` 100% line / 92,30% branch; `pesanan.service.ts` 94,73% line / 84,09% branch; `transaksi.service.ts` 97,82% line / 80,90% branch): <br> <img alt="Pengujian" src="../M10/assets/danesh/Vitest1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/danesh/Vitest2.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/danesh/Vitest3.png" width="70%"> |
 | C41-UT01 - C41-UT03 |  <br> <img alt="Pengujian" src="../M10/assets/C41-T1.png" width="70%"> |
 | C41-UT04 - C41-UT07 | <br> <img alt="Pengujian" src="../M10/assets/C41-T2.png" width="70%">|
 | C41-UT09 - C41-UT11 | <br> <img alt="Pengujian" src="../M10/assets/C41-T3.png" width="70%"> |
@@ -1529,7 +1529,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC11-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC11-T1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T4.png" width="70%"> <br> Sisi Pengguna : <br> <img alt="Pengujian" src="../M10/assets/UC11-Hasil.png" width="70%"> <br> Pengumpulan Revisi <br> <img alt="Pengujian" src="../M10/assets/UC11-T4.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12_2_3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-HasilRevisi.png" width="70%">|
 | UC11-T02 | <br> <img alt="Pengujian" src="../M10/assets/UC11-T1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC11-T3-1.png" width="70%">  |
 | UC11-T03 | <br> <img alt="Pengujian" src="../M10/assets/UC11-T1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC11-Kebesaran.png" width="70%"> |
-| UC12-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-Init.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Cair.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Selesai1.png" <br>  |
+| UC12-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-Init.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Cair.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Selesai1.png" width="70%"> <br>  |
 | UC12-T02 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-FormRevisi.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-2_2.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12_2_3.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-.png"  width="70%"> <br> Penangan Error <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-T2.png"  width="70%"> |
 | UC12-T03 | <br> <img alt="Pengujian" src="../M10/assets/UC12-RevisiAbis.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC14-Init.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Cair.png" width="70%"> <br> <img alt="Pengujian" src="../M10/assets/UC12-Selesai1.png"  width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC12-.png"  width="70%"> |
 | UC13-T01 | <br> <img alt="Pengujian" src="../M10/assets/UC12-T1.png" width="70%"> <br> <br> <img alt="Pengujian" src="../M10/assets/UC13-4.png" width="70%">  |
@@ -1588,7 +1588,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC10-TC02 | <br> <img alt="Pengujian UC10-TC02" src="../M10/assets/UC10-TC02.png" width="100%"> |
 | UC10-TC03 | <br> <img alt="Pengujian UC10-TC03" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
 | UC10-TC04 | <br> <img alt="Pengujian UC10-TC04" src="../M10/assets/UC10-TC03-TC04.png" width="100%"> |
-| KNF01-TC01 | Viewport 320 px (Smartphone) <br> <img alt="Pengujian viewport 320 px" src="../M10/assets/KNF01-320.png" width="100%"> <br><br> Viewport 768 px (Tablet) <br> <img alt="Pengujian viewport 768 px" src="../M10/assets/KNF01-768.png" width="100%"> <br><br> Viewport 1280 px (Laptop) <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/KNF01-1280.png" width="100%"> |
+| KNF01-TC01 | Viewport 320 px (Smartphone) <br> <img alt="Pengujian viewport 320 px" src="../M10/assets/KNF01-320.png" width="100%"> <br><br> Viewport 768 px (Tablet) <br> <img alt="Pengujian viewport 768 px" src="../M10/assets/KNF01-768.png" width="100%"> <br><br> Viewport 1280 px (Laptop) <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/KNF01-1280.png" width="100%"> <br> <img alt="Pengujian viewport 1280 px" src="../M10/assets/1920x1080.png" width="100%"> |
 | UC15-TC01 | <img alt="Pengujian UC15-TC01-1" src="../M10/assets/UC15-TC01-1.png" width="100%"> <br> <img alt="Pengujian UC15-TC01-2" src="../M10/assets/UC15-TC01-2.png" width="100%"> |
 | UC15-TC02 | <img alt="Pengujian UC15-TC02-1" src="../M10/assets/UC15-TC01-2.png" width="100%"> <br> <img alt="Pengujian UC15-TC02-2" src="../M10/assets/UC15-TC02-2.png" width="100%"> |
 | UC15-TC03 | <img alt="Pengujian UC15-TC03-1" src="../M10/assets/UC15-TC03-1.png" width="100%"> <br> <img alt="Pengujian UC15-TC03-2" src="../M10/assets/UC15-TC03-2.png" width="100%"> |
@@ -1648,4 +1648,9 @@ Tabel 5.2. Matriks Kerunutan KNF terhadap Pengujian
 | ID KNF | Parameter | KF/UC Terkait | Test Case |
 | :--- | :--- | :--- | :--- |
 | KNF01 | Portability | KF13–KF15, KF17–KF24, KF37 / UC08, UC09, UC10 (dan seluruh KF yang mencantumkan KNF01) | KNF01-TC01 |
-| KNF06 | Security | KF02 / UC02| KNF06-TC01 |
+| KNF02 | Response Time| KF06, KF07, UC05 |  KNF02-TC01 |
+| KNF03 | Ergonomy | KF13,14,15,37,38 / UC08 | KNF03-TC01| 
+| KNF04 | Reliability |KF17, KF18, KF19, KF20, KF21, KF22, KF23, KF24, KF26, KF27, KF28, KF30, KF31 / UC09 |(Tidak Bisa ditest) karena menggunakan data dummy| 
+| KNF05 | Security | Keseluruhan | KNF05-TC01 | 
+| KNF06 | Security | KF02 / UC02 | KNF06-TC01 |
+| KNF07 | Availability | - | (Tidak Bisa ditest) |

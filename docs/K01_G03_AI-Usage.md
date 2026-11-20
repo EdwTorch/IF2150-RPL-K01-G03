@@ -123,6 +123,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Chat GPT | Membuat Pengujian dengan Vitest |Bagaimana melakukan pengujian Vitest?  | Mencoba untuk melakukan pengujian, memvalidasi apakah langkah yang disebutkan tepat, dan memastikan pengujian sesuai dengan kebutuhan.  |
 | Gemini | Membuat Pengujian Vitest Tambahan | Tolong bantu saya, mendiscover ada yang kurang dari source code ini, lalu berikan kode pengujian yang baru untuk meningkatkan coverage| Saya (Edward) Mencoba melakukan pengujian, memvalidasi coverage yang diinginkan, dan memastikan pengujian sesuai dengan kebutuhan. |
 | Gemini | Membantu memperapih laporan | Tolong bantu saya merapihkan format laporan yang telah saya buat| Saya (Edward) melakukan pengecekan dan memilah mana yang perlu digunakan maupun diperbaiki |
+| Gemini | Membantu penomoran | Bisakah kau cek docs/M10/K01_G03_HIUPL.md, bisakah kau perbaiki untuk 4.2 perbaiki penomorannya agar berurutan, juga perbaiki pada daftar isi | AI membantu merapikan penomoran dan saya (Revandra) mengecek ulang apakah perbaikan sudah benar |
 
 
 ### Pernyataan Integritas dan Persetujuan
