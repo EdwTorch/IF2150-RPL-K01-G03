@@ -190,13 +190,13 @@ Tabel 3.1. Lingkungan Implementasi
 ### Theresia 
 | Aspek | Keterangan |
 | :--- | :--- |
-| *Hardware* | *[Spesifikasi perangkat keras]* |
-| *Operating System* | *[Nama dan versi OS]* |
-| *Bahasa Pemrograman* | *[Bahasa dan versi]* |
-| *Framework/Library* | *[Daftar framework/library beserta versi]* |
-| *DBMS* | *[Nama dan versi DBMS]* |
-| *Development Tools* | *[IDE, version control, tools lain]* |
-| *Testing Tools* | *[Framework unit test, alat ukur performa, alat coverage]* |
+| Hardware | Laptop MSI Modern 14 B11SB, prosesor 11th Gen Intel(R) Core(TM) i5-1155G7 @ 2.50 GHz, 4 Core  |
+| Operating System | Microsoft Windows 11 Home Single Language |
+| Bahasa Pemrograman | TypeScript|
+| Framework/Library | Next.js 16.4.3, React, Tailwind CSS, dan Supabase JavaScript Client.  |
+| DBMS | PostgreSQL melalui Supabase. |
+| Development Tools | VSCode, Git, Github |
+| Testing Tools |  |
 
 ### Edward 
 | Aspek | Keterangan |
@@ -532,6 +532,15 @@ Tabel 4.3.1. Daftar Antarmuka Antarkomponen
 | *I-03* | *PaymentGatewayAdapter* | *Payment Gateway (dummy)* | *Aplikasi - Sistem eksternal* | *INT-TC04, INT-TC05* |
 | *[I-XX]* | *[Komponen asal]* | *[Komponen tujuan]* | *[Jenis batas]* | *[ID test case]* |
 | *...* | *...* | *...* | *...* | *...* |
+| I-11 | PesananService.ambilDaftarPesanan | Tabel pesanan | Aplikasi - Basis data | INT-TC11-1, INT-TC11-2 |
+| I-12 | PesananService.respondOrder | Tabel pesanan | Aplikasi - Basis data | INT-TC12-1, INT-TC12-2 |
+| I-13 | DeliverablesService.submitDeliverable | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC13-1, INT-TC13-2 |
+| I-14 | DeliverablesService.confirmOrderComplete, getDeliverableByPesanan | Tabel produk_akhir, pesanan | Aplikasi - Basis data | INT-TC14-1, INT-TC14-2 |
+| I-15 | DeliverablesService.requestRevision | Tabel pengajuan_revisi, pesanan | Aplikasi - Basis data | INT-TC15-1, INT-TC15-2 |
+| I-16 | PelaporanService.submitLaporan | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC16-1, INT-TC16-2 |
+| I-17 | UlasanService.simpanUlasan | Tabel ulasan, penyedia_jasa, jasa | Aplikasi - Basis data | INT-TC17-1, INT-TC17-2 |
+| I-18 | TanggapanLaporanService.catatKeputusanTindakan, MediasiService.mulaiMediasi | Tabel tanggapan_laporan, tiket_laporan, sesi_mediasi, pesan_mediasi | Aplikasi - Basis data | INT-TC18-1, INT-TC18-2, INT-TC18-3 |
+| I-19 | TanggapanLaporanService.getAllTicketsForAdmin, getDetailTiketAdmin | Tabel tiket_laporan | Aplikasi - Basis data | INT-TC19-1, INT-TC19-2 |
 
 Tabel 4.3.2. Hasil Pengujian Integrasi
 
@@ -541,6 +550,25 @@ Tabel 4.3.2. Hasil Pengujian Integrasi
 | *INT-TC03* | *I-02* | *Normal: simpan pesanan* | *Buat pesanan, lalu baca ulang langsung dari basis data* | *Baris pesanan ada dengan nilai total dan status yang sama* | *[...]* | *Pass/Fail* |
 | *INT-TC05* | *I-03* | *Gagal: gateway mengembalikan status gagal* | *Kirim otorisasi dengan saldo dummy tidak cukup* | *Status pesanan tidak berubah menjadi "Lunas", pesan gagal diteruskan ke pengguna* | *[...]* | *Pass/Fail* |
 | *...* | *...* | *...* | *...* | *...* | *...* | *...* |
+| INT-TC11-1 | I-11 | Normal: mengambil daftar pesanan pengguna | Memanggil `ambilDaftarPesanan()` dengan ID pengguna dan peran `pengguna_jasa` yang valid | Menghasilkan seluruh pesanan milik pengguna beserta status dan informasi ulasan | Menghasilkan 2 pesanan dengan status DIPROSES dan SELESAI serta informasi ulasan yang sesuai | Pass |
+| INT-TC11-2 | I-11 | Normal: pengguna belum memiliki pesanan | Memanggil `ambilDaftarPesanan()` untuk pengguna yang belum memiliki pesanan | Menghasilkan daftar pesanan kosong | Menghasilkan array kosong | Pass |
+| INT-TC12-1 | I-12 | Normal: menerima pesanan | Memanggil `respondOrder()` dengan ID pesanan, ID penyedia, dan tindakan `Diterima` yang valid | Status pesanan diperbarui menjadi DIPROSES | Menghasilkan pesanan dengan status DIPROSES dan menjalankan operasi update satu kali | Pass |
+| INT-TC12-2 | I-12 | Gagal: menerima pesanan yang sudah diproses | Memanggil `respondOrder()` untuk pesanan dengan status DIPROSES | Sistem menolak tindakan dan tidak memperbarui data pesanan | Sistem menghasilkan error "Pesanan ini sudah diproses sebelumnya" dan tidak menjalankan update | Pass |
+| INT-TC13-1 | I-13 | Normal: mengumpulkan hasil pekerjaan | Memanggil `submitDeliverable()` dengan ID pesanan, deskripsi, dan URL berkas valid | Data produk akhir tersimpan dan status pesanan diperbarui | Data produk akhir tersimpan dengan deskripsi yang telah di-trim dan status pemeriksaan false; status pesanan diperbarui | Pass |
+| INT-TC13-2 | I-13 | Gagal: berkas dan tautan hasil pekerjaan kosong | Memanggil `submitDeliverable()` tanpa berkas dan tanpa tautan | Sistem menolak pengumpulan dan tidak menyimpan data | Sistem menghasilkan error "Unggah berkas atau sertakan tautan hasil pekerjaan." dan tidak menjalankan insert maupun update | Pass |
+| INT-TC14-1 | I-14 | Normal: mengonfirmasi pesanan selesai | Memanggil `confirmOrderComplete()` dengan ID pesanan dan ID pengguna valid | Pesanan dikonfirmasi selesai dan RPC pencairan dana dipanggil | Proses berhasil dan RPC `konfirmasi_pesanan_selesai` dipanggil dengan ID pesanan yang sesuai | Pass |
+| INT-TC14-2 | I-14 | Normal: deliverable belum tersedia | Memanggil `getDeliverableByPesanan()` untuk pesanan yang belum memiliki hasil pekerjaan | Sistem mengembalikan nilai null | Menghasilkan null | Pass |
+| INT-TC15-1 | I-15 | Normal: mengajukan revisi | Memanggil `requestRevision()` dengan data pesanan, produk akhir, deskripsi revisi, dan pengguna valid | Pengajuan revisi tersimpan dan kuota revisi berkurang menjadi 2 | Data revisi berhasil disimpan dengan kuota tersisa 2 dan status Sedang Direvisi | Pass |
+| INT-TC15-2 | I-15 | Gagal: kuota revisi habis | Memanggil `requestRevision()` pada pesanan dengan kuota revisi 0 | Sistem menolak pengajuan revisi dan tidak menyimpan pengajuan baru | Sistem menghasilkan error "Kuota revisi untuk pesanan ini sudah habis." dan tidak menjalankan insert | Pass |
+| INT-TC16-1 | I-16 | Normal: mengirim laporan | Memanggil `submitLaporan()` dengan ID pesanan, ID pelapor, kategori, deskripsi, dan bukti valid | Tiket laporan tersimpan dengan identitas terlapor berdasarkan data pesanan | Tiket laporan berhasil disimpan dengan ID terlapor sesuai penyedia jasa pada pesanan | Pass |
+| INT-TC16-2 | I-16 | Gagal: bukti laporan kosong | Memanggil `submitLaporan()` dengan daftar URL bukti kosong | Sistem menolak laporan dan tidak melakukan koneksi ke database | Sistem menghasilkan error "Minimal sertakan 1 tautan atau lampiran bukti." dan tidak memanggil `createClient()` | Pass |
+| INT-TC17-1 | I-17 | Normal: menyimpan ulasan | Memanggil `simpanUlasan()` dengan pesanan selesai dan rating 5 | Ulasan tersimpan dan rating penyedia serta jasa diperbarui | Ulasan tersimpan; mock memverifikasi operasi pembaruan rating penyedia dan jasa dengan nilai 5 | Pass |
+| INT-TC17-2 | I-17 | Gagal: rating tidak valid | Memanggil `simpanUlasan()` dengan rating 0 | Sistem menolak ulasan dan tidak melakukan operasi database | Sistem menghasilkan error "Rating harus bernilai antara 1 sampai 5." dan tidak memanggil client Supabase | Pass |
+| INT-TC18-1 | I-18 | Normal: mencatat keputusan tindakan admin | Memanggil `catatKeputusanTindakan()` dengan ID tiket, ID admin, jenis tindakan PERINGATAN, dan catatan valid | Tanggapan tersimpan, status tiket diperbarui menjadi Selesai, dan RPC pemberian sanksi dipanggil | Tanggapan tersimpan, operasi update tiket dan RPC `admin_beri_sanksi` terverifikasi | Pass |
+| INT-TC18-2 | I-18 | Normal: memulai sesi mediasi baru | Memanggil `mulaiMediasi()` pada tiket yang belum memiliki sesi aktif | Sesi mediasi dan pesan pembuka dibuat serta notifikasi dikirim kepada kedua pihak | Sesi dan pesan pembuka berhasil dibuat; dua notifikasi dikirim kepada pelapor dan terlapor | Pass |
+| INT-TC18-3 | I-18 | Normal: menggunakan sesi mediasi aktif | Memanggil `mulaiMediasi()` pada tiket yang sudah memiliki sesi mediasi aktif | Sistem menggunakan sesi yang tersedia tanpa membuat sesi baru | Sesi aktif dikembalikan tanpa insert pesan baru maupun pengiriman notifikasi | Pass |
+| INT-TC19-1 | I-19 | Normal: mengambil seluruh tiket laporan | Memanggil `getAllTicketsForAdmin()` | Menghasilkan daftar tiket laporan yang diurutkan berdasarkan waktu pembuatan terbaru | Menghasilkan daftar tiket dan memverifikasi pengurutan `created_at` secara descending | Pass |
+| INT-TC19-2 | I-19 | Normal: mengambil detail tiket laporan | Memanggil `getDetailTiketAdmin()` dengan ID tiket valid | Menghasilkan detail tiket beserta tanggapan dan informasi pesanan | Detail tiket, tanggapan, dan informasi pesanan berhasil diperoleh | Pass |
 
 <br>
 
@@ -623,6 +651,15 @@ Tabel 4.6. Bukti Hasil Pengujian
 | C51-UT14 - C51-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T4.png" width="70%"> |
 | C51-UT16 - C51-UT17 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T5.png" width="70%"> |
 | <a id="bukti-c51"></a>C51 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C51-Coverage.png" width="70%"> |
+| INT-TC11-1 – INT-TC11-2 | <img alt="Bukti Pengujian Integrasi I-11" src="../M10/assets/I11.png" width="70%"> |
+| INT-TC12-1 – INT-TC12-2 | <img alt="Bukti Pengujian Integrasi I-12" src="../M10/assets/I12.png" width="70%"> |
+| INT-TC13-1 – INT-TC13-2 | <img alt="Bukti Pengujian Integrasi I-13" src="../M10/assets/I13.png" width="70%"> |
+| INT-TC14-1 – INT-TC14-2 | <img alt="Bukti Pengujian Integrasi I-14" src="../M10/assets/I14.png" width="70%"> |
+| INT-TC15-1 – INT-TC15-2 | <img alt="Bukti Pengujian Integrasi I-15" src="../M10/assets/I15.png" width="70%"> |
+| INT-TC16-1 – INT-TC16-2 | <img alt="Bukti Pengujian Integrasi I-16" src="../M10/assets/I16.png" width="70%"> |
+| INT-TC17-1 – INT-TC17-2 | <img alt="Bukti Pengujian Integrasi I-17" src="../M10/assets/I17.png" width="70%"> |
+| INT-TC18-1 – INT-TC18-3 | <img alt="Bukti Pengujian Integrasi I-18" src="../M10/assets/I18.png" width="70%"> |
+| INT-TC19-1 – INT-TC19-2 | <img alt="Bukti Pengujian Integrasi I-19" src="../M10/assets/I19.png" width="70%"> |
 
 
 <br>
