@@ -206,6 +206,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | *14-11-2026* | Edward, Neci, There | Membahas pembagian tugas | < 2 jam | Selesai | Danesh dan Revan tidak hadir |
 | *16-11-2026* - *20-11-2026* | There | Mengerjakan bab 2, menyusun pengujian unit menggunakan Vitest untuk I11-I19, melakukan testing skenario UC08, UC09, UC10, dan melakukan testing untuk KNF01 | > 5 jam | Selesai | - |
+| *18-11-2026* - *20-11-2026* | Necia | Menyusun pengujian unit menggunakan Vitest untuk I01-I10, melakukan testing skenario UC01, UC02, UC03, dan melakukan testing untuk KNF03 | > 4 jam | Selesai | - |
 
 **Catatan/Evaluasi Milestone 10:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
