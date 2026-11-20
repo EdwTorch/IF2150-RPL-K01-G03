@@ -1225,6 +1225,54 @@ Tabel 4.4.7. Hasil Pengujian Use Case UC07
 | UC07-TC03 | KF12 | Normal: Menghapus Jasa dari Bookmark | 1. Pada `/pengguna/bookmark` (I-07), klik tombol "Hapus dari bookmark" atau ikon bookmark aktif pada kartu jasa. | Pengguna login + `id_jasa` tersimpan | Bookmark terhapus dari database, kartu jasa hilang dari daftar pada layar, dan muncul notifikasi penghapusan. | Kartu jasa langsung hilang dari daftar pada `/pengguna/bookmark` dan muncul notifikasi `"<nama jasa>" dihapus dari bookmark.`. | Pass |
 | UC07-TC04 | KF09, KF10 | Eksepsi: Pengguna Belum Login (Guest) | 1. Buka `/jasa/[id]` (I-06) tanpa login (guest).<br>2. Klik tombol ikon bookmark. | Sesi null (guest) | Aksi dibatalkan dan UI menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Aksi tidak menyimpan data dan layar menampilkan pesan "Masuk atau daftar dulu untuk menyimpan jasa ke bookmark.". | Pass |
 
+### 4.4.8 Use Case Melakukan Komunikasi
+
+**ID Use Case:** UC08  
+**Nama Use Case:** Melakukan Komunikasi
+
+Tabel 4.4.8. Hasil Pengujian Use Case [UC08]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC08-TC01 | KF13, KF14, KF15 | Normal – Pengguna Jasa mengirim pesan kepada Penyedia Jasa | 1. Pengguna Jasa membuka halaman chat dengan Penyedia Jasa. 2. Pengguna Jasa mengirim pesan. 3. Penyedia Jasa membuka percakapan dan melihat pesan yang diterima. | Pesan teks dari Pengguna Jasa. | Pesan berhasil dikirim dan ditampilkan pada riwayat percakapan. Penerima memperoleh notifikasi pesan baru. | Halaman chat menampilkan percakapan antara Pengguna Jasa dan Penyedia Jasa. | Berhasil |
+| UC08-TC02 | KF13, KF14, KF15 | Normal – Penyedia Jasa mengirim pesan kepada Pengguna Jasa | 1. Penyedia Jasa membuka halaman chat dengan Pengguna Jasa. 2. Penyedia Jasa mengirim pesan. 3. Pengguna Jasa membuka percakapan dan melihat pesan yang diterima. | Pesan teks dari Penyedia Jasa. | Pesan berhasil dikirim dan ditampilkan pada riwayat percakapan. Penerima memperoleh notifikasi pesan baru. | Halaman chat menampilkan percakapan antara Pengguna Jasa dan Penyedia Jasa. | Berhasil |
+| UC08-TC03 | KF13, KF15, KF37 | Normal – Pengguna Jasa berkomunikasi dengan Admin | 1. Pengguna Jasa membuka ruang mediasi. 2. Pengguna Jasa mengirim pesan kepada Admin. 3. Admin membuka ruang mediasi dan melihat pesan. | Pesan teks dari Pengguna Jasa/Pelapor. | Pesan berhasil dikirim dan ditampilkan dalam ruang mediasi sehingga dapat dibaca oleh Admin. | Percakapan antara Pelapor dan Admin ditampilkan dalam ruang mediasi. | Berhasil |
+| UC08-TC04 | KF13, KF15, KF37 | Normal – Penyedia Jasa berkomunikasi dengan Admin | 1. Penyedia Jasa membuka ruang mediasi. 2. Penyedia Jasa mengirim pesan kepada Admin. 3. Admin membuka ruang mediasi dan melihat pesan. | Pesan teks dari Penyedia Jasa/Terlapor. | Pesan berhasil dikirim dan ditampilkan dalam ruang mediasi sehingga dapat dibaca oleh Admin. | Percakapan antara Terlapor dan Admin ditampilkan dalam ruang mediasi. | Berhasil |
+| UC08-TC05 | KF13, KF15, KF37 | Normal – Admin mengirim pesan kepada peserta mediasi | 1. Admin membuka ruang mediasi. 2. Admin mengirim pesan kepada peserta mediasi. 3. Peserta membuka ruang mediasi dan melihat pesan dari Admin. | Pesan teks dari Admin. | Pesan berhasil dikirim dan ditampilkan kepada peserta mediasi. | Pesan dari Admin ditampilkan dalam ruang mediasi. | Berhasil |
+| UC08-TC06 | KF13 | Alternatif 1 – Pengguna mengirim pesan kosong | 1. Pengguna membuka halaman chat. 2. Pengguna membiarkan kolom pesan kosong. 3. Pengguna mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Muncul pesan: "Pesan tidak boleh kosong." | Berhasil |
+| UC08-TC07 | KF13 | Alternatif 1 – Admin mengirim pesan kosong | 1. Admin membuka halaman chat. 2. Admin membiarkan kolom pesan kosong. 3. Admin mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Tombol kirim tidak dapat ditekan ketika kolom pesan kosong. | Berhasil |
+| UC08-TC08 | KF13 | Alternatif 1 – Admin mengirim pesan kosong | 1. Admin membuka halaman chat. 2. Admin membiarkan kolom pesan kosong. 3. Admin mencoba menekan tombol kirim. | Kolom pesan kosong. | Sistem mencegah pengiriman pesan kosong. | Tombol kirim tidak dapat ditekan ketika kolom pesan kosong. | Berhasil |
+| UC08-TC09 | KF13, KF14 | Alternatif 2 – Pengiriman pesan gagal oleh Pengguna | 1. Pengguna membuka halaman chat. 2. Pengguna memutus koneksi internet. 3. Pengguna mencoba mengirim pesan kepada Penyedia Jasa. | Pesan teks ketika koneksi internet terputus. | Sistem gagal mengirim pesan dan menampilkan indikator bahwa pesan tidak terkirim. | Sistem menampilkan indikator pesan belum terkirim. | Berhasil |
+
+### 4.4.9 Use Case Melakukan Pemesanan Jasa
+
+**ID Use Case:** UC09  
+**Nama Use Case:** Melakukan Pemesanan Jasa
+
+Tabel 4.4.9. Hasil Pengujian Use Case [UC09]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC09-TC01 | KF17, KF18 | Normal – Memilih jasa dan mengisi formulir pemesanan | 1. Pengguna Jasa memilih salah satu jasa. 2. Pengguna Jasa menekan tombol pesan. 3. Sistem menampilkan formulir pemesanan. 4. Pengguna Jasa mengisi formulir dengan data valid dan mengirimkannya. | Jasa yang dipilih dan data formulir pemesanan yang valid. | Sistem menerima data pemesanan dan membuat pesanan baru. | Formulir pemesanan berhasil dikirim dan sistem melanjutkan proses pemesanan. | Berhasil |
+| UC09-TC02 | KF18, KF19 | Normal – Memilih metode pembayaran | 1. Pengguna Jasa diarahkan ke halaman pembayaran. 2. Pengguna Jasa melihat detail pesanan dan metode pembayaran yang tersedia. 3. Pengguna Jasa memilih salah satu metode pembayaran. | Metode pembayaran yang dipilih. | Sistem menampilkan detail pembayaran dan menyediakan pilihan metode pembayaran digital. | Halaman pembayaran menampilkan detail pesanan dan pilihan metode pembayaran. | Berhasil |
+| UC09-TC03 | KF20 | Normal – Pembayaran berhasil | 1. Pengguna Jasa melakukan pembayaran menggunakan metode yang dipilih. 2. Sistem memvalidasi status transaksi pembayaran. | Konfirmasi pembayaran berhasil. | Sistem memvalidasi pembayaran dan menampilkan notifikasi bahwa pembayaran berhasil. | Sistem menampilkan informasi bahwa pembayaran berhasil. | Berhasil |
+| UC09-TC04 | KF17, KF18 | Alternatif 1 – Formulir pemesanan tidak lengkap | 1. Pengguna Jasa memilih jasa dan membuka formulir pemesanan. 2. Pengguna Jasa mengosongkan salah satu atau beberapa kolom wajib. 3. Pengguna Jasa mencoba mengirim formulir. | Formulir pemesanan dengan data wajib yang belum lengkap. | Sistem menolak pengiriman formulir dan menampilkan pesan validasi pada kolom yang wajib diisi. | Sistem menampilkan pesan validasi ketika formulir dikirim dengan data yang tidak lengkap. | Berhasil |
+| UC09-TC05 | KF20 | Alternatif 2 – Pembayaran gagal | 1. Pengguna Jasa membuka halaman pembayaran. 2. Pengguna Jasa memilih metode pembayaran. 3. Pengguna Jasa melakukan pembayaran dengan kondisi transaksi gagal. | Transaksi pembayaran dengan status gagal. | Sistem mendeteksi kegagalan transaksi dan menampilkan pesan bahwa pembayaran gagal. | Sistem menampilkan informasi kegagalan pembayaran. | Berhasil |
+
+### 4.4.10 Use Case Melakukan Konfirmasi Pesanan
+
+**ID Use Case:** UC10
+**Nama Use Case:** Melakukan Konfirmasi Pesanan
+
+Tabel 4.4.10. Hasil Pengujian Use Case [UC10]
+
+| ID Pengujian | ID KF | Skenario | Prosedur Pengujian | Masukan | Hasil yang Diharapkan | Hasil Pengujian | Kesimpulan |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| UC10-TC01 | KF21 | Normal – Penyedia Jasa menerima notifikasi pesanan baru | 1. Pengguna Jasa membuat pesanan. 2. Penyedia Jasa membuka notifikasi pesanan baru. | Pesanan baru dari Pengguna Jasa. | Sistem mengirimkan notifikasi pesanan baru kepada Penyedia Jasa. | Notifikasi pesanan baru diterima dan ditampilkan pada akun Penyedia Jasa. | Berhasil |
+| UC10-TC02 | KF21, KF22 | Normal – Penyedia Jasa melihat pesanan masuk | 1. Penyedia Jasa membuka halaman daftar pesanan masuk. 2. Penyedia Jasa memilih salah satu pesanan. | Data pesanan baru. | Sistem menampilkan daftar pesanan masuk beserta detail pesanan yang perlu dikonfirmasi. | Pesanan ditampilkan pada daftar pesanan masuk, tetapi statusnya langsung menjadi Diproses. | Tidak Sesuai |
+| UC10-TC03 | KF22 | Normal – Penyedia Jasa melakukan konfirmasi pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencari opsi untuk menerima atau menolak pesanan. | Pesanan dengan status Diproses. | Sistem menyediakan tombol Terima dan Tolak agar Penyedia Jasa dapat menentukan keputusan. | Tidak tersedia tombol Terima maupun Tolak pada halaman detail pesanan. | Tidak Berhasil |
+| UC10-TC04 | KF23 | Alternatif 1 – Penyedia Jasa menolak pesanan | 1. Penyedia Jasa membuka detail pesanan. 2. Penyedia Jasa mencoba melakukan penolakan pesanan. | Pesanan baru yang ingin ditolak. | Sistem memperbarui status pesanan menjadi ditolak dan memproses pengembalian dana kepada pembeli. | Penolakan pesanan tidak dapat dilakukan karena tidak tersedia fitur Tolak. | Tidak Dapat Diuji |
+
 <br>
 
 ## 4.5 Pengujian Kebutuhan Non-Fungsional (KNF)
