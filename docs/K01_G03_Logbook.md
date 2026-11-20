@@ -208,6 +208,7 @@
 | *16-11-2026* - *20-11-2026* | There | Mengerjakan bab 2, menyusun pengujian unit menggunakan Vitest untuk I11-I19, melakukan testing skenario UC08, UC09, UC10, dan melakukan testing untuk KNF01 | > 5 jam | Selesai | - |
 | *18-11-2026* - *20-11-2026* | Necia | Menyusun pengujian unit menggunakan Vitest untuk I01-I10, melakukan testing skenario UC01, UC02, UC03, dan melakukan testing untuk KNF03 | > 4 jam | Selesai | - |
 | *17-11-2026* - *20-11-2026* | Edward | Mengerjakan Bab 1, 3.1, 4.2 Class 38-55, UC11-14, dan KNF06, Beserta Traceability KF25-31 |  10 jam | Selesai | - |
+| *19-11-2026* & *20-11-2026* | Revandra | mengerjakan Bab 4.1 dan 4.2 untuk C01—C18 , mengisi Tabel 3.1, dan 4.4 dan 4.6 untuk UC15, UC16 | 4,5 jam | Selesai | - |
 
 **Catatan/Evaluasi Milestone 10:**
 * *(Isi jika ada catatan khusus untuk asisten atau evaluasi singkat kerja tim)*
