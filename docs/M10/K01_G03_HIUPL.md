@@ -1530,6 +1530,9 @@ Tabel 4.6. Bukti Hasil Pengujian
 | UC02-TC02 | <br> <img alt="Pengujian UC02-TC02" src="../M10/assets/UC02-TC02.png" width="100%"> <br> <img alt="Pengujian UC02-TC01" src="../M10/assets/UC02-TC02-1.png" width="100%">|
 | UC02-TC03 | <br> <img alt="Pengujian UC02-TC03" src="../M10/assets/UC02-TC03.png" width="100%"> |
 | UC02-TC04 | <br> <img alt="Pengujian UC02-TC04" src="../M10/assets/UC02-TC04.png" width="100%"> |
+| UC03-TC01| <br> <img alt="Pengujian UC03-TC01" src="../M10/assets/UC03-TC01.png" width="100%"> |
+| UC03-TC02| <br> <img alt="Pengujian UC03-TC02" src="../M10/assets/UC03-TC02.png" width="100%"> |
+| UC03-TC03| <br> <img alt="Pengujian UC03-TC03" src="../M10/assets/UC03-TC03.png" width="100%"> |
 | UC04-TC01 | Notifikasi sukses unggah jasa pada `/penyedia/upload-jasa`:<br>![UC04-TC01 Sukses Unggah Jasa](./assets/danesh/uc04-tc01.png) |
 | UC04-TC02 | Validasi error pada field wajib dan form `/penyedia/upload-jasa`:<br>![UC04-TC02 Validasi Bagian Atas](./assets/danesh/uc04-tc02-1.png)<br>![UC04-TC02 Validasi Berkas](./assets/danesh/uc04-tc02-2.png) |
 | UC05-TC01 | Pencarian berdasarkan keyword pada `/pengguna/pencarian`:<br>![UC05-TC01 Pencarian Logo](./assets/danesh/uc05-tc01-1.png)<br>![UC05-TC01 Pencarian Banner](./assets/danesh/uc05-tc01-2.png) |
