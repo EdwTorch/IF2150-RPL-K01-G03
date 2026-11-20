@@ -1372,6 +1372,7 @@ Tabel 4.6. Bukti Hasil Pengujian
 | C51-UT14 - C51-UT15 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T4.png" width="70%"> |
 | C51-UT16 - C51-UT17 |  <br> <img alt="Pengujian" src="../M10/assets/C51-T5.png" width="70%"> |
 | <a id="bukti-c51"></a>C51 Coverage | <br> <img alt="Pengujian" src="../M10/assets/C51-Coverage.png" width="70%"> |
+| INT-TC01 – INT-TC28 | <img alt="Bukti Pengujian Integrasi I-01 - I-10" src="../M10/assets/INT-TC01_INT-TC28.png" width="70%"> |
 | INT-TC11-1 – INT-TC11-2 | <img alt="Bukti Pengujian Integrasi I-11" src="../M10/assets/I11.png" width="70%"> |
 | INT-TC12-1 – INT-TC12-2 | <img alt="Bukti Pengujian Integrasi I-12" src="../M10/assets/I12.png" width="70%"> |
 | INT-TC13-1 – INT-TC13-2 | <img alt="Bukti Pengujian Integrasi I-13" src="../M10/assets/I13.png" width="70%"> |
