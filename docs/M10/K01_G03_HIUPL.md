@@ -655,13 +655,22 @@ Tabel 4.6. Bukti Hasil Pengujian
 
 | ID Pengujian | Bukti Hasil Pengujian |
 | :--- | :--- |
-| *C02-UT01 – C02-UT08* | *[Sisipkan hasil keluaran unit test]* |
-| *C02 (coverage)* | *[Sisipkan laporan coverage kelas C02]* |
-| *INT-TC01* | *[Sisipkan bukti pengujian integrasi]* |
-| *UC01-TC01* | *[Sisipkan tangkapan layar UC01-TC01 sesuai prosedur pengujian]* |
-| *UC01-TC02* | *[Sisipkan tangkapan layar UC01-TC02 sesuai prosedur pengujian]* |
-| *KNF01-TC01* | *[Sisipkan bukti pengukuran parameter KNF01-TC01]* |
-| *...* | *...* |
+| C22-UT01 – C22-UT12,<br>C25-UT01 – C25-UT12,<br>C26-UT01 – C26-UT09,<br>C31-UT01 – C31-UT12,<br>C32-UT01 – C32-UT12,<br>serta C22, C25, C26, C31, C32 (coverage) | Keluaran Vitest v5.1.0 (`20 passed (20)`, `678 passed (678)`) dan laporan `@vitest/coverage-v8` (`bookmark.service.ts` 100% line / 83,56% branch; `chat.service.ts` 100% line / 90,19% branch; `notifikasi.service.ts` 100% line / 92,30% branch; `pesanan.service.ts` 94,73% line / 84,09% branch; `transaksi.service.ts` 97,82% line / 80,90% branch):<br>![Output Vitest dan Coverage](./assets/danesh/vitest-coverage.png) |
+| UC04-TC01 | Notifikasi sukses unggah jasa pada `/penyedia/upload-jasa`:<br>![UC04-TC01 Sukses Unggah Jasa](./assets/danesh/uc04-tc01.png) |
+| UC04-TC02 | Validasi error pada field wajib dan form `/penyedia/upload-jasa`:<br>![UC04-TC02 Validasi Bagian Atas](./assets/danesh/uc04-tc02-1.png)<br>![UC04-TC02 Validasi Berkas](./assets/danesh/uc04-tc02-2.png) |
+| UC05-TC01 | Pencarian berdasarkan keyword pada `/pengguna/pencarian`:<br>![UC05-TC01 Pencarian Logo](./assets/danesh/uc05-tc01-1.png)<br>![UC05-TC01 Pencarian Banner](./assets/danesh/uc05-tc01-2.png) |
+| UC05-TC02 | Penerapan filter harga dan rating pada `/pengguna/pencarian`:<br>![UC05-TC02 Filter Harga](./assets/danesh/uc05-tc02-1.png)<br>![UC05-TC02 Filter Rating](./assets/danesh/uc05-tc02-2.png) |
+| UC05-TC03 | Respons JSON endpoint komparasi `GET /api/jasa?compare=...`:<br>![UC05-TC03 Komparasi Jasa](./assets/danesh/uc05-tc03.png) |
+| UC05-TC04 | Tampilan empty state saat jasa tidak ditemukan:<br>![UC05-TC04 Jasa Tidak Ditemukan](./assets/danesh/uc05-tc04.png) |
+| UC05-TC05 | Pesan validasi saat keyword kurang dari 3 karakter:<br>![UC05-TC05 Keyword Kurang dari 3 Karakter](./assets/danesh/uc05-tc05.png) |
+| UC06-TC01 | Halaman detail jasa pada `/jasa/[id]` beserta informasi penyedia dan ulasan:<br>![UC06-TC01 Detail Jasa Atas](./assets/danesh/uc06-tc01-1.png)<br>![UC06-TC01 Detail Jasa Bawah](./assets/danesh/uc06-tc01-2.png) |
+| UC06-TC02 | Tampilan status tidak ditemukan pada `/jasa/00000000-0000-0000-0000-000000000000`:<br>![UC06-TC02 Jasa Tidak Ditemukan](./assets/danesh/uc06-tc02.png) |
+| UC07-TC01 | Ikon bookmark aktif dan notifikasi "Bookmark berhasil disimpan":<br>![UC07-TC01 Simpan Bookmark](./assets/danesh/uc07-tc01.png) |
+| UC07-TC02 | Daftar jasa tersimpan pada `/pengguna/bookmark`:<br>![UC07-TC02 Daftar Bookmark](./assets/danesh/uc07-tc02.png) |
+| UC07-TC03 | Penghapusan bookmark pada `/pengguna/bookmark`:<br>![UC07-TC03 Hapus Bookmark](./assets/danesh/uc07-tc03.png) |
+| UC07-TC04 | Pesan error saat guest mengklik ikon bookmark:<br>![UC07-TC04 Bookmark Tanpa Login](./assets/danesh/uc07-tc04.png) |
+| KNF02-TC01 | Output terminal pengukuran `performance.now()` pada 1.000 listing (20 percobaan, rata-rata 0,259 ms, maks 1,052 ms):<br>![KNF02-TC01 Pengukuran Response Time](./assets/danesh/knf02-tc01.png) |
+| KNF04-TC01 | Keluaran `npx vitest run test/transaksi.test.ts` (20/20 test passed, termasuk simulasi compensating rollback dan penolakan duplicate payment):<br>![KNF04-TC01 Pengujian Reliability Transaksi](./assets/danesh/knf04-tc01.png) |
 
 <br>
 
