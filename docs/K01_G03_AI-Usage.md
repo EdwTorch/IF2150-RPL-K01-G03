@@ -120,6 +120,7 @@ Silakan catat penggunaan AI yang berdampak signifikan pada pengerjaan tugas (mis
 | Tool AI | Tujuan Penggunaan | Contoh Prompt Utama | Modifikasi & Validasi Manusia |
 | :--- | :--- | :--- | :--- |
 | Chat GPT | Membuat Pengujian dengan Vitest | Bagaimana cara membuat kode pengujian untuk kasus ini? Apakah kode pengujian ini sudah benar?  | Saya (There) memeriksa kembali kode pengujian yang dihasilkan AI, mencocokkan test case dengan kebutuhan, memperbaiki bagian yang kurang tepat, dan memastikan hasilnya sesuai dengan yang diharapkan.  |
+| Chat GPT | Membuat Pengujian dengan Vitest |Bagaimana melakukan pengujian Vitest?  | Mencoba untuk melakukan pengujian, memvalidasi apakah langkah yang disebutkan tepat, dan memastikan pengujian sesuai dengan kebutuhan.  |
 
 ### Pernyataan Integritas dan Persetujuan
 
